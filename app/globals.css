@@ -65,4 +65,5 @@ img {
   --t-fast: 0.22s var(--ease);
   --t-base: 0.4s var(--ease);
   --t-slow: 0.7s var(--ease-out);
+  
 }
