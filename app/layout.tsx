@@ -11,7 +11,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: 'IRIS Junior Entreprise — Propulsez votre potentiel',
-  description: 'IRIS Junior Entreprise : propulsez votre potentiel, connectez vos succès avec IRIS JE.',
+  description: 'IRIS Junior Entreprise : propulsez votre potentiel.',
 };
 
 export default function RootLayout({
@@ -19,5 +19,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    
+    <>{children}</>
+    
+  );
 }
