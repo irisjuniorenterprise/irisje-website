@@ -53,6 +53,8 @@ img {
   --text-secondary: #6b7280;
   --text-muted: #9ca3af;
   --text-inverse: #ffffff;
+  --background-hero: linear-gradient(to bottom right, #15426C 0%, #0D2644 100%);
+  --footer-bg: #1a1a1a;
 
   /* ----- Espacements ----- */
   --radius-sm: 8px;
@@ -65,5 +67,5 @@ img {
   --t-fast: 0.22s var(--ease);
   --t-base: 0.4s var(--ease);
   --t-slow: 0.7s var(--ease-out);
-  
+
 }
