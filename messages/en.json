@@ -45,6 +45,22 @@
     "copyright": "All rights reserved",
     "aria_label": "Main navigation"
   },
+  "Breadcrumb": {
+    "home": "Home",
+    "notFound": "Page not found",
+    "routes": {
+      "/a-propos": "About",
+      "/services": "Services",
+      "/contact": "Contact",
+      "/realisations": "Achievements",
+      "/recrutement": "Recruitment",
+      "/devis": "Quote",
+      "/faq": "FAQ",
+      "/mentions-legales": "Legal notice",
+      "/politique-confidentialite": "Privacy policy",
+      "/cgu": "Terms of use"
+    }
+  },
   "Slider": {
     "services": {
       "title": "Customized services",
@@ -70,6 +86,11 @@
       "title": "Partnership & Sponsorship",
       "description": "Support IRIS Junior Entreprise and benefit from unique visibility.",
       "cta": "Become a partner"
+    },
+    "recrutement": {
+      "title": "Join IRIS Junior Entreprise",
+      "description": "Join our team of consultants and develop your technical and human skills.",
+      "cta": "Apply now"
     }
   },
   "ServicesPage": {
@@ -198,5 +219,14 @@
         "desc": "We move forward with involvement, responsibility and team spirit in every project."
       }
     }
+  },
+  "NotFound": {
+    "metaTitle": "Page Not Found | IRIS Junior Entreprise",
+    "metaDescription": "We couldn't find the page you're looking for.",
+    "title": "Our eagle",
+    "titleHighlight": "came back empty-handed",
+    "description": "The trail has gone cold... This page may have moved or disappeared. Return to the nest and start fresh.",
+    "cta": "Back to the nest"
   }
+
 }
