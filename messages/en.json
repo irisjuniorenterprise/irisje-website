@@ -71,5 +71,78 @@
       "description": "Support IRIS Junior Entreprise and benefit from unique visibility.",
       "cta": "Become a partner"
     }
+  },
+  "ServicesPage": {
+    "metaTitle": "Services | IRIS Junior Entreprise",
+    "hero": {
+      "title": "Our <accent>Services</accent>",
+      "description": "Discover our services in IT, Marketing and Studies. We put our expertise at the service of your projects."
+    },
+    "introduction": {
+      "title": "Our Service Offer",
+      "description": "IRIS Junior Entreprise operates as a consulting firm. We put our expertise at the service of entrepreneurs, SMEs and large accounts. Three areas of expertise to meet your needs."
+    },
+    "it": {
+      "title": "IT",
+      "subtitle": "Custom digital solutions to meet your technological needs.",
+      "web": {
+        "title": "Web Development",
+        "desc": "Creation of custom websites or using content management systems. We use HTML/CSS/JavaScript for showcase sites and React JS and FastAPI frameworks for dynamic sites, as well as WordPress with its plugins for a turnkey solution.",
+        "cta": "Request a quote"
+      },
+      "mobile": {
+        "title": "Mobile Development",
+        "desc": "Design of native mobile applications for Android with Dart and Android Studio, or hybrid cross-platform with the Flutter framework.",
+        "cta": "Request a quote"
+      },
+      "chatbot": {
+        "title": "Chatbot Creation",
+        "desc": "Design of intelligent chatbots with Dialogflow (Google). Integration on websites, mobile applications and social platforms like Facebook.",
+        "cta": "Request a quote"
+      }
+    },
+    "marketing": {
+      "title": "Marketing",
+      "subtitle": "Strengthen your brand image and your presence on social networks.",
+      "branding": {
+        "title": "Branding",
+        "desc": "Creation of a complete graphic charter defining colors, typographies, logotype and layout rules. Design of custom logotypes for a strong and consistent visual identity on all your media (web and print).",
+        "cta": "Request a quote"
+      },
+      "community": {
+        "title": "Community Management",
+        "desc": "Animation and engagement of your community on social networks. Content planning, visual creation, thematic monitoring and interaction with your subscribers to strengthen your visibility.",
+        "cta": "Request a quote"
+      }
+    },
+    "etudes": {
+      "title": "Studies",
+      "subtitle": "Strategic studies to inform your decisions and optimize your development.",
+      "marche": {
+        "title": "Market Study",
+        "desc": "Collection and analysis of information to identify the characteristics of a market. Assessment of demand, analysis of competition, products, environment and trends. Use of PESTEL and SWOT methods.",
+        "cta": "Request a quote"
+      },
+      "notoriete": {
+        "title": "Awareness Study",
+        "desc": "Measurement of your brand awareness among consumers. Evaluation of spontaneous, assisted and overall perception of your company, its products and services.",
+        "cta": "Request a quote"
+      },
+      "satisfaction": {
+        "title": "Satisfaction Study",
+        "desc": "Measurement of your customers' satisfaction level. Collection of feedback to improve your products, services and customer relationship. Identification of your strengths and areas for improvement.",
+        "cta": "Request a quote"
+      },
+      "business": {
+        "title": "Business Plan",
+        "desc": "Development of a complete business plan for your creation or development project. Structuring of the economic model with the Business Model Canvas, financial forecasts and commercial strategy. Intended for investors and financial institutions.",
+        "cta": "Request a quote"
+      }
+    },
+    "cta": {
+      "title": "Do you have a project?",
+      "description": "Contact us to discuss your needs and get a personalized quote.",
+      "button": "Contact us"
+    }
   }
 }

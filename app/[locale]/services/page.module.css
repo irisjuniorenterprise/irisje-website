@@ -1,0 +1,59 @@
+/* app/[locale]/services/page.module.css */
+
+.rtlPage {
+  direction: rtl;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.rtlPage .hero .hero-content {
+  text-align: right;
+}
+
+/* ============================================================
+   INTRODUCTION
+   ============================================================ */
+.rtlPage #introduction .value-card {
+  text-align: right;
+}
+
+/* ============================================================
+   SECTIONS SERVICES
+   ============================================================ */
+.rtlPage .service-card {
+  text-align: right;
+}
+
+.rtlPage .service-header {
+  flex-direction: row-reverse;
+}
+
+.rtlPage .service-tools {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.rtlPage .btn-sm {
+  /* Gardé tel quel */
+}
+
+/* ============================================================
+   CTA FINAL
+   ============================================================ */
+.rtlPage #cta h2,
+.rtlPage #cta p {
+  text-align: center; /* déjà centré */
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .rtlPage .service-header {
+    flex-direction: row-reverse;
+  }
+  .rtlPage .service-tools {
+    justify-content: flex-start;
+  }
+}

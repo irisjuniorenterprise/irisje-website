@@ -71,5 +71,78 @@
       "description": "Soutenez IRIS Junior Entreprise et profitez d'une visibilité unique.",
       "cta": "Devenir partenaire"
     }
+  },
+  "ServicesPage": {
+    "metaTitle": "الخدمات | IRIS Junior Entreprise",
+    "hero": {
+      "title": "Nos <accent>Services</accent>",
+      "description": "Découvrez nos prestations dans les domaines de l'IT, du Marketing et des Études. Nous mettons notre savoir-faire au service de vos projets."
+    },
+    "introduction": {
+      "title": "Notre offre de services",
+      "description": "IRIS Junior Entreprise fonctionne comme un cabinet de conseil. Nous mettons notre savoir-faire au service des entrepreneurs, des PME et des Grands Comptes. Trois domaines d'expertise pour répondre à vos besoins."
+    },
+    "it": {
+      "title": "IT",
+      "subtitle": "Des solutions digitales sur mesure pour répondre à vos besoins technologiques.",
+      "web": {
+        "title": "Développement Web",
+        "desc": "Création de sites web sur mesure ou à l'aide de gestionnaires de contenu. Nous utilisons HTML/CSS/JavaScript pour les sites vitrines et les frameworks React JS et FastAPI pour les sites dynamiques, ainsi que WordPress avec ses plugins pour une solution clé en main.",
+        "cta": "Demander un devis"
+      },
+      "mobile": {
+        "title": "Développement Mobile",
+        "desc": "Conception d'applications mobiles natives pour Android avec Dart et Android Studio, ou hybrides multi-plateformes avec le framework Flutter.",
+        "cta": "Demander un devis"
+      },
+      "chatbot": {
+        "title": "Création de Chatbots",
+        "desc": "Conception de chatbots intelligents avec Dialogflow (Google). Intégration sur les sites web, applications mobiles et plateformes sociales comme Facebook.",
+        "cta": "Demander un devis"
+      }
+    },
+    "marketing": {
+      "title": "Marketing",
+      "subtitle": "Renforcez votre image de marque et votre présence sur les réseaux sociaux.",
+      "branding": {
+        "title": "Branding",
+        "desc": "Création d'une charte graphique complète définissant les couleurs, typographies, logotype et règles de mise en page. Conception de logotypes sur mesure pour une identité visuelle forte et cohérente sur tous vos supports (web et print).",
+        "cta": "Demander un devis"
+      },
+      "community": {
+        "title": "Community Management",
+        "desc": "Animation et engagement de votre communauté sur les réseaux sociaux. Planification de contenu, création de visuels, veille thématique et interaction avec vos abonnés pour renforcer votre notoriété.",
+        "cta": "Demander un devis"
+      }
+    },
+    "etudes": {
+      "title": "Études",
+      "subtitle": "Des études stratégiques pour éclairer vos décisions et optimiser votre développement.",
+      "marche": {
+        "title": "Étude de marché",
+        "desc": "Collecte et analyse d'informations pour identifier les caractéristiques d'un marché. Évaluation de la demande, analyse de la concurrence, des produits, de l'environnement et des tendances. Utilisation des méthodes PESTEL et SWOT.",
+        "cta": "Demander un devis"
+      },
+      "notoriete": {
+        "title": "Étude de notoriété",
+        "desc": "Mesure de la notoriété de votre marque auprès des consommateurs. Évaluation de la connaissance spontanée, assistée et de la perception globale de votre entreprise, de ses produits et services.",
+        "cta": "Demander un devis"
+      },
+      "satisfaction": {
+        "title": "Étude de satisfaction",
+        "desc": "Mesure du niveau de satisfaction de vos clients. Recueil de feedbacks pour améliorer vos produits, services et la relation client. Identification de vos points forts et axes d'amélioration.",
+        "cta": "Demander un devis"
+      },
+      "business": {
+        "title": "Plan d'affaires (Business Plan)",
+        "desc": "Élaboration d'un business plan complet pour votre projet de création ou de développement. Structuration du modèle économique avec le Business Model Canvas, prévisions financières et stratégie commerciale. Destiné aux investisseurs et établissements financiers.",
+        "cta": "Demander un devis"
+      }
+    },
+    "cta": {
+      "title": "Vous avez un projet ?",
+      "description": "Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé.",
+      "button": "Nous contacter"
+    }
   }
 }
