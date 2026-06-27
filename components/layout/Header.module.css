@@ -1,0 +1,224 @@
+/* ============================================================
+   STYLES GÉNÉRAUX & DESKTOP
+   ============================================================ */
+.header {
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  transition: box-shadow 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header.isScrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  display: flex;
+  gap: 32px;
+}
+
+.navList a {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  position: relative;
+  padding-bottom: 6px;
+  transition: color 0.3s;
+}
+
+.navList a:hover,
+.navList a.active {
+  color: var(--secondary);
+}
+
+/* Ligne sous le lien actif/survolé */
+.navList a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--secondary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.navList a:hover::after,
+.navList a.active::after {
+  transform: scaleX(1);
+}
+
+.desktopCta {
+  display: inline-flex;
+}
+
+.menuButton {
+  display: none;
+  width: 28px;
+  height: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 70;
+}
+
+.menuButton span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: var(--primary);
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.menuButton.isActive span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.menuButton.isActive span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuButton.isActive span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* ============================================================
+   NAVIGATION MOBILE
+   ============================================================ */
+.mobileNav {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  background: var(--surface);
+  border-top: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.mobileNav.isOpen {
+  max-height: 400px;
+  padding: 1rem 24px 2rem;
+}
+
+.mobileNav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobileNav a {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 1.1rem;
+  display: block;
+}
+
+.mobileNav .mobileCta {
+  margin-top: 10px;
+  background: var(--secondary);
+  color: var(--on-secondary);
+  text-align: center;
+  border-radius: 50px;
+  padding: 12px;
+}
+
+/* ============================================================
+   SUPPORT RTL (CORRIGÉ & OPTIMISÉ)
+   ============================================================ */
+
+/* Aligne le logo à droite et crée l'espace direct avec la navigation */
+.header.rtl .inner {
+  justify-content: flex-start;
+  gap: 40px; 
+}
+
+/* Force la section droite à occuper tout l'espace restant vers la gauche 
+   et pousse le bouton contact à l'extrême gauche */
+.header.rtl .rightSection {
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* Inverse l'origine de l'animation de soulignement des liens */
+.header.rtl .navList a::after {
+  left: auto;
+  right: 0;
+  transform-origin: right;
+}
+
+.header.rtl .navList a:hover::after,
+.header.rtl .navList a.active::after {
+  transform-origin: right;
+}
+
+/* Alignement du menu mobile pour l'arabe */
+.header.rtl .mobileNav ul {
+  align-items: flex-end;
+}
+
+.header.rtl .mobileNav .mobileCta {
+  text-align: center;
+  width: 100%;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .nav, .desktopCta { 
+    display: none; 
+  }
+  
+  .menuButton { 
+    display: flex; 
+  }
+  
+  .inner { 
+    height: 70px; 
+  }
+  
+  .logo img { 
+    height: 32px; 
+  }
+
+  /* Ajustements mobiles spécifiques pour le mode RTL */
+  .header.rtl .inner {
+    justify-content: space-between; /* Le logo reste à droite, le bouton burger va à gauche */
+  }
+
+  .header.rtl .rightSection {
+    flex: none;
+  }
+}
