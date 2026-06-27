@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Footer.module.css';
 import logoData from '@/public/logo-s-no-bg.png'; 
-// import { isRecruitmentOpen } from '@/lib/utils/date'; 
+// import { isRecruitmentOpen } from '@/lib/utils/date'; //A décommenter lorsque la fonction sera prête pour gérer dynamiquement l'affichage du lien de recrutement
 
 const socialIcons = {
   linkedin: (
