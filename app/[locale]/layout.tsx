@@ -3,7 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/config';
 import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';   // <-- Ajout
+import Footer from '@/components/layout/Footer';   // <-- Ajout du footer
 import '../globals.css';
 
 type Props = {
