@@ -1,8 +1,8 @@
-// app/[locale]/layout.tsx
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/config';
+import Header from '@/components/layout/Header';   // <-- Ajout
 import '../globals.css';
 
 type Props = {
@@ -21,7 +21,6 @@ export default async function LocaleLayout({ children, params }: Props) {
   const isRtl = locale === 'ar';
 
   return (
-    
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}>
       <body>
         <NextIntlClientProvider messages={messages} locale={locale}>
@@ -30,7 +29,8 @@ export default async function LocaleLayout({ children, params }: Props) {
              locale === 'en' ? 'Skip to main content' :
              'التجاوز إلى المحتوى الرئيسي'}
           </a>
-          {children}
+          <Header />   {/* <-- Ajout du Header */}
+          <main id="main">{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>
