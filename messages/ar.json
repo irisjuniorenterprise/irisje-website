@@ -45,6 +45,22 @@
     "copyright": "جميع الحقوق محفوظة",
     "aria_label": "القائمة الرئيسية"
   },
+  "Breadcrumb": {
+    "home": "الرئيسية",
+    "notFound": "الصفحة غير موجودة",
+    "routes": {
+      "/a-propos": "من نحن",
+      "/services": "الخدمات",
+      "/contact": "اتصل بنا",
+      "/realisations": "الإنجازات",
+      "/recrutement": "التوظيف",
+      "/devis": "طلب عرض سعر",
+      "/faq": "الأسئلة الشائعة",
+      "/mentions-legales": "إشعارات قانونية",
+      "/politique-confidentialite": "سياسة الخصوصية",
+      "/cgu": "شروط الاستخدام"
+    }
+  },
   "Slider": {
     "services": {
       "title": "خدمات مخصصة",
@@ -70,6 +86,11 @@
       "title": "الشراكة والرعاية",
       "description": "ادعم IRIS Junior Entreprise واستفد من رؤية فريدة.",
       "cta": "كن شريكًا"
+    },
+    "recrutement": {
+      "title": "انضم إلى IRIS Junior Entreprise",
+      "description": "انضم إلى فريقنا من المستشارين وطوّر مهاراتك التقنية والبشرية.",
+      "cta": "قدم الآن"
     }
   },
   "ServicesPage": {
@@ -198,5 +219,13 @@
         "desc": "نتقدم بالمشاركة والمسؤولية وروح الفريق في كل مشروع."
       }
     }
+  },
+  "NotFound": {
+    "metaTitle": "الصفحة غير موجودة | IRIS Junior Entreprise",
+    "metaDescription": "لا يمكن العثور على هذه الصفحة.",
+    "title": "نسرنا",
+    "titleHighlight": "عاد خالي الوفاض",
+    "description": "يبدو أن الأثر اختفى... ربما تغير عنوان الصفحة أو لم تعد موجودة. عد إلى العش وانطلق من جديد.",
+    "cta": "العودة إلى العش"
   }
 }

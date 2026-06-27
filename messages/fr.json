@@ -45,6 +45,22 @@
     "copyright": "Tous droits réservés",
     "aria_label": "Navigation principale"
   },
+  "Breadcrumb": {
+    "home": "Accueil",
+    "notFound": "Page non trouvée",
+    "routes": {
+      "/a-propos": "À propos",
+      "/services": "Services",
+      "/contact": "Contact",
+      "/realisations": "Réalisations",
+      "/recrutement": "Recrutement",
+      "/devis": "Devis",
+      "/faq": "FAQ",
+      "/mentions-legales": "Mentions légales",
+      "/politique-confidentialite": "Politique de confidentialité",
+      "/cgu": "Conditions générales"
+    }
+  },
   "Slider": {
     "services": {
       "title": "Des services sur mesure",
@@ -70,6 +86,11 @@
       "title": "Partenariat & Sponsoring",
       "description": "Soutenez IRIS Junior Entreprise et profitez d'une visibilité unique.",
       "cta": "Devenir partenaire"
+    },
+    "recrutement": {
+      "title": "Rejoignez IRIS Junior Entreprise",
+      "description": "Intégrez notre équipe de consultants et développez vos compétences techniques et humaines.",
+      "cta": "Postuler maintenant"
     }
   },
   "ServicesPage": {
@@ -198,5 +219,13 @@
         "desc": "Nous avançons avec implication, responsabilité et esprit d'équipe dans chaque projet."
       }
     }
+  },
+  "NotFound": {
+    "metaTitle": "Page introuvable | IRIS Junior Entreprise",
+    "metaDescription": "Impossible de trouver cette page.",
+    "title": "Notre aigle",
+    "titleHighlight": "est revenue bredouille",
+    "description": "La piste est froide... Cette page a peut-être disparu ou changé d’adresse. Retournez au nid pour repartir.",
+    "cta": "Retour au nid"
   }
 }
