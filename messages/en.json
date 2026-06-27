@@ -144,5 +144,59 @@
       "description": "Contact us to discuss your needs and get a personalized quote.",
       "button": "Contact us"
     }
+  },
+  "AboutPage": {
+    "metaTitle": "About | IRIS Junior Entreprise",
+    "metaDescription": "Discover IRIS Junior Entreprise, the Junior-Creation of ENIS. Our mission, vision, values.",
+    "hero": {
+      "title": "About <span class=\"accent-text\">IRIS JE</span>",
+      "description": "Discover who we are, our mission and the values that drive us every day."
+    },
+    "who_we_are": {
+      "title": "Who are we?",
+      "description_1": "<strong>IRIS Junior Création</strong> is a student association founded in 2014 within the <strong>National School of Engineers of Sfax (ENIS)</strong>. Operating according to the consulting firm model, it puts the skills of its members at the service of real projects through competitive and professional services.",
+      "description_2": "As a non-profit organization, IRIS Junior Création has a <strong>dual vocation</strong>:",
+      "vocation_pedagogique": "Educational",
+      "vocation_pedagogique_desc": "Develop the technical, strategic and human skills of students.",
+      "vocation_economique": "Economic",
+      "vocation_economique_desc": "Offer concrete and quality solutions to its clients and partners."
+    },
+    "mission": {
+      "title": "Our mission",
+      "quote": "« Train students capable of evolving in a professional environment while offering high value-added services. »",
+      "description": "Through its projects, the association develops the skills of its consultants, promotes innovation, strengthens the spirit of initiative and supports its clients in their development."
+    },
+    "vision": {
+      "title": "Our vision",
+      "description_1": "IRIS Junior Création aims to become a national reference for professionalism, innovation and impact, by achieving the « Next Level » through structured governance, a clear strategy and a high-performance management system.",
+      "description_2": "Through a progressive and consistent evolution of the entity, based on its human values, its quality requirements and its collective commitment, IRIS Junior Création wishes to build a mature, reliable and recognized organization within the Junior-Enterprise movement."
+    },
+    "values": {
+      "title": "Our values",
+      "innovation": {
+        "title": "Innovation",
+        "desc": "We encourage new ideas, creative solutions and the ability to anticipate needs."
+      },
+      "resourcefulness": {
+        "title": "Resourcefulness",
+        "desc": "We know how to make the most of available resources and turn every challenge into an opportunity."
+      },
+      "inspiration": {
+        "title": "Inspiration",
+        "desc": "We want to motivate, transmit and create a positive impact around us."
+      },
+      "strategy": {
+        "title": "Strategy",
+        "desc": "We encourage new ideas, creative solutions and the ability to anticipate needs."
+      },
+      "professionalism": {
+        "title": "Professionalism",
+        "desc": "We value rigor, quality, reliability and respect for our commitments."
+      },
+      "engagement": {
+        "title": "Commitment",
+        "desc": "We move forward with involvement, responsibility and team spirit in every project."
+      }
+    }
   }
 }
