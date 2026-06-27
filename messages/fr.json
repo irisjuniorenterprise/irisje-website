@@ -73,7 +73,7 @@
     }
   },
   "ServicesPage": {
-    "metaTitle": "الخدمات | IRIS Junior Entreprise",
+    "metaTitle": "Services | IRIS Junior Entreprise",
     "hero": {
       "title": "Nos <accent>Services</accent>",
       "description": "Découvrez nos prestations dans les domaines de l'IT, du Marketing et des Études. Nous mettons notre savoir-faire au service de vos projets."
@@ -143,6 +143,60 @@
       "title": "Vous avez un projet ?",
       "description": "Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé.",
       "button": "Nous contacter"
+    }
+  },
+  "AboutPage": {
+    "metaTitle": "À propos | IRIS Junior Entreprise",
+    "metaDescription": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs.",
+    "hero": {
+      "title": "À propos d'<span class=\"accent-text\">IRIS JE</span>",
+      "description": "Découvrez qui nous sommes, notre mission et les valeurs qui nous animent au quotidien."
+    },
+    "who_we_are": {
+      "title": "Qui sommes-nous ?",
+      "description_1": "<strong>IRIS Junior Création</strong> est une association étudiante fondée en 2014 au sein de l'<strong>École Nationale des Ingénieurs de Sfax (ENIS)</strong>. Fonctionnant selon le modèle des cabinets de conseil, elle met les compétences de ses membres au service de projets réels à travers des prestations compétitives et professionnalisantes.",
+      "description_2": "À but non lucratif, IRIS Junior Création possède une <strong>double vocation</strong> :",
+      "vocation_pedagogique": "Pédagogique",
+      "vocation_pedagogique_desc": "Développer les compétences techniques, stratégiques et humaines des étudiants.",
+      "vocation_economique": "Économique",
+      "vocation_economique_desc": "Proposer des solutions concrètes et de qualité à ses clients et partenaires."
+    },
+    "mission": {
+      "title": "Notre mission",
+      "quote": "« Former des étudiants capables d'évoluer dans un environnement professionnel tout en proposant des services à forte valeur ajoutée. »",
+      "description": "À travers ses projets, l'association développe les compétences de ses consultants, favorise l'innovation, renforce l'esprit d'initiative et accompagne ses clients dans leur développement."
+    },
+    "vision": {
+      "title": "Notre vision",
+      "description_1": "IRIS Junior Création ambitionne de devenir une référence nationale de professionnalisme, d'innovation et d'impact, en concrétisant le « Next Level » à travers une gouvernance structurée, une stratégie claire et un système de management performant.",
+      "description_2": "Par une évolution progressive et cohérente de l'entité, fondée sur ses valeurs humaines, son exigence de qualité et son engagement collectif, IRIS Junior Création souhaite bâtir une organisation mature, fiable et reconnue au sein du mouvement des Junior-Entreprises."
+    },
+    "values": {
+      "title": "Nos valeurs",
+      "innovation": {
+        "title": "Innovation",
+        "desc": "Nous encourageons les idées nouvelles, les solutions créatives et la capacité à anticiper les besoins."
+      },
+      "resourcefulness": {
+        "title": "Resourcefulness",
+        "desc": "Nous savons tirer le meilleur des ressources disponibles et transformer chaque défi en opportunité."
+      },
+      "inspiration": {
+        "title": "Inspiration",
+        "desc": "Nous souhaitons motiver, transmettre et créer un impact positif autour de nous."
+      },
+      "strategy": {
+        "title": "Strategy",
+        "desc": "Nous encourageons les idées nouvelles, les solutions créatives et la capacité à anticiper les besoins."
+      },
+      "professionalism": {
+        "title": "Professionalism",
+        "desc": "Nous valorisons la rigueur, la qualité, la fiabilité et le respect de nos engagements."
+      },
+      "engagement": {
+        "title": "Engagement",
+        "desc": "Nous avançons avec implication, responsabilité et esprit d'équipe dans chaque projet."
+      }
     }
   }
 }
