@@ -140,6 +140,7 @@
   padding-right: 4px;
 }
 
+
 @media (min-width: 768px) {
   /* Aligne automatiquement l'ordre des grilles de droite à gauche en Desktop */
   .siteFooter.rtl .footerTop {
