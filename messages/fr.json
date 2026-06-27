@@ -1,6 +1,34 @@
 {
   "HomePage": {
-    "title": "IRIS Junior Entreprise"
+    "hero": {
+      "title": "Propulsez votre potentiel, connectez vos succès avec <span class=\"accent-text\">IRIS JE</span>",
+      "cta_start": "Commencer",
+      "cta_services": "Nos Services"
+    },
+    "services": {
+      "title": "Nos expertises au service de vos ambitions",
+      "description": "IRIS Junior Création accompagne les entrepreneurs, les startups, les PME et les établissements publics à travers des solutions innovantes et adaptées à leurs besoins.",
+      "cta": "Découvrir nos services"
+    },
+    "about": {
+      "title": "Qui sommes-nous ?",
+      "description_1": "Fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax, IRIS Junior Création est une association estudiantine fonctionnant selon le modèle des cabinets de conseil.",
+      "description_2": "Portée par des valeurs de professionnalisme, d'innovation et d'engagement, IRIS Junior Création œuvre à former les ingénieurs de demain.",
+      "cta": "En savoir plus"
+    },
+    "devis": {
+      "title": "Donnez vie à votre projet",
+      "description_1": "Vous avez une idée, un besoin ou un défi à relever ? Notre équipe est à votre écoute.",
+      "description_2": "Décrivez votre projet et obtenez un devis personnalisé.",
+      "cta": "Votre projet commence ici"
+    },
+    "contact": {
+      "title": "Restons en contact",
+      "description_1": "Une question, une demande d'information ou un projet à concrétiser ? N'hésitez pas à nous contacter.",
+      "description_2": "Notre équipe se fera un plaisir de vous accompagner.",
+      "description_3": "Construisons ensemble vos prochaines réussites.",
+      "cta": "Nous contacter"
+    }
   },
   "Navigation": {
     "home": "Accueil",
@@ -16,5 +44,32 @@
     "legal_cgu": "CGU",
     "copyright": "Tous droits réservés",
     "aria_label": "Navigation principale"
+  },
+  "Slider": {
+    "services": {
+      "title": "Des services sur mesure",
+      "description": "Découvrez nos prestations en IT, Marketing et Études pour accompagner votre projet.",
+      "cta": "Voir nos services"
+    },
+    "it": {
+      "title": "Développement IT & Solutions digitales",
+      "description": "Nous créons des sites web, applications mobiles et chatbots sur mesure.",
+      "cta": "Découvrir nos prestations IT"
+    },
+    "etudes": {
+      "title": "Études et conseil stratégique",
+      "description": "Nous réalisons des études de marché, de notoriété, de satisfaction et des business plans.",
+      "cta": "En savoir plus"
+    },
+    "branding": {
+      "title": "Branding & Community Management",
+      "description": "Renforcez votre image de marque avec nos prestations de branding et de community management.",
+      "cta": "En savoir plus"
+    },
+    "partenariat": {
+      "title": "Partenariat & Sponsoring",
+      "description": "Soutenez IRIS Junior Entreprise et profitez d'une visibilité unique.",
+      "cta": "Devenir partenaire"
+    }
   }
 }
