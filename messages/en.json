@@ -1,6 +1,34 @@
 {
   "HomePage": {
-    "title": "IRIS Junior Entreprise"
+    "hero": {
+      "title": "Boost your potential, connect your success with <span class=\"accent-text\">IRIS JE</span>",
+      "cta_start": "Get Started",
+      "cta_services": "Our Services"
+    },
+    "services": {
+      "title": "Our Expertise at the Service of Your Ambitions",
+      "description": "IRIS Junior Création supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions.",
+      "cta": "Discover our services"
+    },
+    "about": {
+      "title": "Who Are We?",
+      "description_1": "Founded in 2014 at the National School of Engineers of Sfax, IRIS Junior Création is a student association operating according to the consulting firm model.",
+      "description_2": "Driven by the values of professionalism, innovation, and commitment, IRIS Junior Création strives to train tomorrow's engineers.",
+      "cta": "Learn more"
+    },
+    "devis": {
+      "title": "Bring Your Project to Life",
+      "description_1": "Do you have an idea, a need, or a challenge to overcome? Our team is ready to help.",
+      "description_2": "Describe your project and receive a personalized quote.",
+      "cta": "Your project starts here"
+    },
+    "contact": {
+      "title": "Let's Stay Connected",
+      "description_1": "Do you have a question, need more information, or wish to bring a project to life?",
+      "description_2": "Our team will be delighted to assist you.",
+      "description_3": "Let's build your next success together.",
+      "cta": "Contact us"
+    }
   },
   "Navigation": {
     "home": "Home",
@@ -16,5 +44,32 @@
     "legal_cgu": "Terms of use",
     "copyright": "All rights reserved",
     "aria_label": "Main navigation"
+  },
+  "Slider": {
+    "services": {
+      "title": "Customized services",
+      "description": "Discover our IT, Marketing and Studies services to support your project.",
+      "cta": "View our services"
+    },
+    "it": {
+      "title": "IT Development & Digital Solutions",
+      "description": "We create custom websites, mobile apps and chatbots to meet your technological needs.",
+      "cta": "Discover our IT services"
+    },
+    "etudes": {
+      "title": "Studies and strategic consulting",
+      "description": "We carry out market studies, awareness studies, satisfaction surveys and business plans.",
+      "cta": "Learn more"
+    },
+    "branding": {
+      "title": "Branding & Community Management",
+      "description": "Strengthen your brand image with our branding and community management services.",
+      "cta": "Learn more"
+    },
+    "partenariat": {
+      "title": "Partnership & Sponsorship",
+      "description": "Support IRIS Junior Entreprise and benefit from unique visibility.",
+      "cta": "Become a partner"
+    }
   }
 }

@@ -1,0 +1,57 @@
+/* app/[locale]/page.module.css */
+
+/* ============================================================
+   RTL OVERRIDES - Page d'accueil
+   ============================================================ */
+
+/* Appliqué sur le conteneur principal de la page */
+.rtlPage {
+  direction: rtl;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.rtlPage .hero .hero-content {
+  text-align: right;
+}
+
+.rtlPage .hero .hero-actions {
+  flex-direction: row-reverse;
+}
+
+.rtlPage .hero .scroll-cue {
+  /* La flèche reste vers le bas, pas besoin d'inversion */
+}
+
+/* ============================================================
+   SLIDER (géré par le composant)
+   ============================================================ */
+/* Aucun override nécessaire, le composant Slider gère le RTL via sa prop `locale` */
+
+/* ============================================================
+   SECTIONS (services, about, devis, contact)
+   ============================================================ */
+/* Les titres et paragraphes sont déjà centrés, on garde */
+.rtlPage .placeholder .section-title {
+  text-align: center;
+}
+
+.rtlPage .placeholder p {
+  text-align: center;
+}
+
+/* ============================================================
+   CTA DEVIS (carte)
+   ============================================================ */
+/* Pas de modifications spécifiques nécessaires */
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .rtlPage .hero .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

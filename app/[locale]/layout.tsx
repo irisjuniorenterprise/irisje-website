@@ -1,10 +1,12 @@
+// app/[locale]/layout.tsx
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/config';
 import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';   // <-- Ajout du footer
-import '../globals.css';
+import Footer from '@/components/layout/Footer';
+import ClientSideEffects from '@/components/ClientSideEffects';
+
 
 type Props = {
   children: React.ReactNode;
@@ -19,22 +21,23 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   const messages = await getMessages({ locale });
-  const isRtl = locale === 'ar';
 
   return (
-    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}>
+    <html>
       <body>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <a href="#main" className="skip-link">
-            {locale === 'fr' ? 'Aller au contenu principal' :
-             locale === 'en' ? 'Skip to main content' :
-             'التجاوز إلى المحتوى الرئيسي'}
+            Aller au contenu principal
           </a>
           <Header />
+          
           <main id="main">{children}</main>
-          <Footer />   {/* <-- Ajout du Footer */}
+          
+          <Footer />
+          <ClientSideEffects />
         </NextIntlClientProvider>
       </body>
     </html>
+    
   );
 }
