@@ -1,5 +1,20 @@
 {
   "HomePage": {
     "title": "IRIS Junior Entreprise"
+  },
+  "Navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "contact": "Contactez-nous",
+    "devis": "Devis",
+    "recruitment": "Recrutement",
+    "faq": "FAQ",
+    "legal": "Informations légales",
+    "legal_mentions": "Mentions légales",
+    "legal_confidentialite": "Politique de confidentialité",
+    "legal_cgu": "CGU",
+    "copyright": "Tous droits réservés",
+    "aria_label": "Navigation principale"
   }
 }

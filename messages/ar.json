@@ -1,5 +1,20 @@
 {
   "HomePage": {
     "title": "IRIS Junior Entreprise"
+  },
+  "Navigation": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "services": "الخدمات",
+    "contact": "اتصل بنا",
+    "devis": "طلب عرض سعر",
+    "recruitment": "التوظيف",
+    "faq": "الأسئلة الشائعة",
+    "legal": "معلومات قانونية",
+    "legal_mentions": "إشعارات قانونية",
+    "legal_confidentialite": "سياسة الخصوصية",
+    "legal_cgu": "شروط الاستخدام",
+    "copyright": "جميع الحقوق محفوظة",
+    "aria_label": "القائمة الرئيسية"
   }
 }
