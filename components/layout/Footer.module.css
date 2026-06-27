@@ -1,0 +1,148 @@
+/* ============================================================
+   STYLES GÉNÉRAUX & STRUCTURE (MOBILE PAR DÉFAUT)
+   ============================================================ */
+.siteFooter {
+  background: var(--footer-bg);
+  color: var(--footer-text-secondary);
+  padding: 56px 0 0;
+}
+
+/* Sur mobile, on force 3 colonnes pour le texte avec un texte très petit selon la maquette */
+.footerTop {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 10px;
+  padding-bottom: 40px;
+}
+
+.footerCol h3 {
+  color: var(--footer-text-primary);
+  font-size: 0.85rem; /* Réduit pour Mobile */
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.footerCol ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footerCol a {
+  color: var(--footer-text-secondary);
+  font-size: 0.75rem; /* Très petit pour tout faire tenir sur Mobile */
+  display: inline-block;
+  transition: color 0.2s ease, padding 0.2s ease;
+}
+
+.footerCol a:hover {
+  color: var(--footer-text-hover);
+  padding-left: 4px;
+}
+
+.footerBrand {
+  grid-column: 1 / -1; /* Prend toute la largeur sur mobile, s'affiche en dessous */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.footerLogo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  opacity: 0.95;
+}
+
+.socialLinks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.socialLinks a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--footer-text-primary);
+  transition: all 0.3s ease;
+}
+
+.socialLinks svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.socialLinks a:hover {
+  background: var(--secondary);
+  color: var(--on-secondary);
+  transform: translateY(-3px);
+}
+
+.footerDivider {
+  height: 1px;
+  background: #333333;
+}
+
+.footerBottom {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   DESKTOP ET TABLETTE (Grand Écrans)
+   ============================================================ */
+@media (min-width: 768px) {
+  .footerTop {
+    grid-template-columns: repeat(3, 1fr) auto;
+    gap: 32px 48px;
+  }
+  
+  .footerCol h3 {
+    font-size: 1rem;
+  }
+  
+  .footerCol a {
+    font-size: 0.88rem;
+  }
+
+  .footerBrand {
+    grid-column: auto;
+    align-items: center;
+    margin-top: 0;
+  }
+}
+
+/* ============================================================
+   SUPPORT RTL (POUR LA LANGUE ARABE)
+   ============================================================ */
+
+/* Aligne TOUS les blocs de texte à droite dès le mobile */
+.siteFooter.rtl .footerCol {
+  text-align: right;
+}
+
+/* En mode Arabe, l'effet de décalage au survol s'inverse vers la droite */
+.siteFooter.rtl .footerCol a:hover {
+  padding-left: 0;
+  padding-right: 4px;
+}
+
+@media (min-width: 768px) {
+  /* Aligne automatiquement l'ordre des grilles de droite à gauche en Desktop */
+  .siteFooter.rtl .footerTop {
+    grid-template-columns: repeat(3, 1fr) auto;
+  }
+}

@@ -2,7 +2,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/config';
-import Header from '@/components/layout/Header';   // <-- Ajout
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';   // <-- Ajout
 import '../globals.css';
 
 type Props = {
@@ -29,8 +30,9 @@ export default async function LocaleLayout({ children, params }: Props) {
              locale === 'en' ? 'Skip to main content' :
              'التجاوز إلى المحتوى الرئيسي'}
           </a>
-          <Header />   {/* <-- Ajout du Header */}
+          <Header />
           <main id="main">{children}</main>
+          <Footer />   {/* <-- Ajout du Footer */}
         </NextIntlClientProvider>
       </body>
     </html>
