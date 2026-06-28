@@ -14,7 +14,6 @@ const intlMiddleware = createMiddleware({
 export default function middleware(request: NextRequest): NextResponse {
   const response = intlMiddleware(request) as NextResponse;
 
-  // ✅ Extraire la locale depuis l'URL et la transmettre en header custom
   const pathname = request.nextUrl.pathname;
   const localeFromUrl = pathname.split('/')[1];
 

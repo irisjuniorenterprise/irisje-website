@@ -1,25 +1,33 @@
 // app/not-found.tsx
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { locales, defaultLocale } from '@/i18n/config';
+import NotFoundContent from '@/components/NotFoundContent';
+import Header from '@/components/layout/Header';
+import Breadcrumb from '@/components/ui/Breadcrumb';
+import Slogan from '@/components/ui/Slogan';
+import Footer from '@/components/layout/Footer';
 import './not-found.css';
 
 async function getLocale(): Promise<string> {
   const headersList = await headers();
 
-  // ✅ Priorité 1 : locale depuis l'URL courante (via middleware)
+  const nextIntlLocale = headersList.get('x-next-intl-locale');
+  if (nextIntlLocale && locales.includes(nextIntlLocale as any)) return nextIntlLocale;
+
   const xLocale = headersList.get('x-locale');
   if (xLocale && locales.includes(xLocale as any)) return xLocale;
 
-  // ✅ Priorité 2 : depuis le referer (si l'user naviguait déjà)
   const referer = headersList.get('referer') || '';
-  const refererSegment = new URL(referer || 'http://x').pathname.split('/')[1];
-  if (refererSegment && locales.includes(refererSegment as any)) return refererSegment;
+  try {
+    const refLocale = new URL(referer).pathname.split('/')[1];
+    if (refLocale && locales.includes(refLocale as any)) return refLocale;
+  } catch {}
 
-  // ✅ Fallback : accept-language du navigateur
-  const acceptLanguage = headersList.get('accept-language') || '';
-  const preferred = acceptLanguage.split(',')[0].split('-')[0];
+  const acceptLang = headersList.get('accept-language') || '';
+  const preferred = acceptLang.split(',')[0].split('-')[0];
   return locales.includes(preferred as any) ? preferred : defaultLocale;
 }
 
@@ -41,5 +49,24 @@ export const metadata: Metadata = {
 
 export default async function RootNotFound() {
   const locale = await getLocale();
-  redirect(`/${locale}/404`);
+  const isRtl = locale === 'ar';
+  const messages = await getMessages({ locale });
+
+  return (
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        {/* ✅ Tous les composants qui utilisent useTranslations
+            doivent être DANS le provider */}
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <Header />
+          <Breadcrumb />
+          <main id="main">
+            <NotFoundContent locale={locale} />
+          </main>
+          <Slogan />
+          <Footer />
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
 }
