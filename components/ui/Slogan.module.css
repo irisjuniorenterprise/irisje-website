@@ -1,0 +1,41 @@
+/* components/ui/Slogan.module.css */
+
+.sloganWrapper {
+  padding: 2.5rem 0 1.5rem 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border-light);
+}
+
+.sloganContent {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.15rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.hashtag,
+.text {
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  color: var(--primary);
+  text-transform: none;
+}
+
+/* ✅ Support RTL : inverser l'ordre des éléments */
+.rtl {
+  flex-direction: row-reverse;
+  justify-content: flex-start; /* ou flex-end selon le rendu souhaité */
+}
+
+/* Version mobile : on garde l'alignement à droite en LTR, et à gauche en RTL */
+@media (max-width: 768px) {
+  .sloganContent {
+    justify-content: flex-end;
+  }
+  .rtl {
+    justify-content: flex-start;
+  }
+}
