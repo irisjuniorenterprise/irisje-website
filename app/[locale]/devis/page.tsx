@@ -1,0 +1,87 @@
+// app/[locale]/devis/page.tsx
+import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
+import Image from 'next/image';
+import logoData from '@/public/logo-s-no-bg.png';
+import DevisForm from '@/components/forms/DevisForm';
+import { Icons } from '@/components/icons/Icons';
+import styles from './page.module.css'; // ✅ import du module CSS
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'DevisPage' });
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+    alternates: {
+      canonical: `https://irisje.com/${locale}/devis`,
+      languages: {
+        fr: '/fr/devis',
+        en: '/en/devis',
+        ar: '/ar/devis',
+      },
+    },
+  };
+}
+
+export default async function DevisPage({ params }: Props) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'DevisPage' });
+  const isRtl = locale === 'ar';
+
+  return (
+    // ✅ Conteneur RTL
+    <div className={isRtl ? styles.rtlPage : ''}>
+      <section className="hero" id="devis-hero">
+        <div className="hero-inner container">
+          <div className="hero-visual" data-animate="visual">
+            <div className="hero-glow"></div>
+            <Image
+              className="hero-logo"
+              src={logoData}
+              alt="IRIS Junior Entreprise"
+              width={300}
+              height={300}
+              priority
+            />
+          </div>
+          <div className="hero-content" data-animate="content">
+            <h1>
+              {t.rich('hero.title', {
+                accent: (chunks) => <span className="accent-text">{chunks}</span>,
+              })}
+            </h1>
+            <p
+              style={{
+                color: 'rgba(255,255,255,0.85)',
+                fontSize: 'clamp(1rem, 1.2vw, 1.2rem)',
+                maxWidth: '560px',
+                margin: '0 auto',
+              }}
+            >
+              {t('hero.description')}
+            </p>
+          </div>
+        </div>
+        <span className="scroll-cue" aria-hidden="true">
+          <Icons.ChevronDown size={22} />
+        </span>
+      </section>
+
+      <section style={{ padding: '3rem 0 5rem', background: 'var(--background)' }}>
+        <div className="container">
+          <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+            <div className="contact-card">
+              {/* Le formulaire gère déjà son propre RTL via la prop locale */}
+              <DevisForm locale={locale} />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
