@@ -1,0 +1,136 @@
+/* ============================================================
+   STYLES GÉNÉRAUX & STRUCTURE (DESKTOP / MOBILE PAR DÉFAUT)
+   ============================================================ */
+.breadcrumb {
+  padding: 0.75rem 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.85rem;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 500;
+  padding: 0.15rem 0.1rem;
+  border-radius: var(--radius-sm);
+}
+
+.link:hover {
+  color: var(--primary);
+}
+
+.link.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: default;
+  pointer-events: none;
+}
+
+.link .homeIcon {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.link:hover .homeIcon {
+  color: var(--primary);
+}
+
+.link.active .homeIcon {
+  color: var(--primary);
+}
+
+.homeLabel {
+  display: none;
+}
+
+.separator {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+/* ============================================================
+   RESPONSIVE (MOBILE)
+   ============================================================ */
+@media (max-width: 480px) {
+  .breadcrumb {
+    padding: 0.5rem 0;
+    font-size: 0.8rem;
+  }
+
+  .list {
+    gap: 0.15rem 0.35rem;
+  }
+
+  .item {
+    gap: 0.15rem 0.35rem;
+  }
+
+  .homeLabel {
+    display: none;
+  }
+
+  .link {
+    padding: 0.1rem 0.05rem;
+  }
+
+  .link .homeIcon {
+    width: 18px;
+    height: 18px;
+    display: inline-block; /* Réactivé sur mobile au cas où */
+  }
+
+  .separator {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE (TABLETTE & DESKTOP)
+   ============================================================ */
+@media (min-width: 481px) {
+  .homeLabel {
+    display: inline;
+  }
+
+  .homeIcon {
+    display: none;
+  }
+}
+
+/* ============================================================
+   SUPPORT RTL (POUR LA LANGUE ARABE)
+   ============================================================ */
+
+/* Aligne le fil d'Ariane à droite de l'écran */
+.breadcrumb.rtl .list {
+  justify-content: flex-start;
+}
+
+/* Pivote les chevrons séparateurs pour qu'ils pointent vers la gauche (<) */
+.breadcrumb.rtl .separator {
+  transform: scaleX(-1);
+}
