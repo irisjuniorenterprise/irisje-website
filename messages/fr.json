@@ -380,7 +380,7 @@
       "title_open": "Rejoignez <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recrutement <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "Envie de développer vos compétences et de vivre une expérience associative enrichissante ? Postulez dès maintenant !",
-      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement au mois de septembre. Revenez nous voir à cette période !"
+      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement au mois de Octobre. Revenez nous voir à cette période !"
     }
   },
   "RecruitmentForm": {
@@ -449,7 +449,7 @@
   },
   "RecruitmentClosed": {
     "title": "Candidatures fermées",
-    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement au mois de septembre</strong>.",
+    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement au mois de Octobre</strong>.",
     "note": "Prochaine ouverture :",
     "actions": {
       "home": "Retour à l'accueil",
@@ -578,7 +578,7 @@
       {
         "id": 4,
         "question": "Comment puis-je rejoindre IRIS Junior Entreprise ?",
-        "answer": "Les candidatures sont ouvertes chaque année au mois de septembre. Vous pouvez postuler via le formulaire de recrutement disponible sur notre site pendant cette période. Nous recherchons des étudiants motivés, passionnés et souhaitant développer leurs compétences."
+        "answer": "Les candidatures sont ouvertes chaque année au mois de Octobre. Vous pouvez postuler via le formulaire de recrutement disponible sur notre site pendant cette période. Nous recherchons des étudiants motivés, passionnés et souhaitant développer leurs compétences."
       },
       {
         "id": 5,

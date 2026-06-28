@@ -380,7 +380,7 @@
       "title_open": "Join <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recruitment <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "Want to develop your skills and live an enriching association experience? Apply now!",
-      "description_closed": "Applications to join IRIS Junior Entreprise are only open in September. Come back to see us then!"
+      "description_closed": "Applications to join IRIS Junior Entreprise are only open in October. Come back to see us then!"
     }
   },
   "RecruitmentForm": {
@@ -449,7 +449,7 @@
   },
   "RecruitmentClosed": {
     "title": "Applications closed",
-    "description": "Applications to join IRIS Junior Entreprise are open <strong>only in September</strong>.",
+    "description": "Applications to join IRIS Junior Entreprise are open <strong>only in October</strong>.",
     "note": "Next opening:",
     "actions": {
       "home": "Back to home",
@@ -578,7 +578,7 @@
       {
         "id": 4,
         "question": "How can I join IRIS Junior Entreprise?",
-        "answer": "Applications are open every year in September. You can apply via the recruitment form available on our site during this period. We are looking for motivated, passionate students who want to develop their skills."
+        "answer": "Applications are open every year in October. You can apply via the recruitment form available on our site during this period. We are looking for motivated, passionate students who want to develop their skills."
       },
       {
         "id": 5,

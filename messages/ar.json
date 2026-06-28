@@ -380,7 +380,7 @@
       "title_open": "انضم إلى <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "التوظيف <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "هل ترغب في تطوير مهاراتك وخوض تجربة جمعية غنية؟ تقدم الآن!",
-      "description_closed": "التقديم للانضمام إلى IRIS Junior Entreprise مفتوح فقط في شهر سبتمبر. عد إلينا في هذه الفترة!"
+      "description_closed": "التقديم للانضمام إلى IRIS Junior Entreprise مفتوح فقط في شهر أكتوبر. عد إلينا في هذه الفترة!"
     }
   },
   "RecruitmentForm": {
@@ -449,7 +449,7 @@
   },
   "RecruitmentClosed": {
     "title": "التقديم مغلق",
-    "description": "التقديم للانضمام إلى IRIS Junior Entreprise مفتوح <strong>فقط في شهر سبتمبر</strong>.",
+    "description": "التقديم للانضمام إلى IRIS Junior Entreprise مفتوح <strong>فقط في شهر أكتوبر</strong>.",
     "note": "الافتتاح القادم:",
     "actions": {
       "home": "العودة إلى الرئيسية",
@@ -578,7 +578,7 @@
       {
         "id": 4,
         "question": "كيف يمكنني الانضمام إلى IRIS Junior Entreprise؟",
-        "answer": "التقديم مفتوح كل عام في شهر سبتمبر. يمكنك التقدم عبر نموذج التوظيف المتاح على موقعنا خلال هذه الفترة. نبحث عن طلاب متحمسين وشغوفين يرغبون في تطوير مهاراتهم."
+        "answer": "التقديم مفتوح كل عام في شهر أكتوبر. يمكنك التقدم عبر نموذج التوظيف المتاح على موقعنا خلال هذه الفترة. نبحث عن طلاب متحمسين وشغوفين يرغبون في تطوير مهاراتهم."
       },
       {
         "id": 5,
