@@ -1,0 +1,27 @@
+/* app/[locale]/faq/page.module.css */
+
+.rtlPage {
+  direction: rtl;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.rtlPage .hero .hero-content {
+  text-align: right;
+}
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+.rtlPage .faq-card {
+  /* Le composant FaqAccordion gère déjà son propre RTL via la prop locale et ses styles */
+  /* Aucun ajustement supplémentaire nécessaire */
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Ajustements mobiles si besoin */
+}

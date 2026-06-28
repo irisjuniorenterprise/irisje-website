@@ -7,13 +7,13 @@
     },
     "services": {
       "title": "Our Expertise at the Service of Your Ambitions",
-      "description": "IRIS Junior Création supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions.",
+      "description": "IRIS Junior Entreprise supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions.",
       "cta": "Discover our services"
     },
     "about": {
       "title": "Who Are We?",
-      "description_1": "Founded in 2014 at the National School of Engineers of Sfax, IRIS Junior Création is a student association operating according to the consulting firm model.",
-      "description_2": "Driven by the values of professionalism, innovation, and commitment, IRIS Junior Création strives to train tomorrow's engineers.",
+      "description_1": "Founded in 2014 at the National School of Engineers of Sfax, IRIS Junior Entreprise is a student association operating according to the consulting firm model.",
+      "description_2": "Driven by the values of professionalism, innovation, and commitment, IRIS Junior Entreprise strives to train tomorrow's engineers.",
       "cta": "Learn more"
     },
     "devis": {
@@ -175,8 +175,8 @@
     },
     "who_we_are": {
       "title": "Who are we?",
-      "description_1": "<strong>IRIS Junior Création</strong> is a student association founded in 2014 within the <strong>National School of Engineers of Sfax (ENIS)</strong>. Operating according to the consulting firm model, it puts the skills of its members at the service of real projects through competitive and professional services.",
-      "description_2": "As a non-profit organization, IRIS Junior Création has a <strong>dual vocation</strong>:",
+      "description_1": "<strong>IRIS Junior Entreprise</strong> is a student association founded in 2014 within the <strong>National School of Engineers of Sfax (ENIS)</strong>. Operating according to the consulting firm model, it puts the skills of its members at the service of real projects through competitive and professional services.",
+      "description_2": "As a non-profit organization, IRIS Junior Entreprise has a <strong>dual vocation</strong>:",
       "vocation_pedagogique": "Educational",
       "vocation_pedagogique_desc": "Develop the technical, strategic and human skills of students.",
       "vocation_economique": "Economic",
@@ -189,8 +189,8 @@
     },
     "vision": {
       "title": "Our vision",
-      "description_1": "IRIS Junior Création aims to become a national reference for professionalism, innovation and impact, by achieving the « Next Level » through structured governance, a clear strategy and a high-performance management system.",
-      "description_2": "Through a progressive and consistent evolution of the entity, based on its human values, its quality requirements and its collective commitment, IRIS Junior Création wishes to build a mature, reliable and recognized organization within the Junior-Enterprise movement."
+      "description_1": "IRIS Junior Entreprise aims to become a national reference for professionalism, innovation and impact, by achieving the « Next Level » through structured governance, a clear strategy and a high-performance management system.",
+      "description_2": "Through a progressive and consistent evolution of the entity, based on its human values, its quality requirements and its collective commitment, IRIS Junior Entreprise wishes to build a mature, reliable and recognized organization within the Junior-Enterprise movement."
     },
     "values": {
       "title": "Our values",
@@ -227,6 +227,79 @@
     "titleHighlight": "came back empty-handed",
     "description": "The trail has gone cold... This page may have moved or disappeared. Return to the nest and start fresh.",
     "cta": "Back to the nest"
+  },
+  "FAQPage": {
+    "metaTitle": "FAQ | IRIS Junior Entreprise",
+    "metaDescription": "Frequently asked questions about IRIS Junior Entreprise: services, recruitment, quotes, operations and more.",
+    "hero": {
+      "title": "Frequently Asked <span class=\"accent-text\">Questions</span>",
+      "description": "Find answers to the most frequently asked questions about IRIS Junior Entreprise, our services, recruitment and our offerings."
+    }
+  },
+  "FaqAccordion": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Quickly find answers to the most asked questions about IRIS Junior Entreprise.",
+    "items": [
+      {
+        "id": 1,
+        "question": "What is IRIS Junior Entreprise?",
+        "answer": "IRIS Junior Entreprise is a student association founded in 2014 within the National School of Engineers of Sfax (ENIS). It operates as a consulting firm and offers services in IT, marketing and strategic studies."
+      },
+      {
+        "id": 2,
+        "question": "What services do you offer?",
+        "answer": "We offer services in three main areas:\n• IT: Web development, mobile development, chatbot creation.\n• Marketing: Branding (graphic charter, logotype), community management.\n• Studies: Market studies, awareness studies, satisfaction studies, business plans."
+      },
+      {
+        "id": 3,
+        "question": "How can I request a quote?",
+        "answer": "You can request a quote by filling out the dedicated form on our \"Quote\" page. Just describe your project, specify the type of service you want, your estimated budget and the desired deadline. Our team will contact you as soon as possible."
+      },
+      {
+        "id": 4,
+        "question": "How can I join IRIS Junior Entreprise?",
+        "answer": "Applications are open every year in September. You can apply via the recruitment form available on our site during this period. We are looking for motivated, passionate students who want to develop their skills."
+      },
+      {
+        "id": 5,
+        "question": "What are the prerequisites to apply?",
+        "answer": "Prerequisites vary depending on the department you are targeting. We generally look for ENIS students (all levels) with strong motivation, team spirit and a desire to learn. Technical skills are a plus but not mandatory for all positions."
+      },
+      {
+        "id": 6,
+        "question": "What is a Junior-Enterprise?",
+        "answer": "A Junior-Enterprise is a non-profit student association that offers consulting and services to companies, startups and individuals. The Junior-Enterprise movement has existed since 1967 and has thousands of student consultants around the world."
+      },
+      {
+        "id": 7,
+        "question": "Are my personal data protected?",
+        "answer": "Yes, we attach particular importance to the protection of your personal data. The information collected via our forms is used exclusively for processing your requests and is neither sold nor transferred to third parties without your prior consent. See our privacy policy for more details."
+      },
+      {
+        "id": 8,
+        "question": "How can I contact IRIS Junior Entreprise?",
+        "answer": "You can contact us via our \"Contact\" page by filling out the online form, by email at contact@irisje.tn or by phone at (+216) 96 822 343. We will reply as soon as possible."
+      },
+      {
+        "id": 9,
+        "question": "Do you offer mobile development services?",
+        "answer": "Yes, we develop native mobile applications for Android (with Dart and Android Studio) and hybrid cross-platform applications with the Flutter framework. We can also integrate features like push notifications, in-app payments and cloud synchronization."
+      },
+      {
+        "id": 10,
+        "question": "What is a brand awareness study?",
+        "answer": "A brand awareness study measures the level of knowledge of a brand, product or service among a target audience. It evaluates spontaneous awareness (knowledge without assistance), assisted awareness (recognition with clues) and the overall perception of the brand."
+      },
+      {
+        "id": 11,
+        "question": "Can I follow IRIS Junior Entreprise news?",
+        "answer": "Yes, you can follow us on our social networks (Facebook, Instagram, LinkedIn, TikTok and GitHub) where we regularly share our news, events and achievements. A news section is also under development on our site."
+      },
+      {
+        "id": 12,
+        "question": "Do you offer community management services?",
+        "answer": "Yes, we offer community management services including managing your social media, creating content (visuals, videos), planning posts, interacting with your community and analyzing performance."
+      }
+    ]
   }
-
 }

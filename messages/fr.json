@@ -7,13 +7,13 @@
     },
     "services": {
       "title": "Nos expertises au service de vos ambitions",
-      "description": "IRIS Junior Création accompagne les entrepreneurs, les startups, les PME et les établissements publics à travers des solutions innovantes et adaptées à leurs besoins.",
+      "description": "IRIS Junior Entreprise accompagne les entrepreneurs, les startups, les PME et les établissements publics à travers des solutions innovantes et adaptées à leurs besoins.",
       "cta": "Découvrir nos services"
     },
     "about": {
       "title": "Qui sommes-nous ?",
-      "description_1": "Fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax, IRIS Junior Création est une association estudiantine fonctionnant selon le modèle des cabinets de conseil.",
-      "description_2": "Portée par des valeurs de professionnalisme, d'innovation et d'engagement, IRIS Junior Création œuvre à former les ingénieurs de demain.",
+      "description_1": "Fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax, IRIS Junior Entreprise est une association estudiantine fonctionnant selon le modèle des cabinets de conseil.",
+      "description_2": "Portée par des valeurs de professionnalisme, d'innovation et d'engagement, IRIS Junior Entreprise œuvre à former les ingénieurs de demain.",
       "cta": "En savoir plus"
     },
     "devis": {
@@ -175,8 +175,8 @@
     },
     "who_we_are": {
       "title": "Qui sommes-nous ?",
-      "description_1": "<strong>IRIS Junior Création</strong> est une association étudiante fondée en 2014 au sein de l'<strong>École Nationale des Ingénieurs de Sfax (ENIS)</strong>. Fonctionnant selon le modèle des cabinets de conseil, elle met les compétences de ses membres au service de projets réels à travers des prestations compétitives et professionnalisantes.",
-      "description_2": "À but non lucratif, IRIS Junior Création possède une <strong>double vocation</strong> :",
+      "description_1": "<strong>IRIS Junior Entreprise</strong> est une association étudiante fondée en 2014 au sein de l'<strong>École Nationale des Ingénieurs de Sfax (ENIS)</strong>. Fonctionnant selon le modèle des cabinets de conseil, elle met les compétences de ses membres au service de projets réels à travers des prestations compétitives et professionnalisantes.",
+      "description_2": "À but non lucratif, IRIS Junior Entreprise possède une <strong>double vocation</strong> :",
       "vocation_pedagogique": "Pédagogique",
       "vocation_pedagogique_desc": "Développer les compétences techniques, stratégiques et humaines des étudiants.",
       "vocation_economique": "Économique",
@@ -189,8 +189,8 @@
     },
     "vision": {
       "title": "Notre vision",
-      "description_1": "IRIS Junior Création ambitionne de devenir une référence nationale de professionnalisme, d'innovation et d'impact, en concrétisant le « Next Level » à travers une gouvernance structurée, une stratégie claire et un système de management performant.",
-      "description_2": "Par une évolution progressive et cohérente de l'entité, fondée sur ses valeurs humaines, son exigence de qualité et son engagement collectif, IRIS Junior Création souhaite bâtir une organisation mature, fiable et reconnue au sein du mouvement des Junior-Entreprises."
+      "description_1": "IRIS Junior Entreprise ambitionne de devenir une référence nationale de professionnalisme, d'innovation et d'impact, en concrétisant le « Next Level » à travers une gouvernance structurée, une stratégie claire et un système de management performant.",
+      "description_2": "Par une évolution progressive et cohérente de l'entité, fondée sur ses valeurs humaines, son exigence de qualité et son engagement collectif, IRIS Junior Entreprise souhaite bâtir une organisation mature, fiable et reconnue au sein du mouvement des Junior-Entreprises."
     },
     "values": {
       "title": "Nos valeurs",
@@ -227,5 +227,79 @@
     "titleHighlight": "est revenue bredouille",
     "description": "La piste est froide... Cette page a peut-être disparu ou changé d’adresse. Retournez au nid pour repartir.",
     "cta": "Retour au nid"
+  },
+  "FAQPage": {
+    "metaTitle": "FAQ | IRIS Junior Entreprise",
+    "metaDescription": "Questions fréquentes sur IRIS Junior Entreprise : services, recrutement, devis, fonctionnement et plus encore.",
+    "hero": {
+      "title": "Foire aux <span class=\"accent-text\">questions</span>",
+      "description": "Retrouvez les réponses aux questions les plus fréquentes sur IRIS Junior Entreprise, nos services, le recrutement et nos prestations."
+    }
+  },
+  "FaqAccordion": {
+    "title": "Questions fréquentes",
+    "subtitle": "Trouvez rapidement les réponses aux questions les plus posées sur IRIS Junior Entreprise.",
+    "items": [
+      {
+        "id": 1,
+        "question": "Qu'est-ce qu'IRIS Junior Entreprise ?",
+        "answer": "IRIS Junior Entreprise est une association étudiante fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax (ENIS). Elle fonctionne comme un cabinet de conseil et propose des prestations dans les domaines de l'IT, du marketing et des études stratégiques."
+      },
+      {
+        "id": 2,
+        "question": "Quels services proposez-vous ?",
+        "answer": "Nous proposons des services dans trois domaines principaux :\n• IT : Développement web, développement mobile, création de chatbots.\n• Marketing : Branding (charte graphique, logotype), community management.\n• Études : Études de marché, études de notoriété, études de satisfaction, business plan."
+      },
+      {
+        "id": 3,
+        "question": "Comment puis-je demander un devis ?",
+        "answer": "Vous pouvez demander un devis en remplissant le formulaire dédié sur notre page \"Devis\". Il vous suffit de décrire votre projet, de préciser le type de prestation souhaitée, votre budget estimé et le délai souhaité. Notre équipe vous contactera dans les plus brefs délais."
+      },
+      {
+        "id": 4,
+        "question": "Comment puis-je rejoindre IRIS Junior Entreprise ?",
+        "answer": "Les candidatures sont ouvertes chaque année au mois de septembre. Vous pouvez postuler via le formulaire de recrutement disponible sur notre site pendant cette période. Nous recherchons des étudiants motivés, passionnés et souhaitant développer leurs compétences."
+      },
+      {
+        "id": 5,
+        "question": "Quels sont les prérequis pour candidater ?",
+        "answer": "Les prérequis varient selon le département visé. Nous recherchons généralement des étudiants de l'ENIS (tous niveaux) avec une motivation forte, un esprit d'équipe et une envie d'apprendre. Des compétences techniques sont un plus mais ne sont pas obligatoires pour tous les postes."
+      },
+      {
+        "id": 6,
+        "question": "Qu'est-ce qu'une Junior-Entreprise ?",
+        "answer": "Une Junior-Entreprise est une association étudiante à but non lucratif qui propose des prestations de conseil et de services à des entreprises, startups et particuliers. Le mouvement des Junior-Entreprises existe depuis 1967 et compte des milliers d'étudiants consultants à travers le monde."
+      },
+      {
+        "id": 7,
+        "question": "Mes données personnelles sont-elles protégées ?",
+        "answer": "Oui, nous accordons une importance particulière à la protection de vos données personnelles. Les informations collectées via nos formulaires sont utilisées exclusivement pour le traitement de vos demandes et ne sont ni vendues ni transmises à des tiers sans votre accord préalable. Consultez notre politique de confidentialité pour plus de détails."
+      },
+      {
+        "id": 8,
+        "question": "Comment puis-je contacter IRIS Junior Entreprise ?",
+        "answer": "Vous pouvez nous contacter via notre page \"Contact\" en remplissant le formulaire en ligne, par e-mail à contact@irisje.tn ou par téléphone au (+216) 96 822 343. Nous vous répondrons dans les plus brefs délais."
+      },
+      {
+        "id": 9,
+        "question": "Proposez-vous des prestations de développement mobile ?",
+        "answer": "Oui, nous développons des applications mobiles natives pour Android (avec Dart et Android Studio) et des applications hybrides multiplateformes avec le framework Flutter. Nous pouvons également intégrer des fonctionnalités comme les notifications push, le paiement intégré et la synchronisation cloud."
+      },
+      {
+        "id": 10,
+        "question": "Qu'est-ce qu'une étude de notoriété ?",
+        "answer": "Une étude de notoriété permet de mesurer le niveau de connaissance d'une marque, d'un produit ou d'un service auprès d'un public cible. Elle évalue la notoriété spontanée (connaissance sans aide), la notoriété assistée (reconnaissance avec indices) et la perception globale de la marque."
+      },
+      {
+        "id": 11,
+        "question": "Puis-je suivre l'actualité d'IRIS Junior Entreprise ?",
+        "answer": "Oui, vous pouvez nous suivre sur nos réseaux sociaux (Facebook, Instagram, LinkedIn, TikTok et GitHub) où nous partageons régulièrement nos actualités, événements et réalisations. Un espace actualités est également en cours de développement sur notre site."
+      },
+      {
+        "id": 12,
+        "question": "Proposez-vous des prestations de community management ?",
+        "answer": "Oui, nous proposons des prestations de community management incluant la gestion de vos réseaux sociaux, la création de contenus (visuels, vidéos), la planification des publications, l'interaction avec votre communauté et l'analyse des performances."
+      }
+    ]
   }
 }
