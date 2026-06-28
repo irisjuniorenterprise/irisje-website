@@ -1,0 +1,27 @@
+/* app/[locale]/recrutement/page.module.css */
+
+.rtlPage {
+  direction: rtl;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.rtlPage .hero .hero-content {
+  text-align: right;
+}
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+.rtlPage .contact-card {
+  /* Le formulaire gère déjà son propre RTL via les composants */
+  /* On peut ajouter des ajustements si nécessaire */
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Ajustements mobiles si besoin */
+}
