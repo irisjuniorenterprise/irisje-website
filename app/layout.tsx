@@ -1,5 +1,5 @@
 // app/layout.tsx
-import { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
 
@@ -13,20 +13,19 @@ export const metadata: Metadata = {
   title: 'IRIS Junior Entreprise — Propulsez votre potentiel',
   description: 'IRIS Junior Entreprise : propulsez votre potentiel.',
 };
-// ✅ Ajouter cette exportation
-export const viewport = {
-  themeColor: '#1a3969', // Bleu IRIS JE
+
+export const viewport: Viewport = {
+  themeColor: '#1a3969',
   width: 'device-width',
   initialScale: 1,
 };
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    
-    <>{children}</>
-    
-  );
+  // ✅ Pas de <html> ni <body> ici —
+  // app/[locale]/layout.tsx s'en charge avec lang, dir et les providers
+  return children as React.ReactElement;
 }
