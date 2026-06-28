@@ -6,6 +6,7 @@ import RecruitmentForm from '@/components/forms/RecruitmentForm';
 import RecruitmentClosed from '@/components/recruitment/RecruitmentClosed';
 import { isRecruitmentOpen } from '@/lib/utils/date';
 import styles from './page.module.css'; // ✅ import du module CSS
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -13,20 +14,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'RecruitmentPage' });
-  
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-    alternates: {
-      canonical: 'https://irisje.com/recrutement',
-      languages: {
-        fr: '/fr/recrutement',
-        en: '/en/recrutement',
-        ar: '/ar/recrutement',
-      },
-    },
-  };
+  return buildMetadata('/recrutement', locale);
 }
 
 export default async function RecrutementPage({ params }: Props) {

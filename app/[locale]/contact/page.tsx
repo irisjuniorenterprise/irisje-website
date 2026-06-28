@@ -5,26 +5,15 @@ import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import ContactForm from '@/components/forms/ContactForm';
 import { Icons } from '@/components/icons/Icons';
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'ContactPage' });
-  return {
-    title: t('meta.title'),
-    description: t('meta.description'),
-    alternates: {
-      canonical: `https://irisje.com/${locale}/contact`,
-      languages: {
-        fr: '/fr/contact',
-        en: '/en/contact',
-        ar: '/ar/contact',
-      },
-    },
-  };
+  return buildMetadata('/contact', locale);
 }
 
 export default async function ContactPage({ params }: Props) {

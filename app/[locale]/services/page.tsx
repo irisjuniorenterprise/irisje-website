@@ -5,6 +5,7 @@ import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import Link from 'next/link';
 import styles from './page.module.css'; // ✅ import du module CSS
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -12,19 +13,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'ServicesPage' });
-  return {
-    title: 'Services | IRIS Junior Entreprise',
-    description: t('hero.description'),
-    alternates: {
-      canonical: 'https://irisje.com/services',
-      languages: {
-        fr: '/fr/services',
-        en: '/en/services',
-        ar: '/ar/services',
-      },
-    },
-  };
+  return buildMetadata('/services', locale);
 }
 
 export default async function ServicesPage({ params }: Props) {

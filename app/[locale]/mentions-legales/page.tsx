@@ -4,6 +4,7 @@ import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css';
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -11,20 +12,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'MentionsLegalesPage' });
-  
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-    alternates: {
-      canonical: 'https://irisje.com/mentions-legales',
-      languages: {
-        fr: '/fr/mentions-legales',
-        en: '/en/mentions-legales',
-        ar: '/ar/mentions-legales',
-      },
-    },
-  };
+  return buildMetadata('/mentions-legales', locale);
 }
 
 export default async function MentionsLegalesPage({ params }: Props) {

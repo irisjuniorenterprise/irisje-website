@@ -5,6 +5,7 @@ import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import FaqAccordion from '@/components/faq/FaqAccordion';
 import styles from './page.module.css'; // ✅ import du module CSS
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -12,20 +13,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'FAQPage' });
-  
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-    alternates: {
-      canonical: 'https://irisje.com/faq',
-      languages: {
-        fr: '/fr/faq',
-        en: '/en/faq',
-        ar: '/ar/faq',
-      },
-    },
-  };
+  return buildMetadata('/faq', locale);
 }
 
 export default async function FAQPage({ params }: Props) {

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css';
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -11,20 +12,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'PolitiqueConfidentialitePage' });
-  
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-    alternates: {
-      canonical: 'https://irisje.com/politique-confidentialite',
-      languages: {
-        fr: '/fr/politique-confidentialite',
-        en: '/en/politique-confidentialite',
-        ar: '/ar/politique-confidentialite',
-      },
-    },
-  };
+  return buildMetadata('/politique-confidentialite', locale);
 }
 
 export default async function PolitiqueConfidentialitePage({ params }: Props) {

@@ -6,26 +6,15 @@ import logoData from '@/public/logo-s-no-bg.png';
 import DevisForm from '@/components/forms/DevisForm';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css'; // ✅ import du module CSS
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'DevisPage' });
-  return {
-    title: t('meta.title'),
-    description: t('meta.description'),
-    alternates: {
-      canonical: `https://irisje.com/${locale}/devis`,
-      languages: {
-        fr: '/fr/devis',
-        en: '/en/devis',
-        ar: '/ar/devis',
-      },
-    },
-  };
+  return buildMetadata('/devis', locale);
 }
 
 export default async function DevisPage({ params }: Props) {
