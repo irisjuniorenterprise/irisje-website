@@ -1,5 +1,10 @@
 {
   "HomePage": {
+    "meta": {
+      "title": "IRIS Junior Entreprise — عزز إمكانياتك",
+      "description": "ترافق IRIS Junior Entreprise رواد الأعمال والشركات الناشئة والمؤسسات الصغرى والمتوسطة من خلال حلول مبتكرة في تكنولوجيا المعلومات والدراسات والتسويق. عزز إمكانياتك مع IRIS JE.",
+      "keywords": "جمعية طلابية, استشارات, تكنولوجيا المعلومات, تسويق, دراسات, ENIS, صفاقس"
+    },
     "hero": {
       "title": "عزز إمكانياتك، واربط نجاحك مع <span class=\"accent-text\">IRIS JE</span>",
       "cta_start": "ابدأ الآن",
@@ -94,6 +99,11 @@
     }
   },
   "ServicesPage": {
+    "meta": {
+      "title": "الخدمات | IRIS Junior Entreprise",
+      "description": "اكتشف خدماتنا في مجالات تكنولوجيا المعلومات والتسويق والدراسات. نضع خبراتنا في خدمة مشاريعكم.",
+      "keywords": "خدمات, تكنولوجيا المعلومات, تطوير ويب, تسويق, دراسات, استشارات"
+    },
     "hero": {
       "title": "<accent>خدماتنا</accent>",
       "description": "اكتشف خدماتنا في مجالات تكنولوجيا المعلومات والتسويق والدراسات. نضع خبراتنا في خدمة مشاريعكم."
@@ -171,7 +181,8 @@
   "DevisPage": {
     "meta": {
       "title": "طلب عرض سعر | IRIS Junior Entreprise",
-      "description": "اطلب عرض سعر مخصص لمشاريعك في تكنولوجيا المعلومات والتسويق والدراسات من IRIS Junior Entreprise."
+      "description": "اطلب عرض سعر مخصص لمشاريعك في تكنولوجيا المعلومات والتسويق والدراسات من IRIS Junior Entreprise.",
+      "keywords": "عرض سعر, طلب, مشروع, ميزانية, مهلة, تكنولوجيا المعلومات, تسويق, دراسات"
     },
     "hero": {
       "title": "طلب <accent>عرض سعر</accent>",
@@ -253,7 +264,8 @@
   "ContactPage": {
     "meta": {
       "title": "اتصل بنا | IRIS Junior Entreprise",
-      "description": "اتصل بـ IRIS Junior Entreprise لأي طلب معلومات، عرض سعر أو شراكة."
+      "description": "اتصل بـ IRIS Junior Entreprise لأي طلب معلومات، عرض سعر أو شراكة.",
+      "keywords": "اتصل, IRIS JE, عرض سعر, شراكة, رعاية"
     },
     "hero": {
       "title": "اتصل بـ <accent>IRIS JE</accent>",
@@ -316,8 +328,11 @@
     "cta": "العودة إلى الرئيسية"
   },
   "AboutPage": {
-    "metaTitle": "من نحن | IRIS Junior Entreprise",
-    "metaDescription": "اكتشف IRIS Junior Entreprise، الجمعية الطلابية للمدرسة الوطنية للمهندسين بصفاقس. مهمتنا، رؤيتنا، قيمنا وفريقنا.",
+    "meta": {
+      "title": "من نحن | IRIS Junior Entreprise",
+      "description": "اكتشف IRIS Junior Entreprise، الجمعية الطلابية للمدرسة الوطنية للمهندسين بصفاقس. مهمتنا، رؤيتنا، قيمنا وفريقنا.",
+      "keywords": "من نحن, IRIS JE, ENIS, مهمة, رؤية, قيم, فريق"
+    },
     "hero": {
       "title": "من نحن <span class=\"accent-text\">IRIS JE</span>",
       "description": "اكتشف من نحن، مهمتنا والقيم التي تحركنا يوميًا."
@@ -374,8 +389,11 @@
     "subtitle": "اكتشف فريق القيادة في IRIS Junior Entreprise"
   },
   "RecruitmentPage": {
-    "metaTitle": "التوظيف | IRIS Junior Entreprise",
-    "metaDescription": "انضم إلى IRIS Junior Entreprise. تقدم للانضمام إلى فريقنا من المستشارين.",
+    "meta": {
+      "title": "التوظيف | IRIS Junior Entreprise",
+      "description": "انضم إلى IRIS Junior Entreprise. تقدم للانضمام إلى فريقنا من المستشارين.",
+      "keywords": "توظيف, تقدم, طلب, جمعية طلابية, ENIS"
+    },
     "hero": {
       "title_open": "انضم إلى <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "التوظيف <span class=\"accent-text\">IRIS JE</span>",
@@ -457,8 +475,11 @@
     }
   },
   "CGUPage": {
-    "metaTitle": "شروط الاستخدام | IRIS Junior Entreprise",
-    "metaDescription": "شروط الاستخدام (CGU) لموقع IRIS Junior Entreprise.",
+    "meta": {
+      "title": "شروط الاستخدام | IRIS Junior Entreprise",
+      "description": "شروط الاستخدام (CGU) لموقع IRIS Junior Entreprise.",
+      "keywords": "شروط الاستخدام, CGU, موقع, استخدام"
+    },
     "hero": {
       "title": "شروط <span class=\"accent-text\">الاستخدام</span>",
       "description": "شروط استخدام موقع IRIS Junior Entreprise."
@@ -489,8 +510,11 @@
     }
   },
   "MentionsLegalesPage": {
-    "metaTitle": "إشعارات قانونية | IRIS Junior Entreprise",
-    "metaDescription": "الإشعارات القانونية لموقع IRIS Junior Entreprise - الناشر، الإحداثيات ومسؤول النشر.",
+    "meta": {
+      "title": "إشعارات قانونية | IRIS Junior Entreprise",
+      "description": "الإشعارات القانونية لموقع IRIS Junior Entreprise - الناشر، الإحداثيات ومسؤول النشر.",
+      "keywords": "إشعارات قانونية, ناشر, مسؤول النشر, موقع"
+    },
     "hero": {
       "title": "إشعارات <span class=\"accent-text\">قانونية</span>",
       "description": "معلومات قانونية تتعلق بنشر موقع IRIS Junior Entreprise."
@@ -517,8 +541,11 @@
     }
   },
   "PolitiqueConfidentialitePage": {
-    "metaTitle": "سياسة الخصوصية | IRIS Junior Entreprise",
-    "metaDescription": "سياسة الخصوصية لموقع IRIS Junior Entreprise - حماية البيانات الشخصية.",
+    "meta": {
+      "title": "سياسة الخصوصية | IRIS Junior Entreprise",
+      "description": "سياسة الخصوصية لموقع IRIS Junior Entreprise - حماية البيانات الشخصية.",
+      "keywords": "خصوصية, بيانات شخصية, ملفات تعريف الارتباط, حماية"
+    },
     "hero": {
       "title": "سياسة <span class=\"accent-text\">الخصوصية</span>",
       "description": "كيف تحمي IRIS Junior Entreprise بياناتك الشخصية."
@@ -549,8 +576,11 @@
     }
   },
   "FAQPage": {
-    "metaTitle": "الأسئلة الشائعة | IRIS Junior Entreprise",
-    "metaDescription": "أسئلة متكررة حول IRIS Junior Entreprise: الخدمات، التوظيف، عروض الأسعار، آلية العمل والمزيد.",
+    "meta": {
+      "title": "الأسئلة الشائعة | IRIS Junior Entreprise",
+      "description": "أسئلة متكررة حول IRIS Junior Entreprise: الخدمات، التوظيف، عروض الأسعار، آلية العمل والمزيد.",
+      "keywords": "أسئلة شائعة, توظيف, خدمات, IRIS JE, استشارات"
+    },
     "hero": {
       "title": "الأسئلة <span class=\"accent-text\">الشائعة</span>",
       "description": "ابحث عن إجابات للأسئلة الأكثر شيوعًا حول IRIS Junior Entreprise وخدماتنا والتوظيف وعروضنا."

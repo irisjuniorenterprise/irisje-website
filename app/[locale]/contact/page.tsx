@@ -13,7 +13,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  return buildMetadata('/contact', locale);
+  const t = await getTranslations({ locale, namespace: 'ContactPage' });
+  return buildMetadata({
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
+    locale,
+    path: '/contact',
+  });
 }
 
 export default async function ContactPage({ params }: Props) {

@@ -12,7 +12,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  return buildMetadata('/cgu', locale);
+  const t = await getTranslations({ locale, namespace: 'CGUPage' });
+  return buildMetadata({
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
+    locale,
+    path: '/cgu',
+  });
 }
 
 export default async function CGUPage({ params }: Props) {

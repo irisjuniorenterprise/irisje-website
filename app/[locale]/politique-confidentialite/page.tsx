@@ -12,7 +12,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  return buildMetadata('/politique-confidentialite', locale);
+  const t = await getTranslations({ locale, namespace: 'PolitiqueConfidentialitePage' });
+  return buildMetadata({
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
+    locale,
+    path: '/politique-confidentialite',
+  });
 }
 
 export default async function PolitiqueConfidentialitePage({ params }: Props) {

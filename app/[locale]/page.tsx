@@ -10,14 +10,20 @@ import styles from './page.module.css';
 
 import { buildMetadata } from '@/lib/metadata';
 
+
+type Props = { params: Promise<{ locale: string }> };
+
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  return buildMetadata('/', locale);
+  const t = await getTranslations({ locale, namespace: 'HomePage' });
+  return buildMetadata({
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
+    locale,
+    path: '/',
+  });
 }
-
-type Props = {
-  params: Promise<{ locale: string }>;
-};
 
 
 
