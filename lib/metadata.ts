@@ -1,7 +1,7 @@
 // lib/metadata.ts
 import type { Metadata } from 'next';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://irisje.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://irisje.vercel.app' || 'https://irisje.com' || 'https://irisje.tn' || 'https://irisje.org';
 const DEFAULT_IMAGE = '/logo-iris.png';  // image unique pour toutes les pages
 
 type MetaOptions = {
