@@ -6,7 +6,7 @@ import { locales } from '@/i18n/config';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
-
+import '../globals.css';
 
 type Props = {
   children: React.ReactNode;
@@ -21,23 +21,24 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   const messages = await getMessages({ locale });
+  const isRtl = locale === 'ar';
 
   return (
-    <html>
-      <body>
+    // ✅ Ajout de lang, dir et suppressHydrationWarning
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <a href="#main" className="skip-link">
-            Aller au contenu principal
+            {locale === 'fr' ? 'Aller au contenu principal' :
+             locale === 'en' ? 'Skip to main content' :
+             'التجاوز إلى المحتوى الرئيسي'}
           </a>
           <Header />
-          
           <main id="main">{children}</main>
-          
           <Footer />
           <ClientSideEffects />
         </NextIntlClientProvider>
       </body>
     </html>
-    
   );
 }
