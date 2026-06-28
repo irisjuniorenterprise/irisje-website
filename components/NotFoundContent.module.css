@@ -1,0 +1,521 @@
+/* app/not-found.css */
+
+/* ============================================================
+   PAGE 404 - STYLES OPTIMISÉS
+   ============================================================ */
+
+.nf-main {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--background, #f8fafc);
+  position: relative;
+}
+
+/* ============================================================
+   FOND AVEC DÉGRADÉ
+   ============================================================ */
+
+.nf-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(26, 57, 105, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(90, 184, 222, 0.04) 0%, transparent 60%),
+    var(--background, #f8fafc);
+  z-index: 0;
+}
+
+/* ============================================================
+   ORBES FLOTTANTS (améliorés)
+   ============================================================ */
+
+.nf-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: nf-orb-float 25s ease-in-out infinite alternate;
+  opacity: 0.6;
+}
+
+.nf-orb--1 {
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  right: -100px;
+  background: radial-gradient(circle at center, rgba(90, 184, 222, 0.12), transparent 70%);
+}
+
+.nf-orb--2 {
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  left: -80px;
+  background: radial-gradient(circle at center, rgba(26, 57, 105, 0.08), transparent 70%);
+  animation-delay: -8s;
+}
+
+.nf-orb--3 {
+  width: 250px;
+  height: 250px;
+  top: 30%;
+  left: 60%;
+  background: radial-gradient(circle at center, rgba(255, 102, 51, 0.05), transparent 70%);
+  animation-delay: -4s;
+  animation-duration: 20s;
+}
+
+@keyframes nf-orb-float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(25px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 25px) scale(0.9);
+  }
+  100% {
+    transform: translate(15px, -15px) scale(1.05);
+  }
+}
+
+/* ============================================================
+   CARTE PRINCIPALE (CONTRASTE AMÉLIORÉ)
+   ============================================================ */
+
+.nf-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 48px;
+  padding: 3.5rem 2.5rem;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 20px 60px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.nf-inner:hover {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 25px 70px rgba(15, 23, 42, 0.16);
+}
+
+/* ============================================================
+   SCÈNE - AIGLE (améliorée)
+   ============================================================ */
+
+.nf-stage {
+  position: relative;
+  height: 200px;
+  margin: 0 auto 1.5rem;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nf-eagle-orbit {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  animation: nf-orbit 12s linear infinite;
+}
+
+@keyframes nf-orbit {
+  0% {
+    transform: rotate(0deg) translateX(140px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(140px) rotate(-360deg);
+  }
+}
+
+.nf-eagle-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 25px rgba(26, 57, 105, 0.25));
+}
+
+/* Ailes */
+.wing-left {
+  transform-origin: 410px 250px;
+  animation: flap-left 0.45s ease-in-out infinite alternate;
+}
+
+.wing-right {
+  transform-origin: 430px 250px;
+  animation: flap-right 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes flap-left {
+  0% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(-70deg);
+  }
+}
+
+@keyframes flap-right {
+  0% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(70deg);
+  }
+}
+
+.eagle-body-group {
+  position: relative;
+  z-index: 10;
+  animation: body-bob 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes body-bob {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Traînée */
+.nf-trail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 100px;
+  margin-top: -50px;
+  margin-left: -150px;
+  pointer-events: none;
+  opacity: 0;
+  animation: nf-trail-appear 12s ease-in-out infinite;
+}
+
+@keyframes nf-trail-appear {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  25%,
+  75% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   TEXTE (CONTRASTE AMÉLIORÉ)
+   ============================================================ */
+
+.nf-num {
+  display: block;
+  font-size: 7rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--primary, #1a3969) 0%, var(--accent, #5ab8de) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+  text-shadow: none;
+  filter: drop-shadow(0 4px 8px rgba(26, 57, 105, 0.08));
+}
+
+.nf-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #1f2937);
+  margin: 0.5rem 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.nf-title span {
+  color: var(--secondary, #ff6633);
+  position: relative;
+}
+
+.nf-title span::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--secondary, #ff6633);
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.nf-desc {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary, #4b5563);
+  max-width: 440px;
+  margin: 0 auto 2.5rem;
+  font-weight: 400;
+}
+
+/* ============================================================
+   BOUTON CTA (AMÉLIORÉ)
+   ============================================================ */
+
+.nf-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.8rem;
+  background: var(--secondary, #ff6633);
+  color: var(--on-secondary, #ffffff);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 102, 51, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.nf-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 60px;
+}
+
+.nf-cta:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: var(--secondary-hover, #e55a2b);
+  box-shadow: 0 8px 30px rgba(255, 102, 51, 0.45);
+}
+
+.nf-cta:hover::before {
+  opacity: 1;
+}
+
+.nf-cta:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.nf-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.nf-cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   RTL (ARABE)
+   ============================================================ */
+
+.rtl .nf-inner {
+  direction: rtl;
+}
+
+.rtl .nf-cta svg {
+  transform: scaleX(-1);
+}
+
+.rtl .nf-cta:hover svg {
+  transform: scaleX(-1) translateX(-4px);
+}
+
+.rtl .nf-title span::after {
+  left: auto;
+  right: 0;
+}
+
+/* ============================================================
+   RÉDUCTION DE MOUVEMENTS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-eagle-orbit,
+  .nf-trail,
+  .nf-orb,
+  .wing-left,
+  .wing-right,
+  .eagle-body-group {
+    animation: none !important;
+  }
+
+  .nf-eagle-orbit {
+    transform: rotate(0deg) translateX(0) !important;
+  }
+
+  .wing-left,
+  .wing-right,
+  .eagle-body-group {
+    transform: rotate(0deg) translateY(0) !important;
+  }
+
+  .nf-trail {
+    opacity: 0 !important;
+  }
+
+  .nf-cta {
+    transition: none !important;
+  }
+  
+  .nf-cta:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .nf-inner {
+    padding: 2.5rem 1.5rem;
+    border-radius: 32px;
+  }
+
+  .nf-stage {
+    height: 160px;
+  }
+
+  .nf-eagle-orbit {
+    width: 200px;
+    height: 200px;
+  }
+
+  @keyframes nf-orbit {
+    0% {
+      transform: rotate(0deg) translateX(110px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(110px) rotate(-360deg);
+    }
+  }
+
+  .nf-num {
+    font-size: 5rem;
+  }
+
+  .nf-title {
+    font-size: 1.7rem;
+  }
+
+  .nf-desc {
+    font-size: 1rem;
+    max-width: 340px;
+  }
+
+  .nf-cta {
+    padding: 0.85rem 2.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nf-main {
+    padding: 1rem;
+    min-height: 60vh;
+  }
+
+  .nf-inner {
+    padding: 2rem 1.25rem;
+    border-radius: 24px;
+  }
+
+  .nf-stage {
+    height: 120px;
+  }
+
+  .nf-eagle-orbit {
+    width: 150px;
+    height: 150px;
+  }
+
+  @keyframes nf-orbit {
+    0% {
+      transform: rotate(0deg) translateX(80px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(80px) rotate(-360deg);
+    }
+  }
+
+  .nf-num {
+    font-size: 3.8rem;
+  }
+
+  .nf-title {
+    font-size: 1.3rem;
+  }
+
+  .nf-title span::after {
+    height: 2px;
+  }
+
+  .nf-desc {
+    font-size: 0.9rem;
+    max-width: 280px;
+  }
+
+  .nf-cta {
+    padding: 0.7rem 1.8rem;
+    font-size: 0.85rem;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nf-cta svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ============================================================
+   ANIMATION D'ENTRÉE
+   ============================================================ */
+
+.nf-inner {
+  animation: nf-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+}
+
+@keyframes nf-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-inner {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

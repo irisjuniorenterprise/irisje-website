@@ -1,21 +1,17 @@
 // app/not-found.tsx
-import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { locales, defaultLocale } from '@/i18n/config';
+import NotFoundContent from '@/components/NotFoundContent';
+import './not-found.css';
 
-async function getLocaleFromRequest(): Promise<string> {
+async function getLocale(): Promise<string> {
   const headersList = await headers();
-  
-  const acceptLanguage = headersList.get('accept-language') || 'fr';
-  const preferredLocale = acceptLanguage.split(',')[0].split('-')[0];
-  if (locales.includes(preferredLocale as any)) {
-    return preferredLocale;
-  }
-  
-  return defaultLocale;
+  const acceptLanguage = headersList.get('accept-language') || '';
+  const preferred = acceptLanguage.split(',')[0].split('-')[0];
+  return locales.includes(preferred as any) ? preferred : defaultLocale;
 }
 
 export default async function RootNotFound() {
-  const locale = await getLocaleFromRequest();
-  redirect(`/${locale}/404`);
+  const locale = await getLocale();
+  return <NotFoundContent locale={locale} />;
 }
