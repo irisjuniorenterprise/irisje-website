@@ -8,27 +8,18 @@ import { getSliderSlides } from '@/lib/data/sliderData';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css';
 
+import { buildMetadata } from '@/lib/metadata';
+
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  return buildMetadata('/', locale);
+}
+
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export async function generateMetadata({ params }: Props) {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'HomePage' });
-  return {
-    title: 'IRIS Junior Entreprise — Propulsez votre potentiel',
-    description:
-      'IRIS Junior Entreprise : propulsez votre potentiel, connectez vos succès avec IRIS JE.',
-    alternates: {
-      canonical: 'https://irisje.com',
-      languages: {
-        fr: '/fr',
-        en: '/en',
-        ar: '/ar',
-      },
-    },
-  };
-}
+
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;

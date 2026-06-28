@@ -5,6 +5,7 @@ import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
 import styles from './page.module.css';
+import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -12,19 +13,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'AboutPage' });
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-    alternates: {
-      canonical: 'https://irisje.com/a-propos',
-      languages: {
-        fr: '/fr/a-propos',
-        en: '/en/a-propos',
-        ar: '/ar/a-propos',
-      },
-    },
-  };
+  return buildMetadata('/a-propos', locale);
 }
 
 // ─────────────────────────────────────────────────────────────
