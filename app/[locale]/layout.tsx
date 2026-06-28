@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
 import '../globals.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
+import Slogan from '@/components/ui/Slogan';
 
 type Props = {
   children: React.ReactNode;
@@ -37,6 +38,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Header />
           <Breadcrumb/>
           <main id="main">{children}</main>
+          <Slogan/>
           <Footer />
           <ClientSideEffects />
         </NextIntlClientProvider>
