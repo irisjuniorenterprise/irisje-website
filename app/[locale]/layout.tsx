@@ -1,4 +1,5 @@
 // app/[locale]/layout.tsx
+import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -15,6 +16,35 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
+// ✅ Viewport géré uniquement ici — supprime les <meta> manuels
+export const viewport: Viewport = {
+  themeColor: '#1a3969',
+  width: 'device-width',
+  initialScale: 1,
+};
+
+// ✅ Metadata centralisée — favicon, titre, manifest, PWA
+export const metadata: Metadata = {
+  title: {
+    default: 'IRIS Junior Entreprise',
+    template: '%s | IRIS Junior Entreprise',
+  },
+  description: 'IRIS Junior Entreprise — Propulsez votre potentiel',
+  manifest: '/manifest.json?v=2',
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },                          // fallback universel
+      { url: '/logo-iris.png', type: 'image/png' },     // navigateurs modernes
+    ],
+    apple: '/logo-iris.png',                            // iOS home screen
+    shortcut: '/favicon.ico',
+  },
+  other: {
+    'msapplication-TileColor': '#1a3969',               // tuile Windows
+    'msapplication-TileImage': '/logo-iris.png',
+  },
+};
+
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
@@ -26,8 +56,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const isRtl = locale === 'ar';
 
   return (
-    // ✅ Ajout de lang, dir et suppressHydrationWarning
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      {/* ✅ Pas de <head> manuel — Next.js injecte tout via metadata et viewport */}
       <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <a href="#main" className="skip-link">
@@ -36,9 +66,9 @@ export default async function LocaleLayout({ children, params }: Props) {
              'التجاوز إلى المحتوى الرئيسي'}
           </a>
           <Header />
-          <Breadcrumb/>
+          <Breadcrumb />
           <main id="main">{children}</main>
-          <Slogan/>
+          <Slogan />
           <Footer />
           <ClientSideEffects />
         </NextIntlClientProvider>

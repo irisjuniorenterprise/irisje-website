@@ -1,0 +1,21 @@
+{
+  "name": "IRIS Junior Entreprise",
+  "short_name": "IRIS JE",
+  "description": "IRIS Junior Entreprise — Propulsez votre potentiel",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a3969",
+  "icons": [
+    {
+      "src": "/logo-iris.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-iris.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
