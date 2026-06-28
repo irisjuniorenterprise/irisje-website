@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
-// import Portfolio from '@/components/portfolio/Portfolio';
+import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
 import styles from './page.module.css';
 
 type Props = {
@@ -27,19 +27,12 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-// Projets (statiques - exemple)
-const projects: {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  image?: string;
-  tags?: string[];
-  client?: string;
-  year?: number;
-  results?: string;
-}[] = [
-  {
+// ─────────────────────────────────────────────────────────────
+// Projets — remplacer par un fetch CMS/API si besoin
+// Chaque projet peut avoir un champ `url` optionnel (voir type Project)
+// ─────────────────────────────────────────────────────────────
+const projects: Project[] = [
+  /* {
     id: 1,
     title: 'Site web pour Startup XYZ',
     description: "Développement d'un site vitrine moderne avec React et Next.js.",
@@ -48,7 +41,8 @@ const projects: {
     client: 'Startup XYZ',
     year: 2025,
     results: '+40% de visibilité',
-  },
+    // url: 'https://example.com', // décommenter si disponible
+  }, */
 ];
 
 export default async function AProposPage({ params }: Props) {
@@ -56,7 +50,6 @@ export default async function AProposPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: 'AboutPage' });
   const isRtl = locale === 'ar';
 
-  // Valeurs traduites
   const values = [
     {
       icon: <Icons.Innovation size={32} stroke="var(--primary)" strokeWidth={1.8} />,
@@ -145,19 +138,11 @@ export default async function AProposPage({ params }: Props) {
             }}
           >
             <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.7',
-                color: 'var(--text-secondary)',
-              }}
+              style={{ fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}
               dangerouslySetInnerHTML={{ __html: t.raw('who_we_are.description_1') }}
             />
             <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.7',
-                color: 'var(--text-secondary)',
-              }}
+              style={{ fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}
               dangerouslySetInnerHTML={{ __html: t.raw('who_we_are.description_2') }}
             />
             <div className="vocation-grid">
@@ -174,22 +159,10 @@ export default async function AProposPage({ params }: Props) {
                 >
                   <Icons.Education size={36} stroke="var(--primary)" strokeWidth={1.8} />
                 </div>
-                <h3
-                  style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
-                  }}
-                >
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {t('who_we_are.vocation_pedagogique')}
                 </h3>
-                <p
-                  style={{
-                    fontSize: '0.95rem',
-                    color: 'var(--text-secondary)',
-                    marginTop: '0.25rem',
-                  }}
-                >
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                   {t('who_we_are.vocation_pedagogique_desc')}
                 </p>
               </div>
@@ -206,22 +179,10 @@ export default async function AProposPage({ params }: Props) {
                 >
                   <Icons.Business size={36} stroke="var(--primary)" strokeWidth={1.8} />
                 </div>
-                <h3
-                  style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
-                  }}
-                >
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {t('who_we_are.vocation_economique')}
                 </h3>
-                <p
-                  style={{
-                    fontSize: '0.95rem',
-                    color: 'var(--text-secondary)',
-                    marginTop: '0.25rem',
-                  }}
-                >
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                   {t('who_we_are.vocation_economique_desc')}
                 </p>
               </div>
@@ -356,13 +317,7 @@ export default async function AProposPage({ params }: Props) {
                 >
                   {value.title}
                 </h3>
-                <p
-                  style={{
-                    fontSize: '0.9rem',
-                    lineHeight: '1.6',
-                    color: 'var(--text-secondary)',
-                  }}
-                >
+                <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
                   {value.desc}
                 </p>
               </div>
@@ -372,9 +327,11 @@ export default async function AProposPage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION 5 : PORTFOLIO (Conditionnel - si projets existent)
+          SECTION 5 : PORTFOLIO
+          Affiché uniquement si projects.length > 0.
+          Fond blanc (var(--surface)) — alterne avec Nos Valeurs (section-alt).
           ============================================================ */}
-      {/* <Portfolio projects={projects} locale={locale} /> */}
+      <Portfolio projects={projects} locale={locale} />
     </div>
   );
 }
