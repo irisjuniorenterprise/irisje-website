@@ -7,25 +7,25 @@
     },
     "services": {
       "title": "Nos expertises au service de vos ambitions",
-      "description": "IRIS Junior Entreprise accompagne les entrepreneurs, les startups, les PME et les établissements publics à travers des solutions innovantes et adaptées à leurs besoins.",
+      "description": "IRIS Junior Création accompagne les entrepreneurs, les startups, les PME et les établissements publics à travers des solutions innovantes et adaptées à leurs besoins. Grâce à son expertise dans les domaines de l'IT, des études et du marketing, l'entité propose des services allant du développement de solutions digitales à la réalisation d'études stratégiques, en passant par le renforcement de l'image de marque et de la présence digitale de ses clients.",
       "cta": "Découvrir nos services"
     },
     "about": {
       "title": "Qui sommes-nous ?",
-      "description_1": "Fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax, IRIS Junior Entreprise est une association estudiantine fonctionnant selon le modèle des cabinets de conseil.",
-      "description_2": "Portée par des valeurs de professionnalisme, d'innovation et d'engagement, IRIS Junior Entreprise œuvre à former les ingénieurs de demain.",
+      "description_1": "Fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax, IRIS Junior Création est une association estudiantine fonctionnant selon le modèle des cabinets de conseil. À travers ses différentes expertises, elle met les compétences de ses membres au service de projets réels et accompagne ses clients avec des solutions innovantes et adaptées à leurs besoins.",
+      "description_2": "Portée par des valeurs de professionnalisme, d'innovation et d'engagement, IRIS Junior Création œuvre à former les ingénieurs de demain tout en contribuant au développement de ses clients et partenaires.",
       "cta": "En savoir plus"
     },
     "devis": {
       "title": "Donnez vie à votre projet",
-      "description_1": "Vous avez une idée, un besoin ou un défi à relever ? Notre équipe est à votre écoute.",
-      "description_2": "Décrivez votre projet et obtenez un devis personnalisé.",
+      "description_1": "Vous avez une idée, un besoin ou un défi à relever ? Notre équipe est à votre écoute pour vous proposer des solutions adaptées à vos objectifs.",
+      "description_2": "Décrivez votre projet et obtenez un devis personnalisé. Ensemble, transformons vos idées en réalisations concrètes.",
       "cta": "Votre projet commence ici"
     },
     "contact": {
       "title": "Restons en contact",
       "description_1": "Une question, une demande d'information ou un projet à concrétiser ? N'hésitez pas à nous contacter.",
-      "description_2": "Notre équipe se fera un plaisir de vous accompagner.",
+      "description_2": "Notre équipe se fera un plaisir de vous accompagner et de répondre à vos besoins dans les meilleurs délais.",
       "description_3": "Construisons ensemble vos prochaines réussites.",
       "cta": "Nous contacter"
     }
@@ -69,7 +69,7 @@
     },
     "it": {
       "title": "Développement IT & Solutions digitales",
-      "description": "Nous créons des sites web, applications mobiles et chatbots sur mesure.",
+      "description": "Nous créons des sites web, applications mobiles et chatbots sur mesure pour répondre à vos besoins technologiques.",
       "cta": "Découvrir nos prestations IT"
     },
     "etudes": {
@@ -84,7 +84,7 @@
     },
     "partenariat": {
       "title": "Partenariat & Sponsoring",
-      "description": "Soutenez IRIS Junior Entreprise et profitez d'une visibilité unique.",
+      "description": "Soutenez IRIS Junior Entreprise et profitez d'une visibilité unique auprès des étudiants et professionnels.",
       "cta": "Devenir partenaire"
     },
     "recrutement": {
@@ -94,7 +94,6 @@
     }
   },
   "ServicesPage": {
-    "metaTitle": "Services | IRIS Junior Entreprise",
     "hero": {
       "title": "Nos <accent>Services</accent>",
       "description": "Découvrez nos prestations dans les domaines de l'IT, du Marketing et des Études. Nous mettons notre savoir-faire au service de vos projets."
@@ -166,17 +165,167 @@
       "button": "Nous contacter"
     }
   },
+  "Common": {
+    "required": "Champ obligatoire"
+  },
+  "DevisPage": {
+    "meta": {
+      "title": "Demande de devis | IRIS Junior Entreprise",
+      "description": "Demandez un devis personnalisé pour vos projets IT, Marketing ou Études auprès d'IRIS Junior Entreprise."
+    },
+    "hero": {
+      "title": "Demande de <accent>devis</accent>",
+      "description": "Décrivez-nous votre projet et nous vous ferons parvenir un devis personnalisé dans les plus brefs délais."
+    },
+    "personal_info": {
+      "title": "Vos coordonnées",
+      "nom": "Nom complet",
+      "email": "Email",
+      "telephone": "Téléphone",
+      "telephone_helper": "8 chiffres, sans espaces"
+    },
+    "project_details": {
+      "title": "Détails du projet",
+      "select_prestation": "Sélectionnez une prestation",
+      "prestation": "Type de prestation",
+      "select_budget": "Sélectionnez un budget",
+      "budget": "Budget estimé",
+      "select_delai": "Sélectionnez un délai",
+      "delai": "Délai souhaité",
+      "description": "Description du projet",
+      "description_helper": "Décrivez votre projet, vos besoins et vos attentes."
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "consent_text": "J'accepte que IRIS Junior Entreprise collecte et traite mes données personnelles pour l'étude de ma demande de devis.",
+      "consent_small": "Conformément à notre",
+      "privacy_link": "politique de confidentialité"
+    },
+    "buttons": {
+      "submit": "Demander un devis",
+      "sending": "Envoi en cours..."
+    },
+    "success": {
+      "title": "Devis demandé !",
+      "message": "Nous vous contacterons dans les plus brefs délais."
+    },
+    "error": {
+      "title": "Une erreur est survenue"
+    },
+    "errors": {
+      "nom_min": "Le nom doit contenir au moins 2 caractères",
+      "email_invalid": "Adresse email invalide",
+      "telephone_format": "Format : 8 chiffres sans espaces",
+      "prestation_required": "Veuillez sélectionner un type de prestation",
+      "budget_required": "Veuillez indiquer un budget estimé",
+      "delai_required": "Veuillez indiquer un délai souhaité",
+      "description_min": "Décrivez votre projet (minimum 20 caractères)",
+      "consentement_required": "Vous devez accepter la politique de confidentialité",
+      "general": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "prestations": {
+      "web": "Développement Web",
+      "mobile": "Développement Mobile",
+      "chatbot": "Création de Chatbot",
+      "branding": "Branding / Charte graphique",
+      "community": "Community Management",
+      "etude_marche": "Étude de marché",
+      "etude_notoriete": "Étude de notoriété",
+      "etude_satisfaction": "Étude de satisfaction",
+      "business_plan": "Business Plan",
+      "autre": "Autre"
+    },
+    "budgets": {
+      "moins_500": "Moins de 500 DT",
+      "500_2000": "500 - 2 000 DT",
+      "2000_5000": "2 000 - 5 000 DT",
+      "5000_10000": "5 000 - 10 000 DT",
+      "plus_10000": "Plus de 10 000 DT"
+    },
+    "delais": {
+      "1_semaine": "Moins d'1 semaine",
+      "2_semaines": "2 semaines",
+      "1_mois": "1 mois",
+      "2_mois": "2 mois",
+      "3_mois": "3 mois ou plus"
+    }
+  },
+  "ContactPage": {
+    "meta": {
+      "title": "Contact | IRIS Junior Entreprise",
+      "description": "Contactez IRIS Junior Entreprise pour toute demande d'information, de devis ou de partenariat."
+    },
+    "hero": {
+      "title": "Contactez <accent>IRIS JE</accent>",
+      "description": "Vous avez un projet, une question ou souhaitez devenir partenaire ? Remplissez le formulaire ci-dessous, nous vous répondrons dans les plus brefs délais."
+    },
+    "personal_info": {
+      "title": "Vos coordonnées",
+      "nom": "Nom complet",
+      "email": "Email",
+      "telephone": "Téléphone",
+      "telephone_helper": "8 chiffres, sans espaces"
+    },
+    "demande": {
+      "title": "Votre demande",
+      "select_sujet": "Sélectionnez un sujet",
+      "sujet": "Sujet de votre message",
+      "message": "Votre message",
+      "message_helper": "Minimum 10 caractères"
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "consent_text": "J'accepte que IRIS Junior Entreprise collecte et traite mes données personnelles pour le traitement de ma demande.",
+      "consent_small": "Conformément à notre",
+      "privacy_link": "politique de confidentialité"
+    },
+    "sujets": {
+      "information": "Demande d'information",
+      "devis": "Demande de devis",
+      "partenariat": "Partenariat",
+      "sponsoring": "Sponsoring",
+      "autre": "Autre"
+    },
+    "buttons": {
+      "submit": "Envoyer",
+      "sending": "Envoi en cours..."
+    },
+    "success": {
+      "title": "Message envoyé !",
+      "message": "Nous vous répondrons dans les plus brefs délais."
+    },
+    "error": {
+      "title": "Une erreur est survenue"
+    },
+    "errors": {
+      "nom_min": "Le nom doit contenir au moins 2 caractères",
+      "email_invalid": "Adresse email invalide",
+      "telephone_format": "Format : 8 chiffres sans espaces",
+      "sujet_required": "Veuillez sélectionner un sujet",
+      "message_min": "Le message doit contenir au moins 10 caractères",
+      "consentement_required": "Vous devez accepter la politique de confidentialité",
+      "general": "Une erreur est survenue. Veuillez réessayer."
+    }
+  },
+  "NotFound": {
+    "metaTitle": "Page non trouvée | IRIS Junior Entreprise",
+    "metaDescription": "La page que vous recherchez n'existe pas.",
+    "title": "Notre aigle",
+    "titleHighlight": "n'a pas repéré",
+    "description": "Elle a peut-être changé d'adresse ou n'existe plus. Revenez au nid et repartez de là.",
+    "cta": "Retour à l'accueil"
+  },
   "AboutPage": {
     "metaTitle": "À propos | IRIS Junior Entreprise",
-    "metaDescription": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs.",
+    "metaDescription": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs et notre équipe.",
     "hero": {
       "title": "À propos d'<span class=\"accent-text\">IRIS JE</span>",
       "description": "Découvrez qui nous sommes, notre mission et les valeurs qui nous animent au quotidien."
     },
     "who_we_are": {
       "title": "Qui sommes-nous ?",
-      "description_1": "<strong>IRIS Junior Entreprise</strong> est une association étudiante fondée en 2014 au sein de l'<strong>École Nationale des Ingénieurs de Sfax (ENIS)</strong>. Fonctionnant selon le modèle des cabinets de conseil, elle met les compétences de ses membres au service de projets réels à travers des prestations compétitives et professionnalisantes.",
-      "description_2": "À but non lucratif, IRIS Junior Entreprise possède une <strong>double vocation</strong> :",
+      "description_1": "<strong>IRIS Junior Création</strong> est une association étudiante fondée en 2014 au sein de l'<strong>École Nationale des Ingénieurs de Sfax (ENIS)</strong>. Fonctionnant selon le modèle des cabinets de conseil, elle met les compétences de ses membres au service de projets réels à travers des prestations compétitives et professionnalisantes.",
+      "description_2": "À but non lucratif, IRIS Junior Création possède une <strong>double vocation</strong> :",
       "vocation_pedagogique": "Pédagogique",
       "vocation_pedagogique_desc": "Développer les compétences techniques, stratégiques et humaines des étudiants.",
       "vocation_economique": "Économique",
@@ -189,8 +338,8 @@
     },
     "vision": {
       "title": "Notre vision",
-      "description_1": "IRIS Junior Entreprise ambitionne de devenir une référence nationale de professionnalisme, d'innovation et d'impact, en concrétisant le « Next Level » à travers une gouvernance structurée, une stratégie claire et un système de management performant.",
-      "description_2": "Par une évolution progressive et cohérente de l'entité, fondée sur ses valeurs humaines, son exigence de qualité et son engagement collectif, IRIS Junior Entreprise souhaite bâtir une organisation mature, fiable et reconnue au sein du mouvement des Junior-Entreprises."
+      "description_1": "IRIS Junior Création ambitionne de devenir une référence nationale de professionnalisme, d'innovation et d'impact, en concrétisant le « Next Level » à travers une gouvernance structurée, une stratégie claire et un système de management performant.",
+      "description_2": "Par une évolution progressive et cohérente de l'entité, fondée sur ses valeurs humaines, son exigence de qualité et son engagement collectif, IRIS Junior Création souhaite bâtir une organisation mature, fiable et reconnue au sein du mouvement des Junior-Entreprises."
     },
     "values": {
       "title": "Nos valeurs",
@@ -220,13 +369,184 @@
       }
     }
   },
-  "NotFound": {
-    "metaTitle": "Page introuvable | IRIS Junior Entreprise",
-    "metaDescription": "Impossible de trouver cette page.",
-    "title": "Notre aigle",
-    "titleHighlight": "est revenue bredouille",
-    "description": "La piste est froide... Cette page a peut-être disparu ou changé d’adresse. Retournez au nid pour repartir.",
-    "cta": "Retour au nid"
+  "Organigramme": {
+    "title": "Organigramme",
+    "subtitle": "Découvrez l'équipe dirigeante d'IRIS Junior Entreprise"
+  },
+  "RecruitmentPage": {
+    "metaTitle": "Recrutement | IRIS Junior Entreprise",
+    "metaDescription": "Rejoignez IRIS Junior Entreprise. Postulez pour intégrer notre équipe de consultants.",
+    "hero": {
+      "title_open": "Rejoignez <span class=\"accent-text\">IRIS JE</span>",
+      "title_closed": "Recrutement <span class=\"accent-text\">IRIS JE</span>",
+      "description_open": "Envie de développer vos compétences et de vivre une expérience associative enrichissante ? Postulez dès maintenant !",
+      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement au mois de septembre. Revenez nous voir à cette période !"
+    }
+  },
+  "RecruitmentForm": {
+    "personal_info": {
+      "title": "Identité",
+      "nom": "Nom",
+      "prenom": "Prénom",
+      "cin": "CIN",
+      "cin_helper": "8 chiffres",
+      "email": "Email",
+      "telephone": "Téléphone",
+      "telephone_helper": "10 chiffres, sans espaces",
+      "date_naissance": "Date de naissance",
+      "date_helper": "Format : JJ/MM/AAAA",
+      "adresse": "Adresse",
+      "niveau_etudes": "Niveau d'études",
+      "select_niveau": "Sélectionnez un niveau d'études"
+    },
+    "candidature": {
+      "title": "Votre candidature",
+      "departement": "Département visé",
+      "select_departement": "Sélectionnez un département",
+      "competences": "Compétences et expériences",
+      "competences_helper": "Décrivez vos compétences techniques et humaines, vos expériences.",
+      "motivation": "Lettre de motivation",
+      "motivation_helper": "Pourquoi souhaitez-vous rejoindre IRIS Junior Entreprise ?"
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "consent_text": "J'accepte que IRIS Junior Entreprise collecte et traite mes données personnelles pour le traitement de ma candidature.",
+      "consent_small": "Conformément à notre",
+      "privacy_link": "politique de confidentialité"
+    },
+    "buttons": {
+      "submit": "Postuler",
+      "sending": "Envoi en cours..."
+    },
+    "success": {
+      "title": "Candidature envoyée !",
+      "message": "Nous vous recontacterons prochainement."
+    },
+    "error": {
+      "title": "Une erreur est survenue"
+    },
+    "errors": {
+      "nom_min": "Le nom doit contenir au moins 2 caractères",
+      "prenom_min": "Le prénom doit contenir au moins 2 caractères",
+      "cin_format": "Le CIN doit comporter 8 chiffres",
+      "email_invalid": "Adresse email invalide",
+      "telephone_format": "Format : 10 chiffres sans espaces",
+      "date_required": "Veuillez saisir votre date de naissance",
+      "adresse_min": "Veuillez saisir votre adresse",
+      "niveau_required": "Veuillez sélectionner votre niveau d'études",
+      "departement_required": "Veuillez sélectionner un département",
+      "competences_min": "Décrivez vos compétences (minimum 10 caractères)",
+      "motivation_min": "Expliquez votre motivation (minimum 20 caractères)",
+      "consentement_required": "Vous devez accepter la politique de confidentialité",
+      "general": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "departements": {
+      "it": "IT - Développement",
+      "marketing": "Marketing & Communication",
+      "etudes": "Études & Conseil",
+      "dev_co": "Développement commercial"
+    }
+  },
+  "RecruitmentClosed": {
+    "title": "Candidatures fermées",
+    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement au mois de septembre</strong>.",
+    "note": "Prochaine ouverture :",
+    "actions": {
+      "home": "Retour à l'accueil",
+      "contact": "Nous contacter"
+    }
+  },
+  "CGUPage": {
+    "metaTitle": "Conditions Générales d'Utilisation | IRIS Junior Entreprise",
+    "metaDescription": "Conditions Générales d'Utilisation (CGU) du site web d'IRIS Junior Entreprise.",
+    "hero": {
+      "title": "Conditions <span class=\"accent-text\">générales</span>",
+      "description": "Conditions Générales d'Utilisation du site web d'IRIS Junior Entreprise."
+    },
+    "acceptation": {
+      "title": "Acceptation des CGU",
+      "desc": "L'accès au présent site implique l'acceptation pleine et entière des présentes Conditions Générales d'Utilisation."
+    },
+    "engagements": {
+      "title": "Engagements de l'utilisateur",
+      "desc": "Les utilisateurs s'engagent à utiliser le site de manière conforme aux lois et réglementations en vigueur et à ne pas porter atteinte à son bon fonctionnement."
+    },
+    "informations": {
+      "title": "Informations diffusées",
+      "desc": "Les informations diffusées sur le site sont fournies à titre informatif. IRIS Junior Création s'efforce d'assurer leur exactitude mais ne peut garantir l'absence d'erreurs ou d'omissions."
+    },
+    "responsabilite": {
+      "title": "Responsabilité de l'utilisateur",
+      "desc": "Les utilisateurs restent responsables des informations qu'ils transmettent via les différents formulaires du site."
+    },
+    "modification": {
+      "title": "Modification et interruption",
+      "desc": "IRIS Junior Création se réserve le droit de modifier, suspendre ou interrompre tout ou partie du site à tout moment, sans préavis."
+    },
+    "droit": {
+      "title": "Droit applicable",
+      "desc": "Les présentes Conditions Générales d'Utilisation sont régies par la législation tunisienne."
+    }
+  },
+  "MentionsLegalesPage": {
+    "metaTitle": "Mentions légales | IRIS Junior Entreprise",
+    "metaDescription": "Mentions légales du site web d'IRIS Junior Entreprise - Éditeur, coordonnées et responsable de publication.",
+    "hero": {
+      "title": "Mentions <span class=\"accent-text\">légales</span>",
+      "description": "Informations légales relatives à l'édition du site web d'IRIS Junior Entreprise."
+    },
+    "editeur": {
+      "title": "Éditeur du site",
+      "desc": "Le présent site est édité par <strong>IRIS Junior Création</strong>, une Junior Entreprise fonctionnant selon le modèle des cabinets de conseil."
+    },
+    "adresse": {
+      "title": "Adresse du siège",
+      "desc": "Route Soukra Km 3.5 – 3038 Sfax, Tunisie"
+    },
+    "telephone": {
+      "title": "Téléphone",
+      "desc": "<a href=\"tel:+21696822343\" style=\"color: var(--primary); text-decoration: none;\">(+216) 96 822 343</a>"
+    },
+    "email": {
+      "title": "E-mail",
+      "desc": "<a href=\"mailto:iris.juniorentreprise@gmail.com\" style=\"color: var(--primary); text-decoration: none;\">iris.juniorentreprise@gmail.com</a>"
+    },
+    "responsable": {
+      "title": "Responsable de publication",
+      "desc": "IRIS Junior Création"
+    }
+  },
+  "PolitiqueConfidentialitePage": {
+    "metaTitle": "Politique de confidentialité | IRIS Junior Entreprise",
+    "metaDescription": "Politique de confidentialité du site web d'IRIS Junior Entreprise - Protection des données personnelles.",
+    "hero": {
+      "title": "Politique de <span class=\"accent-text\">confidentialité</span>",
+      "description": "Comment IRIS Junior Entreprise protège vos données personnelles."
+    },
+    "engagement": {
+      "title": "Engagement de confidentialité",
+      "desc": "IRIS Junior Création accorde une importance particulière à la protection des données personnelles de ses utilisateurs."
+    },
+    "collecte": {
+      "title": "Données collectées",
+      "desc": "Les informations collectées via les formulaires du site (nom, prénom, adresse e-mail, numéro de téléphone, informations relatives aux projets ou aux demandes formulées) sont utilisées exclusivement dans le cadre du traitement des demandes de contact, de devis et de candidature."
+    },
+    "acces": {
+      "title": "Accès et partage",
+      "desc": "Les données collectées sont accessibles uniquement aux membres habilités d'IRIS Junior Création et ne sont ni vendues ni transmises à des tiers sans autorisation préalable."
+    },
+    "conservation": {
+      "title": "Durée de conservation",
+      "desc": "Les données sont conservées pendant la durée nécessaire au traitement des demandes et dans le respect des obligations légales applicables."
+    },
+    "droits": {
+      "title": "Vos droits",
+      "desc": "Conformément aux réglementations en vigueur, tout utilisateur dispose d'un droit d'accès, de rectification, de suppression et d'opposition concernant ses données personnelles. Toute demande peut être adressée à IRIS Junior Création via les coordonnées de contact mises à disposition sur le site."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "desc": "Le site peut également utiliser des cookies nécessaires à son bon fonctionnement et à l'amélioration de l'expérience utilisateur."
+    }
   },
   "FAQPage": {
     "metaTitle": "FAQ | IRIS Junior Entreprise",
@@ -243,7 +563,7 @@
       {
         "id": 1,
         "question": "Qu'est-ce qu'IRIS Junior Entreprise ?",
-        "answer": "IRIS Junior Entreprise est une association étudiante fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax (ENIS). Elle fonctionne comme un cabinet de conseil et propose des prestations dans les domaines de l'IT, du marketing et des études stratégiques."
+        "answer": "IRIS Junior Création est une association étudiante fondée en 2014 au sein de l'École Nationale des Ingénieurs de Sfax (ENIS). Elle fonctionne comme un cabinet de conseil et propose des prestations dans les domaines de l'IT, du marketing et des études stratégiques."
       },
       {
         "id": 2,
@@ -301,5 +621,13 @@
         "answer": "Oui, nous proposons des prestations de community management incluant la gestion de vos réseaux sociaux, la création de contenus (visuels, vidéos), la planification des publications, l'interaction avec votre communauté et l'analyse des performances."
       }
     ]
+  },
+  "Portfolio": {
+    "title": "Nos réalisations",
+    "subtitle": "Découvrez quelques-uns des projets menés par nos consultants.",
+    "filter_all": "Tous",
+    "aria_label": "Voir les détails du projet : {title}",
+    "close_modal": "Fermer",
+    "client_label": "Client :"
   }
 }
