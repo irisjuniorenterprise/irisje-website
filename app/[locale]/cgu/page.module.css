@@ -1,0 +1,44 @@
+/* app/[locale]/cgu/page.module.css */
+
+.rtlPage {
+  direction: rtl;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.rtlPage .hero .hero-content {
+  text-align: right;
+}
+
+/* ============================================================
+   SECTIONS LÉGALES
+   ============================================================ */
+.rtlPage .legal-section {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.rtlPage .legal-icon {
+  margin-left: 1.5rem;
+  margin-right: 0;
+}
+
+.rtlPage .legal-divider {
+  margin: 1.5rem 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .rtlPage .legal-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .rtlPage .legal-icon {
+    margin-left: 0;
+    margin-bottom: 0.75rem;
+  }
+}
