@@ -1,5 +1,10 @@
 {
   "HomePage": {
+    "meta": {
+      "title": "IRIS Junior Entreprise — Propulsez votre potentiel",
+      "description": "IRIS Junior Entreprise accompagne les entrepreneurs, startups et PME avec des solutions innovantes en IT, études et marketing. Propulsez votre potentiel avec IRIS JE.",
+      "keywords": "junior entreprise, conseil, IT, marketing, études, ENIS, Sfax"
+    },
     "hero": {
       "title": "Propulsez votre potentiel, connectez vos succès avec <span class=\"accent-text\">IRIS JE</span>",
       "cta_start": "Commencer",
@@ -94,6 +99,11 @@
     }
   },
   "ServicesPage": {
+    "meta": {
+      "title": "Services | IRIS Junior Entreprise",
+      "description": "Découvrez nos prestations en IT, Marketing et Études. Nous mettons notre expertise au service de vos projets.",
+      "keywords": "services, IT, développement web, marketing, études, conseil"
+    },
     "hero": {
       "title": "Nos <accent>Services</accent>",
       "description": "Découvrez nos prestations dans les domaines de l'IT, du Marketing et des Études. Nous mettons notre savoir-faire au service de vos projets."
@@ -171,7 +181,8 @@
   "DevisPage": {
     "meta": {
       "title": "Demande de devis | IRIS Junior Entreprise",
-      "description": "Demandez un devis personnalisé pour vos projets IT, Marketing ou Études auprès d'IRIS Junior Entreprise."
+      "description": "Demandez un devis personnalisé pour vos projets IT, Marketing ou Études auprès d'IRIS Junior Entreprise.",
+      "keywords": "devis, demande de devis, projet, budget, délai, IT, marketing, études"
     },
     "hero": {
       "title": "Demande de <accent>devis</accent>",
@@ -253,7 +264,8 @@
   "ContactPage": {
     "meta": {
       "title": "Contact | IRIS Junior Entreprise",
-      "description": "Contactez IRIS Junior Entreprise pour toute demande d'information, de devis ou de partenariat."
+      "description": "Contactez IRIS Junior Entreprise pour toute demande d'information, de devis ou de partenariat.",
+      "keywords": "contact, IRIS JE, devis, partenariat, sponsoring"
     },
     "hero": {
       "title": "Contactez <accent>IRIS JE</accent>",
@@ -316,8 +328,11 @@
     "cta": "Retour à l'accueil"
   },
   "AboutPage": {
-    "metaTitle": "À propos | IRIS Junior Entreprise",
-    "metaDescription": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs et notre équipe.",
+    "meta": {
+      "title": "À propos | IRIS Junior Entreprise",
+      "description": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs et notre équipe.",
+      "keywords": "à propos, IRIS JE, ENIS, mission, valeurs, équipe"
+    },
     "hero": {
       "title": "À propos d'<span class=\"accent-text\">IRIS JE</span>",
       "description": "Découvrez qui nous sommes, notre mission et les valeurs qui nous animent au quotidien."
@@ -374,8 +389,11 @@
     "subtitle": "Découvrez l'équipe dirigeante d'IRIS Junior Entreprise"
   },
   "RecruitmentPage": {
-    "metaTitle": "Recrutement | IRIS Junior Entreprise",
-    "metaDescription": "Rejoignez IRIS Junior Entreprise. Postulez pour intégrer notre équipe de consultants.",
+    "meta": {
+      "title": "Recrutement | IRIS Junior Entreprise",
+      "description": "Rejoignez IRIS Junior Entreprise. Postulez pour intégrer notre équipe de consultants.",
+      "keywords": "recrutement, postuler, candidature, junior entreprise, ENIS"
+    },
     "hero": {
       "title_open": "Rejoignez <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recrutement <span class=\"accent-text\">IRIS JE</span>",
@@ -457,8 +475,11 @@
     }
   },
   "CGUPage": {
-    "metaTitle": "Conditions Générales d'Utilisation | IRIS Junior Entreprise",
-    "metaDescription": "Conditions Générales d'Utilisation (CGU) du site web d'IRIS Junior Entreprise.",
+    "meta": {
+      "title": "Conditions Générales d'Utilisation | IRIS Junior Entreprise",
+      "description": "Conditions Générales d'Utilisation (CGU) du site web d'IRIS Junior Entreprise.",
+      "keywords": "CGU, conditions générales, utilisation, site web"
+    },
     "hero": {
       "title": "Conditions <span class=\"accent-text\">générales</span>",
       "description": "Conditions Générales d'Utilisation du site web d'IRIS Junior Entreprise."
@@ -489,8 +510,11 @@
     }
   },
   "MentionsLegalesPage": {
-    "metaTitle": "Mentions légales | IRIS Junior Entreprise",
-    "metaDescription": "Mentions légales du site web d'IRIS Junior Entreprise - Éditeur, coordonnées et responsable de publication.",
+    "meta": {
+      "title": "Mentions légales | IRIS Junior Entreprise",
+      "description": "Mentions légales du site web d'IRIS Junior Entreprise – Éditeur, coordonnées et responsable de publication.",
+      "keywords": "mentions légales, éditeur, responsable, publication"
+    },
     "hero": {
       "title": "Mentions <span class=\"accent-text\">légales</span>",
       "description": "Informations légales relatives à l'édition du site web d'IRIS Junior Entreprise."
@@ -517,8 +541,11 @@
     }
   },
   "PolitiqueConfidentialitePage": {
-    "metaTitle": "Politique de confidentialité | IRIS Junior Entreprise",
-    "metaDescription": "Politique de confidentialité du site web d'IRIS Junior Entreprise - Protection des données personnelles.",
+    "meta": {
+      "title": "Politique de confidentialité | IRIS Junior Entreprise",
+      "description": "Politique de confidentialité du site web d'IRIS Junior Entreprise – Protection de vos données personnelles.",
+      "keywords": "confidentialité, données personnelles, RGPD, cookies"
+    },
     "hero": {
       "title": "Politique de <span class=\"accent-text\">confidentialité</span>",
       "description": "Comment IRIS Junior Entreprise protège vos données personnelles."
@@ -549,8 +576,11 @@
     }
   },
   "FAQPage": {
-    "metaTitle": "FAQ | IRIS Junior Entreprise",
-    "metaDescription": "Questions fréquentes sur IRIS Junior Entreprise : services, recrutement, devis, fonctionnement et plus encore.",
+    "meta": {
+      "title": "FAQ | IRIS Junior Entreprise",
+      "description": "Réponses aux questions fréquentes sur IRIS Junior Entreprise : services, recrutement, devis, fonctionnement.",
+      "keywords": "FAQ, questions fréquentes, recrutement, services, IRIS JE"
+    },
     "hero": {
       "title": "Foire aux <span class=\"accent-text\">questions</span>",
       "description": "Retrouvez les réponses aux questions les plus fréquentes sur IRIS Junior Entreprise, nos services, le recrutement et nos prestations."

@@ -1,5 +1,10 @@
 {
   "HomePage": {
+    "meta": {
+      "title": "IRIS Junior Entreprise — Boost your potential",
+      "description": "IRIS Junior Entreprise supports entrepreneurs, startups and SMEs with innovative solutions in IT, studies and marketing. Boost your potential with IRIS JE.",
+      "keywords": "junior enterprise, consulting, IT, marketing, studies, ENIS, Sfax"
+    },
     "hero": {
       "title": "Boost your potential, connect your success with <span class=\"accent-text\">IRIS JE</span>",
       "cta_start": "Get Started",
@@ -94,6 +99,11 @@
     }
   },
   "ServicesPage": {
+    "meta": {
+      "title": "Services | IRIS Junior Entreprise",
+      "description": "Discover our services in IT, Marketing and Studies. We put our expertise at the service of your projects.",
+      "keywords": "services, IT, web development, marketing, studies, consulting"
+    },
     "hero": {
       "title": "Our <accent>Services</accent>",
       "description": "Discover our services in IT, Marketing and Studies. We put our expertise at the service of your projects."
@@ -171,7 +181,8 @@
   "DevisPage": {
     "meta": {
       "title": "Quote request | IRIS Junior Entreprise",
-      "description": "Request a personalized quote for your IT, Marketing or Studies projects from IRIS Junior Entreprise."
+      "description": "Request a personalized quote for your IT, Marketing or Studies projects from IRIS Junior Entreprise.",
+      "keywords": "quote, request, project, budget, deadline, IT, marketing, studies"
     },
     "hero": {
       "title": "Request a <accent>quote</accent>",
@@ -253,7 +264,8 @@
   "ContactPage": {
     "meta": {
       "title": "Contact | IRIS Junior Entreprise",
-      "description": "Contact IRIS Junior Entreprise for any information, quote or partnership request."
+      "description": "Contact IRIS Junior Entreprise for any information, quote or partnership request.",
+      "keywords": "contact, IRIS JE, quote, partnership, sponsoring"
     },
     "hero": {
       "title": "Contact <accent>IRIS JE</accent>",
@@ -316,8 +328,11 @@
     "cta": "Back to home"
   },
   "AboutPage": {
-    "metaTitle": "About | IRIS Junior Entreprise",
-    "metaDescription": "Discover IRIS Junior Entreprise, the Junior-Creation of ENIS. Our mission, vision, values and team.",
+    "meta": {
+      "title": "About | IRIS Junior Entreprise",
+      "description": "Discover IRIS Junior Entreprise, the Junior-Creation of ENIS. Our mission, vision, values and team.",
+      "keywords": "about, IRIS JE, ENIS, mission, values, team"
+    },
     "hero": {
       "title": "About <span class=\"accent-text\">IRIS JE</span>",
       "description": "Discover who we are, our mission and the values that drive us every day."
@@ -374,8 +389,11 @@
     "subtitle": "Discover the leadership team of IRIS Junior Entreprise"
   },
   "RecruitmentPage": {
-    "metaTitle": "Recruitment | IRIS Junior Entreprise",
-    "metaDescription": "Join IRIS Junior Entreprise. Apply to join our team of consultants.",
+    "meta": {
+      "title": "Recruitment | IRIS Junior Entreprise",
+      "description": "Join IRIS Junior Entreprise. Apply to join our team of consultants.",
+      "keywords": "recruitment, apply, application, junior enterprise, ENIS"
+    },
     "hero": {
       "title_open": "Join <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recruitment <span class=\"accent-text\">IRIS JE</span>",
@@ -457,8 +475,11 @@
     }
   },
   "CGUPage": {
-    "metaTitle": "Terms of Use | IRIS Junior Entreprise",
-    "metaDescription": "Terms of Use (CGU) of the IRIS Junior Entreprise website.",
+    "meta": {
+      "title": "Terms of Use | IRIS Junior Entreprise",
+      "description": "Terms of Use (CGU) of the IRIS Junior Entreprise website.",
+      "keywords": "CGU, terms, conditions, website"
+    },
     "hero": {
       "title": "Terms of <span class=\"accent-text\">Use</span>",
       "description": "Terms of Use of the IRIS Junior Entreprise website."
@@ -489,8 +510,11 @@
     }
   },
   "MentionsLegalesPage": {
-    "metaTitle": "Legal Notice | IRIS Junior Entreprise",
-    "metaDescription": "Legal notice of the IRIS Junior Entreprise website - Publisher, contact details and publication manager.",
+    "meta": {
+      "title": "Legal Notice | IRIS Junior Entreprise",
+      "description": "Legal notice of the IRIS Junior Entreprise website - Publisher, contact details and publication manager.",
+      "keywords": "legal notice, publisher, manager, publication"
+    },
     "hero": {
       "title": "Legal <span class=\"accent-text\">notice</span>",
       "description": "Legal information regarding the publication of the IRIS Junior Entreprise website."
@@ -517,8 +541,11 @@
     }
   },
   "PolitiqueConfidentialitePage": {
-    "metaTitle": "Privacy Policy | IRIS Junior Entreprise",
-    "metaDescription": "Privacy policy of the IRIS Junior Entreprise website - Personal data protection.",
+    "meta": {
+      "title": "Privacy Policy | IRIS Junior Entreprise",
+      "description": "Privacy policy of the IRIS Junior Entreprise website - Personal data protection.",
+      "keywords": "privacy, GDPR, personal data, cookies"
+    },
     "hero": {
       "title": "Privacy <span class=\"accent-text\">policy</span>",
       "description": "How IRIS Junior Entreprise protects your personal data."
@@ -549,8 +576,11 @@
     }
   },
   "FAQPage": {
-    "metaTitle": "FAQ | IRIS Junior Entreprise",
-    "metaDescription": "Frequently asked questions about IRIS Junior Entreprise: services, recruitment, quotes, operations and more.",
+    "meta": {
+      "title": "FAQ | IRIS Junior Entreprise",
+      "description": "Frequently asked questions about IRIS Junior Entreprise: services, recruitment, quotes, operations and more.",
+      "keywords": "FAQ, frequently asked questions, recruitment, services, IRIS JE"
+    },
     "hero": {
       "title": "Frequently Asked <span class=\"accent-text\">Questions</span>",
       "description": "Find answers to the most frequently asked questions about IRIS Junior Entreprise, our services, recruitment and our offerings."

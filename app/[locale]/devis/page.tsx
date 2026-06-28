@@ -14,7 +14,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
-  return buildMetadata('/devis', locale);
+  const t = await getTranslations({ locale, namespace: 'DevisPage' });
+  return buildMetadata({
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
+    locale,
+    path: '/devis',
+  });
 }
 
 export default async function DevisPage({ params }: Props) {
