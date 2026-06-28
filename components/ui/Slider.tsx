@@ -1,3 +1,4 @@
+// components/ui/Slider.tsx
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -9,6 +10,7 @@ export type Slide = {
   title: string;
   description: string;
   icon?: React.ReactNode;
+  image?: string;
   cta?: {
     label: string;
     href: string;

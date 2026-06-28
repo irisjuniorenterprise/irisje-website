@@ -1,9 +1,13 @@
+// lib/data/sliderData.tsx
 import { Slide } from '@/components/ui/Slider';
 import { Icons } from '@/components/icons/Icons';
+import { isRecruitmentOpen } from '@/lib/utils/date';
 
 type TFunction = (key: string) => string;
 
 export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
+  const recruitmentOpen = isRecruitmentOpen();
+
   const slides: Slide[] = [
     {
       id: 1,
@@ -41,6 +45,16 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       cta: { label: t('partenariat.cta'), href: `/${locale}/contact` },
     },
   ];
+
+  if (recruitmentOpen) {
+    slides.push({
+      id: 6,
+      title: t('recrutement.title'),
+      description: t('recrutement.description'),
+      icon: <Icons.User size={32} stroke="currentColor" />,
+      cta: { label: t('recrutement.cta'), href: `/${locale}/recrutement` },
+    });
+  }
 
   return slides;
 };

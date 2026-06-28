@@ -1,3 +1,5 @@
+/* components/ui/Slider.module.css */
+
 .slider {
   position: relative;
   width: 100%;
@@ -6,6 +8,14 @@
   border-radius: var(--radius-md);
   box-shadow: 0 2px 16px var(--shadow);
   margin: 2rem 0;
+}
+
+/* ============================================================
+   FORCER LTR SUR LES CONTENEURS DU SLIDER
+   ============================================================ */
+.sliderContainer,
+.sliderTrack {
+  direction: ltr !important;
 }
 
 .sliderContainer {
@@ -104,6 +114,9 @@
   transform: translateX(3px);
 }
 
+/* ============================================================
+   BOUTONS DE NAVIGATION
+   ============================================================ */
 .navButton {
   position: absolute;
   top: 50%;
@@ -145,6 +158,9 @@
   right: 12px;
 }
 
+/* ============================================================
+   INDICATEURS (DOTS)
+   ============================================================ */
 .dots {
   position: absolute;
   bottom: 16px;
@@ -182,6 +198,9 @@
   border-radius: 999px;
 }
 
+/* ============================================================
+   RTL (Arabe) - Gestion du texte et des flèches
+   ============================================================ */
 .slider.rtl .slideContent {
   flex-direction: row-reverse;
 }
@@ -217,6 +236,9 @@
   transform: scaleX(-1);
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 768px) {
   .sliderContainer {
     aspect-ratio: 16 / 7;
