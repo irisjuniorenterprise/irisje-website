@@ -1,8 +1,6 @@
 // lib/metadata.ts
 import type { Metadata } from 'next';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://irisje.vercel.app' || 'https://irisje.com' || 'https://irisje.tn' || 'https://irisje.org';
-const DEFAULT_IMAGE = '/logo-iris.png';  // image unique pour toutes les pages
+import { headers } from 'next/headers';
 
 type MetaOptions = {
   title: string;
@@ -14,15 +12,21 @@ type MetaOptions = {
   path: string;
 };
 
-export function buildMetadata({
+export async function buildMetadata({
   title,
   description,
   keywords = '',
-  image = DEFAULT_IMAGE,
+  image = '/logo-iris.png',
   type = 'website',
   locale,
   path,
-}: MetaOptions): Metadata {
+}: MetaOptions): Promise<Metadata> {
+  // Récupérer l'URL réelle depuis les headers
+  const headersList = await headers();
+  const host = headersList.get('host') || 'irisje.vercel.app';
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const SITE_URL = `${protocol}://${host}`;
+
   const url = `${SITE_URL}/${locale}${path === '/' ? '' : path}`;
 
   return {
@@ -33,9 +37,9 @@ export function buildMetadata({
     alternates: {
       canonical: url,
       languages: {
-        fr: `https://irisje.com/fr${path === '/' ? '' : path}`,
-        en: `https://irisje.com/en${path === '/' ? '' : path}`,
-        ar: `https://irisje.com/ar${path === '/' ? '' : path}`,
+        fr: `https://${host}/fr${path === '/' ? '' : path}`,
+        en: `https://${host}/en${path === '/' ? '' : path}`,
+        ar: `https://${host}/ar${path === '/' ? '' : path}`,
       },
     },
     openGraph: {
