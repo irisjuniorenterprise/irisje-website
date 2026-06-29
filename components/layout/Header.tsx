@@ -1,23 +1,28 @@
+// components/layout/Header.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Header.module.css';
-import logoData from '@/public/horiz-logo.png'; // Assurez-vous d'avoir ce fichier dans public/
+import logoData from '@/public/horiz-logo.png';
+import { isRecruitmentOpen } from '@/lib/utils/date';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
-  // Extraire la locale
+  // Extraire la locale du pathname
   const segments = pathname.split('/').filter(Boolean);
   const locale = segments[0] || 'fr';
   const pathWithoutLocale = '/' + segments.slice(1).join('/');
+
+  // Déterminer si RTL
   const isRtl = locale === 'ar';
 
   const toggleMenu = () => {
@@ -41,13 +46,17 @@ export default function Header() {
     return pathWithoutLocale.startsWith(path);
   };
 
+  const showRecruitment = isRecruitmentOpen();
+
   const localHref = (path: string) => {
+    if (path.startsWith('/#')) return path;
     if (path === '/') return `/${locale}`;
     return `/${locale}${path}`;
   };
 
   return (
     <header
+      ref={headerRef}
       className={`${styles.header} ${scrolled ? styles.isScrolled : ''} ${isRtl ? styles.rtl : ''}`}
       dir={isRtl ? 'rtl' : 'ltr'}
     >
@@ -79,7 +88,13 @@ export default function Header() {
                   {t('devis')}
                 </Link>
               </li>
-              {/* Recrutement conditionnel – on ajoutera plus tard avec le flag */}
+              {showRecruitment && (
+                <li>
+                  <Link href={localHref('/recrutement')} className={isActive('/recrutement') ? styles.active : ''}>
+                    {t('recruitment')}
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
@@ -99,7 +114,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div className={`${styles.mobileNav} ${isOpen ? styles.isOpen : ''}`}>
         <nav aria-label={t('aria_label')}>
           <ul>
@@ -123,6 +137,13 @@ export default function Header() {
                 {t('devis')}
               </Link>
             </li>
+            {showRecruitment && (
+              <li>
+                <Link href={localHref('/recrutement')} className={isActive('/recrutement') ? styles.active : ''} onClick={closeMenu}>
+                  {t('recruitment')}
+                </Link>
+              </li>
+            )}
             <li>
               <Link href={localHref('/contact')} className={styles.mobileCta} onClick={closeMenu}>
                 {t('contact')}

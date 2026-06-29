@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Footer.module.css';
-import logoData from '@/public/logo-s-no-bg.png'; 
-// import { isRecruitmentOpen } from '@/lib/utils/date'; //A décommenter lorsque la fonction sera prête pour gérer dynamiquement l'affichage du lien de recrutement
+import logoData from '@/public/logo-s-no-bg.png';
+import { isRecruitmentOpen } from '@/lib/utils/date';
 
 const socialIcons = {
   linkedin: (
@@ -39,19 +39,22 @@ const socialIcons = {
 };
 
 export default function Footer() {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(2026);
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
   const segments = pathname.split('/').filter(Boolean);
   const locale = segments[0] || 'fr';
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
+  const showRecruitment = isRecruitmentOpen();
   const isRtl = locale === 'ar';
 
-  // Temporairement, on désactive la condition pour le recrutement (on le rendra dynamique plus tard)
-  // const showRecruitment = isRecruitmentOpen();
-  const showRecruitment = true; // Pour l'instant, on l'affiche toujours
-
   const localHref = (path: string) => {
+    if (path.startsWith('/#')) return path;
     if (path === '/') return `/${locale}`;
     return `/${locale}${path}`;
   };
@@ -60,7 +63,6 @@ export default function Footer() {
     <footer className={`${styles.siteFooter} ${isRtl ? styles.rtl : ''}`} dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="container">
         <div className={styles.footerTop}>
-          {/* Colonne 1 : Navigation */}
           <div className={styles.footerCol}>
             <h3>{t('home')}</h3>
             <ul>
@@ -74,8 +76,6 @@ export default function Footer() {
               <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
             </ul>
           </div>
-
-          {/* Colonne 2 : Services (redondant mais comme dans la maquette) */}
           <div className={styles.footerCol}>
             <h3>{t('services')}</h3>
             <ul>
@@ -88,8 +88,6 @@ export default function Footer() {
               <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
             </ul>
           </div>
-
-          {/* Colonne 3 : Légal */}
           <div className={styles.footerCol}>
             <h3>{t('legal')}</h3>
             <ul>
@@ -99,8 +97,6 @@ export default function Footer() {
               <li><Link href={localHref('/faq')}>{t('faq')}</Link></li>
             </ul>
           </div>
-
-          {/* Colonne 4 : Marque + réseaux sociaux */}
           <div className={styles.footerBrand}>
             <Image className={styles.footerLogo} src={logoData} alt="IRIS Junior Entreprise" width={80} height={80} />
             <div className={styles.socialLinks}>
@@ -112,7 +108,6 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
         <div className={styles.footerDivider}></div>
         <div className={styles.footerBottom}>
           <p>&copy; {year} IRIS JE. {t('copyright')}</p>
