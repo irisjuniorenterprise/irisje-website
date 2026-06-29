@@ -25,17 +25,17 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
     },
     {
       id: 3,
+      title: t('branding.title'),
+      description: t('branding.description'),
+      icon: <Icons.Palette size={32} stroke="currentColor" />,
+      cta: { label: t('branding.cta'), href: `/${locale}/services#marketing` },   
+    },
+    {
+      id: 4,
       title: t('etudes.title'),
       description: t('etudes.description'),
       icon: <Icons.Chart size={32} stroke="currentColor" />,
       cta: { label: t('etudes.cta'), href: `/${locale}/services#etudes` },
-    },
-    {
-      id: 4,
-      title: t('branding.title'),
-      description: t('branding.description'),
-      icon: <Icons.Palette size={32} stroke="currentColor" />,
-      cta: { label: t('branding.cta'), href: `/${locale}/services#marketing` },
     },
     {
       id: 5,
