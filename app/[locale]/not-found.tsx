@@ -1,25 +1,26 @@
 import NotFoundContent from '@/components/NotFoundContent';
-import type { Metadata } from 'next';
 
+type Props = {
+  params: { locale: string };
+};
 
+export async function generateMetadata({ params }: Props) {
+  const { locale } = params;
+  const { getTranslations } = await import('next-intl/server');
 
+  const t = await getTranslations({
+    locale,
+    namespace: 'NotFound'
+  });
 
-export const metadata: Metadata = {
-  title: 'Page non trouvée | IRIS Junior Entreprise',
-  description: "La page que vous recherchez n'existe pas.",
-  openGraph: {
-    title: 'Page non trouvée | IRIS Junior Entreprise',
-    description: "La page que vous recherchez n'existe pas.",
-    images: ['/logo-iris.png'],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Page non trouvée | IRIS Junior Entreprise',
-    description: "La page que vous recherchez n'existe pas.",
-    images: ['/logo-iris.png'],
-  },
-}; 
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  };
+}
 
-export default function NotFound() {
-  return <NotFoundContent />;
+export default function NotFoundPage({ params }: Props) {
+  const { locale } = params;
+
+  return <NotFoundContent locale={locale} />;
 }
