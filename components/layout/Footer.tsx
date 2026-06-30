@@ -67,13 +67,13 @@ export default function Footer() {
             <h3>{t('home')}</h3>
             <ul>
               <li><Link href={localHref('/')}>{t('home')}</Link></li>
-              <li><Link href={localHref('/a-propos')}>{t('about')}</Link></li>
-              <li><Link href={localHref('/services')}>{t('services')}</Link></li>
-              <li><Link href={localHref('/devis')}>{t('devis')}</Link></li>
+              <li><Link href={localHref('#a-propos')}>{t('about')}</Link></li>
+              <li><Link href={localHref('#services')}>{t('services')}</Link></li>
+              <li><Link href={localHref('#devis')}>{t('devis')}</Link></li>
               {showRecruitment && (
-                <li><Link href={localHref('/recrutement')}>{t('recruitment')}</Link></li>
+                <li><Link href={localHref('#recrutement')}>{t('recruitment')}</Link></li>
               )}
-              <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
+              <li><Link href={localHref('#contact')}>{t('contact')}</Link></li>
             </ul>
           </div>
           <div className={styles.footerCol}>
@@ -104,7 +104,7 @@ export default function Footer() {
               <a href="https://www.facebook.com/IRIS.Junior" aria-label="Facebook">{socialIcons.facebook}</a>
               <a href="https://www.instagram.com/iris.junior.creation/" aria-label="Instagram">{socialIcons.instagram}</a>
               <a href="https://github.com/irisjuniorenterprise" aria-label="GitHub">{socialIcons.github}</a>
-              <a href="https://www.tiktok.com/@iris.junior.entreprise?_r=1&_t=ZS-97OaJKrXYOo" aria-label="TikTok">{socialIcons.tiktok}</a>
+              <a href="https://www.tiktok.com/@iris.junior.entreprise" aria-label="TikTok">{socialIcons.tiktok}</a>
             </div>
           </div>
         </div>
