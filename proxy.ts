@@ -3,36 +3,49 @@ import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { locales, defaultLocale } from './i18n/config';
 
+// Middleware next-intl officiel
 const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
-  localeDetection: true,
+  localeDetection: true
 });
 
-export default function middleware(request: NextRequest): NextResponse {
-  // Appel du middleware intl
-  const response = intlMiddleware(request);
-  
-  // Si la réponse est une redirection, on la retourne directement
-  if (response.status >= 300 && response.status < 400) {
-    return response;
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 🚫 Ignorer fichiers statiques + assets + API
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.includes('.') // fichiers (images, css, js, etc.)
+  ) {
+    return NextResponse.next();
   }
-  
-  const pathname = request.nextUrl.pathname;
+
+  // ✅ Appliquer next-intl
+  const response = intlMiddleware(request);
+
+  // ⚠️ IMPORTANT : ne JAMAIS casser le flux pour les 404
+  // → on ne modifie PAS la réponse si ce n’est pas nécessaire
+
+  // ✅ Optionnel (safe) : ajouter header locale sans casser 404
   const localeFromUrl = pathname.split('/')[1];
-  
-  // Ajout du header seulement si une locale valide est présente
-  if (localeFromUrl && locales.includes(localeFromUrl as (typeof locales)[number])) {
+
+  if (
+    localeFromUrl &&
+    locales.includes(localeFromUrl as (typeof locales)[number]) &&
+    response.status === 200 // ⚠️ très important
+  ) {
     response.headers.set('x-locale', localeFromUrl);
   }
-  
+
   return response;
 }
 
 export const config = {
   matcher: [
-    // Inclure toutes les routes sauf celles spécifiées
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
-  ],
+    // matcher propre et safe
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'
+  ]
 };
