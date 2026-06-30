@@ -1,5 +1,9 @@
 /* styles/globals.css */
 
+/* globals.css */
+html, body {
+  overflow-x: hidden;
+}
 /* =====================================================
    RESET ET STYLES DE BASE
    ===================================================== */
