@@ -12,24 +12,24 @@
     },
     "services": {
       "title": "Our Expertise at the Service of Your Ambitions",
-      "description": "IRIS Junior Création supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions tailored to their needs. Leveraging its expertise in IT, studies, and marketing, the organization provides services ranging from digital solution development and strategic studies to brand enhancement and digital presence management.",
+      "description": "IRIS Junior Entreprise supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions tailored to their needs. Leveraging its expertise in IT, studies, and marketing, the organization provides services ranging from digital solution development and strategic studies to brand enhancement and digital presence management.",
       "cta": "Discover our services"
     },
     "about": {
       "title": "Who Are We?",
-      "description_1": "Founded in 2014 at the National Engineering School of Sfax (ENIS), IRIS Junior Création is a student association operating according to the consulting firm model. Through its various areas of expertise, it puts the skills of its members at the service of real-world projects and provides innovative solutions tailored to the needs of its clients.",
-      "description_2": "Driven by the values of professionalism, innovation, and commitment, IRIS Junior Création strives to train tomorrow's engineers while contributing to the success of its clients and partners.",
+      "description_1": "Founded in 2014 at the National Engineering School of Sfax (ENIS), IRIS Junior Entreprise is a non profit student organization  operating according to the consulting firm model. Through its various areas of expertise, it puts the skills of its members at the service of real-world projects and provides innovative solutions tailored to the needs of its clients.",
+      "description_2": "Driven by the values of professionalism, innovation, and commitment, IRIS Junior Entreprise strives to train tomorrow's engineers while contributing to the success of its clients and partners.",
       "cta": "Learn more"
     },
     "devis": {
-      "title": "Bring Your Project to Life",
+      "title": "Take your business to the Next Level",
       "description_1": "Do you have an idea, a need, or a challenge to overcome? Our team is ready to provide solutions tailored to your objectives.",
       "description_2": "Describe your project and receive a personalized quote. Together, let's turn your ideas into concrete achievements.",
       "cta": "Your project starts here"
     },
     "contact": {
       "title": "Let's Stay Connected",
-      "description_1": "Do you have a question, need more information, or wish to bring a project to life? Feel free to contact us.",
+      "description_1": "Do you have a question, need more information, or wish to take your business to the Next Level? Feel free to contact us.",
       "description_2": "Our team will be delighted to assist you and respond to your needs as quickly as possible.",
       "description_3": "Let's build your next success together.",
       "cta": "Contact us"
@@ -68,8 +68,8 @@
   },
   "Slider": {
     "services": {
-      "title": "Customized services",
-      "description": "Discover our IT, Marketing and Studies services to support your project.",
+      "title": "Flexible solutions",
+      "description": "Discover our IT, Marketing and Business services to support your project.",
       "cta": "View our services"
     },
     "it": {
@@ -78,8 +78,8 @@
       "cta": "Discover our IT services"
     },
     "etudes": {
-      "title": "Studies and strategic consulting",
-      "description": "We carry out market studies, awareness studies, satisfaction surveys and business plans.",
+      "title": "Business and strategic consulting",
+      "description": "We carry out Market researches, awareness surveys, satisfaction surveys and business plans.",
       "cta": "Learn more"
     },
     "branding": {
@@ -101,12 +101,12 @@
   "ServicesPage": {
     "meta": {
       "title": "Services | IRIS Junior Entreprise",
-      "description": "Discover our services in IT, Marketing and Studies. We put our expertise at the service of your projects.",
+      "description": "Discover our services in IT, Marketing and Business. We put our expertise at the service of your projects.",
       "keywords": "services, IT, web development, marketing, studies, consulting"
     },
-    "hero": {
+    "hero": { 
       "title": "Our <accent>Services</accent>",
-      "description": "Discover our services in IT, Marketing and Studies. We put our expertise at the service of your projects."
+      "description": "Explore our comprehensive range of professional services designed to help businesses streamline operations, accelerate growth, and achieve measurable results through innovative digital and strategic solutions."
     },
     "introduction": {
       "title": "Our Service Offer",
@@ -117,17 +117,17 @@
       "subtitle": "Custom digital solutions to meet your technological needs.",
       "web": {
         "title": "Web Development",
-        "desc": "Creation of custom websites or using content management systems. We use HTML/CSS/JavaScript for showcase sites and React JS and FastAPI frameworks for dynamic sites, as well as WordPress with its plugins for a turnkey solution.",
+        "desc": "Creation of custom websites or using content management systems. We use HTML/CSS/JavaScript for showcase websites and React JS and FastAPI frameworks for dynamic websites, as well as WordPress with its plugins for a turnkey solution.",
         "cta": "Request a quote"
       },
       "mobile": {
-        "title": "Mobile Development",
+        "title": "Mobile App Development",
         "desc": "Design of native mobile applications for Android with Dart and Android Studio, or hybrid cross-platform with the Flutter framework.",
         "cta": "Request a quote"
       },
       "chatbot": {
         "title": "Chatbot Creation",
-        "desc": "Design of intelligent chatbots with Dialogflow (Google). Integration on websites, mobile applications and social platforms like Facebook.",
+        "desc": "Design of intelligent chatbots with Dialogflow . Integration on websites, mobile applications and social platforms like Facebook.",
         "cta": "Request a quote"
       }
     },
@@ -136,41 +136,41 @@
       "subtitle": "Strengthen your brand image and your presence on social networks.",
       "branding": {
         "title": "Branding",
-        "desc": "Creation of a complete graphic charter defining colors, typographies, logotype and layout rules. Design of custom logotypes for a strong and consistent visual identity on all your media (web and print).",
+        "desc": "Creation of a complete identity systems defining colors, typographies, logotype and layout rules. Design of custom logotypes for a strong and consistent visual identity on all your media (online and offline).",
         "cta": "Request a quote"
       },
       "community": {
         "title": "Community Management",
-        "desc": "Animation and engagement of your community on social networks. Content planning, visual creation, thematic monitoring and interaction with your subscribers to strengthen your visibility.",
+        "desc": "Community management focused on engaging and growing your audience across social networks. We handle content planning, visual creation, trend monitoring, and active community interaction to boost your brand visibility and strengthen audience engagement.",
         "cta": "Request a quote"
       }
     },
     "etudes": {
-      "title": "Studies",
+      "title": "Business",
       "subtitle": "Strategic studies to inform your decisions and optimize your development.",
       "marche": {
-        "title": "Market Study",
-        "desc": "Collection and analysis of information to identify the characteristics of a market. Assessment of demand, analysis of competition, products, environment and trends. Use of PESTEL and SWOT methods.",
+        "title": "Market Research",
+        "desc": "Collection and analysis of information to identify the specifications of said market. Assessment of demand, competition, products, environment and trends.",
         "cta": "Request a quote"
       },
       "notoriete": {
-        "title": "Awareness Study",
-        "desc": "Measurement of your brand awareness among consumers. Evaluation of spontaneous, assisted and overall perception of your company, its products and services.",
+        "title": "Awareness Survey",
+        "desc": "Measurement of your brand awareness among consumers. Evaluation of spontaneous, assisted and overall perception of your business, its products and/or services.",
         "cta": "Request a quote"
       },
       "satisfaction": {
-        "title": "Satisfaction Study",
-        "desc": "Measurement of your customers' satisfaction level. Collection of feedback to improve your products, services and customer relationship. Identification of your strengths and areas for improvement.",
+        "title": "Satisfaction Assessment",
+        "desc": "Measurement of your customers' satisfaction levels. Collection of feedback to improve your products, services and customer relationships. Identification of your strengths and areas for improvement.",
         "cta": "Request a quote"
       },
       "business": {
         "title": "Business Plan",
-        "desc": "Development of a complete business plan for your creation or development project. Structuring of the economic model with the Business Model Canvas, financial forecasts and commercial strategy. Intended for investors and financial institutions.",
+        "desc": "Development of a complete business plan for your Startup or development project. Structuring of the economic model with the Business Model Canvas, financial forecasts and commercial strategy. Intended for investors and financial institutions.",
         "cta": "Request a quote"
       }
     },
     "cta": {
-      "title": "Do you have a project?",
+      "title": "Got a vision? We’ll make it real.",
       "description": "Contact us to discuss your needs and get a personalized quote.",
       "button": "Contact us"
     }
@@ -181,7 +181,7 @@
   "DevisPage": {
     "meta": {
       "title": "Quote request | IRIS Junior Entreprise",
-      "description": "Request a personalized quote for your IT, Marketing or Studies projects from IRIS Junior Entreprise.",
+      "description": "Request a personalized quote for your IT, Marketing or Business projects from IRIS Junior Entreprise.",
       "keywords": "quote, request, project, budget, deadline, IT, marketing, studies"
     },
     "hero": {
@@ -189,7 +189,7 @@
       "description": "Describe your project and we will send you a personalized quote as soon as possible."
     },
     "personal_info": {
-      "title": "Your contact details",
+      "title": "Contact info",
       "nom": "Full name",
       "email": "Email",
       "telephone": "Phone",
@@ -236,12 +236,12 @@
     },
     "prestations": {
       "web": "Web Development",
-      "mobile": "Mobile Development",
+      "mobile": "Mobile App Development",
       "chatbot": "Chatbot Creation",
-      "branding": "Branding / Graphic charter",
+      "branding": "Branding / Identity Systems",
       "community": "Community Management",
       "etude_marche": "Market Study",
-      "etude_notoriete": "Awareness Study",
+      "etude_notoriete": "Awareness Survey",
       "etude_satisfaction": "Satisfaction Study",
       "business_plan": "Business Plan",
       "autre": "Other"
@@ -323,8 +323,8 @@
     "metaTitle": "Page Not Found | IRIS Junior Entreprise",
     "metaDescription": "The page you are looking for does not exist.",
     "title": "Our eagle",
-    "titleHighlight": "hasn't spotted",
-    "description": "It may have changed address or no longer exists. Return to the nest and start over.",
+    "titleHighlight": "hasn't land",
+    "description": "The page you're looking for has change or no longer exist.",
     "cta": "Back to home"
   },
   "AboutPage": {
@@ -339,8 +339,8 @@
     },
     "who_we_are": {
       "title": "Who are we?",
-      "description_1": "<strong>IRIS Junior Création</strong> is a student association founded in 2014 within the <strong>National School of Engineers of Sfax (ENIS)</strong>. Operating according to the consulting firm model, it puts the skills of its members at the service of real projects through competitive and professional services.",
-      "description_2": "As a non-profit organization, IRIS Junior Création has a <strong>dual vocation</strong>:",
+      "description_1": "<strong>IRIS Junior Entreprise</strong> is a non profit student organization founded in 2014 within the <strong>National School of Engineers of Sfax (ENIS)</strong>. Operating according to the consulting firm model, it puts the skills of its members at the service of real projects through competitive and professional services.",
+      "description_2": "As a non-profit organization, IRIS Junior Entreprise has a <strong>dual vocation</strong>:",
       "vocation_pedagogique": "Educational",
       "vocation_pedagogique_desc": "Develop the technical, strategic and human skills of students.",
       "vocation_economique": "Economic",
@@ -349,12 +349,12 @@
     "mission": {
       "title": "Our mission",
       "quote": "« Train students capable of evolving in a professional environment while offering high value-added services. »",
-      "description": "Through its projects, the association develops the skills of its consultants, promotes innovation, strengthens the spirit of initiative and supports its clients in their development."
+      "description": "Through its projects, the entity develops the skills of its consultants, promotes innovation, renforces the spirit of initiation and supports its clients in their development."
     },
     "vision": {
       "title": "Our vision",
-      "description_1": "IRIS Junior Création aims to become a national reference for professionalism, innovation and impact, by achieving the « Next Level » through structured governance, a clear strategy and a high-performance management system.",
-      "description_2": "Through a progressive and consistent evolution of the entity, based on its human values, its quality requirements and its collective commitment, IRIS Junior Création wishes to build a mature, reliable and recognized organization within the Junior-Enterprise movement."
+      "description_1": "IRIS Junior Entreprise aims to become a national reference for professionalism, innovation and impact, by achieving the « Next Level » through structured governance, a clear strategy and a high-performance management system.",
+      "description_2": "Through a progressive and consistent evolution of the entity, based on its human values, its quality requirements and its collective commitment, IRIS Junior Entreprise wishes to build a mature, reliable and recognized organization within the Junior-Enterprise movement."
     },
     "values": {
       "title": "Our values",
@@ -397,7 +397,7 @@
     "hero": {
       "title_open": "Join <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recruitment <span class=\"accent-text\">IRIS JE</span>",
-      "description_open": "Want to develop your skills and live an enriching association experience? Apply now!",
+      "description_open": "Want to develop your skills and live an enriching consulting firm experience? Apply now!",
       "description_closed": "Applications to join IRIS Junior Entreprise are only open in October. Come back to see us then!"
     }
   },
@@ -414,7 +414,7 @@
       "date_naissance": "Date of Birth",
       "date_helper": "Format: DD/MM/YYYY",
       "adresse": "Address",
-      "niveau_etudes": "Level of Studies",
+      "niveau_etudes": "Level of Business",
       "select_niveau": "Select your level of studies"
     },
     "candidature": {
@@ -461,7 +461,7 @@
     "departements": {
       "it": "IT - Development",
       "marketing": "Marketing & Communication",
-      "etudes": "Studies & Consulting",
+      "etudes": "Business & Consulting",
       "dev_co": "Business Development"
     }
   },
@@ -494,7 +494,7 @@
     },
     "informations": {
       "title": "Information Published",
-      "desc": "The information published on the site is provided for informational purposes only. IRIS Junior Création strives to ensure its accuracy but cannot guarantee the absence of errors or omissions."
+      "desc": "The information published on the site is provided for informational purposes only. IRIS Junior Entreprise strives to ensure its accuracy but cannot guarantee the absence of errors or omissions."
     },
     "responsabilite": {
       "title": "User Responsibility",
@@ -502,7 +502,7 @@
     },
     "modification": {
       "title": "Modification and Interruption",
-      "desc": "IRIS Junior Création reserves the right to modify, suspend or interrupt all or part of the site at any time, without notice."
+      "desc": "IRIS Junior Entreprise reserves the right to modify, suspend or interrupt all or part of the site at any time, without notice."
     },
     "droit": {
       "title": "Applicable Law",
@@ -521,11 +521,11 @@
     },
     "editeur": {
       "title": "Website Publisher",
-      "desc": "This site is published by <strong>IRIS Junior Création</strong>, a Junior Enterprise operating according to the consulting firm model."
+      "desc": "This site is published by <strong>IRIS Junior Entreprise</strong>, a Junior Enterprise operating according to the consulting firm model."
     },
     "adresse": {
       "title": "Head Office Address",
-      "desc": "Route Soukra Km 3.5 – 3038 Sfax, Tunisia"
+      "desc": "ENIS : Route Soukra Km 3.5 – 3038 Sfax, Tunisia"
     },
     "telephone": {
       "title": "Phone",
@@ -537,7 +537,7 @@
     },
     "responsable": {
       "title": "Publication Manager",
-      "desc": "IRIS Junior Création"
+      "desc": "IRIS Junior Entreprise"
     }
   },
   "PolitiqueConfidentialitePage": {
@@ -552,7 +552,7 @@
     },
     "engagement": {
       "title": "Privacy Commitment",
-      "desc": "IRIS Junior Création places particular importance on the protection of its users' personal data."
+      "desc": "IRIS Junior Entreprise places particular importance on the protection of its users' personal data."
     },
     "collecte": {
       "title": "Data Collected",
@@ -560,7 +560,7 @@
     },
     "acces": {
       "title": "Access and Sharing",
-      "desc": "Collected data is accessible only to authorized members of IRIS Junior Création and is neither sold nor transferred to third parties without prior authorization."
+      "desc": "Collected data is accessible only to authorized members of IRIS Junior Entreprise and is neither sold nor transferred to third parties without prior authorization."
     },
     "conservation": {
       "title": "Retention Period",
@@ -568,7 +568,7 @@
     },
     "droits": {
       "title": "Your Rights",
-      "desc": "In accordance with current regulations, any user has the right to access, rectify, delete and object to their personal data. Any request can be addressed to IRIS Junior Création via the contact details provided on the site."
+      "desc": "In accordance with current regulations, any user has the right to access, rectify, delete and object to their personal data. Any request can be addressed to IRIS Junior Entreprise via the contact details provided on the site."
     },
     "cookies": {
       "title": "Cookies",
@@ -593,12 +593,12 @@
       {
         "id": 1,
         "question": "What is IRIS Junior Entreprise?",
-        "answer": "IRIS Junior Création is a student association founded in 2014 within the National School of Engineers of Sfax (ENIS). It operates as a consulting firm and offers services in IT, marketing and strategic studies."
+        "answer": "IRIS Junior Entreprise is a student non profit organization founded in 2014 within the National School of Engineers of Sfax (ENIS). It operates as a consulting firm and offers services in IT, marketing and business studies."
       },
       {
         "id": 2,
         "question": "What services do you offer?",
-        "answer": "We offer services in three main areas:\n• IT: Web development, mobile development, chatbot creation.\n• Marketing: Branding (graphic charter, logotype), community management.\n• Studies: Market studies, awareness studies, satisfaction studies, business plans."
+        "answer": "We offer services in three main areas:\n• IT: Web development, mobile app development, chatbot creation.\n• Marketing: Branding (Identity Systems, Logotype), community management.\n• Business: Market researches, awareness surveys, satisfaction assessment, business plans."
       },
       {
         "id": 3,
@@ -618,7 +618,7 @@
       {
         "id": 6,
         "question": "What is a Junior-Enterprise?",
-        "answer": "A Junior-Enterprise is a non-profit student association that offers consulting and services to companies, startups and individuals. The Junior-Enterprise movement has existed since 1967 and has thousands of student consultants around the world."
+        "answer": "A Junior-Enterprise is a non-profit student organization that offers consulting and services to companies, startups and individuals. The Junior-Enterprise movement has existed since 1967 and has thousands of student consultants around the world."
       },
       {
         "id": 7,
@@ -628,17 +628,17 @@
       {
         "id": 8,
         "question": "How can I contact IRIS Junior Entreprise?",
-        "answer": "You can contact us via our \"Contact\" page by filling out the online form, by email at contact@irisje.tn or by phone at (+216) 96 822 343. We will reply as soon as possible."
+        "answer": "You can contact us via our \"Contact\" page by filling out the online form, by email at iris.juniorentreprise@gmail.com or by phone at (+216) 96 822 343. We will reply as soon as possible."
       },
       {
         "id": 9,
-        "question": "Do you offer mobile development services?",
+        "question": "Do you offer mobile app development services?",
         "answer": "Yes, we develop native mobile applications for Android (with Dart and Android Studio) and hybrid cross-platform applications with the Flutter framework. We can also integrate features like push notifications, in-app payments and cloud synchronization."
       },
       {
         "id": 10,
-        "question": "What is a brand awareness study?",
-        "answer": "A brand awareness study measures the level of knowledge of a brand, product or service among a target audience. It evaluates spontaneous awareness (knowledge without assistance), assisted awareness (recognition with clues) and the overall perception of the brand."
+        "question": "What is a brand awareness survey?",
+        "answer": "A brand awareness survey measures the level of knowledge of a brand, product or service among a target audience. It evaluates spontaneous awareness (knowledge without assistance), assisted awareness (recognition with clues) and the overall perception of the brand."
       },
       {
         "id": 11,
