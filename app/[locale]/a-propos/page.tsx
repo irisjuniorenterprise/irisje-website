@@ -130,20 +130,16 @@ export default async function AProposPage({ params }: Props) {
               display: 'flex',
               flexDirection: 'column',
               gap: '1.5rem',
-              textAlign: 'center',
+              textAlign: 'justify',
             }}
           >
             <p
               style={{ fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}
               dangerouslySetInnerHTML={{ __html: t.raw('who_we_are.description_1') }}
             />
-            <p
-              style={{ fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}
-              dangerouslySetInnerHTML={{ __html: t.raw('who_we_are.description_2') }}
-            />
             <div className="vocation-grid">
               {/* Carte Pédagogique */}
-              <div className="value-card">
+              {/* <div className="value-card">
                 <div
                   style={{
                     display: 'flex',
@@ -161,9 +157,9 @@ export default async function AProposPage({ params }: Props) {
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                   {t('who_we_are.vocation_pedagogique_desc')}
                 </p>
-              </div>
+              </div> */}
               {/* Carte Économique */}
-              <div className="value-card">
+              {/* <div className="value-card">
                 <div
                   style={{
                     display: 'flex',
@@ -181,7 +177,7 @@ export default async function AProposPage({ params }: Props) {
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                   {t('who_we_are.vocation_economique_desc')}
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -208,6 +204,7 @@ export default async function AProposPage({ params }: Props) {
                 lineHeight: '1.8',
                 color: 'var(--text-primary)',
                 fontStyle: 'italic',
+                textAlign: 'justify',
               }}
             >
               {t('mission.quote')}
@@ -218,6 +215,7 @@ export default async function AProposPage({ params }: Props) {
                 lineHeight: '1.7',
                 color: 'var(--text-secondary)',
                 marginTop: '1rem',
+                textAlign: 'justify',
               }}
             >
               {t('mission.description')}
@@ -255,7 +253,7 @@ export default async function AProposPage({ params }: Props) {
                 fontSize: '1.05rem',
                 lineHeight: '1.8',
                 color: 'var(--text-secondary)',
-                textAlign: 'center',
+                textAlign: 'justify',
               }}
             >
               {t('vision.description_1')}
@@ -266,7 +264,7 @@ export default async function AProposPage({ params }: Props) {
                 lineHeight: '1.7',
                 color: 'var(--text-secondary)',
                 marginTop: '1rem',
-                textAlign: 'center',
+                textAlign: 'justify',
               }}
             >
               {t('vision.description_2')}
@@ -276,7 +274,7 @@ export default async function AProposPage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION 4 : NOS VALEURS
+          SECTION 4 : NOS VALEURS - CARTES CENTRÉES
           ============================================================ */}
       <section
         className="placeholder section-alt"
@@ -289,9 +287,37 @@ export default async function AProposPage({ params }: Props) {
       >
         <div className="container">
           <h2 className="section-title">{t('values.title')}</h2>
-          <div className="values-grid">
+          <div 
+            className={styles.valuesGrid}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '2rem',
+              margin: '0 auto',
+              maxWidth: '1200px',
+            }}
+          >
             {values.map((value, index) => (
-              <div key={index} className="value-card">
+              <div 
+                key={index} 
+                className={styles.valueCard}
+                style={{
+                  flex: '0 1 280px',
+                  maxWidth: '320px',
+                  minWidth: '240px',
+                  textAlign: 'center',
+                  padding: '1.5rem',
+                  background: 'var(--surface)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-light)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
                 <div
                   style={{
                     display: 'flex',
@@ -299,6 +325,10 @@ export default async function AProposPage({ params }: Props) {
                     alignItems: 'center',
                     marginBottom: '0.75rem',
                     color: 'var(--primary)',
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    background: 'rgba(255, 102, 51, 0.1)',
                   }}
                 >
                   {value.icon}
@@ -309,11 +339,22 @@ export default async function AProposPage({ params }: Props) {
                     fontWeight: 700,
                     color: 'var(--text-primary)',
                     marginBottom: '0.5rem',
+                    textAlign: 'center',
                   }}
                 >
                   {value.title}
                 </h3>
-                <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                <p
+                  className={styles['text-muted-italic']}
+                  style={{
+                    fontSize: '0.9rem',
+                    lineHeight: '1.6',
+                    color: 'var(--text-secondary)',
+                    textAlign: 'center',
+                    margin: '0 auto',
+                    maxWidth: '260px',
+                  }}
+                >
                   {value.desc}
                 </p>
               </div>

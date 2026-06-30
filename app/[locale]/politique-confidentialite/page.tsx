@@ -33,7 +33,7 @@ export default async function PolitiqueConfidentialitePage({ params }: Props) {
     { id: 'acces', icon: Icons.Lock, titleKey: 'acces.title', descKey: 'acces.desc' },
     { id: 'conservation', icon: Icons.Clock, titleKey: 'conservation.title', descKey: 'conservation.desc' },
     { id: 'droits', icon: Icons.Check, titleKey: 'droits.title', descKey: 'droits.desc' },
-    { id: 'cookies', icon: Icons.Calendar, titleKey: 'cookies.title', descKey: 'cookies.desc' },
+    { id: 'cookies', icon: Icons.WebsiteCookie, titleKey: 'cookies.title', descKey: 'cookies.desc' },
   ];
 
   return (

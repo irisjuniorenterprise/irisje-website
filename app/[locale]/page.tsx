@@ -36,7 +36,7 @@ export default async function HomePage({ params }: Props) {
   const isRtl = locale === 'ar';
 
   return (
-    <div className={isRtl ? styles.rtlPage : ''}>
+    <div className={isRtl ? styles.rtlPage : ''} >
       {/* ============================================================
           HERO
           ============================================================ */}
@@ -104,11 +104,12 @@ export default async function HomePage({ params }: Props) {
                 color: 'var(--text-secondary)',
                 maxWidth: '720px',
                 margin: '0 auto',
+                textAlign: 'justify',
               }}
             >
               {t('services.description')}
             </p>
-            <div style={{ marginTop: '2rem' }}>
+            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
               <Link href={`/${locale}/services`} className="btn btn-cta">
                 {t('services.cta')}
               </Link>
@@ -139,6 +140,7 @@ export default async function HomePage({ params }: Props) {
                 color: 'var(--text-secondary)',
                 maxWidth: '720px',
                 margin: '0 auto',
+                textAlign: 'justify',
               }}
             >
               {t('about.description_1')}
@@ -150,11 +152,12 @@ export default async function HomePage({ params }: Props) {
                 color: 'var(--text-secondary)',
                 maxWidth: '720px',
                 margin: '1.5rem auto 0',
+                textAlign: 'justify',
               }}
             >
               {t('about.description_2')}
             </p>
-            <div style={{ marginTop: '2rem' }}>
+            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
               <Link href={`/${locale}/a-propos`} className="btn btn-cta">
                 {t('about.cta')}
               </Link>
@@ -164,7 +167,7 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION DEVIS (CTA)
+          SECTION DEVIS (CTA) - CARTE CONSERVÉE INTACTE
           ============================================================ */}
       <section
         className="placeholder"
@@ -175,6 +178,7 @@ export default async function HomePage({ params }: Props) {
       >
         <div className="container">
           <div
+            className="devis-card"
             style={{
               maxWidth: '800px',
               margin: '0 auto',
@@ -187,6 +191,7 @@ export default async function HomePage({ params }: Props) {
             }}
           >
             <div
+              className="icon-wrapper"
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -226,23 +231,44 @@ export default async function HomePage({ params }: Props) {
                 color: 'var(--text-secondary)',
                 maxWidth: '600px',
                 margin: '0 auto 1.5rem',
+                textAlign: 'center',
               }}
             >
               {t('devis.description_1')}
             </p>
             <p
+              className={styles['text-muted-italic']}  // ✅ UNIQUE MODIFICATION ICI
               style={{
                 fontSize: '0.95rem',
                 lineHeight: '1.6',
                 color: 'var(--text-muted)',
                 maxWidth: '550px',
                 margin: '0 auto 1.5rem',
+                textAlign: 'center',
               }}
             >
               {t('devis.description_2')}
             </p>
-            <div style={{ marginTop: '0.5rem' }}>
-              <Link href={`/${locale}/devis`} className="btn btn-cta">
+            <div
+              className="btn-wrapper"
+              style={{
+                marginTop: '0.5rem',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Link
+                href={`/${locale}/devis`}
+                className="btn btn-cta"
+                style={{
+                  maxWidth: '100%',
+                  width: 'fit-content',
+                  whiteSpace: 'normal',
+                  textAlign: 'center',
+                  wordBreak: 'break-word',
+                }}
+              >
                 {t('devis.cta')}
               </Link>
             </div>
@@ -272,34 +298,25 @@ export default async function HomePage({ params }: Props) {
                 color: 'var(--text-secondary)',
                 maxWidth: '720px',
                 margin: '0 auto',
+                textAlign: 'justify',
               }}
             >
-              {t('contact.description_1')}
+              {t('contact.description_1')+" "+t('contact.description_2')}
             </p>
             <p
-              style={{
-                fontSize: '1rem',
-                lineHeight: '1.7',
-                color: 'var(--text-secondary)',
-                maxWidth: '600px',
-                margin: '1rem auto 0',
-              }}
-            >
-              {t('contact.description_2')}
-            </p>
-            <p
+              className={styles['text-muted-italic']}  // ✅ UNIQUE MODIFICATION ICI
               style={{
                 fontSize: '0.95rem',
                 lineHeight: '1.6',
                 color: 'var(--text-muted)',
                 maxWidth: '550px',
                 margin: '0.75rem auto 0',
-                fontStyle: 'italic',
+                textAlign: 'center',
               }}
             >
               {t('contact.description_3')}
             </p>
-            <div style={{ marginTop: '2rem' }}>
+            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
               <Link href={`/${locale}/contact`} className="btn btn-cta">
                 {t('contact.cta')}
               </Link>

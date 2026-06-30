@@ -32,7 +32,7 @@ export default async function MentionsLegalesPage({ params }: Props) {
     { id: 'adresse', icon: Icons.MapPin, titleKey: 'adresse.title', descKey: 'adresse.desc' },
     { id: 'telephone', icon: Icons.Phone, titleKey: 'telephone.title', descKey: 'telephone.desc' },
     { id: 'email', icon: Icons.Mail, titleKey: 'email.title', descKey: 'email.desc' },
-    { id: 'responsable', icon: Icons.User, titleKey: 'responsable.title', descKey: 'responsable.desc' },
+    { id: 'responsable', icon: Icons.EagleLogo, titleKey: 'responsable.title', descKey: 'responsable.desc' },
   ];
 
   return (

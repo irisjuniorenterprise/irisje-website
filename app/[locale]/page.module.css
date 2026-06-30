@@ -1,6 +1,16 @@
 /* app/[locale]/page.module.css */
 
 /* ============================================================
+   RESET BOX-SIZING — prévient tout débordement de largeur
+   ============================================================ */
+
+.placeholder *,
+.placeholder *::before,
+.placeholder *::after {
+  box-sizing: border-box;
+}
+
+/* ============================================================
    RTL OVERRIDES - Page d'accueil
    ============================================================ */
 
@@ -10,7 +20,7 @@
 }
 
 /* ============================================================
-   HERO
+   HERO - Version améliorée
    ============================================================ */
 .rtlPage .hero .hero-content {
   text-align: right;
@@ -18,6 +28,7 @@
 
 .rtlPage .hero .hero-actions {
   flex-direction: row-reverse;
+  justify-content: center;
 }
 
 .rtlPage .hero .scroll-cue {
@@ -32,13 +43,17 @@
 /* ============================================================
    SECTIONS (services, about, devis, contact)
    ============================================================ */
-/* Les titres et paragraphes sont déjà centrés, on garde */
 .rtlPage .placeholder .section-title {
   text-align: center;
 }
 
 .rtlPage .placeholder p {
-  text-align: center;
+  text-align: justify !important;
+  text-justify: inter-word;
+}
+
+.rtlPage .placeholder .devis-card p {
+  text-align: center !important;
 }
 
 /* ============================================================
@@ -47,11 +62,815 @@
 /* Pas de modifications spécifiques nécessaires */
 
 /* ============================================================
-   RESPONSIVE
+   AMÉLIORATIONS DE RESPONSIVITÉ
    ============================================================ */
-@media (max-width: 768px) {
+
+/* ----- Variables pour le responsive ----- */
+:root {
+  --spacing-section: 60px;
+  --spacing-section-mobile: 40px;
+  --container-padding: 24px;
+  --container-padding-mobile: 16px;
+}
+
+/* ============================================================
+   TEXT-MUTED avec italique - UNIQUE MODIFICATION
+   ============================================================ */
+
+.text-muted-italic {
+  font-style: italic !important;
+}
+
+/* ----- Container amélioré ----- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* ============================================================
+   HERO - Responsive amélioré
+   ============================================================ */
+
+.hero {
+  padding: 60px 0 80px;
+  min-height: 100vh;
+  min-height: 100dvh; /* Pour les navigateurs modernes */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 40px;
+}
+
+.hero-visual {
+  position: relative;
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.hero-logo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.hero-content {
+  max-width: 640px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--text-inverse);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.hero h1 .accent-text {
+  color: var(--secondary);
+}
+
+.hero-actions {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-actions .btn {
+  min-width: 180px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  animation: bounce 2.2s ease-in-out infinite;
+  opacity: 0;
+  animation-delay: 1.4s;
+  animation-fill-mode: forwards;
+  width: 32px;
+  height: 32px;
+}
+
+/* ============================================================
+   SECTIONS - Responsive amélioré avec paragraphes justifiés
+   ============================================================ */
+
+.placeholder {
+  min-height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-section) var(--container-padding);
+  border-bottom: 1px solid var(--border-light);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--t-slow), transform var(--t-slow);
+}
+
+.placeholder.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.placeholder .section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+  text-align: center;
+  width: 100%;
+}
+
+/* --- Paragraphes justifiés --- */
+.placeholder p {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--text-secondary);
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: justify !important;
+  text-justify: inter-word;
+  hyphens: auto;
+  word-spacing: 0.05em;
+  width: 100%;
+}
+
+/* Exception pour les paragraphes de la carte Devis */
+.placeholder .devis-card p {
+  text-align: center !important;
+}
+
+.placeholder .btn {
+  padding: 14px 36px;
+  font-size: 1rem;
+  min-width: 160px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----- Conteneur des boutons pour centrage ----- */
+.placeholder .btn-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.placeholder .btn-wrapper .btn {
+  min-width: 160px;
+}
+
+/* ----- Section avec fond alterné ----- */
+.section-alt {
+  background: var(--background);
+}
+
+/* ============================================================
+   CARTE DEVIS - Version complète et responsive
+   ============================================================ */
+
+.placeholder .devis-card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  background: var(--surface);
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2.5rem);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.placeholder .devis-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
+}
+
+.placeholder .devis-card .icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 102, 51, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.placeholder .devis-card h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.placeholder .devis-card p {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 0.75rem;
+  text-align: center !important;
+  padding: 0;
+}
+
+/* Classes sémantiques remplaçant les styles inline de page.tsx */
+.placeholder .devis-card .icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 102, 51, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+}
+
+.placeholder .devis-card .devis-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.placeholder .devis-card .devis-desc-primary {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 0.75rem;
+  text-align: center !important;
+}
+
+.placeholder .devis-card .devis-desc-secondary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 550px;
+  margin: 0 auto 0.5rem;
+  text-align: center !important;
+}
+
+/* Bouton centré dans la carte — fix iOS Safari */
+.placeholder .devis-card .btn-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;   /* colonne : le bouton ne s'étire pas en largeur */
+  align-items: center;      /* centrage horizontal garanti sur iOS */
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0;
+  overflow: hidden;         /* stoppe tout débordement résiduel */
+}
+
+.placeholder .devis-card .btn-wrapper .btn {
+  box-sizing: border-box;
+  width: auto;
+  max-width: calc(100% - 2rem); /* garde une marge intérieure vis-à-vis du padding carte */
+  min-width: min(180px, 60%);
+  text-align: center;
+  align-self: center;           /* force le centrage sur WebKit/Safari */
+}
+
+/* ============================================================
+   RESPONSIVE - POINTS DE RUPTURE
+   ============================================================ */
+
+/* ----- Mobile (≤ 480px) ----- */
+@media (max-width: 480px) {
+  :root {
+    --spacing-section: 40px;
+    --container-padding: 16px;
+  }
+
+  .hero {
+    padding: 40px 0 60px;
+    min-height: 90vh;
+    min-height: 90dvh;
+  }
+
+  .hero-inner {
+    gap: 28px;
+  }
+
+  .hero-visual {
+    width: 120px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.5rem, 7vw, 1.8rem);
+    text-align: center;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 280px;
+    min-width: unset;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .scroll-cue {
+    bottom: 16px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .placeholder {
+    padding: var(--spacing-section-mobile) var(--container-padding-mobile);
+    min-height: 25vh;
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+  }
+
+  .placeholder p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    text-align: justify !important;
+    text-justify: inter-word;
+    hyphens: auto;
+    word-spacing: 0.02em;
+  }
+
+  .placeholder .btn {
+    width: 100%;
+    max-width: 280px;
+    min-width: unset;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .placeholder .btn-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .placeholder .btn-wrapper .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* ----- Carte Devis - Mobile corrigé ----- */
+  .placeholder .devis-card .icon-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .placeholder .devis-card .icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .placeholder .devis-card p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .placeholder .devis-card .btn-wrapper {
+    margin-top: 1rem;
+  }
+
+  .placeholder .devis-card .btn-wrapper .btn {
+    width: clamp(160px, 70%, 280px);
+    min-width: unset;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ----- Mobile large / Tablette (481px - 767px) ----- */
+@media (min-width: 481px) and (max-width: 767px) {
+  :root {
+    --spacing-section: 48px;
+    --container-padding: 20px;
+  }
+
+  .hero {
+    padding: 50px 0 70px;
+    min-height: 85vh;
+    min-height: 85dvh;
+  }
+
+  .hero-inner {
+    gap: 32px;
+  }
+
+  .hero-visual {
+    width: 140px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    text-align: center;
+  }
+
+  .hero-actions {
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .hero-actions .btn {
+    min-width: 160px;
+    padding: 13px 28px;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .placeholder {
+    padding: var(--spacing-section-mobile) var(--container-padding);
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
+  }
+
+  .placeholder p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    text-align: justify !important;
+  }
+
+  .placeholder .btn {
+    min-width: 160px;
+  }
+
+  /* ----- Carte Devis - Mobile large ----- */
+  .placeholder .devis-card .btn-wrapper .btn {
+    min-width: 160px;
+  }
+}
+
+/* ----- Tablette (768px - 1023px) ----- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --spacing-section: 56px;
+    --container-padding: 32px;
+  }
+
+  .hero {
+    padding: 70px 0 80px;
+    min-height: 80vh;
+    min-height: 80dvh;
+  }
+
+  .hero-inner {
+    flex-direction: row-reverse;
+    text-align: left;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .hero-content {
+    text-align: left;
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .hero h1 {
+    text-align: left;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+
+  .hero-visual {
+    width: 160px;
+    flex-shrink: 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+
+  .placeholder {
+    padding: var(--spacing-section) var(--container-padding);
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  }
+
+  .placeholder p {
+    text-align: justify !important;
+    text-justify: inter-word;
+  }
+
+  /* ----- Carte Devis - Tablette ----- */
+  /* padding géré par clamp() dans la règle de base */
+}
+
+/* ----- Desktop (1024px - 1279px) ----- */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :root {
+    --spacing-section: 64px;
+    --container-padding: 40px;
+  }
+
+  .hero {
+    padding: 80px 0 90px;
+  }
+
+  .hero-inner {
+    flex-direction: row;
+    gap: 56px;
+  }
+
+  .hero-content {
+    text-align: left;
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .hero h1 {
+    text-align: left;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+
+  .hero-visual {
+    width: 200px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+  }
+
+  .placeholder {
+    padding: var(--spacing-section) var(--container-padding);
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+  }
+
+  .placeholder p {
+    text-align: justify !important;
+    text-justify: inter-word;
+  }
+}
+
+/* ----- Grand écran (≥ 1280px) ----- */
+@media (min-width: 1280px) {
+  :root {
+    --spacing-section: 72px;
+    --container-padding: 48px;
+  }
+
+  .hero {
+    padding: 90px 0 100px;
+  }
+
+  .hero-inner {
+    flex-direction: row;
+    gap: 72px;
+  }
+
+  .hero-content {
+    text-align: left;
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .hero h1 {
+    text-align: left;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+
+  .hero-visual {
+    width: 240px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 3.2vw, 3.2rem);
+  }
+
+  .hero-actions .btn {
+    padding: 16px 40px;
+    font-size: 1.05rem;
+  }
+
+  .placeholder {
+    padding: var(--spacing-section) var(--container-padding);
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(2.2rem, 3.2vw, 3rem);
+  }
+
+  .placeholder p {
+    text-align: justify !important;
+    text-justify: inter-word;
+  }
+
+  /* ----- Carte Devis - Grand écran ----- */
+  /* padding géré par clamp() dans la règle de base */
+}
+
+/* ----- Très grand écran (≥ 1600px) ----- */
+@media (min-width: 1600px) {
+  .hero {
+    padding: 100px 0 120px;
+  }
+
+  .hero-visual {
+    width: 280px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.8rem, 3.5vw, 3.6rem);
+  }
+
+  .placeholder {
+    padding: 80px var(--container-padding);
+  }
+
+  .placeholder .section-title {
+    font-size: clamp(2.6rem, 3.5vw, 3.4rem);
+  }
+
+  .placeholder p {
+    text-align: justify !important;
+    text-justify: inter-word;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE - RTL
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .rtlPage .hero-inner {
+    flex-direction: row;
+  }
+
+  .rtlPage .hero-content {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .rtlPage .hero h1 {
+    text-align: right;
+  }
+
+  .rtlPage .hero-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rtlPage .hero-inner {
+    flex-direction: row-reverse;
+  }
+
+  .rtlPage .hero-content {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .rtlPage .hero h1 {
+    text-align: right;
+  }
+
+  .rtlPage .hero-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
   .rtlPage .hero .hero-actions {
     flex-direction: column;
     align-items: center;
+  }
+
+  .rtlPage .hero .hero-content {
+    align-items: center;
+  }
+
+  .rtlPage .hero h1 {
+    text-align: center;
+  }
+
+  .rtlPage .placeholder .devis-card .btn-wrapper .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITÉ - Préférences de réduction de mouvement
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .scroll-cue {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .placeholder {
+    opacity: 1;
+    transform: none;
+  }
+
+  .placeholder .devis-card {
+    transition: none;
+  }
+
+  .placeholder .devis-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ANIMATIONS RÉACTIVÉES
+   ============================================================ */
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(-50%, 6px);
+    opacity: 0.8;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE - SECTION DEVIS (évite le débordement du bouton CTA)
+   ============================================================ */
+@media (max-width: 400px) {
+  :global(.devis-card) {
+    padding: 2rem 1rem !important;
+  }
+
+  :global(.devis-card) :global(.btn-cta) {
+    width: 100%;
+    max-width: 280px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    white-space: normal;
+    text-align: center;
   }
 }

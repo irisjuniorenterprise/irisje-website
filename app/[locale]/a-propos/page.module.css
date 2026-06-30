@@ -5,6 +5,14 @@
 }
 
 /* ============================================================
+   TEXT-MUTED avec italique
+   ============================================================ */
+
+.text-muted-italic {
+  font-style: italic !important;
+}
+
+/* ============================================================
    HERO
    ============================================================ */
 .rtlPage .hero .hero-content {
@@ -38,20 +46,65 @@
 }
 
 /* ============================================================
-   SECTION VALEURS - CENTRAGE DES CARTES
+   SECTION VALEURS - GRILLE CENTRÉE
    ============================================================ */
 .valuesGrid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 2rem;
   margin: 0 auto;
+  max-width: 1200px;
 }
 
 .valueCard {
-  flex: 0 1 220px;
-  max-width: 260px;
+  flex: 0 1 280px;
+  max-width: 320px;
+  min-width: 240px;
   text-align: center;
+  padding: 1.5rem;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.valueCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.valueCard .iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: var(--primary);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 102, 51, 0.1);
+}
+
+.valueCard h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.valueCard p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 260px;
 }
 
 /* RTL : on garde le centrage */
@@ -70,5 +123,24 @@
   .rtlPage #qui-sommes-nous .vocation-grid {
     flex-direction: column;
     align-items: center;
+  }
+
+  .valueCard {
+    flex: 0 1 100%;
+    max-width: 400px;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .valueCard {
+    flex: 0 1 100%;
+    max-width: 100%;
+    padding: 1.25rem;
+  }
+
+  .valuesGrid {
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
 }

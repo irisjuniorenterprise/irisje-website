@@ -5,55 +5,227 @@
 }
 
 /* ============================================================
+   SERVICE CARD - LTR (Défaut)
+   ============================================================ */
+
+.serviceCard {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  direction: ltr;
+  text-align: left;
+}
+
+.serviceCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.serviceHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  justify-content: flex-start;
+  flex-direction: row;
+  direction: ltr;
+}
+
+.serviceIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.serviceTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: isolate;
+  flex: 1;
+}
+
+.serviceDesc {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: left;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  direction: ltr;
+}
+
+.serviceTools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+/* ============================================================
+   SERVICE CARD - RTL (Arabe)
+   ============================================================ */
+
+.serviceCardRtl {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  direction: rtl;
+  text-align: right;
+}
+
+.serviceCardRtl:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* IMPORTANT : pas de row-reverse ici !
+   direction: rtl + flex-direction: row place déjà
+   le 1er enfant (l'icône) à DROITE naturellement.
+   Ajouter row-reverse annulerait cet effet et renverrait l'icône à gauche. */
+.serviceHeaderRtl {
+  display: flex !important;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+  direction: rtl !important;
+  width: 100%;
+}
+
+.serviceIconRtl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.serviceTitleRtl {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 !important;
+  text-align: right !important;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  flex: 1;
+}
+
+.serviceDescRtl {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: right !important;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  direction: rtl !important;
+}
+
+/* Idem ici : row (et non row-reverse) car direction est déjà rtl */
+.serviceToolsRtl {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+  direction: rtl !important;
+}
+
+/* ============================================================
+   VALUE CARD - LTR & RTL (icônes + titres en haut de page)
+   ============================================================ */
+
+.valueCard {
+  text-align: center;
+  direction: ltr;
+}
+
+.valueTitle {
+  text-align: center;
+  direction: ltr;
+}
+
+.valueCardRtl {
+  text-align: center;
+  direction: rtl;
+}
+
+.valueTitleRtl {
+  text-align: center !important;
+  direction: rtl !important;
+}
+
+/* ============================================================
    HERO
    ============================================================ */
-.rtlPage .hero .hero-content {
+.rtlPage :global(.hero) :global(.hero-content) {
   text-align: right;
+  direction: rtl;
 }
 
 /* ============================================================
-   INTRODUCTION
+   SECTIONS SERVICES - RTL Overrides (sécurité globale)
    ============================================================ */
-.rtlPage #introduction .value-card {
+.rtlPage :global(.service-card) {
   text-align: right;
+  direction: rtl;
 }
 
-/* ============================================================
-   SECTIONS SERVICES
-   ============================================================ */
-.rtlPage .service-card {
-  text-align: right;
+.rtlPage :global(.service-header) {
+  flex-direction: row !important;
+  direction: rtl !important;
+  justify-content: flex-start !important;
 }
 
-.rtlPage .service-header {
-  flex-direction: row-reverse;
+.rtlPage :global(.service-header) h3,
+.rtlPage :global(.service-header) :global(h3) {
+  direction: rtl !important;
+  text-align: right !important;
 }
 
-.rtlPage .service-tools {
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+.rtlPage :global(.service-tools) {
+  flex-direction: row !important;
+  direction: rtl !important;
+  justify-content: flex-start;
 }
 
-.rtlPage .btn-sm {
-  /* Gardé tel quel */
+/* Sécurité supplémentaire (double protection) */
+.serviceCardRtl .serviceHeaderRtl {
+  flex-direction: row !important;
+  direction: rtl !important;
+}
+
+.serviceCardRtl h3 {
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 /* ============================================================
    CTA FINAL
    ============================================================ */
-.rtlPage #cta h2,
-.rtlPage #cta p {
-  text-align: center; /* déjà centré */
+.rtlPage :global(#cta) :global(h2),
+.rtlPage :global(#cta) :global(p) {
+  text-align: center;
 }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
-  .rtlPage .service-header {
-    flex-direction: row-reverse;
-  }
-  .rtlPage .service-tools {
-    justify-content: flex-start;
+  .serviceCardRtl,
+  .serviceCard {
+    padding: 1rem;
   }
 }

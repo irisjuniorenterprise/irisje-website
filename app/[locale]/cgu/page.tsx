@@ -29,11 +29,11 @@ export default async function CGUPage({ params }: Props) {
 
   const sections = [
     { id: 'acceptation', icon: Icons.FileCheck, titleKey: 'acceptation.title', descKey: 'acceptation.desc' },
-    { id: 'engagements', icon: Icons.Scale, titleKey: 'engagements.title', descKey: 'engagements.desc' },
+    { id: 'engagements', icon: Icons.PenDraw, titleKey: 'engagements.title', descKey: 'engagements.desc' },
     { id: 'informations', icon: Icons.Info, titleKey: 'informations.title', descKey: 'informations.desc' },
     { id: 'responsabilite', icon: Icons.User, titleKey: 'responsabilite.title', descKey: 'responsabilite.desc' },
     { id: 'modification', icon: Icons.Alert, titleKey: 'modification.title', descKey: 'modification.desc' },
-    { id: 'droit', icon: Icons.Globe, titleKey: 'droit.title', descKey: 'droit.desc' },
+    { id: 'droit', icon: Icons.LawScale, titleKey: 'droit.title', descKey: 'droit.desc' },
   ];
 
   return (

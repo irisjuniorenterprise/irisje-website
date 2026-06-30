@@ -4,7 +4,7 @@ import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import Link from 'next/link';
-import styles from './page.module.css'; // ✅ import du module CSS
+import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
 
 type Props = {
@@ -29,7 +29,6 @@ export default async function ServicesPage({ params }: Props) {
   const isRtl = locale === 'ar';
 
   return (
-    // ✅ Conteneur RTL
     <div className={isRtl ? styles.rtlPage : ''}>
       {/* HERO SERVICES */}
       <section className="hero" id="services-hero">
@@ -81,7 +80,7 @@ export default async function ServicesPage({ params }: Props) {
               fontSize: '1.05rem',
               lineHeight: '1.7',
               color: 'var(--text-secondary)',
-              textAlign: 'center',
+              textAlign: 'justify',
             }}
           >
             {t('introduction.description')}
@@ -98,19 +97,19 @@ export default async function ServicesPage({ params }: Props) {
             }}
           >
             {[
-              { icon: <Icons.Code size={32} stroke="var(--primary)" />, label: t('it.title') },
+              { icon: <Icons.CodeSlash size={32} stroke="var(--primary)" />, label: t('it.title') },
               {
-                icon: <Icons.Megaphone size={32} stroke="var(--primary)" />,
+                icon: <Icons.MarketingMegaphone size={32} stroke="var(--primary)" />,
                 label: t('marketing.title'),
               },
               {
-                icon: <Icons.Chart size={32} stroke="var(--primary)" />,
+                icon: <Icons.Business_dep size={32} stroke="var(--primary)" />,
                 label: t('etudes.title'),
               },
             ].map((item, index) => (
               <div
                 key={index}
-                className="value-card"
+                className={isRtl ? styles.valueCardRtl : styles.valueCard}
                 style={{ padding: '1.25rem', maxWidth: '200px', margin: '0 auto' }}
               >
                 <div
@@ -125,6 +124,7 @@ export default async function ServicesPage({ params }: Props) {
                   {item.icon}
                 </div>
                 <h3
+                  className={isRtl ? styles.valueTitleRtl : styles.valueTitle}
                   style={{
                     fontSize: '1rem',
                     fontWeight: 700,
@@ -162,7 +162,7 @@ export default async function ServicesPage({ params }: Props) {
                 gap: '0.75rem',
               }}
             >
-              <Icons.Code size={32} stroke="var(--primary)" />
+              <Icons.CodeSlash size={32} stroke="var(--primary)" />
               {t('it.title')}
             </h2>
             <p
@@ -176,13 +176,19 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Développement Web */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Globe size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('it.web.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.WebDevBrowser size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('it.web.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('it.web.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('it.web.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">React JS</span>
                 <span className="tool-tag">FastAPI</span>
                 <span className="tool-tag">WordPress</span>
@@ -194,13 +200,19 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Développement Mobile */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Smartphone size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('it.mobile.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.MobileDev size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('it.mobile.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('it.mobile.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('it.mobile.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Flutter</span>
                 <span className="tool-tag">Dart</span>
                 <span className="tool-tag">Android Studio</span>
@@ -212,13 +224,19 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 3 : Création de chatbots */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Chatbot size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('it.chatbot.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.Chatbot size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('it.chatbot.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('it.chatbot.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('it.chatbot.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Dialogflow</span>
                 <span className="tool-tag">IA</span>
                 <span className="tool-tag">API</span>
@@ -254,7 +272,7 @@ export default async function ServicesPage({ params }: Props) {
                 gap: '0.75rem',
               }}
             >
-              <Icons.Megaphone size={32} stroke="var(--primary)" />
+              <Icons.MarketingMegaphone size={32} stroke="var(--primary)" />
               {t('marketing.title')}
             </h2>
             <p
@@ -268,17 +286,22 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Branding */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Palette size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('marketing.branding.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.Palette size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('marketing.branding.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('marketing.branding.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('marketing.branding.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Adobe Illustrator</span>
                 <span className="tool-tag">Photoshop</span>
                 <span className="tool-tag">Figma</span>
-                <span className="tool-tag">Canva</span>
               </div>
               <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
                 {t('marketing.branding.cta')}
@@ -286,15 +309,20 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Community Management */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Share size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('marketing.community.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.Share size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('marketing.community.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('marketing.community.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('marketing.community.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Meta Business Suite</span>
-                <span className="tool-tag">Canva</span>
                 <span className="tool-tag">CapCut</span>
                 <span className="tool-tag">Hootsuite</span>
               </div>
@@ -329,7 +357,7 @@ export default async function ServicesPage({ params }: Props) {
                 gap: '0.75rem',
               }}
             >
-              <Icons.Chart size={32} stroke="var(--primary)" />
+              <Icons.Business_dep size={32} stroke="var(--primary)" />
               {t('etudes.title')}
             </h2>
             <p
@@ -343,13 +371,19 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Étude de marché */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Target size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('etudes.marche.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.Search size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('etudes.marche.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('etudes.marche.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('etudes.marche.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Google Forms</span>
                 <span className="tool-tag">SWOT</span>
                 <span className="tool-tag">PESTEL</span>
@@ -361,13 +395,19 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Étude de notoriété */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.BarChart size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('etudes.notoriete.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.VisibilitySurvey size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('etudes.notoriete.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('etudes.notoriete.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('etudes.notoriete.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Google Forms</span>
                 <span className="tool-tag">Google Sheets</span>
               </div>
@@ -377,13 +417,19 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 3 : Étude de satisfaction */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Heart size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('etudes.satisfaction.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.Heart size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('etudes.satisfaction.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('etudes.satisfaction.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('etudes.satisfaction.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Google Forms</span>
                 <span className="tool-tag">Google Sheets</span>
               </div>
@@ -393,13 +439,19 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 4 : Plan d'affaires */}
-            <div className="service-card">
-              <div className="service-header">
-                <Icons.Briefcase size={28} stroke="var(--primary)" />
-                <h3 className="service-title">{t('etudes.business.title')}</h3>
+            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+              <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
+                <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
+                  <Icons.BusinessPlanDoc size={28} stroke="var(--primary)" />
+                </div>
+                <h3 className={isRtl ? styles.serviceTitleRtl : styles.serviceTitle}>
+                  {t('etudes.business.title')}
+                </h3>
               </div>
-              <p className="service-desc">{t('etudes.business.desc')}</p>
-              <div className="service-tools">
+              <p className={isRtl ? styles.serviceDescRtl : styles.serviceDesc}>
+                {t('etudes.business.desc')}
+              </p>
+              <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
                 <span className="tool-tag">Business Model Canvas</span>
                 <span className="tool-tag">Google Sheets</span>
                 <span className="tool-tag">Google Docs</span>
