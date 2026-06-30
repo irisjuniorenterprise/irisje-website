@@ -16,7 +16,7 @@ type DevisFormData = {
   prestation: string;
   budget: string;
   delai: string;
-  description: string;
+  description?: string; // ✅ CHANGÉ : optionnel
   consentement: boolean;
 };
 
@@ -38,7 +38,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       prestation: z.string().min(1, t('errors.prestation_required')),
       budget: z.string().min(1, t('errors.budget_required')),
       delai: z.string().min(1, t('errors.delai_required')),
-      description: z.string().min(20, t('errors.description_min')),
+      description: z.string().optional(), // ✅ CHANGÉ : plus obligatoire, devient optionnel
       consentement: z.boolean().refine((val) => val === true, {
         message: t('errors.consentement_required'),
       }),
@@ -127,7 +127,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       {/* GROUPE 1 : Informations personnelles */}
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>
-          <Icons.User size={18} />
+          <Icons.PenDraw size={28} />
           {t('personal_info.title')}
         </legend>
 
@@ -196,7 +196,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
 
         <div className={styles.field}>
           <div className={styles.inputWrapper}>
-            <Icons.Code size={20} className={styles.inputIcon} />
+            <Icons.ServicePro size={20} className={styles.inputIcon} />
             <select
               id="devis-prestation"
               {...register('prestation')}
@@ -219,7 +219,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
 
         <div className={styles.field}>
           <div className={styles.inputWrapper}>
-            <Icons.Calendar size={20} className={styles.inputIcon} />
+            <Icons.WalletMoney size={20} className={styles.inputIcon} />
             <select
               id="devis-budget"
               {...register('budget')}
@@ -240,7 +240,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
           {errors.budget && <p className={styles.error}>{errors.budget.message}</p>}
         </div>
 
-        <div className={styles.field}>
+        {/* <div className={styles.field}>
           <div className={styles.inputWrapper}>
             <Icons.Clock size={20} className={styles.inputIcon} />
             <select
@@ -261,7 +261,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
             </label>
           </div>
           {errors.delai && <p className={styles.error}>{errors.delai.message}</p>}
-        </div>
+        </div> */}
 
         <div className={styles.field}>
           <div className={`${styles.inputWrapper} ${styles.textareaWrapper}`}>
@@ -275,7 +275,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
               aria-invalid={!!errors.description}
             />
             <label htmlFor="devis-description" className={styles.floatingLabel}>
-              {t('project_details.description')} *
+              {t('project_details.description')} {/* ✅ Supprimé le * */}
             </label>
           </div>
           <small className={styles.helper}>{t('project_details.description_helper')}</small>

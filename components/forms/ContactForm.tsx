@@ -14,7 +14,7 @@ type ContactFormData = {
   email: string;
   telephone: string;
   sujet: string;
-  message: string;
+  message?: string; // ✅ CHANGÉ : optionnel
   consentement: boolean;
 };
 
@@ -33,7 +33,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
       email: z.string().email(t('errors.email_invalid')),
       telephone: z.string().regex(/^[0-9]{8}$/, t('errors.telephone_format')),
       sujet: z.string().min(1, t('errors.sujet_required')),
-      message: z.string().min(10, t('errors.message_min')),
+      message: z.string().optional(), // ✅ CHANGÉ : plus obligatoire, devient optionnel
       consentement: z.boolean().refine((val) => val === true, {
         message: t('errors.consentement_required'),
       }),
@@ -99,7 +99,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
       {/* GROUPE 1 : Informations personnelles */}
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>
-          <Icons.User size={18} />
+          <Icons.PenDraw size={30} />
           {t('personal_info.title')}
         </legend>
 
@@ -201,7 +201,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
               aria-invalid={!!errors.message}
             />
             <label htmlFor="contact-message" className={styles.floatingLabel}>
-              {t('demande.message')} *
+              {t('demande.message')} {/* ✅ Supprimé le * */}
             </label>
           </div>
           <small className={styles.helper}>{t('demande.message_helper')}</small>
