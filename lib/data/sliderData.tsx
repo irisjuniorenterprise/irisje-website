@@ -13,14 +13,14 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       id: 1,
       title: t('services.title'),
       description: t('services.description'),
-      icon: <Icons.Code size={32} stroke="currentColor" />,
+      icon: <Icons.FlexibleSolutions size={32} stroke="currentColor" />,
       cta: { label: t('services.cta'), href: `/${locale}/services` },
     },
     {
       id: 2,
       title: t('it.title'),
       description: t('it.description'),
-      icon: <Icons.Globe size={32} stroke="currentColor" />,
+      icon: <Icons.CodeSlash size={32} stroke="currentColor" />,
       cta: { label: t('it.cta'), href: `/${locale}/services#it` },
     },
     {
@@ -34,7 +34,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       id: 4,
       title: t('etudes.title'),
       description: t('etudes.description'),
-      icon: <Icons.Chart size={32} stroke="currentColor" />,
+      icon: <Icons.Business_dep size={32} stroke="currentColor" />,
       cta: { label: t('etudes.cta'), href: `/${locale}/services#etudes` },
     },
     {

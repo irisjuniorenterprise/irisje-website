@@ -39,9 +39,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 3rem;
+  /* padding latéral pour laisser de la place aux chevrons (40px + 12px offset) */
+  padding: 2rem 4.5rem;
   background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
   border-bottom: 3px solid var(--primary);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .slideContent {
@@ -73,6 +76,7 @@
 
 .slideText {
   flex: 1;
+  min-width: 0; /* évite le débordement du texte dans le flex */
 }
 
 .slideTitle {
@@ -83,11 +87,18 @@
   margin-bottom: 0.25rem;
 }
 
+/* ============================================================
+   TEXTE JUSTIFIÉ
+   ============================================================ */
 .slideDescription {
   font-size: clamp(0.9rem, 1.2vw, 1.05rem);
   color: var(--text-secondary);
   line-height: 1.5;
   margin-bottom: 0.5rem;
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: left;
+  hyphens: auto;
 }
 
 .slideCta {
@@ -209,6 +220,11 @@
   text-align: right;
 }
 
+.slider.rtl .slideDescription {
+  text-align: justify;
+  text-align-last: right;
+}
+
 .slider.rtl .slideCta {
   flex-direction: row-reverse;
 }
@@ -242,21 +258,38 @@
 @media (max-width: 768px) {
   .sliderContainer {
     aspect-ratio: 16 / 7;
-    min-height: 160px;
+    min-height: 200px; /* augmenté pour laisser la place aux dots en bas */
   }
 
   .slide {
-    padding: 1.5rem 2rem;
+    /* padding latéral réduit (chevrons 32px) + padding-bottom réservé pour les dots */
+    padding: 1.25rem 2.75rem 2.75rem;
+    align-items: flex-start;
+    padding-top: 1.5rem;
   }
 
   .slideContent {
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    margin: auto 0; /* centre verticalement le bloc dans l'espace restant au-dessus des dots */
   }
 
   .slider.rtl .slideContent {
     flex-direction: column;
+  }
+
+  .slideText {
+    width: 100%;
+  }
+
+  /* Sur mobile le texte est centré : la justification crée des espacements
+     disgracieux sur colonnes étroites, donc on centre proprement */
+  .slideDescription,
+  .slider.rtl .slideDescription {
+    text-align: center;
+    text-align-last: center;
+    hyphens: auto;
   }
 
   .slider.rtl .slideText {
@@ -264,13 +297,13 @@
   }
 
   .slideIcon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
   }
 
   .slideIcon svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   .slideTitle {
@@ -279,11 +312,17 @@
 
   .slideDescription {
     font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    /* limite le nombre de lignes affichées pour éviter tout débordement vers les dots */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .navButton {
     width: 32px;
     height: 32px;
+    top: 38%; /* remonté légèrement pour ne pas chevaucher la zone des dots */
   }
 
   .navButton svg {
@@ -310,38 +349,91 @@
   }
 
   .dots {
-    bottom: 10px;
+    bottom: 8px;
     padding: 4px 10px;
     gap: 6px;
   }
 
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
 
   .dotActive {
-    width: 20px;
+    width: 18px;
   }
 }
 
 @media (max-width: 480px) {
   .sliderContainer {
-    aspect-ratio: 16 / 9;
-    min-height: 140px;
+    aspect-ratio: auto;
+    min-height: 220px; /* hauteur fixe garantissant l'espace pour texte + dots */
   }
 
   .slide {
-    padding: 1rem 1.25rem;
+    padding: 1rem 2.25rem 2.5rem;
   }
 
   .slideIcon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .slideIcon svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .slideTitle {
+    font-size: 0.95rem;
+  }
+
+  .slideDescription {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2; /* encore plus restrictif sur très petit écran */
+  }
+
+  .navButton {
+    width: 28px;
+    height: 28px;
+    top: 35%;
+  }
+
+  .navButton svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .navPrev {
+    left: 4px;
+  }
+
+  .navNext {
+    right: 4px;
+  }
+
+  .slider.rtl .navPrev {
+    right: 4px;
+    left: auto;
+  }
+
+  .slider.rtl .navNext {
+    left: 4px;
+    right: auto;
+  }
+
+  .dots {
+    bottom: 6px;
+    padding: 3px 8px;
+    gap: 5px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .dotActive {
+    width: 16px;
   }
 }
