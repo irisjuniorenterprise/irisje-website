@@ -59,9 +59,12 @@ export default async function HomePage({ params }: Props) {
               <Link href={`/${locale}/contact`} className="btn btn-cta">
                 {t('hero.cta_start')}
               </Link>
-              <a href="#services" className="btn btn-outline">
+              <Link href={`/${locale}/services`} className="btn btn-outline">
                 {t('hero.cta_services')}
-              </a>
+              </Link>
+              {/* <a href="#services" className="btn btn-outline">
+                {t('hero.cta_services')}
+              </a> */}
             </div>
           </div>
         </div>
