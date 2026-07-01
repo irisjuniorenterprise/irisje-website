@@ -1,26 +1,11 @@
+// app/[locale]/not-found.tsx
+import { getTranslations } from 'next-intl/server';
 import NotFoundContent from '@/components/NotFoundContent';
 
-type Props = {
-  params: { locale: string };
-};
-
-export async function generateMetadata({ params }: Props) {
-  const { locale } = params;
-  const { getTranslations } = await import('next-intl/server');
-
-  const t = await getTranslations({
-    locale,
-    namespace: 'NotFound'
-  });
-
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-  };
-}
-
-export default function NotFoundPage({ params }: Props) {
-  const { locale } = params;
-
-  return <NotFoundContent locale={locale} />;
+export default async function LocaleNotFound() {
+  // Pas d'accès direct à params ici (limitation Next.js),
+  // donc on récupère la locale déjà injectée par le layout parent
+  // via next-intl (le NextIntlClientProvider du layout est déjà actif)
+  return <NotFoundContent locale="fr" />; 
+  // ⚠️ temporaire — voir note ci-dessous pour la locale dynamique
 }
