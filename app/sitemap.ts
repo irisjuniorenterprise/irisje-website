@@ -2,7 +2,7 @@
 import { MetadataRoute } from 'next';
 import { locales } from '@/i18n/config';
 
-// ✅ URLs statiques du site (pages principales)
+// URLs statiques du site (pages principales)
 const staticPages = [
   '',
   '/a-propos',
