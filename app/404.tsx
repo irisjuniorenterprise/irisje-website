@@ -55,7 +55,7 @@ export default async function RootNotFound() {
   return (
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {/* ✅ Tous les composants qui utilisent useTranslations
+        {/* Tous les composants qui utilisent useTranslations
             doivent être DANS le provider */}
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Header />
