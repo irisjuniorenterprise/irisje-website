@@ -97,20 +97,27 @@ export default async function ServicesPage({ params }: Props) {
             }}
           >
             {[
-              { icon: <Icons.CodeSlash size={32} stroke="var(--primary)" />, label: t('it.title') },
               {
+                id: 'it',
+                icon: <Icons.CodeSlash size={32} stroke="var(--primary)" />,
+                label: t('it.title'),
+              },
+              {
+                id: 'marketing',
                 icon: <Icons.MarketingMegaphone size={32} stroke="var(--primary)" />,
                 label: t('marketing.title'),
               },
               {
+                id: 'etudes',
                 icon: <Icons.Business_dep size={32} stroke="var(--primary)" />,
                 label: t('etudes.title'),
               },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className={isRtl ? styles.valueCardRtl : styles.valueCard}
-                style={{ padding: '1.25rem', maxWidth: '200px', margin: '0 auto' }}
+            ].map((item) => (
+              // Un clic mène directement à la section associée (#it, #marketing, #etudes)
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`${isRtl ? styles.valueCardRtl : styles.valueCard} ${styles.valueLink}`}
               >
                 <div
                   style={{
@@ -133,7 +140,10 @@ export default async function ServicesPage({ params }: Props) {
                 >
                   {item.label}
                 </h3>
-              </div>
+                <span className={styles.valueArrow} aria-hidden="true">
+                  <Icons.ChevronDown size={18} />
+                </span>
+              </a>
             ))}
           </div>
         </div>

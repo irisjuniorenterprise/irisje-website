@@ -7,6 +7,7 @@ import { locales } from '@/i18n/config';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
+import SnapScroll from '@/components/layout/SnapScroll';
 import '../globals.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
@@ -71,6 +72,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Slogan />
           <Footer />
           <ClientSideEffects />
+          <SnapScroll />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -87,9 +87,12 @@ export default async function HomePage({ params }: Props) {
       {/* ============================================================
           SLIDER
           ============================================================ */}
-      <div className="container">
-        <Slider slides={slides} autoplay={false} locale={locale} />
-      </div>
+      {/* Section snap à part entière : sans elle, le snap scroll saute par-dessus le slider */}
+      <section className="placeholder" id="slider" style={{ textAlign: 'start' }}>
+        <div className="container">
+          <Slider slides={slides} autoplay={false} locale={locale} />
+        </div>
+      </section>
 
       {/* ============================================================
           SECTION SERVICES

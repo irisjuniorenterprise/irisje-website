@@ -1,0 +1,74 @@
+/* components/layout/snap-scroll.css
+   Snap scroll strict — actif uniquement quand <html data-snap="y"> (voir SnapScroll.tsx) */
+
+:root {
+  /* Hauteur du header sticky (80px + 1px de bordure ; 70px + 1px en mobile) */
+  --snap-header-h: 81px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --snap-header-h: 71px;
+  }
+}
+
+/* ------------------------------------------------------------
+   1. Le viewport redevient le conteneur de scroll
+   (html, body { overflow-x: hidden } transformait <body> en conteneur de
+   scroll, ce qui empêche le snap de s'appliquer à la fenêtre)
+   ------------------------------------------------------------ */
+html[data-snap],
+html[data-snap] body {
+  overflow-x: clip;
+}
+
+/* Garde le blocage du scroll quand le menu mobile est ouvert */
+html[data-snap]:has(body.menu-open) {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   2. Snap strict sur l'axe vertical
+   Pour un snap plus souple, remplace "mandatory" par "proximity"
+   ------------------------------------------------------------ */
+html[data-snap] {
+  --snap-mode: mandatory;
+  scroll-snap-type: y var(--snap-mode);
+  scroll-padding-top: var(--snap-header-h);
+}
+
+/* Chaque section devient un point d'arrêt, sans jamais en sauter une */
+html[data-snap] main > section,
+html[data-snap] main > div > section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Première section (hero) : ancre le haut de page (header + fil d'Ariane) */
+html[data-snap] main > section:first-of-type,
+html[data-snap] main > div > section:first-of-type {
+  scroll-margin-top: 400px;
+}
+
+/* Fin de page : permet d'atteindre le slogan et le footer */
+html[data-snap] body > footer {
+  scroll-snap-align: end;
+}
+
+/* ------------------------------------------------------------
+   3. Sections plein écran (hors hero), contenu centré
+   !important : certaines sections ont un minHeight: 'auto' en style inline
+   ------------------------------------------------------------ */
+html[data-snap] main section.placeholder {
+  min-height: calc(100vh - var(--snap-header-h)) !important;
+  min-height: calc(100svh - var(--snap-header-h)) !important;
+}
+
+/* ------------------------------------------------------------
+   4. Accessibilité : pas de snap si mouvement réduit ou écran très bas
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce), (max-height: 520px) {
+  html[data-snap] {
+    scroll-snap-type: none;
+  }
+}

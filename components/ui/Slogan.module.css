@@ -6,11 +6,22 @@
   border-top: 1px solid var(--border-light);
 }
 
+/* Décor d'un côté, slogan de l'autre (le sens s'inverse tout seul en RTL) */
 .sloganContent {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+/* ============================================================
+   TEXTE DU SLOGAN
+   ============================================================ */
+.textGroup {
+  display: flex;
   align-items: baseline;
   gap: 0.15rem;
+  flex-shrink: 0;
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -24,18 +35,84 @@
   text-transform: none;
 }
 
-/* ✅ Support RTL : inverser l'ordre des éléments */
-.rtl {
-  flex-direction: row-reverse;
-  justify-content: flex-start; /* ou flex-end selon le rendu souhaité */
+/* ============================================================
+   DÉCOR : TRAIT EN DÉGRADÉ + POINT ORANGE
+   ============================================================ */
+.decor {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
-/* Version mobile : on garde l'alignement à droite en LTR, et à gauche en RTL */
+/* Trait fin qui part du bord de la page et s'intensifie vers le texte */
+.line {
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, transparent 0%, var(--accent) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out);
+}
+
+/* Point orange terminal, avec un halo léger */
+.dot {
+  flex-shrink: 0;
+  width: clamp(8px, 1.1vw, 14px);
+  height: clamp(8px, 1.1vw, 14px);
+  margin-inline-start: 8px;
+  border-radius: 50%;
+  background: var(--secondary);
+  box-shadow: 0 0 0 clamp(4px, 0.5vw, 6px) rgba(255, 102, 51, 0.16);
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 0.4s ease 0.7s,
+    transform 0.5s var(--ease-out) 0.7s;
+}
+
+.visible .line {
+  transform: scaleX(1);
+}
+
+.visible .dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================================
+   RTL : le décor passe à droite, le slogan reste lu de gauche à droite
+   ============================================================ */
+.rtl .line {
+  background: linear-gradient(to left, transparent 0%, var(--accent) 100%);
+  transform-origin: right;
+}
+
+/* ============================================================
+   MOBILE : le décor passe au-dessus du slogan
+   ============================================================ */
 @media (max-width: 768px) {
   .sloganContent {
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
   }
-  .rtl {
-    justify-content: flex-start;
+
+  /* À droite en LTR, à gauche en RTL */
+  .textGroup {
+    align-self: flex-end;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITÉ : pas d'animation si l'utilisateur la désactive
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .line,
+  .dot {
+    transform: none;
+    opacity: 1;
+    transition: none;
   }
 }
