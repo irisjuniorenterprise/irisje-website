@@ -76,6 +76,13 @@
   transform: scaleX(1);
 }
 
+/* Sélecteur de langue + bouton contact + burger */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .desktopCta {
   display: inline-flex;
 }
@@ -203,6 +210,10 @@
   
   .menuButton { 
     display: flex; 
+  }
+
+  .actions {
+    gap: 14px;
   }
   
   .inner { 

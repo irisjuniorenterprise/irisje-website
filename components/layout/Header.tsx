@@ -9,6 +9,7 @@ import Image from 'next/image';
 import styles from './Header.module.css';
 import logoData from '@/public/horiz-logo.png';
 import { isRecruitmentOpen } from '@/lib/utils/date';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -99,6 +100,13 @@ export default function Header() {
           </nav>
 
           <div className={styles.actions}>
+            <LanguageSwitcher
+              locale={locale}
+              pathWithoutLocale={pathWithoutLocale}
+              label={t('language')}
+              onNavigate={closeMenu}
+            />
+
             <Link href={localHref('/contact')} className={`btn btn-cta ${styles.desktopCta}`}>
               {t('contact')}
             </Link>
@@ -107,6 +115,7 @@ export default function Header() {
               className={`${styles.menuButton} ${isOpen ? styles.isActive : ''}`}
               onClick={toggleMenu}
               aria-label="Menu"
+              aria-expanded={isOpen}
             >
               <span></span><span></span><span></span>
             </button>

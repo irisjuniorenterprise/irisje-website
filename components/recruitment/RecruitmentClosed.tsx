@@ -3,6 +3,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
+import { getNextRecruitmentDate, formatRecruitmentDate } from '@/lib/utils/date';
 import styles from './RecruitmentClosed.module.css';
 
 type RecruitmentClosedProps = {
@@ -13,18 +14,8 @@ export default function RecruitmentClosed({ locale }: RecruitmentClosedProps) {
   const t = useTranslations('RecruitmentClosed');
   const isRtl = locale === 'ar';
 
-  // Calcul de la prochaine ouverture (1er octobre prochain)
-  const now = new Date();
-  const nextOctober = new Date(now.getFullYear(), 9, 1);
-  if (now.getMonth() > 9) {
-    nextOctober.setFullYear(nextOctober.getFullYear() + 1);
-  }
-
-  // Formater la date selon la locale
-  const formattedDate = nextOctober.toLocaleDateString(locale, {
-    month: 'long',
-    year: 'numeric',
-  });
+  // Prochaine ouverture : logique centralisée dans lib/utils/date.ts
+  const formattedDate = formatRecruitmentDate(getNextRecruitmentDate(), locale);
 
   return (
     <div

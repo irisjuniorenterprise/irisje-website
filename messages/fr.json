@@ -48,7 +48,8 @@
     "legal_confidentialite": "Politique de confidentialité",
     "legal_cgu": "Conditions d'utilisation",
     "copyright": "Tous droits réservés",
-    "aria_label": "Navigation principale"
+    "aria_label": "Navigation principale",
+    "language": "Langue"
   },
   "Breadcrumb": {
     "home": "Accueil",
@@ -398,7 +399,7 @@
       "title_open": "Rejoignez <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recrutement <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "Envie de développer vos compétences et de vivre une expérience enrichissante en cabinet de conseil ? Postulez dès maintenant !",
-      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement en octobre. Revenez nous voir à ce moment-là !"
+      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement du 1er au 6 octobre. Revenez nous voir à ce moment-là !"
     }
   },
   "RecruitmentForm": {
@@ -467,7 +468,7 @@
   },
   "RecruitmentClosed": {
     "title": "Candidatures fermées",
-    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement en octobre</strong>.",
+    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement du 1er au 6 octobre</strong>.",
     "note": "Prochaine ouverture :",
     "actions": {
       "home": "Retour à l'accueil",
@@ -608,7 +609,7 @@
       {
         "id": 4,
         "question": "Comment puis-je rejoindre IRIS Junior Entreprise ?",
-        "answer": "Les candidatures sont ouvertes chaque année en octobre. Vous pouvez postuler via le formulaire de recrutement disponible sur notre site pendant cette période. Nous recherchons des étudiants motivés, passionnés et désireux de développer leurs compétences."
+        "answer": "Les candidatures sont ouvertes chaque année du 1er au 6 octobre. Vous pouvez postuler via le formulaire de recrutement disponible sur notre site pendant cette période. Nous recherchons des étudiants motivés, passionnés et désireux de développer leurs compétences."
       },
       {
         "id": 5,
