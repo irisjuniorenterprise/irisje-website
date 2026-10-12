@@ -109,7 +109,9 @@ export default function Slider({
         <div
           className={styles.sliderTrack}
           style={{
-            transform: `translateX(-${currentIndex * 100}%)`,
+            // RTL : la 1re diapositive est à droite, la suite se lit de droite à gauche
+            flexDirection: isRtl ? 'row-reverse' : 'row',
+            transform: `translateX(${(isRtl ? 1 : -1) * currentIndex * 100}%)`,
             transition: isTransitioning ? 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
           }}
         >
@@ -141,22 +143,29 @@ export default function Slider({
 
       {totalSlides > 1 && (
         <>
+          {/* En RTL, le CSS place « précédent » à droite et « suivant » à gauche (flèches inversées) */}
           <button
             className={`${styles.navButton} ${styles.navPrev}`}
-            onClick={isRtl ? goToNext : goToPrev}
-            aria-label={isRtl ? 'Diapositive suivante' : 'Diapositive précédente'}
+            onClick={goToPrev}
+            aria-label="Diapositive précédente"
           >
             <Icons.ChevronLeft size={24} />
           </button>
           <button
             className={`${styles.navButton} ${styles.navNext}`}
-            onClick={isRtl ? goToPrev : goToNext}
-            aria-label={isRtl ? 'Diapositive précédente' : 'Diapositive suivante'}
+            onClick={goToNext}
+            aria-label="Diapositive suivante"
           >
             <Icons.ChevronRight size={24} />
           </button>
 
-          <div className={styles.dots} role="tablist" aria-label="Indicateurs de diapositives">
+          {/* Indicateurs : en RTL, le 1er point est à droite (même sens que les diapositives) */}
+          <div
+            className={styles.dots}
+            style={{ direction: isRtl ? 'rtl' : 'ltr' }}
+            role="tablist"
+            aria-label="Indicateurs de diapositives"
+          >
             {slides.map((_, index) => (
               <button
                 key={index}
