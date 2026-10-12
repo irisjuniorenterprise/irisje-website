@@ -4,10 +4,11 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
-import styles from './ContactForm.module.css';
+import ChoiceGroup from './ChoiceGroup';
+import styles from './FormShared.module.css';
 
 type ContactFormData = {
   nom: string;
@@ -80,7 +81,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
     }
   };
 
-  // Options du select
+  // Options du choix du sujet
   const sujets = [
     { value: 'demande-information', label: t('sujets.information') },
     { value: 'devis', label: t('sujets.devis') },
@@ -97,9 +98,9 @@ export default function ContactForm({ locale }: ContactFormProps) {
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* GROUPE 1 : Informations personnelles */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 0 } as CSSProperties}>
         <legend className={styles.legend}>
-          <Icons.PenDraw size={30} />
+          <Icons.PenDraw size={18} />
           {t('personal_info.title')}
         </legend>
 
@@ -160,34 +161,20 @@ export default function ContactForm({ locale }: ContactFormProps) {
       </fieldset>
 
       {/* GROUPE 2 : Votre demande */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 1 } as CSSProperties}>
         <legend className={styles.legend}>
           <Icons.Message size={18} />
           {t('demande.title')}
         </legend>
 
-        <div className={styles.field}>
-          <div className={styles.inputWrapper}>
-            <Icons.ChevronDown size={20} className={styles.inputIcon} />
-            <select
-              id="contact-sujet"
-              {...register('sujet')}
-              className={`${styles.input} ${styles.select} ${errors.sujet ? styles.invalid : ''}`}
-              aria-invalid={!!errors.sujet}
-            >
-              <option value="">{t('demande.select_sujet')}</option>
-              {sujets.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="contact-sujet" className={styles.floatingLabel}>
-              {t('demande.sujet')} *
-            </label>
-          </div>
-          {errors.sujet && <p className={styles.error}>{errors.sujet.message}</p>}
-        </div>
+        <ChoiceGroup
+          id="contact-sujet"
+          label={t('demande.sujet')}
+          icon={<Icons.HelpCircle size={18} />}
+          options={sujets}
+          registration={register('sujet')}
+          error={errors.sujet?.message}
+        />
 
         <div className={styles.field}>
           <div className={`${styles.inputWrapper} ${styles.textareaWrapper}`}>
@@ -210,7 +197,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
       </fieldset>
 
       {/* GROUPE 3 : Confidentialité */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 2 } as CSSProperties}>
         <legend className={styles.legend}>
           <Icons.Shield size={18} />
           {t('privacy.title')}

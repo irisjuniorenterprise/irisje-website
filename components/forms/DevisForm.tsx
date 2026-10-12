@@ -4,10 +4,11 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
-import styles from './DevisForm.module.css';
+import ChoiceGroup from './ChoiceGroup';
+import styles from './FormShared.module.css';
 
 type DevisFormData = {
   nom: string;
@@ -15,7 +16,7 @@ type DevisFormData = {
   telephone: string;
   prestation: string;
   budget: string;
-  delai: string;
+  delai?: string;
   description?: string; // ✅ CHANGÉ : optionnel
   consentement: boolean;
 };
@@ -37,7 +38,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       telephone: z.string().regex(/^[0-9]{8}$/, t('errors.telephone_format')),
       prestation: z.string().min(1, t('errors.prestation_required')),
       budget: z.string().min(1, t('errors.budget_required')),
-      delai: z.string().min(1, t('errors.delai_required')),
+      delai: z.string().optional(), // champ « délai » actuellement masqué dans le formulaire
       description: z.string().optional(), // ✅ CHANGÉ : plus obligatoire, devient optionnel
       consentement: z.boolean().refine((val) => val === true, {
         message: t('errors.consentement_required'),
@@ -125,9 +126,9 @@ export default function DevisForm({ locale }: DevisFormProps) {
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* GROUPE 1 : Informations personnelles */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 0 } as CSSProperties}>
         <legend className={styles.legend}>
-          <Icons.PenDraw size={28} />
+          <Icons.PenDraw size={18} />
           {t('personal_info.title')}
         </legend>
 
@@ -188,7 +189,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       </fieldset>
 
       {/* GROUPE 2 : Détails du projet */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 1 } as CSSProperties}>
         <legend className={styles.legend}>
           <Icons.Briefcase size={18} />
           {t('project_details.title')}
@@ -213,32 +214,19 @@ export default function DevisForm({ locale }: DevisFormProps) {
             <label htmlFor="devis-prestation" className={styles.floatingLabel}>
               {t('project_details.prestation')} *
             </label>
+            <Icons.ChevronDown size={18} className={styles.selectChevron} />
           </div>
           {errors.prestation && <p className={styles.error}>{errors.prestation.message}</p>}
         </div>
 
-        <div className={styles.field}>
-          <div className={styles.inputWrapper}>
-            <Icons.WalletMoney size={20} className={styles.inputIcon} />
-            <select
-              id="devis-budget"
-              {...register('budget')}
-              className={`${styles.input} ${styles.select} ${errors.budget ? styles.invalid : ''}`}
-              aria-invalid={!!errors.budget}
-            >
-              <option value="">{t('project_details.select_budget')}</option>
-              {budgets.map((b) => (
-                <option key={b.value} value={b.value}>
-                  {b.label}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="devis-budget" className={styles.floatingLabel}>
-              {t('project_details.budget')} *
-            </label>
-          </div>
-          {errors.budget && <p className={styles.error}>{errors.budget.message}</p>}
-        </div>
+        <ChoiceGroup
+          id="devis-budget"
+          label={t('project_details.budget')}
+          icon={<Icons.WalletMoney size={18} />}
+          options={budgets}
+          registration={register('budget')}
+          error={errors.budget?.message}
+        />
 
         {/* <div className={styles.field}>
           <div className={styles.inputWrapper}>
@@ -284,7 +272,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       </fieldset>
 
       {/* GROUPE 3 : Confidentialité */}
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} style={{ '--i': 2 } as CSSProperties}>
         <legend className={styles.legend}>
           <Icons.Shield size={18} />
           {t('privacy.title')}
