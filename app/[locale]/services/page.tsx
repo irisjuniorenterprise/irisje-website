@@ -6,6 +6,7 @@ import { Icons } from '@/components/icons/Icons';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
+import { PRESTATIONS, devisHref } from '@/lib/data/prestations';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -204,7 +205,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">WordPress</span>
                 <span className="tool-tag">HTML/CSS/JS</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.web)} className="btn btn-cta btn-sm">
                 {t('it.web.cta')}
               </Link>
             </div>
@@ -228,7 +229,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">Android Studio</span>
                 <span className="tool-tag">Firebase</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.mobile)} className="btn btn-cta btn-sm">
                 {t('it.mobile.cta')}
               </Link>
             </div>
@@ -251,7 +252,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">IA</span>
                 <span className="tool-tag">API</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.chatbot)} className="btn btn-cta btn-sm">
                 {t('it.chatbot.cta')}
               </Link>
             </div>
@@ -313,7 +314,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">Photoshop</span>
                 <span className="tool-tag">Figma</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.branding)} className="btn btn-cta btn-sm">
                 {t('marketing.branding.cta')}
               </Link>
             </div>
@@ -336,7 +337,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">CapCut</span>
                 <span className="tool-tag">Hootsuite</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.community)} className="btn btn-cta btn-sm">
                 {t('marketing.community.cta')}
               </Link>
             </div>
@@ -399,7 +400,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">PESTEL</span>
                 <span className="tool-tag">Google Sheets</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.etudeMarche)} className="btn btn-cta btn-sm">
                 {t('etudes.marche.cta')}
               </Link>
             </div>
@@ -421,7 +422,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">Google Forms</span>
                 <span className="tool-tag">Google Sheets</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.etudeNotoriete)} className="btn btn-cta btn-sm">
                 {t('etudes.notoriete.cta')}
               </Link>
             </div>
@@ -443,7 +444,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">Google Forms</span>
                 <span className="tool-tag">Google Sheets</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.etudeSatisfaction)} className="btn btn-cta btn-sm">
                 {t('etudes.satisfaction.cta')}
               </Link>
             </div>
@@ -466,7 +467,7 @@ export default async function ServicesPage({ params }: Props) {
                 <span className="tool-tag">Google Sheets</span>
                 <span className="tool-tag">Google Docs</span>
               </div>
-              <Link href={`/${locale}/devis`} className="btn btn-cta btn-sm">
+              <Link href={devisHref(locale, PRESTATIONS.businessPlan)} className="btn btn-cta btn-sm">
                 {t('etudes.business.cta')}
               </Link>
             </div>

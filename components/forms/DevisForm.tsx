@@ -8,6 +8,7 @@ import { useState, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import ChoiceGroup from './ChoiceGroup';
+import { PRESTATIONS, type PrestationValue } from '@/lib/data/prestations';
 import styles from './FormShared.module.css';
 
 type DevisFormData = {
@@ -23,9 +24,11 @@ type DevisFormData = {
 
 type DevisFormProps = {
   locale: string;
+  /** Prestation présélectionnée (ex. depuis un clic sur la page Services) */
+  defaultPrestation?: PrestationValue;
 };
 
-export default function DevisForm({ locale }: DevisFormProps) {
+export default function DevisForm({ locale, defaultPrestation }: DevisFormProps) {
   const t = useTranslations('DevisPage');
   const tCommon = useTranslations('Common');
   const isRtl = locale === 'ar';
@@ -63,7 +66,7 @@ export default function DevisForm({ locale }: DevisFormProps) {
       nom: '',
       email: '',
       telephone: '',
-      prestation: '',
+      prestation: defaultPrestation ?? '',
       budget: '',
       delai: '',
       description: '',
@@ -90,15 +93,15 @@ export default function DevisForm({ locale }: DevisFormProps) {
 
   // Options des selects (dynamiques)
   const prestations = [
-    { value: 'developpement-web', label: t('prestations.web') },
-    { value: 'developpement-mobile', label: t('prestations.mobile') },
-    { value: 'chatbot', label: t('prestations.chatbot') },
-    { value: 'branding', label: t('prestations.branding') },
-    { value: 'community-management', label: t('prestations.community') },
-    { value: 'etude-marche', label: t('prestations.etude_marche') },
-    { value: 'etude-notoriete', label: t('prestations.etude_notoriete') },
-    { value: 'etude-satisfaction', label: t('prestations.etude_satisfaction') },
-    { value: 'business-plan', label: t('prestations.business_plan') },
+    { value: PRESTATIONS.web, label: t('prestations.web') },
+    { value: PRESTATIONS.mobile, label: t('prestations.mobile') },
+    { value: PRESTATIONS.chatbot, label: t('prestations.chatbot') },
+    { value: PRESTATIONS.branding, label: t('prestations.branding') },
+    { value: PRESTATIONS.community, label: t('prestations.community') },
+    { value: PRESTATIONS.etudeMarche, label: t('prestations.etude_marche') },
+    { value: PRESTATIONS.etudeNotoriete, label: t('prestations.etude_notoriete') },
+    { value: PRESTATIONS.etudeSatisfaction, label: t('prestations.etude_satisfaction') },
+    { value: PRESTATIONS.businessPlan, label: t('prestations.business_plan') },
     /* { value: 'autre', label: t('prestations.autre') }, */
   ];
 

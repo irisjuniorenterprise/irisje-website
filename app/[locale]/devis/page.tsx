@@ -7,9 +7,11 @@ import DevisForm from '@/components/forms/DevisForm';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css'; // ✅ import du module CSS
 import { buildMetadata } from '@/lib/metadata';
+import { isPrestationValue } from '@/lib/data/prestations';
 
 type Props = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ prestation?: string | string[] }>;
 };
 
 export async function generateMetadata({ params }: Props) {
@@ -24,8 +26,16 @@ export async function generateMetadata({ params }: Props) {
   });
 }
 
-export default async function DevisPage({ params }: Props) {
+export default async function DevisPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { prestation } = await searchParams;
+
+  // Prestation présélectionnée via l'URL (ex. /devis?prestation=chatbot) — valeur vérifiée
+  const requestedPrestation = Array.isArray(prestation) ? prestation[0] : prestation;
+  const defaultPrestation = isPrestationValue(requestedPrestation)
+    ? requestedPrestation
+    : undefined;
+
   const t = await getTranslations({ locale, namespace: 'DevisPage' });
   const isRtl = locale === 'ar';
 
@@ -68,12 +78,19 @@ export default async function DevisPage({ params }: Props) {
         </span>
       </section>
 
-      <section style={{ padding: '3rem 0 5rem', background: 'var(--background)' }}>
+      <section
+        id="formulaire-devis"
+        style={{ padding: '3rem 0 5rem', background: 'var(--background)', scrollMarginTop: '80px' }}
+      >
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <div className="contact-card">
               {/* Le formulaire gère déjà son propre RTL via la prop locale */}
-              <DevisForm locale={locale} />
+              <DevisForm
+                key={defaultPrestation ?? 'aucune'}
+                locale={locale}
+                defaultPrestation={defaultPrestation}
+              />
             </div>
           </div>
         </div>
