@@ -12,6 +12,7 @@ import '../globals.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
 import LoadingScreen from '@/components/layout/LoadingScreen';
+import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
 
 type Props = {
@@ -61,6 +62,13 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       {/* ✅ Pas de <head> manuel — Next.js injecte tout via metadata et viewport */}
       <body suppressHydrationWarning>
+        {/* Écran de chargement persistant : durée minimale d'affichage (une
+            pulsation du logo), au premier chargement comme à chaque changement
+            de page. Rendu hors <Suspense> : il est dans le HTML initial. */}
+        <PageLoader>
+          <LoadingScreen instant />
+        </PageLoader>
+
         {/* getMessages() importe le JSON de traductions (donnée runtime) :
             wrappe dans <Suspense> pour que le shell <html>/<body> ET l'écran
             de chargement soient envoyés immédiatement en streaming, sans
@@ -68,7 +76,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             with loading.js »). Sans ce boundary, l'apparition de l'écran
             de chargement est bloquée jusqu'à la résolution complète du
             layout. */}
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={<LoadingScreen instant />}>
           <LocaleChrome locale={locale}>{children}</LocaleChrome>
         </Suspense>
       </body>

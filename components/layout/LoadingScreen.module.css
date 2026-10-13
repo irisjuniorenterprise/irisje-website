@@ -2,10 +2,14 @@
  *
  * Écran de chargement plein écran, léger : logo IRIS Junior Entreprise
  * recomposé comme le logo officiel (emblème à gauche, légèrement plus haut
- * que le bloc « IRIS / Junior Entreprise »), qui s'illumine en cascade,
- * + barre de progression indéterminée.
+ * que le bloc « IRIS / Junior Entreprise »), qui fait une pulsation
+ * (zoom avant puis arrière, 1,2 s) + barre de progression indéterminée.
  * Overlay fixe : recouvre header, contenu et footer quel que soit le
  * défilement. 100 % CSS, aucune image, aucune police, aucun JS.
+ *
+ * La durée minimale d'affichage (une pulsation complète) est garantie par
+ * PageLoader.tsx : si vous changez la période de ldg-pulse (1,2 s), alignez
+ * MIN_DURATION_MS dans ce composant.
  */
 
 .loading {
@@ -25,9 +29,15 @@
   /* Pas de défilement de la page cachée derrière (notamment au toucher). */
   overscroll-behavior: contain;
   touch-action: none;
-  /* Apparition après 150 ms : une navigation rapide ne fait pas clignoter
-     l'écran ; le fondu reste doux sur une connexion lente. */
-  animation: ldg-in 0.3s ease-out 0.15s both;
+  /* Navigations : apparition après 100 ms (un chargement quasi instantané
+     ne montre pas l'écran), puis fondu doux de 0,35 s. */
+  animation: ldg-in 0.35s ease-out 0.1s both;
+}
+
+/* Prop `instant` (premier chargement, et copie affichée par PageLoader) :
+   le logo apparaît tout de suite, sans délai ni fondu. */
+.loading[data-instant='true'] {
+  animation: none;
 }
 
 /* ---------------------------- Logo (emblème + sigle) ---------------------------- */
@@ -44,6 +54,8 @@
   gap: calc(var(--w) * 0.0685);
   /* Le logo reste toujours emblème à gauche, y compris en arabe (RTL). */
   direction: ltr;
+  /* Pulsation : zoom avant puis arrière, une fois par seconde et deux dixièmes. */
+  animation: ldg-pulse 1.2s ease-in-out infinite;
 }
 
 .emblemWrap {
@@ -64,7 +76,7 @@
   inset: -28%;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(90, 184, 222, 0.28), transparent 68%);
-  animation: ldg-halo 2.4s ease-in-out infinite;
+  animation: ldg-halo 1.2s ease-in-out infinite;
 }
 
 .emblem {
@@ -73,7 +85,6 @@
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 8px 18px rgba(26, 57, 105, 0.18));
-  animation: ldg-float 2.4s ease-in-out infinite;
 }
 
 /* ---------------------------- Sigle ---------------------------- */
@@ -87,20 +98,20 @@
   filter: drop-shadow(0 8px 18px rgba(26, 57, 105, 0.14));
 }
 
-/* Cascade : emblème, puis « IRIS » (+0,3 s), puis « Junior Entreprise »
-   (+0,6 s) — même pulsation décalée, comme une vague lumineuse discrète. */
+/* Cascade lumineuse : emblème, puis « IRIS » (+0,1 s), puis « Junior
+   Entreprise » (+0,2 s), au rythme de la pulsation du logo. */
 .partIris,
 .partJunior {
   fill: var(--primary, #1a3969);
-  animation: ldg-glow 2.4s ease-in-out infinite;
+  animation: ldg-glow 1.2s ease-in-out infinite;
 }
 
 .partIris {
-  animation-delay: 0.3s;
+  animation-delay: 0.1s;
 }
 
 .partJunior {
-  animation-delay: 0.6s;
+  animation-delay: 0.2s;
 }
 
 /* ---------------------------- Barre de progression ---------------------------- */
@@ -169,13 +180,14 @@
   }
 }
 
-@keyframes ldg-float {
+/* Une période = un zoom avant puis un zoom arrière. */
+@keyframes ldg-pulse {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-3px) scale(1.03);
+    transform: scale(1.08);
   }
 }
 
@@ -215,8 +227,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .loading,
+  .lockup,
   .emblemWrap::before,
-  .emblem,
   .partIris,
   .partJunior,
   .barFill {

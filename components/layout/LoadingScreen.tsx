@@ -3,13 +3,17 @@
 // Écran de chargement plein écran, léger et sobre : logo IRIS Junior
 // Entreprise recomposé comme le logo officiel — emblème de l'aigle
 // (EagleLogoInverted : disque bleu, aigle évidé) à gauche, aligné sur
-// « IRIS », « Junior Entreprise » en dessous — qui s'illuminent en
-// cascade, + fine barre de progression aux couleurs de la charte.
+// « IRIS », « Junior Entreprise » en dessous — qui fait une pulsation
+// (zoom avant puis arrière), + fine barre de progression aux couleurs
+// de la charte.
 //
-// Utilisé à deux niveaux (aucune modification de ces fichiers nécessaire) :
-//  - app/[locale]/loading.tsx — frontière Suspense du segment (navigations) ;
-//  - app/[locale]/layout.tsx — fallback du <Suspense> du layout : le shell
-//    html/body et cet écran partent immédiatement, sans attendre les messages.
+// Utilisé à trois endroits :
+//  - app/[locale]/loading.tsx — frontière Suspense du segment (navigations
+//    lentes) : apparition différée de 100 ms ;
+//  - app/[locale]/layout.tsx — fallback du <Suspense> du layout (premier
+//    chargement, prop `instant`) ;
+//  - PageLoader.tsx — overlay persistant qui garantit une durée minimale
+//    d'affichage (une pulsation complète), même si la page est déjà prête.
 //
 // Overlay fixe (voir LoadingScreen.module.css) : header, slogan et footer
 // du layout sont recouverts pendant le chargement, sans être démontés.
@@ -20,9 +24,23 @@
 import EagleLogoInverted from '@/components/icons/EagleLogoInverted';
 import styles from './LoadingScreen.module.css';
 
-export default function LoadingScreen() {
+type LoadingScreenProps = {
+  /**
+   * Affiche l'écran immédiatement, sans délai ni fondu (premier chargement
+   * ou overlay de PageLoader). Par défaut, il apparaît après 100 ms avec
+   * un fondu doux.
+   */
+  instant?: boolean;
+};
+
+export default function LoadingScreen({ instant = false }: LoadingScreenProps) {
   return (
-    <div className={styles.loading} role="status" aria-live="polite">
+    <div
+      className={styles.loading}
+      data-instant={instant}
+      role="status"
+      aria-live="polite"
+    >
       {/* Logo recomposé : emblème à gauche (aligné sur « IRIS »), sigle à droite */}
       <div className={styles.lockup}>
         <div className={styles.emblemWrap} aria-hidden="true">

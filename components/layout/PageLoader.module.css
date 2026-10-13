@@ -1,0 +1,65 @@
+/* components/layout/PageLoader.module.css
+ *
+ * Calque persistant qui porte l'écran de chargement (voir PageLoader.tsx) :
+ * au-dessus de tout (y compris du fallback Suspense, z-index 9999), il
+ * s'affiche pendant la durée minimale puis se retire en fondu.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  opacity: 1;
+  visibility: visible;
+  /* Filet de sécurité sans JavaScript : l'overlay se retire seul après 6 s. */
+  animation: ldg-failsafe 0.3s ease-out 6s forwards;
+}
+
+/* Changement de page : apparition rapide en fondu (pas au premier chargement,
+   où le logo est déjà dans le HTML initial). */
+.overlay[data-nav='true'] {
+  animation:
+    ldg-overlay-in 0.2s ease-out,
+    ldg-failsafe 0.3s ease-out 6s forwards;
+}
+
+/* Durée minimale écoulée : fondu de sortie, puis le calque ne bloque plus rien. */
+.overlay[data-state='hidden'] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease-out,
+    visibility 0s linear 0.3s;
+  animation: none;
+}
+
+/* Calque masqué : on arrête les animations du logo (inutile de les faire tourner). */
+.overlay[data-state='hidden'] * {
+  animation-play-state: paused !important;
+}
+
+@keyframes ldg-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ldg-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay[data-nav='true'] {
+    animation: ldg-failsafe 0.3s ease-out 6s forwards;
+  }
+  .overlay[data-state='hidden'] {
+    transition-duration: 0s;
+  }
+}
