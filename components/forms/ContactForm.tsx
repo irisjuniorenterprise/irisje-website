@@ -70,8 +70,16 @@ export default function ContactForm({ locale }: ContactFormProps) {
     setSubmitSuccess(false);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('Données du formulaire :', data);
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
       setSubmitSuccess(true);
       reset();
     } catch {
