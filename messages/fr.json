@@ -105,7 +105,7 @@
       "description": "Découvrez nos services en IT, Marketing et Business. Nous mettons notre expertise au service de vos projets.",
       "keywords": "services, IT, développement web, marketing, études, conseil"
     },
-    "hero": { 
+    "hero": {
       "title": "Nos <accent>Services</accent>",
       "description": "Explorez notre gamme complète de services professionnels conçus pour aider les entreprises à optimiser leurs opérations, accélérer leur croissance et obtenir des résultats mesurables grâce à des solutions numériques et stratégiques innovantes."
     },
@@ -189,6 +189,11 @@
       "title": "Demander un <accent>devis</accent>",
       "description": "Décrivez votre projet et nous vous enverrons un devis personnalisé dans les plus brefs délais."
     },
+    "form_header": {
+      "title": "Votre demande de devis",
+      "subtitle": "Dites-nous ce dont vous avez besoin : nous préparerons une proposition adaptée à votre projet.",
+      "required_note": "Les champs marqués d'un * sont obligatoires."
+    },
     "personal_info": {
       "title": "Coordonnées",
       "nom": "Nom complet",
@@ -271,6 +276,11 @@
     "hero": {
       "title": "Contacter <accent>IRIS JE</accent>",
       "description": "Vous avez un projet, une question ou vous souhaitez devenir partenaire ? Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais."
+    },
+    "form_header": {
+      "title": "Envoyez-nous un message",
+      "subtitle": "Quelques informations suffisent pour que notre équipe puisse vous répondre.",
+      "required_note": "Les champs marqués d'un * sont obligatoires."
     },
     "personal_info": {
       "title": "Vos coordonnées",

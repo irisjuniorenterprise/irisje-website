@@ -1,0 +1,110 @@
+/* components/forms/FormHeader.module.css
+ *
+ * En-tête des formulaires : pastille d'icône + titre + introduction.
+ * Couleurs de la charte : fond --surface, bordure --border-light, pastille
+ * --accent (comme les cartes « Nos valeurs »), titre --text-primary.
+ * Propriétés logiques (inset-inline, text-align: start) : l'en-tête s'inverse
+ * tout seul en arabe, puisque le <form> porte dir="rtl".
+ */
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* Filet de marque sur le bord de départ (gauche en LTR, droite en RTL) */
+.header::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 4px;
+  background: var(--primary);
+}
+
+/* Garde-fou : aucune puce / décor global ne doit s'injecter dans l'en-tête */
+.header *::before,
+.header *::after {
+  content: none !important;
+}
+
+.badge {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: var(--primary);
+  background: var(--accent);
+  box-shadow: 0 0 0 5px rgba(90, 184, 222, 0.18);
+}
+
+.badge svg {
+  display: block;
+  flex: none;
+  margin: 0;
+  padding: 0;
+}
+
+.text {
+  min-width: 0;
+  text-align: start;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  max-width: 62ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.note {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1.1rem 1.1rem 1.1rem 1.25rem;
+  }
+
+  .badge {
+    width: 48px;
+    height: 48px;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+}

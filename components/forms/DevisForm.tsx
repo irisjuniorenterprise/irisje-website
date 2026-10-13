@@ -8,6 +8,7 @@ import { useState, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import ChoiceGroup from './ChoiceGroup';
+import FormHeader from './FormHeader';
 import { PRESTATIONS, type PrestationValue } from '@/lib/data/prestations';
 import styles from './FormShared.module.css';
 
@@ -130,12 +131,22 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
   ];
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit(onSubmit)}
       className={`${styles.form} ${isRtl ? styles.rtl : ''}`}
       noValidate
       dir={isRtl ? 'rtl' : 'ltr'}
+      aria-labelledby="devis-form-title"
     >
+      {/* EN-TÊTE : titre du formulaire */}
+      <FormHeader
+        id="devis-form-title"
+        icon={<Icons.Briefcase size={26} />}
+        title={t('form_header.title')}
+        subtitle={t('form_header.subtitle')}
+        requiredNote={t('form_header.required_note')}
+      />
+
       {/* GROUPE 1 : Informations personnelles */}
       <fieldset className={styles.fieldset} style={{ '--i': 0 } as CSSProperties}>
         <legend className={styles.legend}>

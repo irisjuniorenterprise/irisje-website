@@ -105,7 +105,7 @@
       "description": "Discover our services in IT, Marketing and Business. We put our expertise at the service of your projects.",
       "keywords": "services, IT, web development, marketing, studies, consulting"
     },
-    "hero": { 
+    "hero": {
       "title": "Our <accent>Services</accent>",
       "description": "Explore our comprehensive range of professional services designed to help businesses streamline operations, accelerate growth, and achieve measurable results through innovative digital and strategic solutions."
     },
@@ -189,6 +189,11 @@
       "title": "Request a <accent>quote</accent>",
       "description": "Describe your project and we will send you a personalized quote as soon as possible."
     },
+    "form_header": {
+      "title": "Your quote request",
+      "subtitle": "Tell us what you need and we will prepare a proposal tailored to your project.",
+      "required_note": "Fields marked with * are required."
+    },
     "personal_info": {
       "title": "Contact info",
       "nom": "Full name",
@@ -271,6 +276,11 @@
     "hero": {
       "title": "Contact <accent>IRIS JE</accent>",
       "description": "Do you have a project, a question or would you like to become a partner? Fill out the form below and we will get back to you as soon as possible."
+    },
+    "form_header": {
+      "title": "Send us a message",
+      "subtitle": "A few details are enough for our team to get back to you.",
+      "required_note": "Fields marked with * are required."
     },
     "personal_info": {
       "title": "Your contact details",
