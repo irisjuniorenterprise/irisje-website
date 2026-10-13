@@ -19,12 +19,12 @@ import { locales, defaultLocale, type Locale } from '@/i18n/config';
 
 /**
  * URL canonique de production, sans slash final.
- * ⚠️ Définissez NEXT_PUBLIC_SITE_URL sur Vercel (ex. https://irisje.com) :
+ * ⚠️ Définissez NEXT_PUBLIC_SITE_URL sur Vercel (ex. https://iris-junior-entreprise.com) :
  * c'est elle qui fait foi pour les canonicals, hreflang, sitemap et JSON-LD,
  * quel que soit le domaine par lequel la page est servie (preview,
  * *.vercel.app, www…) — évite le contenu dupliqué entre domaines.
  */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://irisje.com').replace(
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://iris-junior-entreprise.com').replace(
   /\/+$/,
   '',
 );
