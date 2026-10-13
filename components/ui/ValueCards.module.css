@@ -185,7 +185,7 @@
   height: 64px;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  /* Centrage de l'icône dans le cercle (horizontal et vertical) */
+  /* Centrage du cadre de l'icône dans le cercle (horizontal et vertical) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,25 +196,21 @@
   transition: transform var(--t-base);
 }
 
+/*
+ * Centrage optique automatique : ValueCards.tsx mesure la position réelle du
+ * dessin à l'écran et la compare au centre du cercle, puis renseigne
+ * --icon-dx / --icon-dy (en px) pour recentrer l'icône. Cela corrige un cadre
+ * SVG décalé comme un dessin non centré dans son cadre. Sans mesure (SSR,
+ * SVG non mesurable), la valeur par défaut est 0 : aucun décalage.
+ * margin/padding à 0 : neutralise tout style global qui décalerait le SVG.
+ */
 .iconTile svg {
   display: block;
   flex: none;
-}
-
-/* Centrage optique : l'encre de certaines icônes n'est pas centrée dans leur
-   cadre 24×24, l'icône apparaît donc décalée dans le cercle (le flexbox
-   centre le cadre, pas le dessin). Décalage = (12 − centre vertical de
-   l'encre) / 24, exprimé en % de la taille de l'SVG :
-   - Innovation  : encre de y=3 à y=19 (centre 11)  → 1 unité trop haut  → +4,17 %
-   - Inspiration : encre de y=2 à y=21,02 (centre 11,51) → 0,49 unité trop haut → +2,04 %
-   Les autres icônes (Resourcefulness, Strategy, Professionalism, Engagement)
-   ont un dessin déjà centré dans leur cadre. */
-.card[data-key='innovation'] .iconTile svg {
-  translate: 0 4.17%;
-}
-
-.card[data-key='inspiration'] .iconTile svg {
-  translate: 0 2.04%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  translate: var(--icon-dx, 0px) var(--icon-dy, 0px);
 }
 
 .card:hover .iconTile {

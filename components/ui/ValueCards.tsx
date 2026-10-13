@@ -10,10 +10,13 @@
 //  - clavier  : Entrée / Espace sur le bouton pour retourner, Échap pour revenir.
 // Au premier affichage, les cartes « s'entrouvrent » une fois pour signaler
 // qu'elles sont interactives (désactivé si l'utilisateur réduit les animations).
+// Les icônes sont recentrées automatiquement dans leur cercle en mesurant
+// la position réelle de leur dessin à l'écran, quelle que soit l'icône fournie.
 
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -22,6 +25,10 @@ import {
   type ReactNode,
 } from 'react';
 import styles from './ValueCards.module.css';
+
+// useLayoutEffect côté client (pas de « saut » visuel), useEffect côté serveur.
+const useIsoLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export type ValueItem = {
   key: string;
@@ -59,6 +66,50 @@ function FlipIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+/**
+ * Recentre le dessin d'une icône SVG au milieu de sa pastille.
+ * On compare le centre RÉEL du dessin (en pixels écran) au centre de la
+ * pastille, puis on applique la différence en pixels (--icon-dx / --icon-dy).
+ * Cela corrige à la fois un cadre SVG mal placé et un dessin non centré
+ * dans son cadre.
+ */
+function centerIcon(tile: HTMLElement) {
+  const svg = tile.querySelector('svg');
+  if (!svg) return;
+
+  try {
+    // On repart de zéro pour mesurer la position « brute ».
+    tile.style.setProperty('--icon-dx', '0px');
+    tile.style.setProperty('--icon-dy', '0px');
+
+    const box = svg.getBBox();
+    if (!box.width && !box.height) return;
+
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+
+    const tileRect = tile.getBoundingClientRect();
+    if (!tileRect.width || !tileRect.height) return;
+
+    // Centre du dessin, converti en coordonnées écran.
+    const ink = new DOMPoint(
+      box.x + box.width / 2,
+      box.y + box.height / 2,
+    ).matrixTransform(ctm);
+
+    // Échelle éventuelle appliquée à la pastille (ex. survol), pour rester en px CSS.
+    const scale = tile.offsetWidth ? tileRect.width / tile.offsetWidth : 1;
+
+    const dx = (tileRect.left + tileRect.width / 2 - ink.x) / scale;
+    const dy = (tileRect.top + tileRect.height / 2 - ink.y) / scale;
+
+    tile.style.setProperty('--icon-dx', `${dx.toFixed(2)}px`);
+    tile.style.setProperty('--icon-dy', `${dy.toFixed(2)}px`);
+  } catch {
+    // SVG non mesurable (ex. non rendu) : on laisse le centrage par défaut.
+  }
+}
+
 export default function ValueCards({
   items,
   hintHover,
@@ -73,6 +124,28 @@ export default function ValueCards({
   const lastPointer = useRef<string>('');
   const frontRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const backRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Centrage optique automatique des icônes (avant le premier affichage),
+  // puis une seconde passe une fois la police et la mise en page stabilisées.
+  useIsoLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const run = () =>
+      grid
+        .querySelectorAll<HTMLElement>('[data-icon-tile]')
+        .forEach(centerIcon);
+
+    run();
+    const raf = requestAnimationFrame(run);
+    const onLoad = () => run();
+    window.addEventListener('load', onLoad);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('load', onLoad);
+    };
+  }, [items]);
 
   // « Coup d'œil » unique quand la grille entre dans l'écran.
   useEffect(() => {
@@ -164,7 +237,11 @@ export default function ValueCards({
                 <div className={styles.inner}>
                   {/* Face avant : icône + nom de la valeur */}
                   <div className={`${styles.face} ${styles.front}`}>
-                    <span className={styles.iconTile} aria-hidden="true">
+                    <span
+                      className={styles.iconTile}
+                      data-icon-tile
+                      aria-hidden="true"
+                    >
                       {item.icon}
                     </span>
                     <h3 className={styles.title}>{item.title}</h3>
