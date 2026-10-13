@@ -15,29 +15,66 @@
 .hint {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
   width: fit-content;
   max-width: 100%;
-  margin: 0 auto 2rem;
-  padding: 0.5rem 1rem 0.5rem 0.55rem;
+  margin: 0 auto 2.25rem;
+  padding-block: 0.45rem;
+  padding-inline-start: 0.45rem;
+  padding-inline-end: 1.25rem;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-light);
   background: var(--surface);
-  font-size: 0.85rem;
-  line-height: 1.35;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: start;
   color: var(--text-secondary);
 }
 
+/* Garde-fou : aucune puce / décor global ne doit s'injecter dans la pastille */
+.hint *::before,
+.hint *::after {
+  content: none !important;
+}
+
 .hintIcon {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: rgba(90, 184, 222, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
   color: var(--primary);
+  background: rgba(90, 184, 222, 0.16);
+  animation: hintPulse 3s ease-out infinite;
+}
+
+.hintIcon svg {
+  display: block;
+  flex: none;
+  margin: 0;
+  padding: 0;
   animation: hintSpin 6s ease-in-out infinite;
+}
+
+.hintText {
+  min-width: 0;
+}
+
+.hintHover,
+.hintTouch {
+  margin: 0;
+  letter-spacing: normal;
+  text-transform: none;
+  font-weight: 500;
 }
 
 .hintTouch {
@@ -50,7 +87,7 @@
   }
 
   .hintTouch {
-    display: inline;
+    display: block;
   }
 }
 
@@ -65,9 +102,21 @@
   }
 }
 
+@keyframes hintPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(90, 184, 222, 0.35);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 9px rgba(90, 184, 222, 0);
+  }
+}
+
 @media (max-width: 560px) {
   .hint {
     border-radius: 18px;
+    padding-inline-end: 1rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -196,6 +245,12 @@
   transition: transform var(--t-base);
 }
 
+/* Garde-fou : aucune puce / décor global ne doit s'injecter dans la pastille */
+.iconTile::before,
+.iconTile::after {
+  content: none !important;
+}
+
 /*
  * Centrage optique automatique : ValueCards.tsx mesure la position réelle du
  * dessin à l'écran et la compare au centre du cercle, puis renseigne
@@ -306,11 +361,12 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Mouvement réduit : le « coup d'œil » automatique est désactivé       */
+/* Mouvement réduit : animations automatiques désactivées               */
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .hintIcon {
+  .hintIcon,
+  .hintIcon svg {
     animation: none;
   }
 

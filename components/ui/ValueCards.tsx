@@ -12,6 +12,11 @@
 // qu'elles sont interactives (désactivé si l'utilisateur réduit les animations).
 // Les icônes sont recentrées automatiquement dans leur cercle en mesurant
 // la position réelle de leur dessin à l'écran, quelle que soit l'icône fournie.
+//
+// NB : on utilise des <div> et non des <span> pour la pastille d'indication et
+// les pastilles d'icônes : la section parente porte la classe globale
+// `.placeholder`, dont la règle `.placeholder span` ajoute une puce « ✦ » et
+// passe le texte en majuscules.
 
 import {
   useEffect,
@@ -207,13 +212,16 @@ export default function ValueCards({
 
   return (
     <>
-      <p className={styles.hint}>
-        <span className={styles.hintIcon}>
-          <FlipIcon />
-        </span>
-        <span className={styles.hintHover}>{hintHover}</span>
-        <span className={styles.hintTouch}>{hintTouch}</span>
-      </p>
+      {/* Indication d'usage : pastille avec flèche animée + texte selon l'appareil */}
+      <div className={styles.hint}>
+        <div className={styles.hintIcon} aria-hidden="true">
+          <FlipIcon size={18} />
+        </div>
+        <div className={styles.hintText}>
+          <div className={styles.hintHover}>{hintHover}</div>
+          <div className={styles.hintTouch}>{hintTouch}</div>
+        </div>
+      </div>
 
       <div className={styles.grid} ref={gridRef}>
         {items.map((item, index) => {
@@ -237,13 +245,13 @@ export default function ValueCards({
                 <div className={styles.inner}>
                   {/* Face avant : icône + nom de la valeur */}
                   <div className={`${styles.face} ${styles.front}`}>
-                    <span
+                    <div
                       className={styles.iconTile}
                       data-icon-tile
                       aria-hidden="true"
                     >
                       {item.icon}
-                    </span>
+                    </div>
                     <h3 className={styles.title}>{item.title}</h3>
                     <button
                       type="button"
