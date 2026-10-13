@@ -359,6 +359,9 @@
     },
     "values": {
       "title": "Our values",
+      "hint_hover": "Hover over a card to read more about each value.",
+      "hint_touch": "Tap a card to read more about each value.",
+      "reveal": "Discover",
       "innovation": {
         "title": "Innovation",
         "desc": "We encourage new ideas, creative solutions and the ability to anticipate needs."
@@ -383,6 +386,20 @@
         "title": "Commitment",
         "desc": "We move forward with involvement, responsibility and team spirit in every project."
       }
+    },
+    "map": {
+      "label": "Location",
+      "title": "Where to find us?",
+      "description": "IRIS Junior Entreprise is based at the National School of Engineers of Sfax (ENIS), in the heart of the city of Sfax.",
+      "address_label": "Address",
+      "address": "Sfax, Tunisia",
+      "institution_label": "Institution",
+      "institution": "National School of Engineers of Sfax (ENIS)",
+      "coordinates_label": "Coordinates",
+      "coordinates": "34.7273° N, 10.7171° E",
+      "country_label": "Tunisia",
+      "attribution": "© OpenStreetMap contributors",
+      "error": "The map could not be loaded."
     }
   },
   "Organigramme": {

@@ -4,6 +4,8 @@ import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
+import ValueCards from '@/components/ui/ValueCards';
+import TunisiaMapLoader from '@/components/map/TunisiaMapLoader';
 import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
 
@@ -48,31 +50,37 @@ export default async function AProposPage({ params }: Props) {
 
   const values = [
     {
+      key: 'innovation',
       icon: <Icons.Innovation size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.innovation.title'),
       desc: t('values.innovation.desc'),
     },
     {
+      key: 'resourcefulness',
       icon: <Icons.Resourcefulness size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.resourcefulness.title'),
       desc: t('values.resourcefulness.desc'),
     },
     {
+      key: 'inspiration',
       icon: <Icons.Inspiration size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.inspiration.title'),
       desc: t('values.inspiration.desc'),
     },
     {
+      key: 'strategy',
       icon: <Icons.Strategy size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.strategy.title'),
       desc: t('values.strategy.desc'),
     },
     {
+      key: 'professionalism',
       icon: <Icons.Professionalism size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.professionalism.title'),
       desc: t('values.professionalism.desc'),
     },
     {
+      key: 'engagement',
       icon: <Icons.Engagement size={32} stroke="var(--primary)" strokeWidth={1.8} />,
       title: t('values.engagement.title'),
       desc: t('values.engagement.desc'),
@@ -274,7 +282,7 @@ export default async function AProposPage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION 4 : NOS VALEURS - CARTES CENTRÉES
+          SECTION 4 : NOS VALEURS - CARTES À RETOURNEMENT
           ============================================================ */}
       <section
         className="placeholder section-alt"
@@ -287,84 +295,86 @@ export default async function AProposPage({ params }: Props) {
       >
         <div className="container">
           <h2 className="section-title">{t('values.title')}</h2>
-          <div 
-            className={styles.valuesGrid}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '2rem',
-              margin: '0 auto',
-              maxWidth: '1200px',
-            }}
-          >
-            {values.map((value, index) => (
-              <div 
-                key={index} 
-                className={styles.valueCard}
-                style={{
-                  flex: '0 1 280px',
-                  maxWidth: '320px',
-                  minWidth: '240px',
-                  textAlign: 'center',
-                  padding: '1.5rem',
-                  background: 'var(--surface)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-light)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '0.75rem',
-                    color: 'var(--primary)',
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 102, 51, 0.1)',
-                  }}
-                >
-                  {value.icon}
+          {/* Cartes à retournement : nom de la valeur devant, description derrière */}
+          <ValueCards
+            items={values}
+            hintHover={t('values.hint_hover')}
+            hintTouch={t('values.hint_touch')}
+            revealLabel={t('values.reveal')}
+          />
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 5 : NOUS TROUVER - CARTE DE LA TUNISIE
+          Fond blanc (placeholder) — alterne avec Nos Valeurs (section-alt).
+          Rendu client uniquement (Leaflet) via TunisiaMapLoader (ssr: false).
+          ============================================================ */}
+      <section
+        className="placeholder"
+        id="nous-trouver"
+        style={{
+          minHeight: 'auto',
+          padding: '4rem 0',
+          borderBottom: '1px solid var(--border-light)',
+        }}
+      >
+        <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <h2 className="section-title">{t('map.title')}</h2>
+          <div className={styles.mapWrapper}>
+            {/* Carte d'information */}
+            <div className={styles.mapInfo}>
+              <div className={styles.mapInfoLabel}>{t('map.label')}</div>
+              <p className={styles.mapInfoDescription}>{t('map.description')}</p>
+
+              <div className={styles.locationList}>
+                <div className={styles.locationItem}>
+                  <div className={styles.locationIcon} aria-hidden="true">
+                    <Icons.MapPin size={20} />
+                  </div>
+                  <div className={styles.locationContent}>
+                    <div className={styles.locationLabel}>{t('map.address_label')}</div>
+                    <div className={styles.locationValue}>{t('map.address')}</div>
+                  </div>
                 </div>
-                <h3
-                  style={{
-                    fontSize: '1.05rem',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
-                    marginBottom: '0.5rem',
-                    textAlign: 'center',
-                  }}
-                >
-                  {value.title}
-                </h3>
-                <p
-                  className={styles['text-muted-italic']}
-                  style={{
-                    fontSize: '0.9rem',
-                    lineHeight: '1.6',
-                    color: 'var(--text-secondary)',
-                    textAlign: 'center',
-                    margin: '0 auto',
-                    maxWidth: '260px',
-                  }}
-                >
-                  {value.desc}
-                </p>
+
+                <div className={styles.locationItem}>
+                  <div className={styles.locationIcon} aria-hidden="true">
+                    <Icons.GraduationCap size={20} />
+                  </div>
+                  <div className={styles.locationContent}>
+                    <div className={styles.locationLabel}>{t('map.institution_label')}</div>
+                    <div className={styles.locationValue}>{t('map.institution')}</div>
+                  </div>
+                </div>
+
+                <div className={styles.locationItem}>
+                  <div className={styles.locationIcon} aria-hidden="true">
+                    <Icons.Target size={20} />
+                  </div>
+                  <div className={styles.locationContent}>
+                    <div className={styles.locationLabel}>{t('map.coordinates_label')}</div>
+                    <div className={styles.locationValue}>{t('map.coordinates')}</div>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Carte Leaflet (chargée côté client, marqueur orange IRIS JE) */}
+            <div className={styles.mapColumn}>
+              <TunisiaMapLoader
+                markerLabel="IRIS Junior Entreprise"
+                countryLabel={t('map.country_label')}
+                attribution={t('map.attribution')}
+                errorLabel={t('map.error')}
+              />
+            </div>
           </div>
         </div>
       </section>
 
       {/* ============================================================
-          SECTION 5 : PORTFOLIO
+          SECTION 6 : PORTFOLIO
           Affiché uniquement si projects.length > 0.
           Fond blanc (var(--surface)) — alterne avec Nos Valeurs (section-alt).
           ============================================================ */}

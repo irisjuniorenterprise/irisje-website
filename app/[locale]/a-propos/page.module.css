@@ -78,16 +78,45 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.valueCard .iconWrapper {
+.valueIcon {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   margin-bottom: 0.75rem;
-  color: var(--primary);
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(255, 102, 51, 0.1);
+  color: var(--primary);
+  background: var(--accent);
+  box-shadow: 0 0 0 6px rgba(90, 184, 222, 0.18);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.valueIcon svg {
+  transition: stroke 0.3s ease;
+}
+
+/* Au survol de la carte : la pastille passe au bleu primaire, l'icône devient claire */
+.valueCard:hover .valueIcon {
+  background: var(--primary);
+  box-shadow: 0 0 0 6px rgba(26, 57, 105, 0.12);
+  transform: scale(1.06);
+}
+
+.valueCard:hover .valueIcon svg {
+  stroke: var(--on-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .valueIcon,
+  .valueIcon svg {
+    transition: none;
+  }
+
+  .valueCard:hover .valueIcon {
+    transform: none;
+  }
 }
 
 .valueCard h3 {
@@ -117,8 +146,117 @@
 }
 
 /* ============================================================
+   SECTION NOUS TROUVER - CARTE DE LA TUNISIE
+   ============================================================ */
+
+.mapWrapper {
+  display: grid;
+  grid-template-columns: 0.9fr 1.4fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* Carte d'information à gauche de la carte géographique */
+.mapInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  text-align: start;
+}
+
+/* Petites capitales avec puce accent, comme les labels de section du site */
+.mapInfoLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.mapInfoLabel::before {
+  content: '✦ ';
+  color: var(--accent);
+}
+
+.mapInfoDescription {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  text-align: start;
+}
+
+/* Liste des points de repère (adresse, établissement, coordonnées) */
+.locationList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 2rem;
+}
+
+.locationItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* NB : div et non span — toute balise span hériterait du style global
+   `.placeholder span` (majuscules + puce ✦) de la section */
+.locationIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 102, 51, 0.1);
+  color: var(--secondary);
+}
+
+.locationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.locationLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.locationValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Colonne droite : la carte Leaflet (rendue par TunisiaMapLoader) */
+.mapColumn {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* Carte : empilement de la carte d'info et de la carte géographique */
+@media (max-width: 900px) {
+  .mapWrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .rtlPage #qui-sommes-nous .vocation-grid {
     flex-direction: column;
@@ -142,5 +280,13 @@
   .valuesGrid {
     gap: 1.5rem;
     padding: 0 1rem;
+  }
+
+  .mapInfo {
+    padding: 24px;
+  }
+
+  .locationItem {
+    gap: 10px;
   }
 }

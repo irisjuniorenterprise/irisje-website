@@ -359,6 +359,9 @@
     },
     "values": {
       "title": "Nos valeurs",
+      "hint_hover": "Survolez une carte pour découvrir la valeur en détail.",
+      "hint_touch": "Touchez une carte pour découvrir la valeur en détail.",
+      "reveal": "Découvrir",
       "innovation": {
         "title": "Innovation",
         "desc": "Nous encourageons les nouvelles idées, les solutions créatives et la capacité à anticiper les besoins."
@@ -383,6 +386,20 @@
         "title": "Engagement",
         "desc": "Nous avançons avec implication, responsabilité et esprit d'équipe dans chaque projet."
       }
+    },
+    "map": {
+      "label": "Localisation",
+      "title": "Où nous trouver ?",
+      "description": "IRIS Junior Entreprise est basée au sein de l'École Nationale d'Ingénieurs de Sfax (ENIS), au cœur de la ville de Sfax.",
+      "address_label": "Adresse",
+      "address": "Sfax, Tunisie",
+      "institution_label": "Établissement",
+      "institution": "École Nationale d'Ingénieurs de Sfax (ENIS)",
+      "coordinates_label": "Coordonnées",
+      "coordinates": "34.7273° N, 10.7171° E",
+      "country_label": "Tunisie",
+      "attribution": "© Contributeurs OpenStreetMap",
+      "error": "La carte n'a pas pu être chargée."
     }
   },
   "Organigramme": {

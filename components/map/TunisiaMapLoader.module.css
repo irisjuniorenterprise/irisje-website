@@ -1,0 +1,45 @@
+/* components/map/TunisiaMapLoader.module.css
+ *
+ * Placeholder affiché pendant le chargement dynamique de la carte Leaflet.
+ * Même emprise que la carte finale pour éviter tout saut de mise en page.
+ */
+
+.placeholder {
+  width: 100%;
+  height: 420px;
+  background: linear-gradient(110deg, #eef6f9 8%, #f7fbfd 18%, #eef6f9 33%);
+  background-size: 200% 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .placeholder {
+    height: 450px;
+  }
+}
+
+@media (max-width: 640px) {
+  .placeholder {
+    height: 330px;
+  }
+}
+
+@media (max-width: 380px) {
+  .placeholder {
+    height: 280px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .placeholder {
+    animation: none;
+  }
+}
