@@ -4,18 +4,34 @@
   padding: 2.5rem 0 1.5rem 0;
   background: var(--surface);
   border-top: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Décor d'un côté, slogan de l'autre (le sens s'inverse tout seul en RTL) */
+.sloganWrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 120% at 100% 50%,
+    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 .sloganContent {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================================
-   TEXTE DU SLOGAN
+   TEXTE DU SLOGAN — INCHANGÉ
    ============================================================ */
 .textGroup {
   display: flex;
@@ -26,6 +42,12 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1;
+  opacity: 0;
+  transition: opacity 0.7s ease 0.3s;
+}
+
+.visible .textGroup {
+  opacity: 1;
 }
 
 .hashtag,
@@ -36,27 +58,121 @@
 }
 
 /* ============================================================
-   DÉCOR : TRAIT EN DÉGRADÉ + POINT ORANGE
+   CADRE AUTOUR DU SLOGAN (sans toucher le mot)
+   ============================================================ */
+.textFrame {
+  position: relative;
+  display: inline-flex;
+  padding: 0.5em 0.75em;
+  flex-shrink: 0;
+  z-index: 3;
+}
+
+/* --- Coins "brackets" --- */
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.5s var(--ease-out),
+    border-color 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  transform: translate(-10px, -10px);
+}
+.tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 6px;
+  transform: translate(10px, -10px);
+}
+.bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 6px;
+  transform: translate(-10px, 10px);
+}
+.br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+  transform: translate(10px, 10px);
+}
+
+/* Hover : les coins viennent se poser, avec un léger décalage en cascade */
+.sloganContent:hover .corner {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.sloganContent:hover .tl { transition-delay: 0s; }
+.sloganContent:hover .tr { transition-delay: 0.05s; }
+.sloganContent:hover .bl { transition-delay: 0.1s; }
+.sloganContent:hover .br { transition-delay: 0.15s; }
+
+/* ============================================================
+   DÉCOR : TRAIT + POINT (hover = respiration)
    ============================================================ */
 .decor {
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
-/* Trait fin qui part du bord de la page et s'intensifie vers le texte */
-.line {
+.lineWrap {
+  position: relative;
   flex: 1;
   height: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.line {
+  position: absolute;
+  inset: 0;
   border-radius: 2px;
   background: linear-gradient(to right, transparent 0%, var(--accent) 100%);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.9s var(--ease-out);
+  transition: transform 1s var(--ease-out);
 }
 
-/* Point orange terminal, avec un halo léger */
+.lineGlow {
+  position: absolute;
+  inset: -3px 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 100%
+  );
+  filter: blur(6px);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    transform 1s var(--ease-out),
+    opacity 0.6s ease 0.2s;
+}
+
 .dot {
   flex-shrink: 0;
   width: clamp(8px, 1.1vw, 14px);
@@ -64,33 +180,134 @@
   margin-inline-start: 8px;
   border-radius: 50%;
   background: var(--secondary);
-  box-shadow: 0 0 0 clamp(4px, 0.5vw, 6px) rgba(255, 102, 51, 0.16);
+  position: relative;
   opacity: 0;
   transform: scale(0.4);
   transition:
-    opacity 0.4s ease 0.7s,
-    transform 0.5s var(--ease-out) 0.7s;
+    opacity 0.4s ease 0.75s,
+    transform 0.5s var(--ease-out) 0.75s;
+  z-index: 2;
 }
 
-.visible .line {
-  transform: scaleX(1);
+.dot::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--secondary) 35%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
-.visible .dot {
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--secondary);
+  opacity: 0.5;
+  animation: pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  70% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Hover : le point s'épanouit légèrement + le glow s'intensifie */
+.sloganContent:hover .dot {
+  transform: scale(1.2);
+  transition: transform 0.4s var(--ease-out), opacity 0.3s ease;
+}
+
+.sloganContent:hover .lineGlow {
+  opacity: 0.9;
+}
+
+/* États visibles */
+.visible .line { transform: scaleX(1); }
+.visible .lineGlow { transform: scaleX(1); opacity: 0.6; }
+.visible .dot { opacity: 1; transform: scale(1); }
+
+/* ============================================================
+   CLICK : ANNEAUX QUI SE PROPAGENT JUSQU'AUX EXTRÉMITÉS
+   ============================================================ */
+.ring {
+  position: absolute;
+  left: var(--rx);
+  top: var(--ry);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  /* --ringScale est calculé en JS pour atteindre le bord le plus éloigné */
+  animation: ringExpand 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+.ring:nth-child(2) {
+  animation-delay: 0.14s;
+  border-color: var(--secondary);
+}
+.ring:nth-child(3) {
+  animation-delay: 0.28s;
+}
+
+@keyframes ringExpand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0.9;
+  }
+  55% {
+    opacity: 0.45;
+  }
+  85% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(var(--ringScale, 22));
+    opacity: 0;
+  }
+}
+
+/* Flash bref des coins pendant le clic */
+.cornerFlash .corner {
   opacity: 1;
-  transform: scale(1);
+  transform: translate(0, 0);
+  border-color: var(--secondary);
+  transition:
+    opacity 0.15s ease,
+    transform 0.25s var(--ease-out),
+    border-color 0.15s ease;
 }
 
 /* ============================================================
-   RTL : le décor passe à droite, le slogan reste lu de gauche à droite
+   RTL
    ============================================================ */
 .rtl .line {
   background: linear-gradient(to left, transparent 0%, var(--accent) 100%);
   transform-origin: right;
 }
+.rtl .lineGlow {
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 100%
+  );
+  transform-origin: right;
+}
 
 /* ============================================================
-   MOBILE : le décor passe au-dessus du slogan
+   MOBILE
    ============================================================ */
 @media (max-width: 768px) {
   .sloganContent {
@@ -98,21 +315,36 @@
     align-items: stretch;
     gap: 1rem;
   }
-
-  /* À droite en LTR, à gauche en RTL */
   .textGroup {
     align-self: flex-end;
   }
+  .textFrame {
+    align-self: flex-end;
+  }
+  .decor {
+    order: -1;
+  }
+  /* Pas de hover ni de clic "viseur" sur tactile */
+  .corner { display: none; }
+  .ring { display: none; }
 }
 
 /* ============================================================
-   ACCESSIBILITÉ : pas d'animation si l'utilisateur la désactive
+   ACCESSIBILITÉ
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .line,
-  .dot {
-    transform: none;
-    opacity: 1;
-    transition: none;
+  .lineGlow,
+  .dot,
+  .dot::after,
+  .corner,
+  .ring {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
   }
+  .corner,
+  .ring { display: none !important; }
+  .visible .line,
+  .visible .lineGlow { transform: scaleX(1); opacity: 0.6; }
 }
