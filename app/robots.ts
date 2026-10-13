@@ -1,28 +1,21 @@
 // app/robots.ts
-
-import { MetadataRoute } from 'next';
-
-const getBaseUrl = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 'http://localhost:3000';
-  }
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://irisje.com';
-};
+//
+// ⚠️ On ne bloque PLUS /_next/ : Google a besoin des fichiers CSS/JS qui s'y
+// trouvent pour afficher la page comme un visiteur et l'évaluer (rendu mobile,
+// Core Web Vitals). Bloquer ce dossier dégrade l'indexation.
+// Les pages 404 sont déjà exclues automatiquement (statut 404 + noindex).
+import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = getBaseUrl();
-
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: [
-        '/api/',        // Ne pas indexer les routes API
-        '/_next/',      // Ne pas indexer les fichiers Next.js
-        '/404',         // Ne pas indexer la page 404
-      ],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/'],
+      },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
