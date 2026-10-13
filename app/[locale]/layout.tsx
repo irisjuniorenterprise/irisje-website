@@ -11,6 +11,8 @@ import SnapScroll from '@/components/layout/SnapScroll';
 import '../globals.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
+import LoadingScreen from '@/components/layout/LoadingScreen';
+import { Suspense } from 'react';
 
 type Props = {
   children: React.ReactNode;
@@ -53,28 +55,53 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  const messages = await getMessages({ locale });
   const isRtl = locale === 'ar';
 
   return (
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       {/* ✅ Pas de <head> manuel — Next.js injecte tout via metadata et viewport */}
       <body suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <a href="#main" className="skip-link">
-            {locale === 'fr' ? 'Aller au contenu principal' :
-             locale === 'en' ? 'Skip to main content' :
-             'التجاوز إلى المحتوى الرئيسي'}
-          </a>
-          <Header />
-          <Breadcrumb />
-          <main id="main">{children}</main>
-          <Slogan />
-          <Footer />
-          <ClientSideEffects />
-          <SnapScroll />
-        </NextIntlClientProvider>
+        {/* getMessages() importe le JSON de traductions (donnée runtime) :
+            wrappe dans <Suspense> pour que le shell <html>/<body> ET l'écran
+            de chargement soient envoyés immédiatement en streaming, sans
+            attendre la fin du rendu du layout (doc Next — « Interaction
+            with loading.js »). Sans ce boundary, l'apparition de l'écran
+            de chargement est bloquée jusqu'à la résolution complète du
+            layout. */}
+        <Suspense fallback={<LoadingScreen />}>
+          <LocaleChrome locale={locale}>{children}</LocaleChrome>
+        </Suspense>
       </body>
     </html>
+  );
+}
+
+// Contenu du layout : traductions + chrome du site (header, main, footer…).
+// Asynchrone — c'est lui qui importe les messages, rendu dans le
+// <Suspense> ci-dessus.
+async function LocaleChrome({
+  locale,
+  children,
+}: {
+  locale: string;
+  children: React.ReactNode;
+}) {
+  const messages = await getMessages({ locale });
+
+  return (
+    <NextIntlClientProvider messages={messages} locale={locale}>
+      <a href="#main" className="skip-link">
+        {locale === 'fr' ? 'Aller au contenu principal' :
+         locale === 'en' ? 'Skip to main content' :
+         'التجاوز إلى المحتوى الرئيسي'}
+      </a>
+      <Header />
+      <Breadcrumb />
+      <main id="main">{children}</main>
+      <Slogan />
+      <Footer />
+      <ClientSideEffects />
+      <SnapScroll />
+    </NextIntlClientProvider>
   );
 }

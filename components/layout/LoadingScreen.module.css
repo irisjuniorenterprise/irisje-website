@@ -1,0 +1,228 @@
+/* components/layout/LoadingScreen.module.css
+ *
+ * Écran de chargement plein écran, léger : logo IRIS Junior Entreprise
+ * recomposé comme le logo officiel (emblème à gauche, légèrement plus haut
+ * que le bloc « IRIS / Junior Entreprise »), qui s'illumine en cascade,
+ * + barre de progression indéterminée.
+ * Overlay fixe : recouvre header, contenu et footer quel que soit le
+ * défilement. 100 % CSS, aucune image, aucune police, aucun JS.
+ */
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.1rem, 3.5vw, 1.6rem);
+  padding: 2rem 1.5rem;
+  background:
+    radial-gradient(640px 400px at 50% -8%, rgba(90, 184, 222, 0.14), transparent 60%),
+    radial-gradient(560px 360px at 100% 108%, rgba(255, 102, 51, 0.08), transparent 55%),
+    var(--background, #f8fafc);
+  /* Pas de défilement de la page cachée derrière (notamment au toucher). */
+  overscroll-behavior: contain;
+  touch-action: none;
+  /* Apparition après 150 ms : une navigation rapide ne fait pas clignoter
+     l'écran ; le fondu reste doux sur une connexion lente. */
+  animation: ldg-in 0.3s ease-out 0.15s both;
+}
+
+/* ---------------------------- Logo (emblème + sigle) ---------------------------- */
+
+/* Proportions du logo officiel (public/iris-junior-entreprise-logo.svg) :
+   toutes les dimensions dérivent de --w, la largeur du sigle texte.
+   - emblème : 456 / 1080 de --w de haut, soit un peu plus que le bloc
+     « IRIS / Junior Entreprise » (347 / 1080) ;
+   - écart emblème → texte : 74 / 1080 de --w. */
+.lockup {
+  --w: clamp(170px, 40vw, 260px);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--w) * 0.0685);
+  /* Le logo reste toujours emblème à gauche, y compris en arabe (RTL). */
+  direction: ltr;
+}
+
+.emblemWrap {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: calc(var(--w) * 0.4287);
+  aspect-ratio: 1;
+  /* Dans le logo officiel l'emblème est très légèrement plus haut que le centre du texte. */
+  margin-bottom: calc(var(--w) * 0.0212);
+}
+
+/* Halo doux derrière l'emblème (dégradé statique, aucun coût de rendu). */
+.emblemWrap::before {
+  content: '';
+  position: absolute;
+  inset: -28%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(90, 184, 222, 0.28), transparent 68%);
+  animation: ldg-halo 2.4s ease-in-out infinite;
+}
+
+.emblem {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 18px rgba(26, 57, 105, 0.18));
+  animation: ldg-float 2.4s ease-in-out infinite;
+}
+
+/* ---------------------------- Sigle ---------------------------- */
+
+.wordmark {
+  display: block;
+  flex: none;
+  width: var(--w);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(26, 57, 105, 0.14));
+}
+
+/* Cascade : emblème, puis « IRIS » (+0,3 s), puis « Junior Entreprise »
+   (+0,6 s) — même pulsation décalée, comme une vague lumineuse discrète. */
+.partIris,
+.partJunior {
+  fill: var(--primary, #1a3969);
+  animation: ldg-glow 2.4s ease-in-out infinite;
+}
+
+.partIris {
+  animation-delay: 0.3s;
+}
+
+.partJunior {
+  animation-delay: 0.6s;
+}
+
+/* ---------------------------- Barre de progression ---------------------------- */
+
+.bar {
+  position: relative;
+  /* Le balayage est physique (gauche → droite), y compris en arabe (RTL). */
+  direction: ltr;
+  width: clamp(130px, 32vw, 170px);
+  height: 3px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--border, #e5e7eb);
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  border-radius: var(--radius-pill, 999px);
+  background: linear-gradient(
+    90deg,
+    var(--primary, #1a3969),
+    var(--accent, #5ab8de),
+    var(--secondary, #ff6633)
+  );
+  animation: ldg-sweep 1.4s var(--ease, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+}
+
+/* ---------------------------- Accessibilité ---------------------------- */
+
+/* Texte réservé aux lecteurs d'écran : le statut reste annoncé même si les
+   animations sont réduites. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------- Animations ---------------------------- */
+
+@keyframes ldg-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ldg-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ldg-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.03);
+  }
+}
+
+@keyframes ldg-halo {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes ldg-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(340%);
+  }
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+/* Écrans bas (mobile en paysage) : tout reste visible sans scroll. */
+@media (max-height: 480px) {
+  .loading {
+    gap: 0.9rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .lockup {
+    --w: clamp(130px, 26vw, 190px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading,
+  .emblemWrap::before,
+  .emblem,
+  .partIris,
+  .partJunior,
+  .barFill {
+    animation: none;
+  }
+  .barFill {
+    width: 70%;
+  }
+}
