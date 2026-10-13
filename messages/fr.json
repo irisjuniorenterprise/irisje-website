@@ -177,7 +177,8 @@
     }
   },
   "Common": {
-    "required": "Champ requis"
+    "required": "Champ requis",
+    "back_to_top": "Retour en haut de la page"
   },
   "DevisPage": {
     "meta": {

@@ -11,6 +11,7 @@ import SnapScroll from '@/components/layout/SnapScroll';
 import '../globals.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
+import BackToTop from '@/components/ui/BackToTop';
 import LoadingScreen from '@/components/layout/LoadingScreen';
 import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
@@ -108,6 +109,7 @@ async function LocaleChrome({
       <main id="main">{children}</main>
       <Slogan />
       <Footer />
+      <BackToTop />
       <ClientSideEffects />
       <SnapScroll />
     </NextIntlClientProvider>

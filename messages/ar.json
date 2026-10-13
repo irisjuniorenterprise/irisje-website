@@ -177,7 +177,8 @@
     }
   },
   "Common": {
-    "required": "حقل مطلوب"
+    "required": "حقل مطلوب",
+    "back_to_top": "العودة إلى أعلى الصفحة"
   },
   "DevisPage": {
     "meta": {

@@ -1,0 +1,74 @@
+/* components/ui/BackToTop.module.css
+ *
+ * Bouton "retour en haut" : bouton rond fixé en bas à droite (RTL : bas à
+ * gauche, grâce à `inset-inline-end`), masqué par défaut (opacity + translate)
+ * et révélé via la classe .visible.
+ *
+ * Utilise les variables globales de la charte (--primary, --secondary…) et
+ * respecte prefers-reduced-motion.
+ */
+
+.backToTop {
+  position: fixed;
+  bottom: 2rem;
+  inset-inline-end: 2rem; /* s'inverse automatiquement en RTL */
+  z-index: 900; /* au-dessus du contenu, en dessous du header (999+) */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  cursor: pointer;
+
+  /* Masqué par défaut */
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s var(--ease-out),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.backToTop.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  box-shadow: 0 4px 14px rgba(26, 57, 105, 0.3);
+}
+
+.backToTop:hover {
+  background: var(--secondary);
+}
+
+.backToTop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+ * MOBILE : un peu plus en retrait pour ne pas gêner le pouce
+ * ============================================================ */
+@media (max-width: 768px) {
+  .backToTop {
+    bottom: 1.25rem;
+    inset-inline-end: 1.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+/* ============================================================
+ * ACCESSIBILITÉ : pas d'animation si l'utilisateur la désactive
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .backToTop {
+    transition: none;
+  }
+}
