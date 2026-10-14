@@ -12,6 +12,7 @@
 
 .container {
   width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -23,7 +24,9 @@
 .map {
   position: relative;
   width: 100%;
-  height: 420px;
+  /* La carte suit la hauteur de la colonne (panneau d'itinéraire inclus) */
+  flex: 1 1 auto;
+  min-height: 420px;
   overflow: hidden;
   background: #eef6f9;
   border: 1px solid var(--border);
@@ -32,6 +35,8 @@
 }
 
 .leafletMap {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: #eef6f9;
@@ -143,6 +148,86 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Mode itinéraire                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Les régions ne captent plus ni survol ni clic : le glisser-déposer et le
+   zoom restent fluides sur le fond de carte, et les info-bulles de régions
+   (non marqueur) ne parasitent pas le tracé. */
+.routeMode :global(path.leaflet-interactive) {
+  pointer-events: none !important;
+}
+
+.routeMode :global(.leaflet-tooltip):not(.markerTooltip) {
+  display: none;
+}
+
+/* Fond de carte : fondu à l'apparition */
+.tiles {
+  animation: tilesIn 0.7s var(--ease-out) both;
+}
+
+@keyframes tilesIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Tracé : se dessine du départ vers IRIS (dasharray supérieure à la
+   longueur réelle ; hors animation le trait redevient plein) */
+.routeLine {
+  animation: routeDraw 1.4s var(--ease-out) 0.25s both;
+}
+
+@keyframes routeDraw {
+  from {
+    stroke-dasharray: 9000;
+    stroke-dashoffset: 9000;
+  }
+  to {
+    stroke-dasharray: 9000;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Point de départ : pastille bleue + halo pulsé */
+.userIcon {
+  background: transparent;
+  border: none;
+}
+
+.userDot {
+  position: absolute;
+  inset: 3px;
+  background: #2563eb;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.55);
+}
+
+.userPulse {
+  position: absolute;
+  inset: 0;
+  background: rgba(37, 99, 235, 0.35);
+  border-radius: 50%;
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Copyright                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -181,6 +266,12 @@
   .markerIcon:hover {
     transition: none;
   }
+
+  .tiles,
+  .routeLine,
+  .userPulse {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -189,13 +280,13 @@
 
 @media (max-width: 1024px) {
   .map {
-    height: 450px;
+    min-height: 450px;
   }
 }
 
 @media (max-width: 640px) {
   .map {
-    height: 330px;
+    min-height: 330px;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
@@ -207,6 +298,6 @@
 
 @media (max-width: 380px) {
   .map {
-    height: 280px;
+    min-height: 280px;
   }
 }
