@@ -1,15 +1,21 @@
 // components/ui/BackToTop.tsx
 //
-// Bouton "retour en haut" : apparaît avec une animation quand l'utilisateur
-// a scrollé (seuil en px depuis le haut), masqué sinon. Le clic défile en
-// douceur jusqu'en haut de la page (smooth scroll).
+// Bouton "retour en haut", dans la même famille visuelle que ScrollDownButton :
+// pastille primaire cerclée de blanc, disque blanc au centre avec chevrons
+// animés. Nouveauté UX : un anneau autour du disque indique la progression de
+// lecture de la page (0 % en haut, 100 % en bas).
 //
-// Le seuil est exprimé en px (et non en % de la page) : sur une page courte
-// le bouton n'apparaît jamais (inutile), sur une longue page il apparaît vite.
+// Il apparaît quand l'utilisateur a scrollé (seuil en px depuis le haut),
+// masqué sinon. Le clic défile en douceur jusqu'en haut (smooth, sauf si
+// prefers-reduced-motion).
+//
+// La progression est écrite directement dans une variable CSS (--progress,
+// de 0 à 1) via une ref : aucun re-render à chaque pixel de scroll. Seul le
+// passage visible / masqué passe par l'état React.
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import styles from './BackToTop.module.css';
@@ -19,27 +25,40 @@ const SCROLL_THRESHOLD_PX = 600;
 
 export default function BackToTop() {
   const t = useTranslations('Common');
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Passif : on laisse le navigateur gérer le scroll, le listener ne fait
-    // que mettre à jour l'état `visible` (peu coûteux).
-    const onScroll = () => {
-      setVisible(window.scrollY > SCROLL_THRESHOLD_PX);
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+
+      buttonRef.current?.style.setProperty('--progress', progress.toFixed(4));
+      setVisible(y > SCROLL_THRESHOLD_PX);
     };
 
-    // État initial au montage (utile si l'utilisateur arrive avec un scroll
-    // restauré par le navigateur).
-    onScroll();
+    // Un seul calcul par image (requestAnimationFrame) : léger même sur mobile.
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    // État initial au montage (utile si le navigateur restaure le scroll).
+    update();
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const scrollToTop = () => {
-    // comportement 'smooth' respecte prefers-reduced-motion via le CSS
-    // (scroll-behavior: auto si l'utilisateur désire moins d'animations),
-    // mais on force smooth en JS pour la majorité des utilisateurs.
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
@@ -52,6 +71,7 @@ export default function BackToTop() {
 
   return (
     <button
+      ref={buttonRef}
       type="button"
       className={`${styles.backToTop} ${visible ? styles.visible : ''}`}
       onClick={scrollToTop}
@@ -61,7 +81,16 @@ export default function BackToTop() {
       // clavier tant qu'il n'est pas visible.
       tabIndex={visible ? 0 : -1}
     >
-      <Icons.ArrowUp size={22} />
+      {/* Anneau de progression de lecture (décoratif) */}
+      <i className={styles.progress} aria-hidden="true" />
+
+      {/* Disque blanc + deux chevrons qui « montent » au survol */}
+      <i className={styles.disc} aria-hidden="true">
+        <i className={styles.chevrons}>
+          <Icons.ChevronDown size={18} strokeWidth={3} className={styles.chevron} />
+          <Icons.ChevronDown size={18} strokeWidth={3} className={styles.chevron} />
+        </i>
+      </i>
     </button>
   );
 }
