@@ -413,7 +413,25 @@
       "error": "The map could not be loaded.",
       "itinerary_label": "Get directions",
       "itinerary_locating": "Locating…",
-      "itinerary_aria": "Open directions to IRIS Junior Entreprise in Google Maps"
+      "itinerary_aria": "Get directions to IRIS Junior Entreprise",
+      "itinerary_calculating": "Calculating route…",
+      "itinerary_privacy": "Your location is only used to draw the route. It is neither stored nor shared.",
+      "itinerary_direct": "Or open directly in Google Maps",
+      "itinerary_by_car": "By car",
+      "itinerary_note": "Estimated time without traffic.",
+      "itinerary_ready": "Route ready: {duration}, {distance}.",
+      "itinerary_open_google": "Open in Google Maps",
+      "itinerary_open_waze": "Open in Waze",
+      "itinerary_clear": "Clear route",
+      "itinerary_close": "Close",
+      "itinerary_retry": "Try again",
+      "you_are_here": "You are here",
+      "error_denied": "Location is blocked for this site. Allow it in your browser, or open Google Maps to enter your starting point.",
+      "error_unavailable": "Your location can't be found right now. Try again, or open Google Maps to enter your starting point.",
+      "error_timeout": "Locating you is taking too long. Try again, or open Google Maps to enter your starting point.",
+      "error_unsupported": "Your browser doesn't support location. Open Google Maps to enter your starting point.",
+      "error_noroute": "No driving route found from your location. Open Google Maps to try another starting point.",
+      "error_network": "The route can't be calculated right now. Try again, or open Google Maps."
     }
   },
   "Organigramme": {
