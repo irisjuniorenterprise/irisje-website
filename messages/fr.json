@@ -413,7 +413,25 @@
       "error": "La carte n'a pas pu être chargée.",
       "itinerary_label": "Obtenir l'itinéraire",
       "itinerary_locating": "Localisation en cours…",
-      "itinerary_aria": "Ouvrir l'itinéraire vers IRIS Junior Entreprise dans Google Maps"
+      "itinerary_aria": "Obtenir l'itinéraire vers IRIS Junior Entreprise",
+      "itinerary_calculating": "Calcul de l'itinéraire…",
+      "itinerary_privacy": "Votre position sert uniquement à tracer l'itinéraire. Elle n'est ni enregistrée ni partagée.",
+      "itinerary_direct": "Ou ouvrir directement dans Google Maps",
+      "itinerary_by_car": "En voiture",
+      "itinerary_note": "Durée estimée sans embouteillages.",
+      "itinerary_ready": "Itinéraire prêt : {duration}, {distance}.",
+      "itinerary_open_google": "Ouvrir dans Google Maps",
+      "itinerary_open_waze": "Ouvrir dans Waze",
+      "itinerary_clear": "Effacer l'itinéraire",
+      "itinerary_close": "Fermer",
+      "itinerary_retry": "Réessayer",
+      "you_are_here": "Vous êtes ici",
+      "error_denied": "La localisation est bloquée pour ce site. Autorisez-la dans votre navigateur, ou ouvrez Google Maps pour saisir votre point de départ.",
+      "error_unavailable": "Votre position est introuvable pour le moment. Réessayez, ou ouvrez Google Maps pour saisir votre point de départ.",
+      "error_timeout": "La localisation prend trop de temps. Réessayez, ou ouvrez Google Maps pour saisir votre point de départ.",
+      "error_unsupported": "Votre navigateur ne permet pas la localisation. Ouvrez Google Maps pour saisir votre point de départ.",
+      "error_noroute": "Aucun itinéraire routier trouvé depuis votre position. Ouvrez Google Maps pour essayer un autre point de départ.",
+      "error_network": "Impossible de calculer l'itinéraire pour le moment. Réessayez, ou ouvrez Google Maps."
     }
   },
   "Organigramme": {
