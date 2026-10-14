@@ -413,7 +413,25 @@
       "error": "تعذّر تحميل الخريطة.",
       "itinerary_label": "الحصول على الاتجاهات",
       "itinerary_locating": "جارٍ تحديد الموقع…",
-      "itinerary_aria": "فتح الاتجاهات إلى IRIS Junior Entreprise في خرائط Google"
+      "itinerary_aria": "الحصول على الاتجاهات إلى IRIS Junior Entreprise",
+      "itinerary_calculating": "جارٍ حساب المسار…",
+      "itinerary_privacy": "يُستخدم موقعك فقط لرسم المسار، ولا يتم حفظه أو مشاركته.",
+      "itinerary_direct": "أو افتح مباشرة في خرائط Google",
+      "itinerary_by_car": "بالسيارة",
+      "itinerary_note": "المدة تقديرية دون احتساب الازدحام.",
+      "itinerary_ready": "المسار جاهز: {duration}، {distance}.",
+      "itinerary_open_google": "فتح في خرائط Google",
+      "itinerary_open_waze": "فتح في Waze",
+      "itinerary_clear": "مسح المسار",
+      "itinerary_close": "إغلاق",
+      "itinerary_retry": "إعادة المحاولة",
+      "you_are_here": "أنت هنا",
+      "error_denied": "تحديد الموقع محظور لهذا الموقع. اسمح به من إعدادات المتصفح، أو افتح خرائط Google لإدخال نقطة الانطلاق.",
+      "error_unavailable": "تعذّر تحديد موقعك حاليًا. أعد المحاولة، أو افتح خرائط Google لإدخال نقطة الانطلاق.",
+      "error_timeout": "يستغرق تحديد الموقع وقتًا طويلًا. أعد المحاولة، أو افتح خرائط Google لإدخال نقطة الانطلاق.",
+      "error_unsupported": "متصفحك لا يدعم تحديد الموقع. افتح خرائط Google لإدخال نقطة الانطلاق.",
+      "error_noroute": "لم يتم العثور على طريق بري انطلاقًا من موقعك. افتح خرائط Google لتجربة نقطة انطلاق أخرى.",
+      "error_network": "تعذّر حساب المسار حاليًا. أعد المحاولة، أو افتح خرائط Google."
     }
   },
   "Organigramme": {
