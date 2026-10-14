@@ -6,6 +6,7 @@ import { Icons } from '@/components/icons/Icons';
 import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
 import ValueCards from '@/components/ui/ValueCards';
 import TunisiaMapLoader from '@/components/map/TunisiaMapLoader';
+import ItineraryButton from '@/components/map/ItineraryButton';
 import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
 
@@ -358,6 +359,14 @@ export default async function AProposPage({ params }: Props) {
                   </div>
                 </div>
               </div>
+
+              {/* Itinéraire temps réel : ouvre Google Maps dans une petite
+                  fenêtre, depuis la position de l'utilisateur (geolocation)
+                  jusqu'aux coordonnées affichées sur la carte. */}
+              <ItineraryButton
+                destination="34.72732618156304,10.717072094398517"
+                className={styles.mapItineraryBtn}
+              />
             </div>
 
             {/* Carte Leaflet (chargée côté client, marqueur orange IRIS JE) */}

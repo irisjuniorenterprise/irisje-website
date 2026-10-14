@@ -1,0 +1,38 @@
+/* components/map/ItineraryButton.module.css
+ *
+ * État « localisation en cours » du bouton Itinéraire : petit indicateur
+ * de progression à droite du libellé (la position GPS met parfois 1-2s).
+ * Le bouton hérite des classes globales .btn .btn-cta (charte du site).
+ */
+
+.locating {
+  position: relative;
+  cursor: progress;
+  /* Légère réduction d'opacité pour signaler l'attente, sans masquer le texte */
+  opacity: 0.85;
+}
+
+/* Pastille animée après le texte (l'icône de boussole reste visible) */
+.locating::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin-inline-start: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibilité : pas d'animation si l'utilisateur la désactive */
+@media (prefers-reduced-motion: reduce) {
+  .locating::after {
+    animation: none;
+  }
+}

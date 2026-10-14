@@ -410,7 +410,10 @@
       "coordinates": "34.7273° N, 10.7171° E",
       "country_label": "Tunisie",
       "attribution": "© Contributeurs OpenStreetMap",
-      "error": "La carte n'a pas pu être chargée."
+      "error": "La carte n'a pas pu être chargée.",
+      "itinerary_label": "Obtenir l'itinéraire",
+      "itinerary_locating": "Localisation en cours…",
+      "itinerary_aria": "Ouvrir l'itinéraire vers IRIS Junior Entreprise dans Google Maps"
     }
   },
   "Organigramme": {

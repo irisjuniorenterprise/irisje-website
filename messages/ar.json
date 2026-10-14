@@ -410,7 +410,10 @@
       "coordinates": "34.7273° شمالاً، 10.7171° شرقاً",
       "country_label": "تونس",
       "attribution": "© المساهمون في OpenStreetMap",
-      "error": "تعذّر تحميل الخريطة."
+      "error": "تعذّر تحميل الخريطة.",
+      "itinerary_label": "الحصول على الاتجاهات",
+      "itinerary_locating": "جارٍ تحديد الموقع…",
+      "itinerary_aria": "فتح الاتجاهات إلى IRIS Junior Entreprise في خرائط Google"
     }
   },
   "Organigramme": {

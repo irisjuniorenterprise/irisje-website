@@ -239,6 +239,13 @@
   color: var(--primary);
 }
 
+/* Bouton Itinéraire sous la liste : aligné à gauche (start), léger retrait
+   vertical pour respirer avec le dernier point de repère. */
+.mapItineraryBtn {
+  align-self: flex-start;
+  margin-top: 2rem;
+}
+
 /* Colonne droite : la carte Leaflet (rendue par TunisiaMapLoader) */
 .mapColumn {
   display: flex;
