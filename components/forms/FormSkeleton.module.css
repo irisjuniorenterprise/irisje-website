@@ -1,0 +1,54 @@
+/* components/forms/FormSkeleton.module.css
+ *
+ * Espace réservé affiché pendant le chargement différé d'un formulaire.
+ * Même principe que le placeholder de la carte : emprise proche du
+ * formulaire final pour éviter tout saut de mise en page.
+ */
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 100%;
+}
+
+.line {
+  border-radius: var(--radius-md);
+  background: linear-gradient(110deg, #eef6f9 8%, #f7fbfd 18%, #eef6f9 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.title {
+  height: 2.2rem;
+  width: 60%;
+  margin-bottom: 0.6rem;
+}
+
+.field {
+  height: 3rem;
+  width: 100%;
+}
+
+.area {
+  height: 7rem;
+  width: 100%;
+}
+
+.button {
+  height: 3rem;
+  width: 40%;
+  margin-top: 0.5rem;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line {
+    animation: none;
+  }
+}

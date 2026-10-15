@@ -2,7 +2,7 @@
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
-import RecruitmentForm from '@/components/forms/RecruitmentForm';
+import { LazyRecruitmentForm } from '@/components/forms/LazyForms';
 import RecruitmentClosed from '@/components/recruitment/RecruitmentClosed';
 import { isRecruitmentOpen } from '@/lib/utils/date';
 import styles from './page.module.css'; // ✅ import du module CSS
@@ -76,7 +76,7 @@ export default async function RecrutementPage({ params }: Props) {
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <div className="contact-card">
               {/* Les composants gèrent leur propre RTL via la prop locale */}
-              {open ? <RecruitmentForm locale={locale} /> : <RecruitmentClosed locale={locale} />}
+              {open ? <LazyRecruitmentForm locale={locale} /> : <RecruitmentClosed locale={locale} />}
             </div>
           </div>
         </div>

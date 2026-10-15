@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
-import ContactForm from '@/components/forms/ContactForm';
+import { LazyContactForm } from '@/components/forms/LazyForms';
 import { Icons } from '@/components/icons/Icons';
 import { buildMetadata } from '@/lib/metadata';
 
@@ -71,7 +71,7 @@ export default async function ContactPage({ params }: Props) {
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <div className="contact-card">
-              <ContactForm locale={locale} />
+              <LazyContactForm locale={locale} />
             </div>
           </div>
         </div>

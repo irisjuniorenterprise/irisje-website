@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import logoData from '@/public/logo-s-no-bg.png';
-import DevisForm from '@/components/forms/DevisForm';
+import { LazyDevisForm } from '@/components/forms/LazyForms';
 import { Icons } from '@/components/icons/Icons';
 import styles from './page.module.css'; // ✅ import du module CSS
 import { buildMetadata } from '@/lib/metadata';
@@ -86,7 +86,7 @@ export default async function DevisPage({ params, searchParams }: Props) {
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <div className="contact-card">
               {/* Le formulaire gère déjà son propre RTL via la prop locale */}
-              <DevisForm
+              <LazyDevisForm
                 key={defaultPrestation ?? 'aucune'}
                 locale={locale}
                 defaultPrestation={defaultPrestation}
