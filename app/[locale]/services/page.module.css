@@ -71,6 +71,21 @@
 }
 
 /* ============================================================
+   LIEN CTA (btn) DES CARTES SERVICE - ALIGNÉ AU DÉBUT
+   ----------------------------------------------------------
+   La carte force `text-align: left` (resp. `right` en RTL) pour
+   la description justifiée. Le lien <a class="btn"> est en
+   `inline-flex` : il suit donc naturellement cet alignement,
+   au même niveau que la description et les tags d'outils.
+   `width: fit-content` évite qu'il s'étire si le comportement
+   du bouton venait à changer.
+   ============================================================ */
+.serviceCard :global(.btn),
+.serviceCardRtl :global(.btn) {
+  width: fit-content;
+}
+
+/* ============================================================
    SERVICE CARD - RTL (Arabe)
    ============================================================ */
 
