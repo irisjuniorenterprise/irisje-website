@@ -15,6 +15,8 @@ import BackToTop from '@/components/ui/BackToTop';
 import LoadingScreen from '@/components/layout/LoadingScreen';
 import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
+import PageJsonLd from '@/components/seo/PageJsonLd';
+import { getRequestSite } from '@/lib/request-site';
 
 type Props = {
   children: React.ReactNode;
@@ -96,6 +98,8 @@ async function LocaleChrome({
   children: React.ReactNode;
 }) {
   const messages = await getMessages({ locale });
+  // Domaine réellement servi (.com / .tn) : sert aux URLs du JSON-LD
+  const { origin } = await getRequestSite();
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
@@ -104,6 +108,8 @@ async function LocaleChrome({
          locale === 'en' ? 'Skip to main content' :
          'التجاوز إلى المحتوى الرئيسي'}
       </a>
+      {/* Données structurées schema.org de la page (Organization, WebSite, fil d'Ariane…) */}
+      <PageJsonLd origin={origin} />
       <Header />
       <Breadcrumb />
       <main id="main">{children}</main>

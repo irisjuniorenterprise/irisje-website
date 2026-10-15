@@ -4,19 +4,22 @@
 // Données structurées JSON-LD (schema.org) de la page courante, générées à
 // partir du chemin et des traductions — placé une seule fois dans le layout,
 // il couvre toutes les pages du site (rendu aussi dans le HTML serveur) :
-//  - accueil : Organization + WebSite (identité du site pour Google) ;
+//  - accueil : Organization (+ ProfessionalService : adresse, position, zone
+//    desservie) + WebSite (nom du site pour Google) ;
 //  - toutes les pages : WebPage typée (AboutPage, ContactPage, FAQPage…)
 //    + BreadcrumbList (fil d'Ariane) ;
 //  - /services : catalogue des prestations (OfferCatalog) ;
 //  - /faq : questions / réponses (FAQPage).
 // Les pages inconnues (404) n'émettent rien.
+//
+// `origin` = domaine réellement servi (.com ou .tn), fourni par le layout :
+// les @id et les URLs du JSON-LD suivent le domaine de la page.
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import JsonLd from '@/components/seo/JsonLd';
 import {
   ORGANIZATION,
   SITE_NAME,
-  SITE_URL,
   absoluteUrl,
   getRoute,
   normalizePath,
@@ -37,7 +40,7 @@ const SERVICE_CATEGORIES: { key: string; items: string[] }[] = [
   { key: 'etudes', items: ['marche', 'notoriete', 'satisfaction', 'business'] },
 ];
 
-export default function PageJsonLd() {
+export default function PageJsonLd({ origin }: { origin: string }) {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations() as unknown as Translator;
@@ -50,9 +53,9 @@ export default function PageJsonLd() {
 
   const read = (key: string) => (t.has(key) ? t(key) : '');
 
-  const pageUrl = absoluteUrl(locale, path);
-  const homeUrl = absoluteUrl(locale, '/');
-  const orgId = `${SITE_URL}/#organization`;
+  const pageUrl = absoluteUrl(locale, path, origin);
+  const homeUrl = absoluteUrl(locale, '/', origin);
+  const orgId = `${origin}/#organization`;
   const siteId = `${homeUrl}#website`;
 
   const title = read(`${route.namespace}.meta.title`);
@@ -65,23 +68,26 @@ export default function PageJsonLd() {
     const institution = read('AboutPage.map.institution');
 
     graph.push({
-      '@type': 'Organization',
+      '@type': ['Organization', 'ProfessionalService'],
       '@id': orgId,
       name: SITE_NAME,
-      alternateName: ['IRIS JE'],
-      url: SITE_URL,
+      alternateName: ORGANIZATION.alternateName,
+      url: origin,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/logo-iris.png`,
+        url: `${origin}/logo-iris.png`,
         width: 500,
         height: 500,
       },
-      image: `${SITE_URL}/og-image.png`,
+      image: `${origin}/og-image.png`,
       description: read('HomePage.meta.description'),
       foundingDate: ORGANIZATION.foundingDate,
       email: ORGANIZATION.email,
       telephone: ORGANIZATION.telephone,
       address: { '@type': 'PostalAddress', ...ORGANIZATION.address },
+      geo: { '@type': 'GeoCoordinates', ...ORGANIZATION.geo },
+      areaServed: { '@type': 'Country', name: 'Tunisia' },
+      knowsAbout: ORGANIZATION.knowsAbout,
       contactPoint: [
         {
           '@type': 'ContactPoint',
@@ -102,6 +108,7 @@ export default function PageJsonLd() {
       '@id': siteId,
       url: homeUrl,
       name: SITE_NAME,
+      alternateName: ORGANIZATION.alternateName,
       inLanguage: locale,
       publisher: { '@id': orgId },
     });
@@ -178,7 +185,7 @@ export default function PageJsonLd() {
     for (const segment of path.split('/').filter(Boolean)) {
       current += `/${segment}`;
       const label = read(`Breadcrumb.routes.${current}`);
-      if (label) crumbs.push({ name: label, url: absoluteUrl(locale, current) });
+      if (label) crumbs.push({ name: label, url: absoluteUrl(locale, current, origin) });
     }
 
     graph.push({
