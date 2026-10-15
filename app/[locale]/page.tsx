@@ -7,6 +7,7 @@ import Slider from '@/components/ui/Slider';
 import { getSliderSlides } from '@/lib/data/sliderData';
 import { Icons } from '@/components/icons/Icons';
 import { visuallyHidden } from '@/components/ui/visuallyHidden';
+import CtaBand from '@/components/ui/CtaBand';
 import styles from './page.module.css';
 
 import { buildMetadata } from '@/lib/metadata';
@@ -288,53 +289,18 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION CONTACT
+          SECTION CONTACT (bandeau CTA)
           ============================================================ */}
-      <section
-        className="placeholder"
+      <CtaBand
         id="contact"
-        style={{
-          borderBottom: 'none',
-        }}
+        title={t('contact.title')}
+        description={t('contact.description_1') + ' ' + t('contact.description_2')}
+        note={t('contact.description_3')}
       >
-        <div className="container">
-          <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 className="section-title" style={{ marginBottom: '1rem' }}>
-              {t('contact.title')}
-            </h2>
-            <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.8',
-                color: 'var(--text-secondary)',
-                maxWidth: '720px',
-                margin: '0 auto',
-                textAlign: 'justify',
-              }}
-            >
-              {t('contact.description_1')+" "+t('contact.description_2')}
-            </p>
-            <p
-              className={styles['text-muted-italic']}  // ✅ UNIQUE MODIFICATION ICI
-              style={{
-                fontSize: '0.95rem',
-                lineHeight: '1.6',
-                color: 'var(--text-muted)',
-                maxWidth: '550px',
-                margin: '0.75rem auto 0',
-                textAlign: 'center',
-              }}
-            >
-              {t('contact.description_3')}
-            </p>
-            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
-              <Link href={`/${locale}/contact`} className="btn btn-cta">
-                {t('contact.cta')}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+        <Link href={`/${locale}/contact`} className="btn btn-cta">
+          {t('contact.cta')}
+        </Link>
+      </CtaBand>
     </div>
   );
 }

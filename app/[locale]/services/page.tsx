@@ -8,6 +8,7 @@ import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
 import { PRESTATIONS, devisHref } from '@/lib/data/prestations';
 import ToolTag from '@/components/ui/ToolTag';
+import CtaBand from '@/components/ui/CtaBand';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -481,46 +482,15 @@ export default async function ServicesPage({ params }: Props) {
       </section>
 
       {/* CTA FINAL */}
-      <section
-        className="placeholder"
+      <CtaBand
         id="cta"
-        style={{
-          minHeight: 'auto',
-          padding: '3rem 0',
-          background: 'var(--background-hero)',
-          borderBottom: 'none',
-        }}
+        title={t('cta.title')}
+        description={t('cta.description')}
       >
-        <div className="container" style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)',
-              fontWeight: 700,
-              color: 'var(--text-inverse)',
-              textAlign: 'center',
-              marginBottom: '1rem',
-            }}
-          >
-            {t('cta.title')}
-          </h2>
-          <p
-            style={{
-              textAlign: 'center',
-              color: 'rgba(255,255,255,0.85)',
-              fontSize: '1.05rem',
-              marginBottom: '1.5rem',
-            }}
-          >
-            {t('cta.description')}
-          </p>
-          <div style={{ textAlign: 'center' }}>
-            <Link href={`/${locale}/contact`} className="btn btn-cta">
-              {t('cta.button')}
-            </Link>
-          </div>
-        </div>
-      </section>
+        <Link href={`/${locale}/contact`} className="btn btn-cta">
+          {t('cta.button')}
+        </Link>
+      </CtaBand>
     </div>
   );
 }
