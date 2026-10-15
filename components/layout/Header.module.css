@@ -121,34 +121,64 @@
    NAVIGATION MOBILE
    ============================================================ */
 /* Se colle juste sous le header (top: 100% = bas du header, quelle que soit sa
-   hauteur : 80px desktop / 70px mobile). Fermé : invisible et non focalisable
-   (visibility), sans ombre ni bordure résiduelles. */
+   hauteur : 80px desktop / 70px mobile).
+
+   Ouverture / fermeture : la hauteur est animée par grid-template-rows
+   (0fr ↔ 1fr), qui s'adapte au contenu réel du menu (liens traduits, lien
+   recrutement présent ou non…). Le padding n'est PAS sur le conteneur mais sur
+   la liste, à l'intérieur de la zone rognée : il ne saute donc plus d'un coup
+   à la fermeture (c'est ce saut qui faisait « sauter » les liens avant qu'ils
+   ne disparaissent). Les liens s'estompent pendant que le panneau se replie ;
+   fermé, le panneau est invisible et non focalisable (visibility). */
 .mobileNav {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
   background: var(--surface);
-  padding: 0;
-  max-height: 0;
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 0fr;
   visibility: hidden;
-  transition: max-height 0.4s ease, visibility 0s linear 0.4s;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0);
+  transition:
+    grid-template-rows 0.35s ease,
+    box-shadow 0.35s ease,
+    visibility 0s linear 0.35s;
 }
 
 .mobileNav.isOpen {
-  max-height: 400px;
-  padding: 1rem 24px 2rem;
+  grid-template-rows: 1fr;
   visibility: visible;
-  border-top: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-  transition: max-height 0.4s ease, visibility 0s linear 0s;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+  transition:
+    grid-template-rows 0.35s ease,
+    box-shadow 0.35s ease,
+    visibility 0s linear 0s;
+}
+
+/* Zone rognée : à 0fr, sa hauteur tombe à 0 et tout ce qu'elle contient est masqué */
+.mobileNav > nav {
+  min-height: 0;
+  overflow: hidden;
 }
 
 .mobileNav ul {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1rem 24px 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  /* Fermeture : les liens s'estompent vite, avant la fin du repli */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+.mobileNav.isOpen ul {
+  opacity: 1;
+  transform: none;
+  /* Ouverture : légère attente pour que le panneau soit déjà un peu ouvert */
+  transition: opacity 0.3s ease 0.1s, transform 0.35s ease 0.05s;
 }
 
 .mobileNav a {
@@ -209,6 +239,24 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* Le menu mobile n'existe pas sur grand écran (évite qu'il reste ouvert si la
+   fenêtre est agrandie alors qu'il était déployé) */
+@media (min-width: 769px) {
+  .mobileNav {
+    display: none;
+  }
+}
+
+/* Respecte « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+  .mobileNav,
+  .mobileNav.isOpen,
+  .mobileNav ul,
+  .mobileNav.isOpen ul {
+    transition: none;
+  }
+}
+
 @media (max-width: 768px) {
   .nav, .desktopCta { 
     display: none; 
