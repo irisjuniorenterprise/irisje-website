@@ -1,8 +1,19 @@
 /* components/map/TunisiaMapLoader.module.css
  *
- * Placeholder affiché pendant le chargement dynamique de la carte Leaflet.
- * Même emprise que la carte finale pour éviter tout saut de mise en page.
+ * Placeholder affiché avant et pendant le chargement différé de la carte
+ * Leaflet. Même emprise que la carte finale pour éviter tout saut de mise en
+ * page.
  */
+
+/* Conteneur du montage différé : remplace le conteneur direct de la carte
+   dans la colonne flex (la carte garde ainsi `flex: 1` et la même hauteur). */
+.lazy {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
 
 .placeholder {
   width: 100%;
