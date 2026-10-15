@@ -251,13 +251,10 @@ export default async function AProposPage({ params }: Props) {
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 className="section-title">{t('vision.title')}</h2>
           <div
+            className={styles.visionBlock}
             style={{
-              background: 'var(--surface)',
-              padding: '2rem 2.5rem',
-              borderRadius: 'var(--radius-md)',
               borderLeft: isRtl ? 'none' : '4px solid var(--primary)',
               borderRight: isRtl ? '4px solid var(--primary)' : 'none',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
             }}
           >
             <p

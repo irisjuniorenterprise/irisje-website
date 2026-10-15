@@ -708,6 +708,14 @@ html:has(body.menu-open) {
   border-radius: var(--radius-md);
   border-left: 4px solid var(--secondary);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    border-left-color 0.3s ease;
+}
+
+.mission-block:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-left-color: var(--primary);
 }
 @media (max-width: 480px) {
   .mission-block {
