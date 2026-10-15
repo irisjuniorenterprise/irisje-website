@@ -120,23 +120,29 @@
 /* ============================================================
    NAVIGATION MOBILE
    ============================================================ */
+/* Se colle juste sous le header (top: 100% = bas du header, quelle que soit sa
+   hauteur : 80px desktop / 70px mobile). Fermé : invisible et non focalisable
+   (visibility), sans ombre ni bordure résiduelles. */
 .mobileNav {
   position: absolute;
-  top: 80px;
+  top: 100%;
   left: 0;
   width: 100%;
   background: var(--surface);
-  border-top: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.05);
   padding: 0;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease;
+  visibility: hidden;
+  transition: max-height 0.4s ease, visibility 0s linear 0.4s;
 }
 
 .mobileNav.isOpen {
   max-height: 400px;
   padding: 1rem 24px 2rem;
+  visibility: visible;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+  transition: max-height 0.4s ease, visibility 0s linear 0s;
 }
 
 .mobileNav ul {
