@@ -7,6 +7,7 @@ import Link from 'next/link';
 import styles from './page.module.css';
 import { buildMetadata } from '@/lib/metadata';
 import { PRESTATIONS, devisHref } from '@/lib/data/prestations';
+import ToolTag from '@/components/ui/ToolTag';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -200,10 +201,10 @@ export default async function ServicesPage({ params }: Props) {
                 {t('it.web.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">React JS</span>
-                <span className="tool-tag">FastAPI</span>
-                <span className="tool-tag">WordPress</span>
-                <span className="tool-tag">HTML/CSS/JS</span>
+                <ToolTag>React JS</ToolTag>
+                <ToolTag>FastAPI</ToolTag>
+                <ToolTag>WordPress</ToolTag>
+                <ToolTag>HTML/CSS/JS</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.web)} className="btn btn-cta btn-sm">
                 {t('it.web.cta')}
@@ -224,10 +225,10 @@ export default async function ServicesPage({ params }: Props) {
                 {t('it.mobile.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Flutter</span>
-                <span className="tool-tag">Dart</span>
-                <span className="tool-tag">Android Studio</span>
-                <span className="tool-tag">Firebase</span>
+                <ToolTag>Flutter</ToolTag>
+                <ToolTag>Dart</ToolTag>
+                <ToolTag>Android Studio</ToolTag>
+                <ToolTag>Firebase</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.mobile)} className="btn btn-cta btn-sm">
                 {t('it.mobile.cta')}
@@ -248,9 +249,9 @@ export default async function ServicesPage({ params }: Props) {
                 {t('it.chatbot.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Dialogflow</span>
-                <span className="tool-tag">IA</span>
-                <span className="tool-tag">API</span>
+                <ToolTag>Dialogflow</ToolTag>
+                <ToolTag>IA</ToolTag>
+                <ToolTag>API</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.chatbot)} className="btn btn-cta btn-sm">
                 {t('it.chatbot.cta')}
@@ -310,9 +311,9 @@ export default async function ServicesPage({ params }: Props) {
                 {t('marketing.branding.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Adobe Illustrator</span>
-                <span className="tool-tag">Photoshop</span>
-                <span className="tool-tag">Figma</span>
+                <ToolTag>Adobe Illustrator</ToolTag>
+                <ToolTag>Photoshop</ToolTag>
+                <ToolTag>Figma</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.branding)} className="btn btn-cta btn-sm">
                 {t('marketing.branding.cta')}
@@ -333,9 +334,9 @@ export default async function ServicesPage({ params }: Props) {
                 {t('marketing.community.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Meta Business Suite</span>
-                <span className="tool-tag">CapCut</span>
-                <span className="tool-tag">Hootsuite</span>
+                <ToolTag>Meta Business Suite</ToolTag>
+                <ToolTag>CapCut</ToolTag>
+                <ToolTag>Hootsuite</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.community)} className="btn btn-cta btn-sm">
                 {t('marketing.community.cta')}
@@ -395,10 +396,10 @@ export default async function ServicesPage({ params }: Props) {
                 {t('etudes.marche.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Google Forms</span>
-                <span className="tool-tag">SWOT</span>
-                <span className="tool-tag">PESTEL</span>
-                <span className="tool-tag">Google Sheets</span>
+                <ToolTag>Google Forms</ToolTag>
+                <ToolTag>SWOT</ToolTag>
+                <ToolTag>PESTEL</ToolTag>
+                <ToolTag>Google Sheets</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.etudeMarche)} className="btn btn-cta btn-sm">
                 {t('etudes.marche.cta')}
@@ -419,8 +420,8 @@ export default async function ServicesPage({ params }: Props) {
                 {t('etudes.notoriete.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Google Forms</span>
-                <span className="tool-tag">Google Sheets</span>
+                <ToolTag>Google Forms</ToolTag>
+                <ToolTag>Google Sheets</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.etudeNotoriete)} className="btn btn-cta btn-sm">
                 {t('etudes.notoriete.cta')}
@@ -441,8 +442,8 @@ export default async function ServicesPage({ params }: Props) {
                 {t('etudes.satisfaction.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Google Forms</span>
-                <span className="tool-tag">Google Sheets</span>
+                <ToolTag>Google Forms</ToolTag>
+                <ToolTag>Google Sheets</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.etudeSatisfaction)} className="btn btn-cta btn-sm">
                 {t('etudes.satisfaction.cta')}
@@ -463,9 +464,9 @@ export default async function ServicesPage({ params }: Props) {
                 {t('etudes.business.desc')}
               </p>
               <div className={isRtl ? styles.serviceToolsRtl : styles.serviceTools}>
-                <span className="tool-tag">Business Model Canvas</span>
-                <span className="tool-tag">Google Sheets</span>
-                <span className="tool-tag">Google Docs</span>
+                <ToolTag>Business Model Canvas</ToolTag>
+                <ToolTag>Google Sheets</ToolTag>
+                <ToolTag>Google Docs</ToolTag>
               </div>
               <Link href={devisHref(locale, PRESTATIONS.businessPlan)} className="btn btn-cta btn-sm">
                 {t('etudes.business.cta')}
