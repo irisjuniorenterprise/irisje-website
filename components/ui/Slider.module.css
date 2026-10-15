@@ -22,6 +22,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  touch-action: pan-y; /* le balayage horizontal est géré par le slider, le scroll vertical reste libre */
   aspect-ratio: 16 / 5;
   min-height: 200px;
 }
@@ -178,6 +179,13 @@
   transform: translateY(-50%) scale(1.05);
 }
 
+/* Zone tactile élargie (≈ 44 px) même quand le bouton est réduit sur mobile */
+.navButton::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
 .navButton:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
@@ -210,6 +218,7 @@
 }
 
 .dot {
+  position: relative;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -229,6 +238,13 @@
   background: var(--primary);
   width: 28px;
   border-radius: 999px;
+}
+
+/* Zone tactile élargie (≈ 28 px de haut) sans changer l'apparence des points */
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: -9px -2px;
 }
 
 /* ============================================================

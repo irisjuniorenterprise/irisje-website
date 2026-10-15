@@ -38,6 +38,7 @@ export default function Slider({
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const totalSlides = slides.length;
   const isRtl = locale === 'ar';
@@ -86,6 +87,26 @@ export default function Slider({
     };
   }, [autoplay, isPaused, goToNext, interval, totalSlides]);
 
+  // Balayage tactile : un geste surtout horizontal de plus de 40 px change de diapositive.
+  // En RTL les diapositives défilent de droite à gauche : le sens est donc inversé.
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || totalSlides < 2) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    const forward = isRtl ? dx > 0 : dx < 0;
+    if (forward) goToNext();
+    else goToPrev();
+  };
+
   const handleMouseEnter = () => setIsPaused(true);
   const handleMouseLeave = () => setIsPaused(false);
   const handleFocus = () => setIsPaused(true);
@@ -106,7 +127,11 @@ export default function Slider({
       onKeyDown={handleKeyDown}
       ref={containerRef}
     >
-      <div className={styles.sliderContainer}>
+      <div
+        className={styles.sliderContainer}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           className={styles.sliderTrack}
           style={{
