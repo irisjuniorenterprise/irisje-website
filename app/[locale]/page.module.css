@@ -281,6 +281,33 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
 }
 
+/* ============================================================
+   SURVOL DE LA CARTE DEVIS — fonctionnel
+   ----------------------------------------------------------
+   `.devis-card` est une classe GLOBALE : elle est écrite en dur
+   dans le JSX (`className="devis-card"`) et définie pour la
+   forme dans globals.css. Dans un fichier .module.css, CSS
+   Modules hache tout nom non enveloppé dans :global() — le
+   compilé produit `.page-module__XXX__devis-card`, qui ne
+   correspond à aucun élément du DOM.
+
+   C'est le défaut des règles `.placeholder .devis-card` de ce
+   fichier : toutes sont mortes (survol compris). Vérifié sur le
+   build : le sélecteur compilé ne matche rien.
+
+   On redéclare donc ici, en :global(), la seule propriété
+   nécessaire au survol. La transition est reprise également —
+   sans elle, l'effet snapping au lieu d'animer.
+   ============================================================ */
+:global(.devis-card) {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:global(.devis-card:hover) {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
 .placeholder .devis-card .icon-wrapper {
   width: 64px;
   height: 64px;
