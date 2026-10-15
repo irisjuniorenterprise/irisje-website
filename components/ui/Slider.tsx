@@ -18,6 +18,40 @@ export type Slide = {
   };
 };
 
+// Libellés d'accessibilité (lecteurs d'écran) selon la langue du site
+const LABELS = {
+  fr: {
+    region: 'Bandeau défilant des actualités et services',
+    carousel: 'Carrousel',
+    slide: 'Diapositive',
+    prev: 'Diapositive précédente',
+    next: 'Diapositive suivante',
+    dots: 'Indicateurs de diapositives',
+    goTo: (n: number) => `Aller à la diapositive ${n}`,
+    of: (i: number, n: number) => `${i} sur ${n}`,
+  },
+  en: {
+    region: 'Scrolling banner of news and services',
+    carousel: 'Carousel',
+    slide: 'Slide',
+    prev: 'Previous slide',
+    next: 'Next slide',
+    dots: 'Slide indicators',
+    goTo: (n: number) => `Go to slide ${n}`,
+    of: (i: number, n: number) => `${i} of ${n}`,
+  },
+  ar: {
+    region: 'شريط متحرك للأخبار والخدمات',
+    carousel: 'دوّار الشرائح',
+    slide: 'شريحة',
+    prev: 'الشريحة السابقة',
+    next: 'الشريحة التالية',
+    dots: 'مؤشرات الشرائح',
+    goTo: (n: number) => `الانتقال إلى الشريحة ${n}`,
+    of: (i: number, n: number) => `${i} من ${n}`,
+  },
+} as const;
+
 type SliderProps = {
   slides: Slide[];
   autoplay?: boolean;
@@ -42,6 +76,7 @@ export default function Slider({
 
   const totalSlides = slides.length;
   const isRtl = locale === 'ar';
+  const l = LABELS[locale as keyof typeof LABELS] ?? LABELS.fr;
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -118,8 +153,8 @@ export default function Slider({
     <div
       className={`${styles.slider} ${className} ${isRtl ? styles.rtl : ''}`}
       role="region"
-      aria-roledescription="Carrousel"
-      aria-label="Bandeau défilant des actualités et services"
+      aria-roledescription={l.carousel}
+      aria-label={l.region}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}
@@ -152,8 +187,8 @@ export default function Slider({
                   : undefined
               }
               role="group"
-              aria-roledescription="Diapositive"
-              aria-label={`${index + 1} sur ${totalSlides}`}
+              aria-roledescription={l.slide}
+              aria-label={l.of(index + 1, totalSlides)}
             >
               <div className={styles.slideContent}>
                 {slide.icon && <div className={styles.slideIcon}>{slide.icon}</div>}
@@ -179,16 +214,18 @@ export default function Slider({
         <>
           {/* En RTL, le CSS place « précédent » à droite et « suivant » à gauche (flèches inversées) */}
           <button
+            type="button"
             className={`${styles.navButton} ${styles.navPrev}`}
             onClick={goToPrev}
-            aria-label="Diapositive précédente"
+            aria-label={l.prev}
           >
             <Icons.ChevronLeft size={24} />
           </button>
           <button
+            type="button"
             className={`${styles.navButton} ${styles.navNext}`}
             onClick={goToNext}
-            aria-label="Diapositive suivante"
+            aria-label={l.next}
           >
             <Icons.ChevronRight size={24} />
           </button>
@@ -198,16 +235,17 @@ export default function Slider({
             className={styles.dots}
             style={{ direction: isRtl ? 'rtl' : 'ltr' }}
             role="tablist"
-            aria-label="Indicateurs de diapositives"
+            aria-label={l.dots}
           >
             {slides.map((_, index) => (
               <button
                 key={index}
                 className={`${styles.dot} ${index === currentIndex ? styles.dotActive : ''}`}
+                type="button"
                 onClick={() => goToSlide(index)}
                 role="tab"
                 aria-selected={index === currentIndex}
-                aria-label={`Aller à la diapositive ${index + 1}`}
+                aria-label={l.goTo(index + 1)}
               />
             ))}
           </div>
