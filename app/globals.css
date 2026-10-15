@@ -1,8 +1,13 @@
 /* styles/globals.css */
 
 /* globals.css */
+/* `clip` (et non `hidden`) : empêche le scroll horizontal SANS transformer
+   html/body en conteneur de scroll — sinon le header `position: sticky` ne
+   colle plus à la fenêtre et le menu mobile s'affiche en haut de la page.
+   La ligne `hidden` sert de repli aux anciens navigateurs. */
 html, body {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 /* =====================================================
    RESET ET STYLES DE BASE
@@ -148,6 +153,7 @@ body {
   background: var(--background);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 h1,
 h2,
@@ -185,8 +191,15 @@ h3 {
 .skip-link:focus {
   top: 12px;
 }
-body.menu-open {
+/* Blocage du scroll quand le menu mobile est ouvert : appliqué à <html> (le
+   viewport) et non à <body>, pour ne pas casser le header sticky. */
+html:has(body.menu-open) {
   overflow: hidden;
+}
+@supports not selector(:has(*)) {
+  body.menu-open {
+    overflow: hidden;
+  }
 }
 
 /* =====================================================
