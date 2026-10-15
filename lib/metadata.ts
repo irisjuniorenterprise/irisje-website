@@ -1,27 +1,26 @@
 // lib/metadata.ts
 //
 // Construit les métadonnées SEO complètes d'une page : titre, description,
-// canonical, hreflang (+ x-default), robots, Open Graph et Twitter.
+// canonical, hreflang (+ x-default, multi-domaines), robots, Open Graph et
+// Twitter.
 //
-// Corrections par rapport à la version précédente :
-//  - plus d'appel à headers() : l'URL canonique vient de SITE_URL (lib/seo.ts)
-//    et non du Host de la requête → canonical identique sur tous les
-//    domaines (preview, *.vercel.app…) et pages enfin mises en cache
-//    (rendu statique) au lieu d'être dynamiques à chaque visite ;
+//  - le canonical est celui du domaine réellement servi (.com ou .tn) : chaque
+//    domaine est auto-canonique et les deux se déclarent en hreflang
+//    (voir lib/seo.ts) ; l'hôte est validé par liste blanche ;
+//  - un hôte hors production (preview, *.vercel.app) est servi en noindex ;
 //  - titre, description et mots-clés sont lus dans le namespace propre à la
-//    page (registre ROUTES de lib/seo.ts) : toutes les pages passaient
-//    jusqu'ici ceux de « HomePage », donc partageaient le même titre ;
-//  - title en `absolute` : le gabarit du layout n'ajoute plus le nom du
-//    site une seconde fois (les titres le contiennent déjà) ;
-//  - hreflang avec x-default, locale Open Graph valide, image 1200 × 630.
+//    page (registre ROUTES de lib/seo.ts) ;
+//  - title en `absolute` : le gabarit du layout n'ajoute pas le nom du site
+//    une seconde fois (les titres le contiennent déjà).
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { defaultLocale, locales } from '@/i18n/config';
+import { getRequestSite } from '@/lib/request-site';
 import {
   OG_IMAGE,
   OG_LOCALES,
+  ORGANIZATION,
   SITE_NAME,
-  SITE_URL,
   absoluteUrl,
   getRoute,
   isLocale,
@@ -47,6 +46,14 @@ type MetaOptions = {
   noindex?: boolean;
 };
 
+// Codes de vérification des propriétaires (Search Console / Bing), optionnels.
+const verification = {
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+  ...(process.env.BING_SITE_VERIFICATION
+    ? { other: { 'msvalidate.01': process.env.BING_SITE_VERIFICATION } }
+    : {}),
+};
+
 export async function buildMetadata({
   locale: rawLocale,
   path,
@@ -58,6 +65,8 @@ export async function buildMetadata({
   noindex = false,
 }: MetaOptions): Promise<Metadata> {
   const locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
+  const { origin, indexable } = await getRequestSite();
+  const hidden = noindex || !indexable;
 
   let title = fallbackTitle;
   let description = fallbackDescription;
@@ -75,18 +84,24 @@ export async function buildMetadata({
     keywords = t.has('meta.keywords') ? t('meta.keywords') : keywords;
   }
 
-  const url = absoluteUrl(locale, path);
+  const url = absoluteUrl(locale, path, origin);
 
   return {
-    metadataBase: new URL(SITE_URL),
+    metadataBase: new URL(origin),
     title: { absolute: title },
     description,
     keywords: keywords || undefined,
+    applicationName: SITE_NAME,
+    authors: [{ name: SITE_NAME, url: origin }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
+    category: 'business',
+    formatDetection: { telephone: false, email: false, address: false },
     alternates: {
       canonical: url,
       languages: languageAlternates(path),
     },
-    robots: noindex
+    robots: hidden
       ? { index: false, follow: false }
       : {
           index: true,
@@ -99,6 +114,7 @@ export async function buildMetadata({
             'max-video-preview': -1,
           },
         },
+    verification: Object.keys(verification).length > 0 ? verification : undefined,
     openGraph: {
       type,
       siteName: SITE_NAME,
@@ -123,6 +139,13 @@ export async function buildMetadata({
       images: [image],
       site: '@IRIS_JE',
       creator: '@IRIS_JE',
+    },
+    other: {
+      // Signaux géographiques (secondaires, mais cohérents avec le JSON-LD)
+      'geo.region': 'TN-61',
+      'geo.placename': ORGANIZATION.address.addressLocality,
+      'geo.position': `${ORGANIZATION.geo.latitude};${ORGANIZATION.geo.longitude}`,
+      ICBM: `${ORGANIZATION.geo.latitude}, ${ORGANIZATION.geo.longitude}`,
     },
   };
 }
