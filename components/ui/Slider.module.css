@@ -294,9 +294,16 @@
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
+  /* Hauteur pilotée par le contenu (et non par un ratio fixe) : la diapositive la plus
+     haute fixe la hauteur de toutes, donc le texte n'est jamais rogné, quelle que soit
+     la largeur, la langue (fr/en/ar) ou la taille de police du système. */
   .sliderContainer {
-    aspect-ratio: 16 / 7;
-    min-height: 200px; /* augmenté pour laisser la place aux dots en bas */
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  .sliderTrack {
+    height: auto;
   }
 
   .slide {
@@ -304,6 +311,8 @@
     padding: 1.25rem 2.75rem 2.75rem;
     align-items: flex-start;
     padding-top: 1.5rem;
+    height: auto;
+    min-height: 200px;
   }
 
   /* Mobile : l'illustration est recadrée sur la droite et atténuée par un voile
@@ -421,13 +430,9 @@
 }
 
 @media (max-width: 480px) {
-  .sliderContainer {
-    aspect-ratio: auto;
-    min-height: 220px; /* hauteur fixe garantissant l'espace pour texte + dots */
-  }
-
   .slide {
     padding: 1rem 2.25rem 2.5rem;
+    min-height: 220px; /* garantit l'espace pour texte + dots */
   }
 
   .slideIcon {
