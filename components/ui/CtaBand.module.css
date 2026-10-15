@@ -1,0 +1,102 @@
+/* components/ui/CtaBand.module.css */
+
+/* `section.band` (élément + classe) l'emporte sur la classe globale
+   `.placeholder` (min-height, padding, bordure) sans dépendre de l'ordre
+   de chargement des feuilles de style. */
+section.band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: auto;
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  border-bottom: none;
+  color: var(--text-inverse);
+
+  /* Voile bleu nuit (lisibilité du texte) + illustration UNIQUE (2048×1024).
+     La moitié droite de l'image = l'illustration carrée d'origine (aigle) ;
+     la moitié gauche = fond étendu pour les grands écrans.
+     L'aigle est à droite : on ancre à droite (80 %) et on cadre sur sa tête
+     et ses épaules (26 % en vertical). */
+  background-color: #173a67;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(13, 38, 68, 0.82) 0%,
+      rgba(13, 38, 68, 0.62) 55%,
+      rgba(13, 38, 68, 0.32) 100%
+    ),
+    url('/cta-bg.webp');
+  background-size: cover, cover;
+  background-position: center, 80% 26%;
+  background-repeat: no-repeat;
+}
+
+.inner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-inverse);
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+/* `section.band p.xxx` (0,2,2) + !important : bat la règle RTL de l'accueil
+   `.rtlPage .placeholder p { text-align: justify !important }`. */
+section.band p.description {
+  max-width: 600px;
+  margin: 0 0 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: center !important;
+}
+
+section.band p.note {
+  max-width: 520px;
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center !important;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Mobiles + tablettes (< 1024px) : même image, cadrée sur sa moitié droite
+   (l'aigle) + voile plus dense (le texte recouvre l'illustration) */
+@media (max-width: 1023px) {
+  section.band {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(13, 38, 68, 0.78) 0%,
+        rgba(13, 38, 68, 0.66) 100%
+      ),
+      url('/cta-bg.webp');
+    background-position: center, 92% 30%;
+  }
+}
+
+/* Contraste renforcé / mouvement : rien d'animé ici, voile simplifié */
+@media (forced-colors: active) {
+  section.band {
+    background-image: none;
+  }
+}
