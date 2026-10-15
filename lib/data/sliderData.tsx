@@ -14,6 +14,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('services.title'),
       description: t('services.description'),
       icon: <Icons.FlexibleSolutions size={32} stroke="currentColor" />,
+      image: '/slider/services-bg.svg',
       cta: { label: t('services.cta'), href: `/${locale}/services` },
     },
     {
@@ -21,6 +22,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('it.title'),
       description: t('it.description'),
       icon: <Icons.CodeSlash size={32} stroke="currentColor" />,
+      image: '/slider/it-bg.svg',
       cta: { label: t('it.cta'), href: `/${locale}/services#it` },
     },
     {
@@ -28,6 +30,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('branding.title'),
       description: t('branding.description'),
       icon: <Icons.Palette size={32} stroke="currentColor" />,
+      image: '/slider/branding-bg.svg',
       cta: { label: t('branding.cta'), href: `/${locale}/services#marketing` },   
     },
     {
@@ -35,6 +38,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('etudes.title'),
       description: t('etudes.description'),
       icon: <Icons.Business_dep size={32} stroke="currentColor" />,
+      image: '/slider/etudes-bg.svg',
       cta: { label: t('etudes.cta'), href: `/${locale}/services#etudes` },
     },
     {
@@ -42,6 +46,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('partenariat.title'),
       description: t('partenariat.description'),
       icon: <Icons.Share size={32} stroke="currentColor" />,
+      image: '/slider/partenariat-bg.svg',
       cta: { label: t('partenariat.cta'), href: `/${locale}/contact` },
     },
   ];
@@ -52,6 +57,7 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       title: t('recrutement.title'),
       description: t('recrutement.description'),
       icon: <Icons.User size={32} stroke="currentColor" />,
+      image: '/slider/recrutement-bg.svg',
       cta: { label: t('recrutement.cta'), href: `/${locale}/recrutement` },
     });
   }

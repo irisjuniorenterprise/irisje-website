@@ -119,7 +119,13 @@ export default function Slider({
           {slides.map((slide, index) => (
             <div
               key={slide.id}
-              className={styles.slide}
+              className={`${styles.slide} ${slide.image ? styles.slideWithImage : ''}`}
+              // Image de fond optionnelle, transmise au CSS via une variable
+              style={
+                slide.image
+                  ? ({ '--slide-bg': `url("${slide.image}")` } as React.CSSProperties)
+                  : undefined
+              }
               role="group"
               aria-roledescription="Diapositive"
               aria-label={`${index + 1} sur ${totalSlides}`}

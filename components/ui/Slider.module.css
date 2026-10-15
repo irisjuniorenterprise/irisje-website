@@ -47,6 +47,28 @@
   overflow: hidden;
 }
 
+/* Diapositive avec illustration de fond (variable --slide-bg posée par Slider.tsx).
+   Le dégradé d'origine reste en dessous comme couleur de repli. */
+.slideWithImage {
+  background-image:
+    var(--slide-bg),
+    linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+  background-size: cover, auto;
+  background-position: center, 0 0;
+  background-repeat: no-repeat, no-repeat;
+}
+
+/* Voile blanc doux derrière le contenu (icône + texte) : il estompe l'illustration
+   exactement là où se trouve le texte, quelle que soit la largeur d'écran.
+   Le halo (box-shadow) le fond dans l'arrière-plan : aucun bord visible. */
+.slideWithImage .slideContent {
+  box-sizing: border-box;
+  padding: 0.75rem 1.25rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0 22px 16px rgba(255, 255, 255, 0.82);
+}
+
 .slideContent {
   display: flex;
   align-items: center;
@@ -266,6 +288,24 @@
     padding: 1.25rem 2.75rem 2.75rem;
     align-items: flex-start;
     padding-top: 1.5rem;
+  }
+
+  /* Mobile : l'illustration est recadrée sur la droite et atténuée par un voile
+     clair pour que le texte reste parfaitement lisible */
+  .slideWithImage .slideContent {
+    padding: 0.5rem 0.75rem;
+    border-radius: 18px;
+    box-shadow: 0 0 16px 10px rgba(255, 255, 255, 0.82);
+  }
+
+  .slideWithImage {
+    background-image:
+      linear-gradient(rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.6)),
+      var(--slide-bg),
+      linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+    background-size: auto, cover, auto;
+    background-position: 0 0, 100% center, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat;
   }
 
   .slideContent {
