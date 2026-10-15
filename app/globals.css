@@ -526,6 +526,11 @@ html:has(body.menu-open) {
 /* =====================================================
    PLACEHOLDERS
    ===================================================== */
+/* ⚠️ Révélation au scroll (ClientSideEffects) : la classe `in-view` est
+   ajoutée par script, éventuellement AVANT l'hydratation React de la
+   section. Tout <section className="placeholder…"> doit donc porter
+   `suppressHydrationWarning`, sinon la console affiche une erreur
+   « hydration mismatch » en dev (le DOM garde bien `in-view`). */
 .placeholder {
   min-height: 38vh;
   display: flex;

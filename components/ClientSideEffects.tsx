@@ -6,6 +6,19 @@ import { usePathname } from 'next/navigation';
 
 // Éléments révélés au scroll (fondu + glissement) : invisibles (opacity: 0)
 // tant que la classe `in-view` ne leur est pas ajoutée (voir globals.css).
+//
+// ⚠️ La classe est ajoutée ICI, c'est-à-dire par un script — et le contenu
+// streamé peut se trouver dans le DOM plus tôt que son hydratation React.
+// React comparerait alors `class="placeholder in-view"` (DOM) à son propre
+// rendu `class="placeholder"` → erreur « hydration mismatch » en dev.
+// Chaque élément ciblé par REVEAL_SELECTOR doit donc porter
+// `suppressHydrationWarning` : React cesse de comparer les attributs de
+// l'élément, le DOM garde `in-view` (aucun « rattrapage ») et l'apparition
+// de la section fonctionne comme prévu. C'est le même principe que
+// `suppressHydrationWarning` sur <html>/<body> du layout (menu mobile).
+//
+// Note : `.site-footer` ne correspond actuellement à rien (le footer utilise
+// une classe de module) — sélecteur conservé par sécurité.
 const REVEAL_SELECTOR = '.placeholder, .site-footer';
 // Sections suivies par le scrollspy
 const SECTION_SELECTOR = 'main section[id]';
