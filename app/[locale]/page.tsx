@@ -6,6 +6,7 @@ import logoData from '@/public/logo-s-no-bg.png';
 import Slider from '@/components/ui/Slider';
 import { getSliderSlides } from '@/lib/data/sliderData';
 import { Icons } from '@/components/icons/Icons';
+import { visuallyHidden } from '@/components/ui/visuallyHidden';
 import styles from './page.module.css';
 
 import { buildMetadata } from '@/lib/metadata';
@@ -166,6 +167,8 @@ export default async function HomePage({ params }: Props) {
             <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
               <Link href={`/${locale}/a-propos`} className="btn btn-cta">
                 {t('about.cta')}
+                {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
+                <span style={visuallyHidden}>{` — ${t('about.title')}`}</span>
               </Link>
             </div>
           </div>

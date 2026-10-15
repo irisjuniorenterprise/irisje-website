@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Icons } from '@/components/icons/Icons';
+import { visuallyHidden } from '@/components/ui/visuallyHidden';
 import styles from './Slider.module.css';
 
 export type Slide = {
@@ -131,6 +132,8 @@ export default function Slider({
                   {slide.cta && (
                     <a href={slide.cta.href} className={styles.slideCta}>
                       {slide.cta.label}
+                      {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
+                      <span style={visuallyHidden}>{` — ${slide.title}`}</span>
                       <Icons.ChevronRight size={16} />
                     </a>
                   )}
