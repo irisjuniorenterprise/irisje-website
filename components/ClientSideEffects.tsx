@@ -4,46 +4,21 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+// Éléments révélés au scroll (fondu + glissement) : invisibles (opacity: 0)
+// tant que la classe `in-view` ne leur est pas ajoutée (voir globals.css).
+const REVEAL_SELECTOR = '.placeholder, .site-footer';
+// Sections suivies par le scrollspy
+const SECTION_SELECTOR = 'main section[id]';
+
 export default function ClientSideEffects() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Fonction qui exécute les effets
-    const runEffects = () => {
-      // --- Scrollspy ---
-      const navLinks = document.querySelectorAll<HTMLAnchorElement>(
-        '.nav-link, .mobile-link'
-      );
-      const sections = document.querySelectorAll<HTMLElement>('main section[id]');
+    const hasObserver = 'IntersectionObserver' in window;
 
-      // Nettoyer les anciens observateurs en les stockant globalement
-      if ((window as any).__spyObserver) {
-        (window as any).__spyObserver.disconnect();
-      }
-      if ((window as any).__revealObserver) {
-        (window as any).__revealObserver.disconnect();
-      }
-
-      if ('IntersectionObserver' in window) {
-        // --- Scrollspy ---
-        const spy = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const id = entry.target.id;
-                navLinks.forEach((link) => {
-                  link.classList.toggle('active', link.dataset.target === id);
-                });
-              }
-            });
-          },
-          { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
-        );
-        sections.forEach((s) => spy.observe(s));
-        (window as any).__spyObserver = spy;
-
-        // --- Reveal placeholder + footer ---
-        const reveal = new IntersectionObserver(
+    // --- Révélation au scroll ---
+    const reveal = hasObserver
+      ? new IntersectionObserver(
           (entries, obs) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
@@ -53,49 +28,76 @@ export default function ClientSideEffects() {
             });
           },
           { threshold: 0.15 }
-        );
+        )
+      : null;
 
-        const elements = document.querySelectorAll('.placeholder, .site-footer');
-        // Réinitialiser les classes in-view avant de réobserver
-        elements.forEach((el) => {
-          el.classList.remove('in-view');
-          reveal.observe(el);
-        });
+    // --- Scrollspy ---
+    const spy = hasObserver
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id;
+                document
+                  .querySelectorAll<HTMLAnchorElement>('.nav-link, .mobile-link')
+                  .forEach((link) => {
+                    link.classList.toggle('active', link.dataset.target === id);
+                  });
+              }
+            });
+          },
+          { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+        )
+      : null;
 
-        (window as any).__revealObserver = reveal;
+    // Éléments déjà pris en charge (évite de les observer deux fois)
+    const known = new WeakSet<Element>();
 
-        // Si aucun élément n'est trouvé, on force l'affichage
-        if (elements.length === 0) {
-          document.querySelectorAll('.placeholder, .site-footer').forEach((el) => {
-            el.classList.add('in-view');
-          });
-        }
-      } else {
-        // Fallback
-        document.querySelectorAll('.placeholder, .site-footer').forEach((el) => {
-          el.classList.add('in-view');
-        });
+    const track = (el: Element, resetRevealed: boolean) => {
+      if (known.has(el)) return;
+      known.add(el);
+
+      if (el.matches(REVEAL_SELECTOR)) {
+        // Rejoue l'animation d'un élément persistant (le footer ne change pas
+        // de page : on le « referme » puis on le réobserve)
+        if (resetRevealed) el.classList.remove('in-view');
+        if (reveal) reveal.observe(el);
+        else el.classList.add('in-view'); // navigateur sans IntersectionObserver
       }
+      if (spy && el.matches(SECTION_SELECTOR)) spy.observe(el);
     };
 
-    // Exécuter après un court délai pour laisser le DOM se stabiliser
-    const timer = setTimeout(() => {
-      runEffects();
-    }, 100);
+    const trackWithin = (root: ParentNode, resetRevealed: boolean) => {
+      if (root instanceof Element) track(root, resetRevealed);
+      root
+        .querySelectorAll(`${REVEAL_SELECTOR}, ${SECTION_SELECTOR}`)
+        .forEach((el) => track(el, resetRevealed));
+    };
+
+    // 1) Ce qui est déjà dans la page
+    trackWithin(document, true);
+
+    // 2) Ce qui arrive APRÈS : lors d'une navigation côté client, le chemin
+    // change alors que le contenu de la page est encore en cours de
+    // chargement (écran loading.tsx affiché, puis streaming). Un scan unique
+    // à un instant donné rate ces sections, qui restent à opacity: 0 — la page
+    // n'apparaît alors qu'après un rechargement complet (Ctrl+R). On observe
+    // donc le DOM et on prend en charge chaque nouvel élément dès son arrivée.
+    const mutations = new MutationObserver((records) => {
+      records.forEach((record) => {
+        record.addedNodes.forEach((node) => {
+          if (node instanceof Element) trackWithin(node, false);
+        });
+      });
+    });
+    mutations.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      clearTimeout(timer);
-      // Nettoyer les observateurs
-      if ((window as any).__spyObserver) {
-        (window as any).__spyObserver.disconnect();
-        delete (window as any).__spyObserver;
-      }
-      if ((window as any).__revealObserver) {
-        (window as any).__revealObserver.disconnect();
-        delete (window as any).__revealObserver;
-      }
+      mutations.disconnect();
+      reveal?.disconnect();
+      spy?.disconnect();
     };
-  }, [pathname]); // Déclenché à chaque changement de route
+  }, [pathname]); // Relancé à chaque changement de route
 
   return null;
 }
