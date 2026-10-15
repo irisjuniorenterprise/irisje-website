@@ -222,6 +222,75 @@
   transform: translateY(-3px);
 }
 
+/* ============================================================
+   ANIMATION DES ICÔNES - RYTHME 1-2-3
+   ----------------------------------------------------------
+   Seule l'icône de chaque lien s'anime (pas la carte, pas le
+   texte) : un « battement » en boucle, et un temps par lien.
+
+   RÈGLE DU RYTHME : un temps doit être TERMINÉ avant que le
+   suivant ne démarre, sans quoi deux icônes bougent ensemble
+   au lieu de se répondre. Concrètement, il faut donc :
+       délai entre deux temps  >=  durée d'un battement
+   Le cycle (3,6s) est divisé en 3 parts égales de 1,2s, et le
+   battement occupe 0,6s de sa part — soit autant de mouvement
+   que de silence. C'est cet équilibre 50/50 qui donne un tempo
+   posé : un temps toutes les 1,2s (≈ 50 pulsations/minute).
+   Un rapport mouvement/repos plus chargé se lirait comme de
+   l'animation pressée, pas comme un rythme.
+
+   Les délais sont écrits en calc(var(--beat) * n) pour que le
+   décalage reste explicitement un MULTIPLE du temps : si l'on
+   change le rythme, on ne peut pas recréer un chevauchement par
+   inattention.
+   ============================================================ */
+.valueIcon {
+  display: flex;
+  /* Durée d'une part = cycle / 3 temps */
+  --beat: 1.2s;
+  animation: iconBeat 3.6s var(--ease) infinite;
+}
+
+/* Le décalage rythmique se pose sur le lien parent : l'icône
+   est un descendant unique, donc `nth-child` cible bien les 3
+   cartes (et non 3 icônes d'une même carte). */
+.valueLink:nth-child(1) .valueIcon {
+  animation-delay: calc(var(--beat) * 0); /* temps 1 : IT */
+}
+.valueLink:nth-child(2) .valueIcon {
+  animation-delay: calc(var(--beat) * 1); /* temps 2 : Marketing */
+}
+.valueLink:nth-child(3) .valueIcon {
+  animation-delay: calc(var(--beat) * 2); /* temps 3 : Études */
+}
+
+@keyframes iconBeat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  /* Montée : 8% de 3,6s = 0,3s. L'accent est sur le départ
+     du mouvement, sans à-coup. */
+  8% {
+    transform: translateY(-6px) scale(1.08);
+  }
+  /* Retour amorti : 17% de 3,6s = 0,6s au total, sans rebond
+     secondaire. */
+  17% {
+    transform: translateY(0) scale(1);
+  }
+  /* 17% -> 100% (0,6s -> 3,6s) : silence de 3s, au cours
+     duquel les deux autres temps jouent à leur tour. Chaque
+     icône se repose donc 2,4s entre deux de ses battements. */
+}
+
+/* Au survol du lien, l'icône se fige sur son point haut :
+   le geste rythmique cède la place à un état « actif ». */
+.valueLink:hover .valueIcon {
+  animation-play-state: paused;
+  transform: translateY(-4px) scale(1.06);
+}
+
 .valueArrow {
   display: flex;
   justify-content: center;

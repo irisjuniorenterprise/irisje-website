@@ -114,6 +114,7 @@ export default async function ServicesPage({ params }: Props) {
                 className={`${isRtl ? styles.valueCardRtl : styles.valueCard} ${styles.valueLink}`}
               >
                 <div
+                  className={styles.valueIcon}
                   style={{
                     display: 'flex',
                     justifyContent: 'center',
