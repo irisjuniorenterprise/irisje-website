@@ -89,17 +89,7 @@ export default async function ServicesPage({ params }: Props) {
           >
             {t('introduction.description')}
           </p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1.5rem',
-              marginTop: '2rem',
-              maxWidth: '700px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
+          <div className={styles.valueNav}>
             {[
               {
                 id: 'it',
