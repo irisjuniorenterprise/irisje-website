@@ -89,7 +89,7 @@ export default async function HomePage({ params }: Props) {
           SLIDER
           ============================================================ */}
       {/* Section snap à part entière : sans elle, le snap scroll saute par-dessus le slider */}
-      <section className="placeholder" id="slider" style={{ textAlign: 'start' }}>
+      <section className="placeholder" suppressHydrationWarning id="slider" style={{ textAlign: 'start' }}>
         <div className="container">
           <Slider slides={slides} autoplay={false} locale={locale} />
         </div>
@@ -98,7 +98,7 @@ export default async function HomePage({ params }: Props) {
       {/* ============================================================
           SECTION SERVICES
           ============================================================ */}
-      <section className="placeholder" id="services">
+      <section className="placeholder" suppressHydrationWarning id="services">
         <div className="container">
           <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
             <h2 className="section-title" style={{ marginBottom: '1rem' }}>
@@ -130,6 +130,7 @@ export default async function HomePage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder section-alt"
+        suppressHydrationWarning
         id="a-propos"
         style={{
           borderBottom: '1px solid var(--border-light)',
@@ -180,6 +181,7 @@ export default async function HomePage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="devis"
         style={{
           borderBottom: '1px solid var(--border-light)',

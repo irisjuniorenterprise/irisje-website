@@ -129,6 +129,7 @@ export default async function AProposPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="qui-sommes-nous"
         style={{ minHeight: 'auto', padding: '4rem 0' }}
       >
@@ -197,6 +198,7 @@ export default async function AProposPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder section-alt"
+        suppressHydrationWarning
         id="notre-mission"
         style={{
           minHeight: 'auto',
@@ -238,6 +240,7 @@ export default async function AProposPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="notre-vision"
         style={{
           minHeight: 'auto',
@@ -287,6 +290,7 @@ export default async function AProposPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder section-alt"
+        suppressHydrationWarning
         id="nos-valeurs"
         style={{
           minHeight: 'auto',
@@ -313,6 +317,7 @@ export default async function AProposPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="nous-trouver"
         style={{
           minHeight: 'auto',

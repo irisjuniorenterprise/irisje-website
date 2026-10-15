@@ -72,6 +72,7 @@ export default async function ServicesPage({ params }: Props) {
       {/* INTRODUCTION */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="introduction"
         style={{ minHeight: 'auto', padding: '4rem 0' }}
       >
@@ -156,6 +157,7 @@ export default async function ServicesPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder section-alt"
+        suppressHydrationWarning
         id="it"
         style={{
           minHeight: 'auto',
@@ -266,6 +268,7 @@ export default async function ServicesPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
         id="marketing"
         style={{
           minHeight: 'auto',
@@ -351,6 +354,7 @@ export default async function ServicesPage({ params }: Props) {
           ============================================================ */}
       <section
         className="placeholder section-alt"
+        suppressHydrationWarning
         id="etudes"
         style={{
           minHeight: 'auto',
