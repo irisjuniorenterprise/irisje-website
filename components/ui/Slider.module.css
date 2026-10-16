@@ -97,6 +97,46 @@
   stroke: currentColor;
 }
 
+/* ============================================================
+   ANIMATION DE L'ICÔNE - FLOTTEMENT HAUT / BAS
+   ----------------------------------------------------------
+   L'icône ronde de chaque diapositive monte et descend en
+   boucle continue, sans intervention de JavaScript.
+
+   - amplitude faible (8 px) : un flottement, pas un saut ;
+   - 3 s par cycle (0→haut en 1,5 s, retour en 1,5 s) : lent
+     Volontairement, il n'y a PAS de temps d'arrêt comme sur les
+     cartes de prestation (services) : ici le geste doit se lire
+     comme un « qui flotte », continu par nature. Sur un cycle
+     court, la même oscillation deviendrait une vibration.
+   - `ease-in-out` : arrêt progressif en haut et en bas, donc
+     aucun accroc au moment de l'inversion ;
+   - `0%` et `100%` identiques : le rebouclage est invisible.
+   ============================================================ */
+@keyframes iconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  /* Position haute : la moitié exacte du cycle, pour un
+     aller-retour symétrique. */
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.slideIcon {
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+/* Accessibilité : mouvement purement décoratif, donc neutralisé
+   pour les utilisateurs qui demandent une réduction des animations. */
+@media (prefers-reduced-motion: reduce) {
+  .slideIcon {
+    animation: none;
+  }
+}
+
 .slideText {
   flex: 1;
   min-width: 0; /* évite le débordement du texte dans le flex */
