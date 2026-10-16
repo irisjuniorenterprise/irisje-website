@@ -1,7 +1,14 @@
 // components/ui/Slider.tsx
 'use client';
 
-import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 import { Icons } from '@/components/icons/Icons';
 import { visuallyHidden } from '@/components/ui/visuallyHidden';
 import styles from './Slider.module.css';
@@ -132,33 +139,19 @@ const getReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ============================================================
-// GLISSEMENT AUX DOIGTS UNIQUEMENT
+// ANIMATION DU CHANGEMENT DE DIAPOSITIVE
 // ----------------------------------------------------------
-// - Mobile / tablette : UN doigt suffit (événements tactiles).
-// - Ordinateur : balayage horizontal à DEUX doigts sur le
-//   pavé tactile (événements `wheel` avec deltaX).
-// Dans les deux cas le contenu suit les doigts en temps réel,
-// puis se cale sur la diapositive voisine ou revient en place.
-// La souris (clic + glisser) n'est volontairement PAS utilisée.
+// La position de la piste est écrite DIRECTEMENT dans le style
+// (transform: translate3d en pixels), sans passer par l'état
+// React : un changement de diapositive ne fait qu'une écriture.
 // ============================================================
-const DRAG_START_PX = 6;          // seuil avant de considérer un geste comme un glissement
-const SWIPE_MIN_PX = 50;          // distance minimale pour changer de diapositive…
-const SWIPE_DISTANCE_RATIO = 0.2; // …ou 20 % de la largeur (le plus grand des deux)
-const FLICK_VELOCITY = 0.4;       // px/ms : un geste rapide suffit même s'il est court
-const EDGE_RESISTANCE = 0.35;     // effet « élastique » en bout de carrousel
-const SETTLE_MS = 500;            // durée du calage (identique à la transition CSS)
-const WHEEL_MIN_PX = 60;          // pavé tactile : distance minimale pour changer de diapositive…
-const WHEEL_RATIO = 0.15;         // …ou 15 % de la largeur (le plus grand des deux)
-const WHEEL_IDLE_MS = 120;        // silence = doigts levés : fin du geste
+const SETTLE_MS = 500;       // durée pour une diapositive voisine
+const SETTLE_EXTRA_MS = 120; // + par diapositive supplémentaire franchie (retour au début, points)
+const MAX_SETTLE_MS = 900;   // plafond : un long trajet reste vif
+const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
-type DragState = {
-  pointerId: number;
-  startX: number;
-  startY: number;
-  width: number;
-  active: boolean;
-  samples: { x: number; t: number }[];
-};
+// useLayoutEffect côté client (pas de « flash » de position), useEffect côté serveur
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function Slider({
   slides,
@@ -168,40 +161,29 @@ export default function Slider({
   locale = 'fr',
 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  // Pause TEMPORAIRE : survol à la souris ou focus clavier. Deux sources
-  // distinctes (un seul booléen se faisait écraser : un « blur » relançait
-  // l'avance alors que la souris était encore dessus, et inversement).
+  // Pause VOLONTAIRE : uniquement le bouton ⏸/▶. La navigation manuelle
+  // (flèches, points, clavier) ne coupe pas l'avance automatique :
+  // elle repart pour une durée complète sur la diapositive atteinte.
+  const [isUserPaused, setIsUserPaused] = useState(false);
+  // Pause TEMPORAIRE : survol souris ou focus clavier (deux sources distinctes)
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const isPaused = isHovered || isFocused;
-  // Pause VOLONTAIRE : uniquement le bouton ⏸/▶. La navigation manuelle
-  // (flèches, points, clavier, balayage) ne coupe plus l'avance automatique :
-  // elle repart pour une durée complète sur la diapositive atteinte.
-  const [isUserPaused, setIsUserPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const transitionTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  // Pas d'avance automatique si le carrousel n'est pas visible (hors écran / onglet masqué)
+  const [isInView, setIsInView] = useState(true);
+  const [isTabVisible, setIsTabVisible] = useState(true);
 
-  // Glissement : décalage en pixels appliqué en direct à la piste pendant le geste
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef<DragState | null>(null);
-  // Vrai si le geste vient d'être un glissement : sert à ignorer le « clic » fantôme
-  // qui suit le relâchement (sinon un lien CTA serait ouvert à la fin d'un glissement).
-  const didDragRef = useRef(false);
-  // Pavé tactile (deux doigts) : état du geste en cours, hors rendu
-  const wheelRef = useRef<{
-    active: boolean; // geste en cours, le contenu suit les doigts
-    locked: boolean; // changement fait : on ignore l'inertie jusqu'au silence
-    offset: number;
-    timer: ReturnType<typeof setTimeout> | null;
-  }>({ active: false, locked: false, offset: 0, timer: null });
-  // Dernières valeurs lues par l'écouteur `wheel` (installé une seule fois)
-  const latestRef = useRef({ currentIndex: 0, totalSlides: 0, isRtl: false, isTransitioning: false });
+  const rootRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Préférence système « réduire les animations », lue comme une source
-  // externe : le rendu serveur suppose `false`, le client répond `true`/`false`.
+  // Valeurs lues hors rendu
+  const widthRef = useRef(0);
+  const indexRef = useRef(0);
+  const prevIndexRef = useRef<number | null>(null);
+
+  // Préférence système « réduire les animations », lue comme une source externe
   const reducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     getReducedMotion,
@@ -209,6 +191,7 @@ export default function Slider({
   );
 
   const totalSlides = slides.length;
+  const hasSlides = totalSlides > 0;
   const isRtl = locale === 'ar';
   const l = LABELS[locale as keyof typeof LABELS] ?? LABELS.fr;
 
@@ -216,61 +199,95 @@ export default function Slider({
     setCurrentIndex(0);
   }, [slides]);
 
-  // L'avance automatique est possible si elle est demandée par la page,
-  // qu'il y a au moins 2 diapositives et que le système n'exige pas moins
-  // d'animations. `isUserPaused` décide ensuite si elle tourne vraiment.
-  const autoPlayAvailable = autoplay && totalSlides > 1 && !reducedMotion;
-  const autoPlayRunning = autoPlayAvailable && !isUserPaused;
+  // ------------------------------------------------------------
+  // Position de la piste (écriture directe dans le style)
+  // ------------------------------------------------------------
+  // RTL : la 1re diapositive est à droite, la suite se lit de droite à gauche
+  const restX = useCallback(
+    (index: number) => (isRtl ? 1 : -1) * index * widthRef.current,
+    [isRtl]
+  );
 
-  // Durée d'affichage de la diapositive COURANTE : imposée par `interval`
-  // si la page en fournit une, sinon adaptative selon le texte à lire
-  // (cf. getDwellMs). La lecture se règle donc sur le contenu réel, pas
-  // sur un rythme unique imposé à des textes de longueurs différentes.
-  const currentDwellMs = interval ?? getDwellMs(slides[currentIndex]);
+  const settleMs = useCallback(
+    (distance: number) =>
+      reducedMotion
+        ? 0
+        : Math.min(MAX_SETTLE_MS, SETTLE_MS + Math.max(0, distance - 1) * SETTLE_EXTRA_MS),
+    [reducedMotion]
+  );
 
-  // Une pression sur ⏸ stoppe et coupe le timer ; une pression sur ▶
-  // remet la lecture en route (le timer repart alors pour un intervalle
-  // complet, sans course résiduelle).
-  const toggleAutoPlay = useCallback(() => setIsUserPaused((paused) => !paused), []);
-
-  // Active la transition CSS le temps du calage (changement de diapositive ou retour en place)
-  const settle = useCallback(() => {
-    setIsTransitioning(true);
-    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
-    transitionTimerRef.current = setTimeout(() => setIsTransitioning(false), SETTLE_MS);
-  }, []);
-
-  useEffect(
-    () => () => {
-      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+  /** Place la piste ; `ms > 0` anime le déplacement depuis la position visible actuelle. */
+  const paint = useCallback(
+    (x: number, ms: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      if (ms > 0) {
+        // Lecture forcée : fige la position de départ avant de poser la transition
+        // (sinon Safari peut animer depuis une ancienne valeur)
+        void track.offsetWidth;
+        track.style.transition = `transform ${ms}ms ${EASING}`;
+      } else {
+        track.style.transition = 'none';
+      }
+      track.style.transform = `translate3d(${x}px, 0, 0)`;
     },
     []
   );
 
-  const goToSlide = useCallback(
-    (index: number) => {
-      if (isTransitioning || index === currentIndex) return;
-      settle();
-      setCurrentIndex(index);
-    },
-    [currentIndex, isTransitioning, settle]
+  // Largeur réelle : mesurée, puis suivie (rotation de l'écran, redimensionnement)
+  useIsoLayoutEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const measure = () => {
+      const width = el.getBoundingClientRect().width;
+      if (width === widthRef.current) return; // changement de hauteur seulement : on ne touche à rien
+      widthRef.current = width;
+      paint(restX(indexRef.current), 0);
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasSlides, paint, restX]);
+
+  // Changement de diapositive (flèches, points, clavier, timer) : déplacement animé
+  useIsoLayoutEffect(() => {
+    indexRef.current = currentIndex;
+    const previous = prevIndexRef.current;
+    prevIndexRef.current = currentIndex;
+    if (previous === null || previous === currentIndex) {
+      paint(restX(currentIndex), 0); // premier rendu (ou changement de sens RTL) : sans animation
+      return;
+    }
+    paint(restX(currentIndex), settleMs(Math.abs(currentIndex - previous)));
+  }, [currentIndex, paint, restX, settleMs]);
+
+  // ------------------------------------------------------------
+  // Avance automatique
+  // ------------------------------------------------------------
+  // Possible si demandée par la page, ≥ 2 diapositives, et pas de préférence
+  // « réduire les animations ». `isUserPaused` décide ensuite si elle tourne.
+  const autoPlayAvailable = autoplay && totalSlides > 1 && !reducedMotion;
+  const autoPlayRunning = autoPlayAvailable && !isUserPaused;
+  const isOnScreen = isInView && isTabVisible;
+
+  // Durée d'affichage de la diapositive COURANTE : imposée par `interval` si la
+  // page en fournit une, sinon adaptative selon le texte à lire (cf. getDwellMs).
+  const currentDwellMs = interval ?? getDwellMs(slides[currentIndex]);
+
+  const toggleAutoPlay = useCallback(() => setIsUserPaused((paused) => !paused), []);
+
+  // Navigation : updaters fonctionnels → identités stables, aucun callback périmé
+  const goToSlide = useCallback((index: number) => setCurrentIndex(index), []);
+  const goToNext = useCallback(
+    () => setCurrentIndex((i) => (i + 1) % totalSlides),
+    [totalSlides]
   );
-
-  const goToNext = useCallback(() => {
-    goToSlide((currentIndex + 1) % totalSlides);
-  }, [currentIndex, goToSlide, totalSlides]);
-
-  // Avance du timer : indépendante de `isTransitioning` et de `currentIndex`
-  // (updater fonctionnel) → identité stable, jamais de timer « perdu » parce
-  // qu'un callback périmé a été capturé pendant un calage.
-  const advance = useCallback(() => {
-    settle();
-    setCurrentIndex((i) => (i + 1) % totalSlides);
-  }, [settle, totalSlides]);
-
-  const goToPrev = useCallback(() => {
-    goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
-  }, [currentIndex, goToSlide, totalSlides]);
+  const goToPrev = useCallback(
+    () => setCurrentIndex((i) => (i - 1 + totalSlides) % totalSlides),
+    [totalSlides]
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -280,203 +297,47 @@ export default function Slider({
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
         isRtl ? goToNext() : goToPrev();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
       }
     },
-    [goToNext, goToPrev, isRtl]
+    [goToNext, goToPrev, goToSlide, isRtl, totalSlides]
   );
 
+  // Visibilité : l'avance s'arrête hors écran et quand l'onglet est masqué
+  // (économie de CPU / batterie, et pas de diapositives qui défilent dans le vide)
   useEffect(() => {
-    // Timer uniquement si : avance auto rendue possible (demandée par la
-    // page, ≥ 2 diapositives, pas de préférence « réduire les animations »),
-    // non interrompue par l'utilisateur (bouton ⏸ ou navigation manuelle),
-    // et curseur/focus hors du carrousel (sinon la lecture s'interrompt le
-    // temps du survol ou du focus clavier).
-    if (autoPlayRunning && !isPaused && !isDragging) {
-      // setTimeout (et non setInterval) : chaque diapositive a sa propre
-      // durée, calculée d'après la longueur de son texte. Le compteur
-      // repart à zéro à chaque changement, jamais au milieu d'une lecture.
-      // `currentIndex` est une dépendance explicite : avec une durée identique
-      // d'une diapositive à l'autre (prop `interval`, ou plancher de 4,5 s),
-      // rien d'autre ne relancerait le timer après un changement manuel.
-      timerRef.current = setTimeout(advance, currentDwellMs);
+    const onVisibility = () => setIsTabVisible(!document.hidden);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasSlides]);
+
+  useEffect(() => {
+    // setTimeout (et non setInterval) : chaque diapositive a sa propre durée.
+    // `currentIndex` est une dépendance explicite : avec une durée identique d'une
+    // diapositive à l'autre, rien d'autre ne relancerait le timer après un changement.
+    if (autoPlayRunning && !isPaused && isOnScreen) {
+      timerRef.current = setTimeout(goToNext, currentDwellMs);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isPaused, isDragging, advance, currentDwellMs, currentIndex]);
-
-  useEffect(() => {
-    latestRef.current = { currentIndex, totalSlides, isRtl, isTransitioning };
-  });
-
-  // ------------------------------------------------------------
-  // Balayage à DEUX doigts sur pavé tactile (ordinateur)
-  // ------------------------------------------------------------
-  // Le navigateur reçoit ce geste sous forme d'événements `wheel` avec un
-  // deltaX. Écouteur natif non passif (et non `onWheel` de React) : il faut
-  // pouvoir appeler preventDefault() pour empêcher le navigateur d'interpréter
-  // le geste comme « page précédente / suivante ».
-  // Le défilement vertical normal (deltaY dominant) n'est jamais intercepté.
-  const hasSlides = totalSlides > 0;
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const wheel = wheelRef.current;
-
-    // Silence prolongé = les doigts ont quitté le pavé
-    const endGesture = () => {
-      wheel.timer = null;
-      const wasActive = wheel.active;
-      wheel.active = false;
-      wheel.locked = false;
-      wheel.offset = 0;
-      if (wasActive) {
-        // Seuil non atteint : retour en place en douceur
-        settle();
-        setIsDragging(false);
-        setDragOffset(0);
-      }
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) return; // pincement (zoom) : hors sujet
-      const { currentIndex, totalSlides, isRtl, isTransitioning } = latestRef.current;
-      const unit = e.deltaMode === 1 ? 16 : 1; // Firefox peut compter en lignes
-      const dx = e.deltaX * unit;
-      const dy = e.deltaY * unit;
-
-      if (!wheel.active && !wheel.locked) {
-        if (totalSlides < 2 || isTransitioning) return;
-        // Geste vertical ou micro-mouvement : on laisse la page défiler
-        if (Math.abs(dx) < 2 || Math.abs(dx) <= Math.abs(dy)) return;
-        wheel.active = true;
-        wheel.offset = 0;
-        setIsDragging(true);
-      }
-
-      e.preventDefault();
-      if (wheel.timer) clearTimeout(wheel.timer);
-      wheel.timer = setTimeout(endGesture, WHEEL_IDLE_MS);
-      if (wheel.locked) return; // inertie du pavé après un changement : ignorée
-
-      // Les doigts vont vers la gauche (deltaX > 0) : le contenu part vers la gauche
-      const width = el.getBoundingClientRect().width;
-      wheel.offset = Math.max(-width, Math.min(width, wheel.offset - dx));
-      const forward = isRtl ? wheel.offset > 0 : wheel.offset < 0;
-      const atEdge =
-        (forward && currentIndex === totalSlides - 1) || (!forward && currentIndex === 0);
-      setDragOffset(atEdge ? wheel.offset * EDGE_RESISTANCE : wheel.offset);
-
-      // Seuil atteint : on change tout de suite, puis on ignore l'inertie
-      if (!atEdge && Math.abs(wheel.offset) >= Math.max(WHEEL_MIN_PX, width * WHEEL_RATIO)) {
-        wheel.active = false;
-        wheel.locked = true;
-        wheel.offset = 0;
-        settle();
-        setIsDragging(false);
-        setDragOffset(0);
-        setCurrentIndex(currentIndex + (forward ? 1 : -1));
-      }
-    };
-
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      el.removeEventListener('wheel', onWheel);
-      if (wheel.timer) clearTimeout(wheel.timer);
-    };
-  }, [hasSlides, settle]);
-
-  // ------------------------------------------------------------
-  // Glissement à UN doigt (mobile / tablette)
-  // ------------------------------------------------------------
-  // `touch-action: pan-y` (CSS) laisse le navigateur gérer le défilement
-  // vertical de la page ; le mouvement horizontal nous revient.
-  // En RTL, « suivant » correspond à un geste vers la DROITE.
-  const isForward = (dx: number) => (isRtl ? dx > 0 : dx < 0);
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (totalSlides < 2 || isTransitioning) return;
-    if (e.pointerType !== 'touch') return; // doigts uniquement : ni souris, ni stylet
-    didDragRef.current = false;
-    dragRef.current = {
-      pointerId: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      width: e.currentTarget.getBoundingClientRect().width,
-      active: false,
-      samples: [{ x: e.clientX, t: e.timeStamp }],
-    };
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    if (!drag || e.pointerId !== drag.pointerId) return;
-
-    if (!drag.active) {
-      const dx = e.clientX - drag.startX;
-      const dy = e.clientY - drag.startY;
-      // Pas encore un glissement : trop court, ou plutôt vertical
-      if (Math.abs(dx) < DRAG_START_PX || Math.abs(dx) < Math.abs(dy)) return;
-      drag.active = true;
-      didDragRef.current = true;
-      drag.startX = e.clientX; // repart de 0 : pas de « saut » au démarrage
-      // La capture n'est prise qu'ici (pas au simple appui) pour ne pas
-      // détourner le toucher sur les liens CTA.
-      e.currentTarget.setPointerCapture(e.pointerId);
-      setIsDragging(true);
-    }
-
-    const dx = e.clientX - drag.startX;
-    drag.samples.push({ x: e.clientX, t: e.timeStamp });
-    if (drag.samples.length > 6) drag.samples.shift();
-
-    // Effet élastique : en première / dernière diapositive, on ne peut pas aller plus loin
-    const atEdge =
-      (isForward(dx) && currentIndex === totalSlides - 1) ||
-      (!isForward(dx) && currentIndex === 0);
-    const clamped = Math.max(-drag.width, Math.min(drag.width, dx));
-    setDragOffset(atEdge ? clamped * EDGE_RESISTANCE : clamped);
-  };
-
-  const finishDrag = (e: React.PointerEvent<HTMLDivElement>, cancelled: boolean) => {
-    const drag = dragRef.current;
-    if (!drag || e.pointerId !== drag.pointerId) return;
-    dragRef.current = null;
-    if (!drag.active) return; // simple clic / appui : on ne touche à rien
-
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-
-    const dx = e.clientX - drag.startX;
-    const first = drag.samples[0];
-    const last = drag.samples[drag.samples.length - 1];
-    const velocity = last.t > first.t ? (last.x - first.x) / (last.t - first.t) : 0;
-
-    const passedDistance = Math.abs(dx) >= Math.max(SWIPE_MIN_PX, drag.width * SWIPE_DISTANCE_RATIO);
-    const passedFlick = Math.abs(velocity) >= FLICK_VELOCITY && Math.abs(dx) >= 20;
-    const direction = passedFlick && !passedDistance ? velocity : dx;
-    const target = currentIndex + (isForward(direction) ? 1 : -1);
-    const canChange =
-      !cancelled && (passedDistance || passedFlick) && target >= 0 && target < totalSlides;
-
-    // Un seul rendu : la transition CSS part de la position actuelle du doigt
-    // vers la position finale (diapositive voisine ou retour en place).
-    settle();
-    setIsDragging(false);
-    setDragOffset(0);
-    if (canChange) {
-      setCurrentIndex(target);
-    }
-  };
-
-  const handleClickCapture = (e: React.MouseEvent) => {
-    if (didDragRef.current) {
-      e.preventDefault();
-      e.stopPropagation();
-      didDragRef.current = false;
-    }
-  };
+  }, [autoPlayRunning, isPaused, isOnScreen, goToNext, currentDwellMs, currentIndex]);
 
   // Survol : souris uniquement. Sur écran tactile, `mouseenter` est émulé au
   // toucher et `mouseleave` n'arrive qu'au toucher suivant ailleurs → la
@@ -487,9 +348,8 @@ export default function Slider({
   const handlePointerLeave = (e: React.PointerEvent) => {
     if (e.pointerType === 'mouse') setIsHovered(false);
   };
-  // Focus : seulement le focus CLAVIER (:focus-visible). Un clic sur une
-  // flèche ou un point donne le focus à un bouton sans que ce soit une
-  // demande de pause.
+  // Focus : seulement le focus CLAVIER (:focus-visible). Un clic sur une flèche
+  // ou un point donne le focus à un bouton sans que ce soit une demande de pause.
   const handleFocus = (e: React.FocusEvent) => {
     if (e.target.matches(':focus-visible')) setIsFocused(true);
   };
@@ -511,65 +371,65 @@ export default function Slider({
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      ref={containerRef}
+      ref={rootRef}
     >
       <div
-        className={`${styles.sliderContainer} ${isDragging ? styles.dragging : ''}`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={(e) => finishDrag(e, false)}
-        onPointerCancel={(e) => finishDrag(e, true)}
-        // Filet de sécurité : capture perdue sans pointerup → on ne reste pas « en glissement »
-        // (isDragging bloquerait l'avance automatique pour toujours)
-        onLostPointerCapture={(e) => finishDrag(e, true)}
-        onClickCapture={handleClickCapture}
-        onDragStart={(e) => e.preventDefault()}
+        ref={viewportRef}
+        className={styles.sliderContainer}
       >
+        {/* Le transform / transition de la piste sont posés par paint()
+            (écriture directe) : volontairement absents du style React, qui ne doit pas
+            les écraser à un re-rendu. */}
         <div
+          ref={trackRef}
           className={styles.sliderTrack}
-          style={{
-            // RTL : la 1re diapositive est à droite, la suite se lit de droite à gauche
-            flexDirection: isRtl ? 'row-reverse' : 'row',
-            // Position de la diapositive + décalage du doigt en pixels (suivi en direct)
-            transform: `translateX(calc(${(isRtl ? 1 : -1) * currentIndex * 100}% + ${dragOffset}px))`,
-            // Pas de transition PENDANT le glissement (la piste colle au doigt), seulement au calage
-            transition:
-              isTransitioning && !isDragging
-                ? `transform ${SETTLE_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`
-                : 'none',
-          }}
+          style={{ flexDirection: isRtl ? 'row-reverse' : 'row' }}
+          // Pendant l'avance automatique le contenu change seul : on n'annonce rien.
+          // En pause / navigation manuelle, le lecteur d'écran annonce la nouvelle diapositive.
+          aria-live={autoPlayRunning ? 'off' : 'polite'}
         >
-          {slides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className={`${styles.slide} ${slide.image ? styles.slideWithImage : ''}`}
-              // Image de fond optionnelle, transmise au CSS via une variable
-              style={
-                slide.image
-                  ? ({ '--slide-bg': `url("${slide.image}")` } as React.CSSProperties)
-                  : undefined
-              }
-              role="group"
-              aria-roledescription={l.slide}
-              aria-label={l.of(index + 1, totalSlides)}
-            >
-              <div className={styles.slideContent}>
-                {slide.icon && <div className={styles.slideIcon}>{slide.icon}</div>}
-                <div className={styles.slideText}>
-                  <h3 className={styles.slideTitle}>{slide.title}</h3>
-                  <p className={styles.slideDescription}>{slide.description}</p>
-                  {slide.cta && (
-                    <a href={slide.cta.href} className={styles.slideCta} draggable={false}>
-                      {slide.cta.label}
-                      {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
-                      <span style={visuallyHidden}>{` — ${slide.title}`}</span>
-                      <Icons.ChevronRight size={16} />
-                    </a>
-                  )}
+          {slides.map((slide, index) => {
+            const isActive = index === currentIndex;
+            return (
+              <div
+                key={slide.id}
+                className={`${styles.slide} ${slide.image ? styles.slideWithImage : ''} ${
+                  isActive ? styles.slideActive : ''
+                }`}
+                // Image de fond optionnelle, transmise au CSS via une variable
+                style={
+                  slide.image
+                    ? ({ '--slide-bg': `url("${slide.image}")` } as React.CSSProperties)
+                    : undefined
+                }
+                role="group"
+                aria-roledescription={l.slide}
+                aria-label={l.of(index + 1, totalSlides)}
+                // Diapositives hors champ : retirées de l'ordre de tabulation et de
+                // l'arbre d'accessibilité. Sans cela, Tab pouvait donner le focus à un
+                // lien caché, et le navigateur faisait défiler la zone masquée
+                // (le slider « sautait » de position).
+                aria-hidden={isActive ? undefined : true}
+                inert={!isActive}
+              >
+                <div className={styles.slideContent}>
+                  {slide.icon && <div className={styles.slideIcon}>{slide.icon}</div>}
+                  <div className={styles.slideText}>
+                    <h3 className={styles.slideTitle}>{slide.title}</h3>
+                    <p className={styles.slideDescription}>{slide.description}</p>
+                    {slide.cta && (
+                      <a href={slide.cta.href} className={styles.slideCta}>
+                        {slide.cta.label}
+                        {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
+                        <span style={visuallyHidden}>{` — ${slide.title}`}</span>
+                        <Icons.ChevronRight size={16} />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -613,19 +473,11 @@ export default function Slider({
             ))}
           </div>
 
-          {/* Contrôle explicite de l'avance automatique (WCAG 2.2.2 : un
-              contenu qui défile seul doit pouvoir être mis en pause).
-
-              Le bouton reste affiché TANT QU'UNE avance auto est possible :
-              c'est lui qui redémarre la lecture après une pause ⏸, ou après
-              une navigation manuelle (flèches, points, clavier, balayage)
-              qui l'avait arrêtée. L'étiquette décrit l'action à venir
-              (⏸ « Mettre en pause » / ▶ « Reprendre »), comme sur les
-              lecteurs multimédias.
-
-              Rien n'est affiché si le système demande moins d'animations :
-              le carrousel ne défile alors jamais tout seul, un bouton de
-              reprise n'aurait aucun sens. */}
+          {/* Contrôle explicite de l'avance automatique (WCAG 2.2.2 : un contenu qui
+              défile seul doit pouvoir être mis en pause). Affiché TANT QU'UNE avance
+              auto est possible. L'étiquette décrit l'action à venir (⏸ « Mettre en
+              pause » / ▶ « Reprendre »), comme sur les lecteurs multimédias.
+              Rien n'est affiché si le système demande moins d'animations. */}
           {autoPlayAvailable && (
             <button
               type="button"
