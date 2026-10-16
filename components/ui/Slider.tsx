@@ -65,71 +65,24 @@ const LABELS = {
   },
 } as const;
 
+// ============================================================
+// RYTHME DE L'AVANCE AUTOMATIQUE
+// ----------------------------------------------------------
+// Tempo FIXE : chaque diapositive reste affichée la même durée,
+// quel que soit son contenu. Modifiable via la prop `interval`.
+// ============================================================
+const DEFAULT_INTERVAL_MS = 5000;
+
 type SliderProps = {
   slides: Slide[];
   autoplay?: boolean;
-  /**
-   * Durée fixe par diapositive, en millisecondes.
-   * Non renseigné (défaut) : durée ADAPTATIVE, calculée à partir de la
-   * longueur du texte de chaque diapositive (voir getDwellMs).
-   */
+  /** Durée fixe par diapositive, en millisecondes (défaut : 5000). */
   interval?: number;
   className?: string;
   locale?: string;
 };
 
-// ============================================================
-// RYTHME DE L'AVANCE AUTOMATIQUE
-// ----------------------------------------------------------
-// Deux exigences opposées : ne pas être si lent qu'on s'ennuie,
-// et ne pas être si rapide qu'on coupe une phrase en pleine
-// lecture. Plutôt qu'une durée fixe imposée à toutes les
-// diapositives, la durée dépend de ce que chacune contient :
-//
-//     durée = clamp(4,5 s, temps de lecture + 1,25 s, 8 s)
-//
-// - 260 mots/minute : rythme de « lecture en diagonale », ce
-//   qui correspond à des accroches courtes à l'écran (une
-//   lecture attentive de paragraphes exigeants reste à
-//   180-200 mpm — le plafond ci-dessous protège les cas où le
-//   texte dépasse ce que ce rythme autorise) ;
-// - 1,25 s de marge : temps de repérage visuel (illustration,
-//   pastille, titre) avant que le regard n'atteigne le texte ;
-// - plancher 4,5 s : même la diapositive la plus courte reste
-//   affichée le temps d'être vue sans précipitation ;
-// - plafond 8 s : au-delà, l'attente devient ennuyeuse. Une
-//   personne qui n'a pas fini de lire dispose du survol (pause
-//   automatique) ou du bouton ⏸, et peut relancer avec ▶.
-//
-// Exemples mesurés sur les textes actuels (fr) :
-//   « Solutions flexibles »          ≈ 14 mots → 4,5 s
-//   « Rejoignez IRIS Junior… »       ≈ 16 mots → 4,9 s
-//   « Développement IT & Numérique » ≈ 24 mots → 6,8 s
-// Amplitude obtenue sur le site : 4,5 s à 6,8 s en français,
-// 4,5 s à 5,4 s en anglais et 4,5 s à 5,6 s en arabe
-// (textes plus courts ailleurs qu'en français).
-// ============================================================
-const READING_WORDS_PER_MINUTE = 260;
-const DWELL_OVERHEAD_MS = 1250;
-const MIN_DWELL_MS = 4500;
-const MAX_DWELL_MS = 8000;
-
-const countWords = (text?: string) =>
-  text?.trim().split(/\s+/).filter(Boolean).length ?? 0;
-
-/** Temps d'affichage d'une diapositive, proportionnel à son contenu. */
-const getDwellMs = (slide?: Slide) => {
-  const words =
-    countWords(slide?.title) +
-    countWords(slide?.description) +
-    countWords(slide?.cta?.label);
-  const readingMs = (words / READING_WORDS_PER_MINUTE) * 60_000;
-  return Math.min(MAX_DWELL_MS, Math.max(MIN_DWELL_MS, readingMs + DWELL_OVERHEAD_MS));
-};
-
 // Abonnement à la préférence système « réduire les animations ».
-// Utilisé via useSyncExternalStore : le rendu serveur répond `false`
-// (inconnu côté serveur), le client répond sa propre préférence.
 const subscribeToReducedMotion = (onChange: () => void) => {
   const query = window.matchMedia('(prefers-reduced-motion: reduce)');
   query.addEventListener('change', onChange);
@@ -146,9 +99,37 @@ const getReducedMotion = () =>
 // React : un changement de diapositive ne fait qu'une écriture.
 // ============================================================
 const SETTLE_MS = 500;       // durée pour une diapositive voisine
-const SETTLE_EXTRA_MS = 120; // + par diapositive supplémentaire franchie (retour au début, points)
+const SETTLE_EXTRA_MS = 120; // + par diapositive supplémentaire franchie
 const MAX_SETTLE_MS = 900;   // plafond : un long trajet reste vif
 const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+// ============================================================
+// GLISSEMENT (DOIGT + SOURIS)
+// ----------------------------------------------------------
+// Géré par Pointer Events : un seul code pour le doigt (mobile,
+// tablette) et la souris (clic maintenu + déplacement). Le geste
+// vertical est laissé au navigateur (défilement de la page).
+// ============================================================
+const DRAG_START_PX = 6;            // seuil avant de commencer à tirer
+const DRAG_COMMIT_MIN_PX = 50;      // seuil minimal de validation
+const DRAG_COMMIT_RATIO = 0.15;     // … ou 15 % de la largeur de la diapositive
+const DRAG_EDGE_RESISTANCE = 0.35;  // élasticité aux extrémités (0 = blocage sec)
+
+// ============================================================
+// MOLETTE / TRACKPAD DEUX DOIGTS (PC)
+// ----------------------------------------------------------
+// Un trackpad à deux doigts émet des WheelEvent avec un deltaX
+// horizontal. Le scroll vertical de la page reste intact : on
+// n'intercepte que les gestes franchement horizontaux.
+//
+// Comme le trackpad envoie une rafale d'événements (et de
+// l'inertie après le geste), on ACCUMULE les deltaX et on
+// verrouille après chaque validation : un geste = un changement.
+// ============================================================
+const WHEEL_PAUSE_MS = 180;   // au-delà, on considère un nouveau geste
+const WHEEL_THRESHOLD = 80;   // deltaX cumulé pour valider un changement
+const WHEEL_LOCK_MS = 350;    // blocage après validation (inertie)
+const WHEEL_MIN_DELTA = 8;    // filtre les micro-impulsions
 
 // useLayoutEffect côté client (pas de « flash » de position), useEffect côté serveur
 const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -156,20 +137,17 @@ const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : use
 export default function Slider({
   slides,
   autoplay = false,
-  interval,
+  interval = DEFAULT_INTERVAL_MS,
   className = '',
   locale = 'fr',
 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // Pause VOLONTAIRE : uniquement le bouton ⏸/▶. La navigation manuelle
-  // (flèches, points, clavier) ne coupe pas l'avance automatique :
-  // elle repart pour une durée complète sur la diapositive atteinte.
+  // Pause VOLONTAIRE : uniquement le bouton ⏸/▶.
   const [isUserPaused, setIsUserPaused] = useState(false);
-  // Pause TEMPORAIRE : survol souris ou focus clavier (deux sources distinctes)
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const isPaused = isHovered || isFocused;
-  // Pas d'avance automatique si le carrousel n'est pas visible (hors écran / onglet masqué)
+  // Seule pause temporaire : glissement en cours (évite un changement
+  // de diapositive en plein geste). Le survol et le focus ne bloquent plus l'avance.
+  const [isDragging, setIsDragging] = useState(false);
+  // Pas d'avance auto si hors écran ou onglet masqué
   const [isInView, setIsInView] = useState(true);
   const [isTabVisible, setIsTabVisible] = useState(true);
 
@@ -182,6 +160,29 @@ export default function Slider({
   const widthRef = useRef(0);
   const indexRef = useRef(0);
   const prevIndexRef = useRef<number | null>(null);
+
+  // --- état du glissement (hors rendu) ---
+  const suppressClickRef = useRef(false);
+  const dragRef = useRef<{
+    pointerId: number | null;
+    startX: number;
+    startY: number;
+    startTrackX: number;
+    isDragging: boolean;
+  }>({
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    startTrackX: 0,
+    isDragging: false,
+  });
+
+  // --- état de la molette (hors rendu) ---
+  const wheelRef = useRef({
+    accum: 0,       // deltaX cumulé depuis le début du geste
+    lastEventAt: 0, // timestamp du dernier wheel reçu
+    lockedUntil: 0, // verrou après validation
+  });
 
   // Préférence système « réduire les animations », lue comme une source externe
   const reducedMotion = useSyncExternalStore(
@@ -202,7 +203,6 @@ export default function Slider({
   // ------------------------------------------------------------
   // Position de la piste (écriture directe dans le style)
   // ------------------------------------------------------------
-  // RTL : la 1re diapositive est à droite, la suite se lit de droite à gauche
   const restX = useCallback(
     (index: number) => (isRtl ? 1 : -1) * index * widthRef.current,
     [isRtl]
@@ -223,7 +223,6 @@ export default function Slider({
       if (!track) return;
       if (ms > 0) {
         // Lecture forcée : fige la position de départ avant de poser la transition
-        // (sinon Safari peut animer depuis une ancienne valeur)
         void track.offsetWidth;
         track.style.transition = `transform ${ms}ms ${EASING}`;
       } else {
@@ -240,7 +239,7 @@ export default function Slider({
     if (!el) return;
     const measure = () => {
       const width = el.getBoundingClientRect().width;
-      if (width === widthRef.current) return; // changement de hauteur seulement : on ne touche à rien
+      if (width === widthRef.current) return;
       widthRef.current = width;
       paint(restX(indexRef.current), 0);
     };
@@ -251,34 +250,28 @@ export default function Slider({
     return () => observer.disconnect();
   }, [hasSlides, paint, restX]);
 
-  // Changement de diapositive (flèches, points, clavier, timer) : déplacement animé
+  // Changement de diapositive (flèches, points, clavier, timer, glissement, molette)
   useIsoLayoutEffect(() => {
     indexRef.current = currentIndex;
     const previous = prevIndexRef.current;
     prevIndexRef.current = currentIndex;
     if (previous === null || previous === currentIndex) {
-      paint(restX(currentIndex), 0); // premier rendu (ou changement de sens RTL) : sans animation
+      paint(restX(currentIndex), 0);
       return;
     }
     paint(restX(currentIndex), settleMs(Math.abs(currentIndex - previous)));
   }, [currentIndex, paint, restX, settleMs]);
 
   // ------------------------------------------------------------
-  // Avance automatique
+  // Avance automatique (tempo fixe)
   // ------------------------------------------------------------
-  // Possible si demandée par la page, ≥ 2 diapositives, et pas de préférence
-  // « réduire les animations ». `isUserPaused` décide ensuite si elle tourne.
   const autoPlayAvailable = autoplay && totalSlides > 1 && !reducedMotion;
   const autoPlayRunning = autoPlayAvailable && !isUserPaused;
   const isOnScreen = isInView && isTabVisible;
 
-  // Durée d'affichage de la diapositive COURANTE : imposée par `interval` si la
-  // page en fournit une, sinon adaptative selon le texte à lire (cf. getDwellMs).
-  const currentDwellMs = interval ?? getDwellMs(slides[currentIndex]);
-
   const toggleAutoPlay = useCallback(() => setIsUserPaused((paused) => !paused), []);
 
-  // Navigation : updaters fonctionnels → identités stables, aucun callback périmé
+  // Navigation : updaters fonctionnels → identités stables
   const goToSlide = useCallback((index: number) => setCurrentIndex(index), []);
   const goToNext = useCallback(
     () => setCurrentIndex((i) => (i + 1) % totalSlides),
@@ -309,7 +302,6 @@ export default function Slider({
   );
 
   // Visibilité : l'avance s'arrête hors écran et quand l'onglet est masqué
-  // (économie de CPU / batterie, et pas de diapositives qui défilent dans le vide)
   useEffect(() => {
     const onVisibility = () => setIsTabVisible(!document.hidden);
     document.addEventListener('visibilitychange', onVisibility);
@@ -327,65 +319,212 @@ export default function Slider({
     return () => observer.disconnect();
   }, [hasSlides]);
 
+  // Chaque diapositive (y compris après une navigation manuelle) reste
+  // affichée exactement `interval` ms avant l'avance suivante.
   useEffect(() => {
-    // setTimeout (et non setInterval) : chaque diapositive a sa propre durée.
-    // `currentIndex` est une dépendance explicite : avec une durée identique d'une
-    // diapositive à l'autre, rien d'autre ne relancerait le timer après un changement.
-    if (autoPlayRunning && !isPaused && isOnScreen) {
-      timerRef.current = setTimeout(goToNext, currentDwellMs);
+    if (autoPlayRunning && !isDragging && isOnScreen) {
+      timerRef.current = setTimeout(goToNext, interval);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isPaused, isOnScreen, goToNext, currentDwellMs, currentIndex]);
+  }, [autoPlayRunning, isDragging, isOnScreen, goToNext, interval, currentIndex]);
 
-  // Survol : souris uniquement. Sur écran tactile, `mouseenter` est émulé au
-  // toucher et `mouseleave` n'arrive qu'au toucher suivant ailleurs → la
-  // lecture restait bloquée. Les événements pointeur donnent le vrai type.
-  const handlePointerEnter = (e: React.PointerEvent) => {
-    if (e.pointerType === 'mouse') setIsHovered(true);
+  // ------------------------------------------------------------
+  // Glissement : pointer events → un seul code pour doigt + souris
+  // ------------------------------------------------------------
+  const handleDragPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (totalSlides <= 1) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    const target = e.target as HTMLElement;
+    if (target.closest('input, textarea, select, [role="tab"]')) return;
+
+    suppressClickRef.current = false;
+    dragRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      startTrackX: restX(indexRef.current),
+      isDragging: false,
+    };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* no-op */
+    }
   };
-  const handlePointerLeave = (e: React.PointerEvent) => {
-    if (e.pointerType === 'mouse') setIsHovered(false);
+
+  const handleDragPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (drag.pointerId !== e.pointerId) return;
+
+    const dx = e.clientX - drag.startX;
+    const dy = e.clientY - drag.startY;
+
+    if (!drag.isDragging) {
+      if (Math.abs(dx) < DRAG_START_PX && Math.abs(dy) < DRAG_START_PX) return;
+      // Geste vertical dominant : rendu au navigateur
+      if (Math.abs(dy) > Math.abs(dx)) {
+        drag.pointerId = null;
+        return;
+      }
+      drag.isDragging = true;
+      suppressClickRef.current = true;
+      setIsDragging(true);
+      if (trackRef.current) trackRef.current.style.transition = 'none';
+    }
+
+    const track = trackRef.current;
+    if (!track) return;
+
+    let x = drag.startTrackX + dx;
+
+    const lastX = restX(totalSlides - 1);
+    const min = Math.min(0, lastX);
+    const max = Math.max(0, lastX);
+    if (x < min) x = min + (x - min) * DRAG_EDGE_RESISTANCE;
+    else if (x > max) x = max + (x - max) * DRAG_EDGE_RESISTANCE;
+
+    track.style.transform = `translate3d(${x}px, 0, 0)`;
   };
-  // Focus : seulement le focus CLAVIER (:focus-visible). Un clic sur une flèche
-  // ou un point donne le focus à un bouton sans que ce soit une demande de pause.
-  const handleFocus = (e: React.FocusEvent) => {
-    if (e.target.matches(':focus-visible')) setIsFocused(true);
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>, commit: boolean) => {
+    const drag = dragRef.current;
+    if (drag.pointerId !== e.pointerId) return;
+
+    const wasDragging = drag.isDragging;
+    drag.pointerId = null;
+    drag.isDragging = false;
+
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      }
+    } catch {
+      /* no-op */
+    }
+
+    if (!wasDragging) return;
+    setIsDragging(false);
+
+    const current = indexRef.current;
+
+    if (!commit) {
+      paint(restX(current), settleMs(0));
+      return;
+    }
+
+    const dx = e.clientX - drag.startX;
+    const width = widthRef.current || 1;
+    const threshold = Math.max(DRAG_COMMIT_MIN_PX, width * DRAG_COMMIT_RATIO);
+
+    let nextIndex = current;
+    if (Math.abs(dx) > threshold) {
+      const slidesMoved = Math.max(1, Math.round(Math.abs(dx) / width));
+      const sign = dx > 0 ? 1 : -1;
+      nextIndex = isRtl
+        ? current + sign * slidesMoved
+        : current - sign * slidesMoved;
+      nextIndex = Math.max(0, Math.min(totalSlides - 1, nextIndex));
+    }
+
+    if (nextIndex !== current) {
+      setCurrentIndex(nextIndex);
+    } else {
+      paint(restX(current), settleMs(0));
+    }
   };
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    // Le focus change d'élément À L'INTÉRIEUR du carrousel : on ne relance pas
-    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setIsFocused(false);
+
+  const handleDragPointerUp = (e: React.PointerEvent<HTMLDivElement>) =>
+    endDrag(e, true);
+  const handleDragPointerCancel = (e: React.PointerEvent<HTMLDivElement>) =>
+    endDrag(e, false);
+  const handleLostPointerCapture = (e: React.PointerEvent<HTMLDivElement>) =>
+    endDrag(e, false);
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      e.stopPropagation();
+      e.preventDefault();
+    }
   };
+
+  // ------------------------------------------------------------
+  // Molette / trackpad deux doigts (PC)
+  // ------------------------------------------------------------
+  // Écouteur natif posé en { passive: false } : React n'autorise
+  // pas preventDefault() sur onWheel (listener passif).
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el || totalSlides <= 1) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // On n'intercepte QUE les gestes franchement horizontaux.
+      // Un scroll vertical (deltaY dominant) appartient à la page.
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      if (Math.abs(e.deltaX) < WHEEL_MIN_DELTA) return;
+
+      // Empêche le navigateur de faire rebondir / défiler horizontalement
+      e.preventDefault();
+
+      const now = performance.now();
+      const w = wheelRef.current;
+
+      // Nouveau geste après une pause : on repart de zéro
+      if (now - w.lastEventAt > WHEEL_PAUSE_MS) w.accum = 0;
+      w.lastEventAt = now;
+
+      // Verrou post-validation : absorbe l'inertie du trackpad
+      if (now < w.lockedUntil) return;
+
+      w.accum += e.deltaX;
+      if (Math.abs(w.accum) < WHEEL_THRESHOLD) return;
+
+      const dir = w.accum > 0 ? 1 : -1;
+      w.accum = 0;
+      w.lockedUntil = now + WHEEL_LOCK_MS;
+
+      // deltaX > 0 : l'utilisateur pousse vers la droite (voir contenu de droite).
+      // LTR : diapositive suivante. RTL : la suite est à gauche, donc précédente.
+      if ((dir > 0) === !isRtl) goToNext();
+      else goToPrev();
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [totalSlides, isRtl, goToNext, goToPrev]);
 
   if (totalSlides === 0) return null;
 
   return (
     <div
-      className={`${styles.slider} ${className} ${isRtl ? styles.rtl : ''}`}
+      className={`${styles.slider} ${className} ${isRtl ? styles.rtl : ''} ${
+        isDragging ? styles.sliderDragging : ''
+      }`}
       role="region"
       aria-roledescription={l.carousel}
       aria-label={l.region}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       ref={rootRef}
     >
       <div
         ref={viewportRef}
         className={styles.sliderContainer}
+        onPointerDown={handleDragPointerDown}
+        onPointerMove={handleDragPointerMove}
+        onPointerUp={handleDragPointerUp}
+        onPointerCancel={handleDragPointerCancel}
+        onLostPointerCapture={handleLostPointerCapture}
+        onClickCapture={handleClickCapture}
+        onDragStart={(e) => e.preventDefault()}
       >
         {/* Le transform / transition de la piste sont posés par paint()
-            (écriture directe) : volontairement absents du style React, qui ne doit pas
-            les écraser à un re-rendu. */}
+            (écriture directe) : volontairement absents du style React. */}
         <div
           ref={trackRef}
           className={styles.sliderTrack}
           style={{ flexDirection: isRtl ? 'row-reverse' : 'row' }}
-          // Pendant l'avance automatique le contenu change seul : on n'annonce rien.
-          // En pause / navigation manuelle, le lecteur d'écran annonce la nouvelle diapositive.
           aria-live={autoPlayRunning ? 'off' : 'polite'}
         >
           {slides.map((slide, index) => {
@@ -396,7 +535,6 @@ export default function Slider({
                 className={`${styles.slide} ${slide.image ? styles.slideWithImage : ''} ${
                   isActive ? styles.slideActive : ''
                 }`}
-                // Image de fond optionnelle, transmise au CSS via une variable
                 style={
                   slide.image
                     ? ({ '--slide-bg': `url("${slide.image}")` } as React.CSSProperties)
@@ -405,10 +543,6 @@ export default function Slider({
                 role="group"
                 aria-roledescription={l.slide}
                 aria-label={l.of(index + 1, totalSlides)}
-                // Diapositives hors champ : retirées de l'ordre de tabulation et de
-                // l'arbre d'accessibilité. Sans cela, Tab pouvait donner le focus à un
-                // lien caché, et le navigateur faisait défiler la zone masquée
-                // (le slider « sautait » de position).
                 aria-hidden={isActive ? undefined : true}
                 inert={!isActive}
               >
@@ -420,7 +554,6 @@ export default function Slider({
                     {slide.cta && (
                       <a href={slide.cta.href} className={styles.slideCta}>
                         {slide.cta.label}
-                        {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
                         <span style={visuallyHidden}>{` — ${slide.title}`}</span>
                         <Icons.ChevronRight size={16} />
                       </a>
@@ -435,7 +568,6 @@ export default function Slider({
 
       {totalSlides > 1 && (
         <>
-          {/* En RTL, le CSS place « précédent » à droite et « suivant » à gauche (flèches inversées) */}
           <button
             type="button"
             className={`${styles.navButton} ${styles.navPrev}`}
@@ -453,7 +585,6 @@ export default function Slider({
             <Icons.ChevronRight size={24} />
           </button>
 
-          {/* Indicateurs : en RTL, le 1er point est à droite (même sens que les diapositives) */}
           <div
             className={styles.dots}
             style={{ direction: isRtl ? 'rtl' : 'ltr' }}
@@ -473,11 +604,6 @@ export default function Slider({
             ))}
           </div>
 
-          {/* Contrôle explicite de l'avance automatique (WCAG 2.2.2 : un contenu qui
-              défile seul doit pouvoir être mis en pause). Affiché TANT QU'UNE avance
-              auto est possible. L'étiquette décrit l'action à venir (⏸ « Mettre en
-              pause » / ▶ « Reprendre »), comme sur les lecteurs multimédias.
-              Rien n'est affiché si le système demande moins d'animations. */}
           {autoPlayAvailable && (
             <button
               type="button"
