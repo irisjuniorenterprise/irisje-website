@@ -159,6 +159,70 @@
 }
 
 /* ============================================================
+   ANIMATION DE L'ICÔNE AU SURVOL - MOUVEMENT GAUCHE / DROITE
+   ----------------------------------------------------------
+   Au survol d'une carte de prestation, seule l'icône s'anime :
+   un balancement horizontal (gauche-droite) amorti, qui attire
+   l'œil sur la prestation sans bouger le reste de la carte.
+
+   - `translateX` porte le mouvement latéral ;
+   - une légère `rotate` en phase donne l'effet « oscillation »
+     plutôt qu'un glissement strict ;
+   - un cycle = UN SEUL aller-retour (gauche puis droite) suivi
+     d'un retour au repos ;
+   - `ease-in-out` évite la rupture de vitesse aux extrémités ;
+   - `infinite` : les cycles se répètent tant que le curseur reste
+     sur la carte (et non un seul cycle au survol).
+
+   TEMPO MOUVEMENT / PAUSE : le mouvement occupe 60 % du cycle
+   (0,96 s), le repos les 40 % restants (0,64 s). Sans ce silence,
+   deux aller-retours d'affilée se liraient comme un tremblement ;
+   la pause sépare nettement chaque battement, comme pour les
+   icônes rythmiques de la section « valueNav » plus haut.
+   ============================================================ */
+@keyframes iconShake {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Gauche */
+  20% {
+    transform: translateX(-6px) rotate(-8deg);
+  }
+  /* Droite */
+  40% {
+    transform: translateX(6px) rotate(8deg);
+  }
+  /* Retour au repos : fin du battement */
+  60% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* 60% -> 100% : silence. L'icône est immobile au point de
+     départ, donc le rebouclage est invisible. */
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.serviceCard:hover .serviceIcon,
+.serviceCardRtl:hover .serviceIconRtl {
+  /* 1,6 s par cycle = 0,96 s de mouvement + 0,64 s de pause.
+     Un peu plus lent que le « temps » rythmique de la page
+     (voir .valueIcon) pour que le balancement reste lisible
+     comme une oscillation posée, pas comme un tremblement. */
+  animation: iconShake 1.6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Accessibilité : le mouvement est purement décoratif,
+   il est donc neutralisé pour les utilisateurs qui le refusent. */
+@media (prefers-reduced-motion: reduce) {
+  .serviceCard:hover .serviceIcon,
+  .serviceCardRtl:hover .serviceIconRtl {
+    animation: none;
+  }
+}
+
+/* ============================================================
    VALUE CARD - LTR & RTL (icônes + titres en haut de page)
    ============================================================ */
 
