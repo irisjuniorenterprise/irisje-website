@@ -169,11 +169,15 @@ export default function Slider({
 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  // Interruption volontaire de l'avance automatique : pause explicite
-  // (bouton ⏸/▶) OU navigation manuelle (flèches, points, clavier,
-  // balayage). Un seul état pour les deux : dans les deux cas le bouton
-  // reste visible et permet de REPARTIR d'où que l'on soit.
+  // Pause TEMPORAIRE : survol à la souris ou focus clavier. Deux sources
+  // distinctes (un seul booléen se faisait écraser : un « blur » relançait
+  // l'avance alors que la souris était encore dessus, et inversement).
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const isPaused = isHovered || isFocused;
+  // Pause VOLONTAIRE : uniquement le bouton ⏸/▶. La navigation manuelle
+  // (flèches, points, clavier, balayage) ne coupe plus l'avance automatique :
+  // elle repart pour une durée complète sur la diapositive atteinte.
   const [isUserPaused, setIsUserPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const transitionTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -256,6 +260,14 @@ export default function Slider({
     goToSlide((currentIndex + 1) % totalSlides);
   }, [currentIndex, goToSlide, totalSlides]);
 
+  // Avance du timer : indépendante de `isTransitioning` et de `currentIndex`
+  // (updater fonctionnel) → identité stable, jamais de timer « perdu » parce
+  // qu'un callback périmé a été capturé pendant un calage.
+  const advance = useCallback(() => {
+    settle();
+    setCurrentIndex((i) => (i + 1) % totalSlides);
+  }, [settle, totalSlides]);
+
   const goToPrev = useCallback(() => {
     goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
   }, [currentIndex, goToSlide, totalSlides]);
@@ -264,11 +276,9 @@ export default function Slider({
     (e: React.KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        setIsUserPaused(true);
         isRtl ? goToPrev() : goToNext();
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        setIsUserPaused(true);
         isRtl ? goToNext() : goToPrev();
       }
     },
@@ -285,12 +295,15 @@ export default function Slider({
       // setTimeout (et non setInterval) : chaque diapositive a sa propre
       // durée, calculée d'après la longueur de son texte. Le compteur
       // repart à zéro à chaque changement, jamais au milieu d'une lecture.
-      timerRef.current = setTimeout(goToNext, currentDwellMs);
+      // `currentIndex` est une dépendance explicite : avec une durée identique
+      // d'une diapositive à l'autre (prop `interval`, ou plancher de 4,5 s),
+      // rien d'autre ne relancerait le timer après un changement manuel.
+      timerRef.current = setTimeout(advance, currentDwellMs);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isPaused, isDragging, goToNext, currentDwellMs]);
+  }, [autoPlayRunning, isPaused, isDragging, advance, currentDwellMs, currentIndex]);
 
   useEffect(() => {
     latestRef.current = { currentIndex, totalSlides, isRtl, isTransitioning };
@@ -363,7 +376,6 @@ export default function Slider({
         setIsDragging(false);
         setDragOffset(0);
         setCurrentIndex(currentIndex + (forward ? 1 : -1));
-        setIsUserPaused(true);
       }
     };
 
@@ -455,7 +467,6 @@ export default function Slider({
     setDragOffset(0);
     if (canChange) {
       setCurrentIndex(target);
-      setIsUserPaused(true);
     }
   };
 
@@ -467,10 +478,25 @@ export default function Slider({
     }
   };
 
-  const handleMouseEnter = () => setIsPaused(true);
-  const handleMouseLeave = () => setIsPaused(false);
-  const handleFocus = () => setIsPaused(true);
-  const handleBlur = () => setIsPaused(false);
+  // Survol : souris uniquement. Sur écran tactile, `mouseenter` est émulé au
+  // toucher et `mouseleave` n'arrive qu'au toucher suivant ailleurs → la
+  // lecture restait bloquée. Les événements pointeur donnent le vrai type.
+  const handlePointerEnter = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') setIsHovered(true);
+  };
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') setIsHovered(false);
+  };
+  // Focus : seulement le focus CLAVIER (:focus-visible). Un clic sur une
+  // flèche ou un point donne le focus à un bouton sans que ce soit une
+  // demande de pause.
+  const handleFocus = (e: React.FocusEvent) => {
+    if (e.target.matches(':focus-visible')) setIsFocused(true);
+  };
+  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    // Le focus change d'élément À L'INTÉRIEUR du carrousel : on ne relance pas
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setIsFocused(false);
+  };
 
   if (totalSlides === 0) return null;
 
@@ -480,8 +506,8 @@ export default function Slider({
       role="region"
       aria-roledescription={l.carousel}
       aria-label={l.region}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
@@ -493,6 +519,9 @@ export default function Slider({
         onPointerMove={handlePointerMove}
         onPointerUp={(e) => finishDrag(e, false)}
         onPointerCancel={(e) => finishDrag(e, true)}
+        // Filet de sécurité : capture perdue sans pointerup → on ne reste pas « en glissement »
+        // (isDragging bloquerait l'avance automatique pour toujours)
+        onLostPointerCapture={(e) => finishDrag(e, true)}
         onClickCapture={handleClickCapture}
         onDragStart={(e) => e.preventDefault()}
       >
@@ -550,10 +579,7 @@ export default function Slider({
           <button
             type="button"
             className={`${styles.navButton} ${styles.navPrev}`}
-            onClick={() => {
-              setIsUserPaused(true);
-              goToPrev();
-            }}
+            onClick={goToPrev}
             aria-label={l.prev}
           >
             <Icons.ChevronLeft size={24} />
@@ -561,10 +587,7 @@ export default function Slider({
           <button
             type="button"
             className={`${styles.navButton} ${styles.navNext}`}
-            onClick={() => {
-              setIsUserPaused(true);
-              goToNext();
-            }}
+            onClick={goToNext}
             aria-label={l.next}
           >
             <Icons.ChevronRight size={24} />
@@ -582,10 +605,7 @@ export default function Slider({
                 key={index}
                 className={`${styles.dot} ${index === currentIndex ? styles.dotActive : ''}`}
                 type="button"
-                onClick={() => {
-                  setIsUserPaused(true);
-                  goToSlide(index);
-                }}
+                onClick={() => goToSlide(index)}
                 role="tab"
                 aria-selected={index === currentIndex}
                 aria-label={l.goTo(index + 1)}
