@@ -189,18 +189,29 @@
 }
 
 /* ============================================================
-   BOUTONS DE NAVIGATION
+   BOUTONS RONDS À PICHOGRAMME (CHEVRONS + PAUSE / REPRISE)
+   ----------------------------------------------------------
+   Les deux contrôles à icône du slider partagent le MÊME gabarit :
+   pastille blanche, liseré et pictogramme bleu marque, anneau de
+   focus, zone tactile élargie et retours visuels identiques.
+   Un contrôle qui ressemble aux flèches se repère d'un coup
+   d'œil, et son état de focus est aussi lisible que celui des
+   flèches — c'est la condition d'une navigation clavier fluide.
+
+   Seul le POSITIONNEMENT diffère (voir .navButton / .autoPlayToggle
+   plus bas). Le centrage vertical des chevrons utilise la propriété
+   `translate` (et non `transform`) : elle est indépendante de
+   `transform`, donc l'effet `scale(1.06)` du survol ne vient pas
+   écraser la position.
    ============================================================ */
-.navButton {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+.navButton,
+.autoPlayToggle {
   z-index: 10;
   width: 40px;
   height: 40px;
   padding: 0;
   border-radius: 50%;
-  /* Contraste élevé : pastille blanche, liseré et chevron bleu marque
+  /* Contraste élevé : pastille blanche, liseré et pictogramme bleu marque
      (≈ 11:1 sur fond clair, bien au-delà des 3:1 exigés pour les composants d'interface) */
   background: var(--surface);
   border: 2px solid var(--primary);
@@ -215,7 +226,8 @@
 }
 
 /* Zone tactile élargie (≈ 44 px) même quand le bouton est réduit sur mobile */
-.navButton::after {
+.navButton::after,
+.autoPlayToggle::after {
   content: '';
   position: absolute;
   inset: -8px;
@@ -224,23 +236,26 @@
 /* Survol uniquement sur les appareils qui en ont un : évite le bouton « resté
    bleu » après un appui sur écran tactile */
 @media (hover: hover) {
-  .navButton:hover {
+  .navButton:hover,
+  .autoPlayToggle:hover {
     background: var(--primary);
     color: var(--on-primary);
-    transform: translateY(-50%) scale(1.06);
+    transform: scale(1.06);
     box-shadow: 0 4px 14px rgba(26, 57, 105, 0.35);
   }
 }
 
-.navButton:active {
+.navButton:active,
+.autoPlayToggle:active {
   background: var(--primary);
   color: var(--on-primary);
-  transform: translateY(-50%) scale(0.96);
+  transform: scale(0.96);
 }
 
 /* Focus clavier très visible : anneau épais bleu marque (le bleu clair --focus
    n'offre que ≈ 2,2:1 sur fond blanc) décalé + inversion des couleurs */
-.navButton:focus-visible {
+.navButton:focus-visible,
+.autoPlayToggle:focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 3px;
   background: var(--primary);
@@ -248,15 +263,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .navButton {
+  .navButton,
+  .autoPlayToggle {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
-  .navButton {
+  .navButton,
+  .autoPlayToggle {
     border-color: ButtonText;
   }
+}
+
+/* Positionnement : chevrons centrés verticalement sur les bords… */
+.navButton {
+  position: absolute;
+  top: 50%;
+  /* `translate` (et non transform) pour ne pas entrer en conflit
+     avec le scale appliqué au survol / à l'appui. */
+  translate: 0 -50%;
 }
 
 .navPrev {
@@ -306,6 +332,28 @@
   background: var(--primary);
   width: 28px;
   border-radius: 999px;
+}
+
+/* ============================================================
+   BOUTON PAUSE / REPRISE DE L'AVANCE AUTOMATIQUE
+   ----------------------------------------------------------
+   Le gabarit (taille, couleurs, liseré, focus, zone tactile,
+   états hover/actif) est hérité du bloc « BOUTONS RONDS À
+   PICHOGRAMME » ci-dessus : bouton strictement identique aux
+   chevrons. Il ne reste ici que le POSITIONNEMENT, aligné sur
+   la même ligne que les points (même retrait du bas).
+   ============================================================ */
+.autoPlayToggle {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+}
+
+/* En RTL le bandeau de points glisse à droite : le bouton passe à gauche
+   pour ne jamais le chevaucher. */
+.slider.rtl .autoPlayToggle {
+  right: auto;
+  left: 16px;
 }
 
 /* Zone tactile élargie (≈ 28 px de haut) sans changer l'apparence des points */
@@ -452,13 +500,15 @@
     overflow: hidden;
   }
 
-  .navButton {
+  .navButton,
+  .autoPlayToggle {
     width: 32px;
     height: 32px;
     top: 38%; /* remonté légèrement pour ne pas chevaucher la zone des dots */
   }
 
-  .navButton svg {
+  .navButton svg,
+  .autoPlayToggle svg {
     width: 18px;
     height: 18px;
   }
@@ -485,6 +535,19 @@
     bottom: 8px;
     padding: 4px 10px;
     gap: 6px;
+  }
+
+  /* Même taille que les chevrons (héritée ci-dessus) ; seule la
+     position change : calé en bas à droite, sur la ligne des points. */
+  .autoPlayToggle {
+    top: auto;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .slider.rtl .autoPlayToggle {
+    right: auto;
+    left: 8px;
   }
 
   .dot {
@@ -522,13 +585,15 @@
     -webkit-line-clamp: 2; /* encore plus restrictif sur très petit écran */
   }
 
-  .navButton {
+  .navButton,
+  .autoPlayToggle {
     width: 28px;
     height: 28px;
     top: 35%;
   }
 
-  .navButton svg {
+  .navButton svg,
+  .autoPlayToggle svg {
     width: 16px;
     height: 16px;
   }
@@ -555,6 +620,17 @@
     bottom: 6px;
     padding: 3px 8px;
     gap: 5px;
+  }
+
+  .autoPlayToggle {
+    top: auto;
+    bottom: 5px;
+    right: 6px;
+  }
+
+  .slider.rtl .autoPlayToggle {
+    right: auto;
+    left: 6px;
   }
 
   .dot {
