@@ -1,0 +1,169 @@
+/* app/alignment.css
+ *
+ * Politique d'alignement du site (toutes tailles d'écran, LTR + RTL).
+ * Importée APRÈS globals.css dans app/[locale]/layout.tsx.
+ *
+ * RÈGLES
+ *  1. Titres, sous-titres de section, boutons d'action, cartes courtes : centrés
+ *     (tels que définis par les pages).
+ *  2. Paragraphes de lecture : alignés au DÉBUT de la ligne (gauche en FR/EN,
+ *     droite en AR), jamais justifiés. Un texte « ragged right » reste lisible
+ *     sur toutes les largeurs, sans « rivières » de blancs, et fonctionne
+ *     tel quel en arabe (pas de kashida).
+ *  3. Hero : centré en mobile, au début à partir de 768px, titre et
+ *     paragraphe toujours calés ensemble.
+ *  4. Plus de `left` / `right` / `text-align-last` en dur : on utilise `start`.
+ *  5. Longueur de ligne confortable et retours à la ligne équilibrés
+ *     (`text-wrap`), sans césure automatique.
+ *
+ * `!important` n'est utilisé que pour battre des styles inline des pages ou
+ * des CSS Modules (dont l'ordre de chargement n'est pas garanti).
+ *
+ * Points de rupture : < 768px mobile, ≥ 768px tablette/desktop
+ * (le slider garde son propre seuil à 768px, texte centré en dessous).
+ */
+
+/* =====================================================
+   1. HERO — titre et description toujours alignés ensemble
+   ===================================================== */
+.hero-inner {
+  width: 100%;
+}
+
+.hero-content {
+  width: 100%;
+  min-width: 0; /* évite qu'un long mot déborde en flex */
+  max-width: 560px;
+}
+
+.hero-content h1,
+.hero-content p {
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.hero-content h1 {
+  text-wrap: balance;
+}
+
+/* Bat le style inline `margin: '0 auto'` des pages */
+.hero-content p {
+  max-width: 560px !important;
+  margin-block: 1rem 0 !important;
+  margin-inline: auto !important;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.hero-actions {
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    flex: 0 1 560px;
+  }
+
+  .hero-content h1,
+  .hero-content p {
+    text-align: start;
+  }
+
+  /* Le paragraphe démarre exactement sous le titre (pas de centrage) */
+  .hero-content p {
+    margin-inline: 0 !important;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* =====================================================
+   2. PLUS DE TEXTE JUSTIFIÉ
+   Concerne : les styles inline `textAlign: 'justify'` (accueil, services,
+   à propos…), les descriptions de prestations et celles du slider.
+   Le serveur sérialise `text-align:justify` (sans espace), le client
+   `text-align: justify` (avec espace) : on couvre les deux.
+   ===================================================== */
+[style*='text-align:justify'],
+[style*='text-align: justify'] {
+  text-align: start !important;
+  text-align-last: start !important;
+  hyphens: manual;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+/* Descriptions des cartes de services (modules : left / right / justify) */
+[class*='serviceCard'],
+[class*='serviceTitle'] {
+  text-align: start !important;
+}
+
+[class*='serviceDesc'] {
+  text-align: start !important;
+  text-align-last: start !important;
+  hyphens: manual;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+/* Slider d'accueil : le texte reste centré sous 769px (choix du composant),
+   au début au-dessus. */
+@media (min-width: 769px) {
+  [class*='slideDescription'] {
+    text-align: start !important;
+    text-align-last: start !important;
+    hyphens: manual;
+    text-wrap: pretty;
+  }
+}
+
+/* =====================================================
+   3. PAGE À PROPOS — bloc mission en RTL
+   Le filet d'accent passe du côté « début » de la lecture.
+   ===================================================== */
+[dir='rtl'] .mission-block {
+  border-left: none;
+  border-right: 4px solid var(--secondary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    border-right-color 0.3s ease;
+}
+
+[dir='rtl'] .mission-block:hover {
+  border-right-color: var(--primary);
+}
+
+/* =====================================================
+   4. PAGES LÉGALES — lisibilité sur petit écran
+   Avant : sous 480px, icône + titre + longs paragraphes étaient CENTRÉS.
+   Désormais : tout au début, icône au-dessus.
+   ===================================================== */
+.legal-content {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.legal-content p {
+  text-wrap: pretty;
+}
+
+@media (max-width: 480px) {
+  .legal-card .legal-section {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .legal-card .legal-content {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   5. TITRES DE SECTION — équilibrage des retours à la ligne
+   ===================================================== */
+.section-title {
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
