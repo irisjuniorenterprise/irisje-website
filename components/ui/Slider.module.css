@@ -28,6 +28,47 @@
   overflow: hidden;
   aspect-ratio: 16 / 5;
   min-height: 200px;
+
+  /* Le glissement horizontal est géré par Slider.tsx (pointer events) ;
+     le défilement vertical et le zoom à deux doigts restent natifs.
+     Sans cette ligne, le navigateur « avale » les gestes horizontaux. */
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+  /* Empêche le menu contextuel iOS (appui long) au milieu d'un glissement */
+  -webkit-touch-callout: none;
+}
+
+/* ============================================================
+   ÉTAT « EN COURS DE GLISSEMENT »
+   ----------------------------------------------------------
+   Posée sur le conteneur racine pendant un drag actif :
+   - curseur « saisie en cours » ;
+   - aucune sélection de texte parasite ;
+   - images non glissables par le navigateur (sinon la souris
+     déclenche le drag natif de l'image et court-circuite le
+     nôtre).
+   ============================================================ */
+.sliderDragging .sliderContainer {
+  cursor: grabbing;
+}
+
+.sliderDragging .slide,
+.sliderDragging .slideTitle,
+.sliderDragging .slideDescription {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.slide img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Sur écran tactile, la main n'a pas besoin du curseur « grab » */
+@media (hover: none) {
+  .sliderContainer {
+    cursor: auto;
+  }
 }
 
 .sliderTrack {
