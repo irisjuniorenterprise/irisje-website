@@ -61,10 +61,63 @@ const LABELS = {
 type SliderProps = {
   slides: Slide[];
   autoplay?: boolean;
-  /** Durée fixe par diapositive, en millisecondes. */
+  /**
+   * Durée fixe par diapositive, en millisecondes.
+   * Non renseigné (défaut) : durée ADAPTATIVE, calculée à partir de la
+   * longueur du texte de chaque diapositive (voir getDwellMs).
+   */
   interval?: number;
   className?: string;
   locale?: string;
+};
+
+// ============================================================
+// RYTHME DE L'AVANCE AUTOMATIQUE
+// ----------------------------------------------------------
+// Deux exigences opposées : ne pas être si lent qu'on s'ennuie,
+// et ne pas être si rapide qu'on coupe une phrase en pleine
+// lecture. Plutôt qu'une durée fixe imposée à toutes les
+// diapositives, la durée dépend de ce que chacune contient :
+//
+//     durée = clamp(4,5 s, temps de lecture + 1,25 s, 8 s)
+//
+// - 260 mots/minute : rythme de « lecture en diagonale », ce
+//   qui correspond à des accroches courtes à l'écran (une
+//   lecture attentive de paragraphes exigeants reste à
+//   180-200 mpm — le plafond ci-dessous protège les cas où le
+//   texte dépasse ce que ce rythme autorise) ;
+// - 1,25 s de marge : temps de repérage visuel (illustration,
+//   pastille, titre) avant que le regard n'atteigne le texte ;
+// - plancher 4,5 s : même la diapositive la plus courte reste
+//   affichée le temps d'être vue sans précipitation ;
+// - plafond 8 s : au-delà, l'attente devient ennuyeuse. Une
+//   personne qui n'a pas fini de lire dispose du survol (pause
+//   automatique) ou du bouton ⏸, et peut relancer avec ▶.
+//
+// Exemples mesurés sur les textes actuels (fr) :
+//   « Solutions flexibles »          ≈ 14 mots → 4,5 s
+//   « Rejoignez IRIS Junior… »       ≈ 16 mots → 4,9 s
+//   « Développement IT & Numérique » ≈ 24 mots → 6,8 s
+// Amplitude obtenue sur le site : 4,5 s à 6,8 s en français,
+// 4,5 s à 5,4 s en anglais et 4,5 s à 5,6 s en arabe
+// (textes plus courts ailleurs qu'en français).
+// ============================================================
+const READING_WORDS_PER_MINUTE = 260;
+const DWELL_OVERHEAD_MS = 1250;
+const MIN_DWELL_MS = 4500;
+const MAX_DWELL_MS = 8000;
+
+const countWords = (text?: string) =>
+  text?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+
+/** Temps d'affichage d'une diapositive, proportionnel à son contenu. */
+const getDwellMs = (slide?: Slide) => {
+  const words =
+    countWords(slide?.title) +
+    countWords(slide?.description) +
+    countWords(slide?.cta?.label);
+  const readingMs = (words / READING_WORDS_PER_MINUTE) * 60_000;
+  return Math.min(MAX_DWELL_MS, Math.max(MIN_DWELL_MS, readingMs + DWELL_OVERHEAD_MS));
 };
 
 // Abonnement à la préférence système « réduire les animations ».
@@ -81,7 +134,7 @@ const getReducedMotion = () =>
 export default function Slider({
   slides,
   autoplay = false,
-  interval = 6000,
+  interval,
   className = '',
   locale = 'fr',
 }: SliderProps) {
@@ -118,6 +171,12 @@ export default function Slider({
   // d'animations. `isUserPaused` décide ensuite si elle tourne vraiment.
   const autoPlayAvailable = autoplay && totalSlides > 1 && !reducedMotion;
   const autoPlayRunning = autoPlayAvailable && !isUserPaused;
+
+  // Durée d'affichage de la diapositive COURANTE : imposée par `interval`
+  // si la page en fournit une, sinon adaptative selon le texte à lire
+  // (cf. getDwellMs). La lecture se règle donc sur le contenu réel, pas
+  // sur un rythme unique imposé à des textes de longueurs différentes.
+  const currentDwellMs = interval ?? getDwellMs(slides[currentIndex]);
 
   // Une pression sur ⏸ stoppe et coupe le timer ; une pression sur ▶
   // remet la lecture en route (le timer repart alors pour un intervalle
@@ -164,12 +223,15 @@ export default function Slider({
     // et curseur/focus hors du carrousel (sinon la lecture s'interrompt le
     // temps du survol ou du focus clavier).
     if (autoPlayRunning && !isPaused) {
-      timerRef.current = setInterval(goToNext, interval);
+      // setTimeout (et non setInterval) : chaque diapositive a sa propre
+      // durée, calculée d'après la longueur de son texte. Le compteur
+      // repart à zéro à chaque changement, jamais au milieu d'une lecture.
+      timerRef.current = setTimeout(goToNext, currentDwellMs);
     }
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isPaused, goToNext, interval]);
+  }, [autoPlayRunning, isPaused, goToNext, currentDwellMs]);
 
   // Balayage tactile : un geste surtout horizontal de plus de 40 px change de diapositive.
   // En RTL les diapositives défilent de droite à gauche : le sens est donc inversé.

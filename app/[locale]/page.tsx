@@ -92,10 +92,12 @@ export default async function HomePage({ params }: Props) {
       {/* Section snap à part entière : sans elle, le snap scroll saute par-dessus le slider */}
       <section className="placeholder" suppressHydrationWarning id="slider" style={{ textAlign: 'start' }}>
         <div className="container">
-          {/* Avance automatique : une diapositive toutes les 6 s. Le
+          {/* Avance automatique : la durée de chaque diapositive est
+              adaptative (calculée d'après la longueur de son texte, entre
+              4,5 s et 8 s) pour rester lisible sans devenir ennuyeuse. Le
               slider se met en pause au survol, au focus clavier, et peut
               être relancé à tout moment avec le bouton ⏸/▶. */}
-          <Slider slides={slides} autoplay interval={6000} locale={locale} />
+          <Slider slides={slides} autoplay locale={locale} />
         </div>
       </section>
 
