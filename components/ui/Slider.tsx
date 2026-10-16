@@ -131,6 +131,35 @@ const subscribeToReducedMotion = (onChange: () => void) => {
 const getReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// ============================================================
+// GLISSEMENT AUX DOIGTS UNIQUEMENT
+// ----------------------------------------------------------
+// - Mobile / tablette : UN doigt suffit (événements tactiles).
+// - Ordinateur : balayage horizontal à DEUX doigts sur le
+//   pavé tactile (événements `wheel` avec deltaX).
+// Dans les deux cas le contenu suit les doigts en temps réel,
+// puis se cale sur la diapositive voisine ou revient en place.
+// La souris (clic + glisser) n'est volontairement PAS utilisée.
+// ============================================================
+const DRAG_START_PX = 6;          // seuil avant de considérer un geste comme un glissement
+const SWIPE_MIN_PX = 50;          // distance minimale pour changer de diapositive…
+const SWIPE_DISTANCE_RATIO = 0.2; // …ou 20 % de la largeur (le plus grand des deux)
+const FLICK_VELOCITY = 0.4;       // px/ms : un geste rapide suffit même s'il est court
+const EDGE_RESISTANCE = 0.35;     // effet « élastique » en bout de carrousel
+const SETTLE_MS = 500;            // durée du calage (identique à la transition CSS)
+const WHEEL_MIN_PX = 60;          // pavé tactile : distance minimale pour changer de diapositive…
+const WHEEL_RATIO = 0.15;         // …ou 15 % de la largeur (le plus grand des deux)
+const WHEEL_IDLE_MS = 120;        // silence = doigts levés : fin du geste
+
+type DragState = {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  width: number;
+  active: boolean;
+  samples: { x: number; t: number }[];
+};
+
 export default function Slider({
   slides,
   autoplay = false,
@@ -147,8 +176,25 @@ export default function Slider({
   // reste visible et permet de REPARTIR d'où que l'on soit.
   const [isUserPaused, setIsUserPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const transitionTimerRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Glissement : décalage en pixels appliqué en direct à la piste pendant le geste
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef<DragState | null>(null);
+  // Vrai si le geste vient d'être un glissement : sert à ignorer le « clic » fantôme
+  // qui suit le relâchement (sinon un lien CTA serait ouvert à la fin d'un glissement).
+  const didDragRef = useRef(false);
+  // Pavé tactile (deux doigts) : état du geste en cours, hors rendu
+  const wheelRef = useRef<{
+    active: boolean; // geste en cours, le contenu suit les doigts
+    locked: boolean; // changement fait : on ignore l'inertie jusqu'au silence
+    offset: number;
+    timer: ReturnType<typeof setTimeout> | null;
+  }>({ active: false, locked: false, offset: 0, timer: null });
+  // Dernières valeurs lues par l'écouteur `wheel` (installé une seule fois)
+  const latestRef = useRef({ currentIndex: 0, totalSlides: 0, isRtl: false, isTransitioning: false });
 
   // Préférence système « réduire les animations », lue comme une source
   // externe : le rendu serveur suppose `false`, le client répond `true`/`false`.
@@ -183,14 +229,27 @@ export default function Slider({
   // complet, sans course résiduelle).
   const toggleAutoPlay = useCallback(() => setIsUserPaused((paused) => !paused), []);
 
+  // Active la transition CSS le temps du calage (changement de diapositive ou retour en place)
+  const settle = useCallback(() => {
+    setIsTransitioning(true);
+    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    transitionTimerRef.current = setTimeout(() => setIsTransitioning(false), SETTLE_MS);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    },
+    []
+  );
+
   const goToSlide = useCallback(
     (index: number) => {
       if (isTransitioning || index === currentIndex) return;
-      setIsTransitioning(true);
+      settle();
       setCurrentIndex(index);
-      setTimeout(() => setIsTransitioning(false), 500);
     },
-    [currentIndex, isTransitioning]
+    [currentIndex, isTransitioning, settle]
   );
 
   const goToNext = useCallback(() => {
@@ -222,7 +281,7 @@ export default function Slider({
     // non interrompue par l'utilisateur (bouton ⏸ ou navigation manuelle),
     // et curseur/focus hors du carrousel (sinon la lecture s'interrompt le
     // temps du survol ou du focus clavier).
-    if (autoPlayRunning && !isPaused) {
+    if (autoPlayRunning && !isPaused && !isDragging) {
       // setTimeout (et non setInterval) : chaque diapositive a sa propre
       // durée, calculée d'après la longueur de son texte. Le compteur
       // repart à zéro à chaque changement, jamais au milieu d'une lecture.
@@ -231,27 +290,181 @@ export default function Slider({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isPaused, goToNext, currentDwellMs]);
+  }, [autoPlayRunning, isPaused, isDragging, goToNext, currentDwellMs]);
 
-  // Balayage tactile : un geste surtout horizontal de plus de 40 px change de diapositive.
-  // En RTL les diapositives défilent de droite à gauche : le sens est donc inversé.
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  useEffect(() => {
+    latestRef.current = { currentIndex, totalSlides, isRtl, isTransitioning };
+  });
+
+  // ------------------------------------------------------------
+  // Balayage à DEUX doigts sur pavé tactile (ordinateur)
+  // ------------------------------------------------------------
+  // Le navigateur reçoit ce geste sous forme d'événements `wheel` avec un
+  // deltaX. Écouteur natif non passif (et non `onWheel` de React) : il faut
+  // pouvoir appeler preventDefault() pour empêcher le navigateur d'interpréter
+  // le geste comme « page précédente / suivante ».
+  // Le défilement vertical normal (deltaY dominant) n'est jamais intercepté.
+  const hasSlides = totalSlides > 0;
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const wheel = wheelRef.current;
+
+    // Silence prolongé = les doigts ont quitté le pavé
+    const endGesture = () => {
+      wheel.timer = null;
+      const wasActive = wheel.active;
+      wheel.active = false;
+      wheel.locked = false;
+      wheel.offset = 0;
+      if (wasActive) {
+        // Seuil non atteint : retour en place en douceur
+        settle();
+        setIsDragging(false);
+        setDragOffset(0);
+      }
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) return; // pincement (zoom) : hors sujet
+      const { currentIndex, totalSlides, isRtl, isTransitioning } = latestRef.current;
+      const unit = e.deltaMode === 1 ? 16 : 1; // Firefox peut compter en lignes
+      const dx = e.deltaX * unit;
+      const dy = e.deltaY * unit;
+
+      if (!wheel.active && !wheel.locked) {
+        if (totalSlides < 2 || isTransitioning) return;
+        // Geste vertical ou micro-mouvement : on laisse la page défiler
+        if (Math.abs(dx) < 2 || Math.abs(dx) <= Math.abs(dy)) return;
+        wheel.active = true;
+        wheel.offset = 0;
+        setIsDragging(true);
+      }
+
+      e.preventDefault();
+      if (wheel.timer) clearTimeout(wheel.timer);
+      wheel.timer = setTimeout(endGesture, WHEEL_IDLE_MS);
+      if (wheel.locked) return; // inertie du pavé après un changement : ignorée
+
+      // Les doigts vont vers la gauche (deltaX > 0) : le contenu part vers la gauche
+      const width = el.getBoundingClientRect().width;
+      wheel.offset = Math.max(-width, Math.min(width, wheel.offset - dx));
+      const forward = isRtl ? wheel.offset > 0 : wheel.offset < 0;
+      const atEdge =
+        (forward && currentIndex === totalSlides - 1) || (!forward && currentIndex === 0);
+      setDragOffset(atEdge ? wheel.offset * EDGE_RESISTANCE : wheel.offset);
+
+      // Seuil atteint : on change tout de suite, puis on ignore l'inertie
+      if (!atEdge && Math.abs(wheel.offset) >= Math.max(WHEEL_MIN_PX, width * WHEEL_RATIO)) {
+        wheel.active = false;
+        wheel.locked = true;
+        wheel.offset = 0;
+        settle();
+        setIsDragging(false);
+        setDragOffset(0);
+        setCurrentIndex(currentIndex + (forward ? 1 : -1));
+        setIsUserPaused(true);
+      }
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      if (wheel.timer) clearTimeout(wheel.timer);
+    };
+  }, [hasSlides, settle]);
+
+  // ------------------------------------------------------------
+  // Glissement à UN doigt (mobile / tablette)
+  // ------------------------------------------------------------
+  // `touch-action: pan-y` (CSS) laisse le navigateur gérer le défilement
+  // vertical de la page ; le mouvement horizontal nous revient.
+  // En RTL, « suivant » correspond à un geste vers la DROITE.
+  const isForward = (dx: number) => (isRtl ? dx > 0 : dx < 0);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (totalSlides < 2 || isTransitioning) return;
+    if (e.pointerType !== 'touch') return; // doigts uniquement : ni souris, ni stylet
+    didDragRef.current = false;
+    dragRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      width: e.currentTarget.getBoundingClientRect().width,
+      active: false,
+      samples: [{ x: e.clientX, t: e.timeStamp }],
+    };
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const start = touchStartRef.current;
-    touchStartRef.current = null;
-    if (!start || totalSlides < 2) return;
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - start.x;
-    const dy = touch.clientY - start.y;
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-    const forward = isRtl ? dx > 0 : dx < 0;
-    setIsUserPaused(true);
-    if (forward) goToNext();
-    else goToPrev();
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || e.pointerId !== drag.pointerId) return;
+
+    if (!drag.active) {
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      // Pas encore un glissement : trop court, ou plutôt vertical
+      if (Math.abs(dx) < DRAG_START_PX || Math.abs(dx) < Math.abs(dy)) return;
+      drag.active = true;
+      didDragRef.current = true;
+      drag.startX = e.clientX; // repart de 0 : pas de « saut » au démarrage
+      // La capture n'est prise qu'ici (pas au simple appui) pour ne pas
+      // détourner le toucher sur les liens CTA.
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setIsDragging(true);
+    }
+
+    const dx = e.clientX - drag.startX;
+    drag.samples.push({ x: e.clientX, t: e.timeStamp });
+    if (drag.samples.length > 6) drag.samples.shift();
+
+    // Effet élastique : en première / dernière diapositive, on ne peut pas aller plus loin
+    const atEdge =
+      (isForward(dx) && currentIndex === totalSlides - 1) ||
+      (!isForward(dx) && currentIndex === 0);
+    const clamped = Math.max(-drag.width, Math.min(drag.width, dx));
+    setDragOffset(atEdge ? clamped * EDGE_RESISTANCE : clamped);
+  };
+
+  const finishDrag = (e: React.PointerEvent<HTMLDivElement>, cancelled: boolean) => {
+    const drag = dragRef.current;
+    if (!drag || e.pointerId !== drag.pointerId) return;
+    dragRef.current = null;
+    if (!drag.active) return; // simple clic / appui : on ne touche à rien
+
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+
+    const dx = e.clientX - drag.startX;
+    const first = drag.samples[0];
+    const last = drag.samples[drag.samples.length - 1];
+    const velocity = last.t > first.t ? (last.x - first.x) / (last.t - first.t) : 0;
+
+    const passedDistance = Math.abs(dx) >= Math.max(SWIPE_MIN_PX, drag.width * SWIPE_DISTANCE_RATIO);
+    const passedFlick = Math.abs(velocity) >= FLICK_VELOCITY && Math.abs(dx) >= 20;
+    const direction = passedFlick && !passedDistance ? velocity : dx;
+    const target = currentIndex + (isForward(direction) ? 1 : -1);
+    const canChange =
+      !cancelled && (passedDistance || passedFlick) && target >= 0 && target < totalSlides;
+
+    // Un seul rendu : la transition CSS part de la position actuelle du doigt
+    // vers la position finale (diapositive voisine ou retour en place).
+    settle();
+    setIsDragging(false);
+    setDragOffset(0);
+    if (canChange) {
+      setCurrentIndex(target);
+      setIsUserPaused(true);
+    }
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (didDragRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      didDragRef.current = false;
+    }
   };
 
   const handleMouseEnter = () => setIsPaused(true);
@@ -275,17 +488,26 @@ export default function Slider({
       ref={containerRef}
     >
       <div
-        className={styles.sliderContainer}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        className={`${styles.sliderContainer} ${isDragging ? styles.dragging : ''}`}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={(e) => finishDrag(e, false)}
+        onPointerCancel={(e) => finishDrag(e, true)}
+        onClickCapture={handleClickCapture}
+        onDragStart={(e) => e.preventDefault()}
       >
         <div
           className={styles.sliderTrack}
           style={{
             // RTL : la 1re diapositive est à droite, la suite se lit de droite à gauche
             flexDirection: isRtl ? 'row-reverse' : 'row',
-            transform: `translateX(${(isRtl ? 1 : -1) * currentIndex * 100}%)`,
-            transition: isTransitioning ? 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+            // Position de la diapositive + décalage du doigt en pixels (suivi en direct)
+            transform: `translateX(calc(${(isRtl ? 1 : -1) * currentIndex * 100}% + ${dragOffset}px))`,
+            // Pas de transition PENDANT le glissement (la piste colle au doigt), seulement au calage
+            transition:
+              isTransitioning && !isDragging
+                ? `transform ${SETTLE_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`
+                : 'none',
           }}
         >
           {slides.map((slide, index) => (
@@ -308,7 +530,7 @@ export default function Slider({
                   <h3 className={styles.slideTitle}>{slide.title}</h3>
                   <p className={styles.slideDescription}>{slide.description}</p>
                   {slide.cta && (
-                    <a href={slide.cta.href} className={styles.slideCta}>
+                    <a href={slide.cta.href} className={styles.slideCta} draggable={false}>
                       {slide.cta.label}
                       {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
                       <span style={visuallyHidden}>{` — ${slide.title}`}</span>
