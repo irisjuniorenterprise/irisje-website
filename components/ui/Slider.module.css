@@ -25,6 +25,19 @@
   touch-action: pan-y; /* le balayage horizontal est géré par le slider, le scroll vertical reste libre */
   aspect-ratio: 16 / 5;
   min-height: 200px;
+  /* Balayage à deux doigts sur pavé tactile : empêche le navigateur de le
+     transformer en « page précédente / suivante » */
+  overscroll-behavior-x: contain;
+}
+
+/* Pendant un glissement tactile : pas de sélection de texte, et les liens ne réagissent pas */
+.sliderContainer.dragging {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.sliderContainer.dragging .slideCta {
+  pointer-events: none;
 }
 
 .sliderTrack {
