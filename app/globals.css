@@ -983,12 +983,12 @@ html:has(body.menu-open) {
   }
   .hero-inner {
     flex-direction: row-reverse;
-    text-align: left;
+    text-align: start;
     justify-content: space-between;
     gap: 56px;
   }
   .hero-content {
-    text-align: left;
+    text-align: start;
   }
   .hero-actions {
     justify-content: flex-start;
