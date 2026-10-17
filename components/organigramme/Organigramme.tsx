@@ -285,8 +285,11 @@ function AssistantRow({
 
   return (
     <li className={styles.assistant} style={vars({ '--at': at })}>
-      <span className={styles.miniAvatar}>
-        <Avatar photo={person.photo} alt={hasName ? name : ''} sizes="52px" />
+      {/* Wrap non rogné (porte l'anneau au survol) + avatar rogné, comme les responsables */}
+      <span className={styles.miniAvatarWrap}>
+        <span className={styles.miniAvatar}>
+          <Avatar photo={person.photo} alt={hasName ? name : ''} sizes="52px" />
+        </span>
       </span>
       <div className={styles.assistantText}>
         {/* Mêmes styles que les cartes des responsables (Qualité, Projet…) */}
