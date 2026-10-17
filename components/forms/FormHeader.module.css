@@ -49,6 +49,12 @@
   color: var(--primary);
   background: var(--accent);
   box-shadow: 0 0 0 5px rgba(90, 184, 222, 0.18);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
 }
 
 .badge svg {
@@ -56,6 +62,7 @@
   flex: none;
   margin: 0;
   padding: 0;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .text {
@@ -89,6 +96,79 @@
   letter-spacing: normal;
   text-transform: none;
   color: var(--text-muted);
+}
+
+/* Survol : la pastille grossit en s'inclinant légèrement et son halo
+   s'élargit ; l'icône fait un petit rebond. Les couleurs ne changent pas. */
+@media (hover: hover) {
+  .badge:hover {
+    transform: scale(1.12) rotate(-8deg);
+    box-shadow: 0 0 0 10px rgba(90, 184, 222, 0.28);
+  }
+
+  .badge:hover svg {
+    transform: scale(1.1) rotate(8deg);
+  }
+}
+
+/* Appui : effet d'enfoncement immédiat */
+.badge:active {
+  transform: scale(0.9);
+}
+
+/* Clic : pop + onde de halo, et l'icône fait un tour complet.
+   La classe .popping est posée par FormHeader.tsx puis retirée à la fin. */
+.popping {
+  animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.popping svg {
+  animation: badgeSpin 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 5px rgba(90, 184, 222, 0.35);
+  }
+  35% {
+    transform: scale(0.85);
+  }
+  70% {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 22px rgba(90, 184, 222, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 5px rgba(90, 184, 222, 0.18);
+  }
+}
+
+@keyframes badgeSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .badge svg {
+    transition: none;
+  }
+
+  .badge:hover,
+  .badge:hover svg,
+  .badge:active {
+    transform: none;
+  }
+
+  .popping,
+  .popping svg {
+    animation: none;
+  }
 }
 
 @media (max-width: 480px) {

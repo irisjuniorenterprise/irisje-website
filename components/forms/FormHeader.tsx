@@ -1,3 +1,5 @@
+'use client';
+
 // components/forms/FormHeader.tsx
 //
 // En-tête commun aux formulaires (Contact, Devis) : pastille d'icône, titre,
@@ -9,7 +11,7 @@
 // la classe globale `.placeholder`, dont la règle `.placeholder span` ajoute
 // une puce « ✦ » et passe le texte en majuscules.
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import styles from './FormHeader.module.css';
 
 type FormHeaderProps = {
@@ -28,9 +30,20 @@ export default function FormHeader({
   subtitle,
   requiredNote,
 }: FormHeaderProps) {
+  // Animation au clic : la classe est posée au clic puis retirée à la fin de
+  // l'animation, ce qui permet de la rejouer à chaque clic.
+  const [popping, setPopping] = useState(false);
+
   return (
     <header className={styles.header}>
-      <div className={styles.badge} aria-hidden="true">
+      <div
+        className={`${styles.badge} ${popping ? styles.popping : ''}`}
+        aria-hidden="true"
+        onClick={() => setPopping(true)}
+        onAnimationEnd={(e) => {
+          if (e.target === e.currentTarget) setPopping(false);
+        }}
+      >
         {icon}
       </div>
       <div className={styles.text}>
