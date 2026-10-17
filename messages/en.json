@@ -2,8 +2,8 @@
   "HomePage": {
     "meta": {
       "title": "IRIS Junior Entreprise — Boost your potential",
-      "description": "IRIS Junior Entreprise supports entrepreneurs, startups and SMEs with innovative solutions in IT, studies and marketing. Boost your potential with IRIS JE.",
-      "keywords": "junior enterprise, consulting, IT, marketing, studies, ENIS, Sfax"
+      "description": "IRIS Junior Entreprise supports entrepreneurs, startups and SMEs with innovative solutions in IT, business and marketing. Boost your potential with IRIS JE.",
+      "keywords": "junior enterprise, consulting, IT, marketing, business, ENIS, Sfax"
     },
     "hero": {
       "title": "Boost your potential, connect your success with <span class=\"accent-text\">IRIS JE</span>",
@@ -12,7 +12,7 @@
     },
     "services": {
       "title": "Our Expertise at the Service of Your Ambitions",
-      "description": "IRIS Junior Entreprise supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions tailored to their needs. Leveraging its expertise in IT, studies, and marketing, the organization provides services ranging from digital solution development and strategic studies to brand enhancement and digital presence management.",
+      "description": "IRIS Junior Entreprise supports entrepreneurs, startups, SMEs, and public institutions through innovative solutions tailored to their needs. Leveraging its expertise in IT, business, and marketing, the organization provides services ranging from digital solution development and strategic business consulting to brand enhancement and digital presence management.",
       "cta": "Discover our services"
     },
     "about": {
@@ -103,7 +103,7 @@
     "meta": {
       "title": "Services | IRIS Junior Entreprise",
       "description": "Discover our services in IT, Marketing and Business. We put our expertise at the service of your projects.",
-      "keywords": "services, IT, web development, marketing, studies, consulting"
+      "keywords": "services, IT, web development, marketing, business, consulting"
     },
     "hero": {
       "title": "Our <accent>Services</accent>",
@@ -148,7 +148,7 @@
     },
     "etudes": {
       "title": "Business",
-      "subtitle": "Strategic studies to inform your decisions and optimize your development.",
+      "subtitle": "Strategic business insights to inform your decisions and optimize your development.",
       "marche": {
         "title": "Market Research",
         "desc": "Collection and analysis of information to identify the specifications of said market. Assessment of demand, competition, products, environment and trends.",
@@ -184,7 +184,7 @@
     "meta": {
       "title": "Quote request | IRIS Junior Entreprise",
       "description": "Request a personalized quote for your IT, Marketing or Business projects from IRIS Junior Entreprise.",
-      "keywords": "quote, request, project, budget, deadline, IT, marketing, studies"
+      "keywords": "quote, request, project, budget, deadline, IT, marketing, business"
     },
     "hero": {
       "title": "Request a <accent>quote</accent>",
@@ -464,7 +464,7 @@
       "date_naissance": "Date of Birth",
       "date_helper": "Format: DD/MM/YYYY",
       "adresse": "Address",
-      "niveau_etudes": "Level of Business",
+      "niveau_etudes": "Level of study",
       "select_niveau": "Select your level of studies"
     },
     "candidature": {
@@ -643,7 +643,7 @@
       {
         "id": 1,
         "question": "What is IRIS Junior Entreprise?",
-        "answer": "IRIS Junior Entreprise is a student non profit organization founded in 2014 within the National School of Engineers of Sfax (ENIS). It operates as a consulting firm and offers services in IT, marketing and business studies."
+        "answer": "IRIS Junior Entreprise is a student non profit organization founded in 2014 within the National School of Engineers of Sfax (ENIS). It operates as a consulting firm and offers services in IT, marketing and business."
       },
       {
         "id": 2,
