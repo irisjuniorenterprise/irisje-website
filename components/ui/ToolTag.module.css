@@ -1,6 +1,10 @@
 /* components/ui/ToolTag.module.css
-   Pastille d'outil — apparence au repos identique à l'ancienne .tool-tag
-   (globals.css) : fond --border-light, texte --text-secondary, pilule 0.75rem. */
+   Pastille d'outil — le style est celui rendu historiquement sur la page
+   services : fond --border-light, étiquette en majuscules Montserrat 600
+   0.85rem gris --text-muted, précédée de l'étoile ✦ accent. Ces valeurs
+   venaient d'une fuite de la règle globale `.placeholder span*`
+   (globals.css) ; ToolTag les porte désormais lui-même pour que le rendu
+   soit identique partout où il est utilisé (services, portfolio…). */
 
 .tag {
   /* Remise à zéro du <button> pour retrouver l'aspect de l'ancien <span> */
@@ -40,6 +44,42 @@
   transition: width 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
 }
 
+/* Étoile décorative « ✦ » : reprend EXACTEMENT la puce que la règle globale
+   .placeholder span::before (globals.css) affichait devant les étiquettes
+   des pastilles de la page services (même caractère, même taille que le
+   texte, couleur accent, largeur d'un espace comme séparateur).
+   ToolTag la porte désormais lui-même : le rendu est donc identique sur
+   toutes les pages qui l'utilisent (services, portfolio…).
+   Sélecteurs en `.tag .…` (spécificité 0,2,0 / 0,2,1) : ils doivent battre
+   la règle globale `.placeholder span*` (0,1,1), sinon la page services
+   afficherait une SECONDE étoile (une par source). */
+.tag .star {
+  flex: none;
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1;
+  margin-inline-end: 0.25em;
+}
+
+.tag .star::before,
+.tag .label::before {
+  content: none;
+}
+
+/* Étiquette : ces valeurs DUPLIQUENT celles de `.placeholder span`
+   (globals.css) — la règle qui « fuyait » dans les pastilles de la page
+   services. En les portant par le composant, le rendu de la page services
+   reste strictement identique (majuscules, Montserrat 600, 0.85rem,
+   gris --text-muted) et le portfolio affiche exactement le même style. */
+.tag .label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 /* Survol — uniquement sur les appareils qui survolent vraiment
    (évite l'état « collé » après un toucher sur mobile) */
 @media (hover: hover) {
@@ -49,6 +89,11 @@
     color: var(--primary);
     box-shadow: inset 0 0 0 1px var(--accent), 0 4px 12px rgba(26, 57, 105, 0.14);
     transform: translateY(-2px);
+  }
+  /* L'étiquette porte sa propre couleur (`.tag .label`) : sans cette ligne
+     elle resterait gris clair sur le fond teinté accent du survol. */
+  .tag:hover .label {
+    color: var(--primary);
   }
 }
 
@@ -72,10 +117,21 @@
   animation: toolTagPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Étiquette en blanc, comme la coche : `.tag .label` porte sa propre
+   couleur, l'héritage de `.tag.selected` ne suffirait pas. */
+.tag.selected .label {
+  color: var(--on-primary);
+}
+
 .tag.selected .check {
   width: 10px;
   opacity: 1;
   margin-inline-end: 0.35rem;
+}
+
+/* État marqué : l'étoile suit la teinte du texte (blanc), comme la coche */
+.tag.selected .star {
+  color: inherit;
 }
 
 @media (hover: hover) {
