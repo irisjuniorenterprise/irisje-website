@@ -2,10 +2,21 @@
 
 .sloganWrapper {
   padding: 2.5rem 0 1.5rem 0;
-  background: transparent;
-  border-top: 1px solid var(--border-light);
+  /* Effet verre (glassmorphism) : fond blanc translucide + flou du décor fixe
+     derrière (réseau de lignes et aigle). */
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(2px) saturate(110%);
+  backdrop-filter: blur(2px) saturate(110%);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
   position: relative;
   overflow: hidden;
+}
+
+/* Navigateurs sans backdrop-filter : fond plus opaque pour garder la lisibilité */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sloganWrapper {
+    background: rgba(255, 255, 255, 0.9);
+  }
 }
 
 .sloganWrapper::before {
