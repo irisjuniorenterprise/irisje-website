@@ -6,6 +6,16 @@
   background: var(--surface);
   /* Pas de border-top : la section précédente (Nos Valeurs) fournit déjà un border-bottom */
   border-bottom: 1px solid var(--border-light);
+  /* Révélation au scroll : fondu + glissement, déclenchée par l'IntersectionObserver
+     du composant (classe .inView). */
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--t-slow), transform var(--t-slow);
+}
+
+.inView {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .header {
@@ -76,6 +86,171 @@
   color: var(--on-primary);
 }
 
+/* Compteur de projets dans chaque pastille de filtre */
+.filterCount {
+  display: inline-block;
+  margin-inline-start: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--border-light);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.filterActive .filterCount {
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--on-primary);
+}
+
+/* ============================================================
+   PROJET À LA UNE
+   Carte large (image + texte côte à côte) affichée au-dessus
+   de la grille. S'empile en colonne sous 768 px.
+   ============================================================ */
+.featuredCard {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  margin-bottom: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
+}
+
+.featuredCard:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.featuredMedia {
+  position: relative;
+  overflow: hidden;
+  background: var(--background);
+  min-height: 260px;
+}
+
+.featuredMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.featuredCard:hover .featuredMedia img {
+  transform: scale(1.03);
+}
+
+/* Pastille « Projet à la une » */
+.featuredBadge {
+  position: absolute;
+  top: 0.9rem;
+  inset-inline-start: 0.9rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 0.25rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.featuredBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.75rem 2rem;
+}
+
+.featuredTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.featuredDesc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.featuredMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  width: 100%;
+}
+
+/* Catégorie statique (hors overlay) pour la carte à la une */
+.cardCategoryStatic {
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 0.2rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* CTA de la carte à la une : même base que le lien de la modale */
+.featuredCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding: 0.55rem 1.4rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  cursor: pointer;
+  transition: background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+
+.featuredCta:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -4px rgba(26, 57, 105, 0.4);
+}
+
+.featuredCta svg {
+  transition: transform var(--t-fast);
+}
+
+.featuredCta:hover svg {
+  transform: translateX(3px);
+}
+
+.rtl .featuredCta svg {
+  transform: scaleX(-1);
+}
+
+.rtl .featuredCta:hover svg {
+  transform: scaleX(-1) translateX(3px);
+}
+
+.featuredCta:focus-visible,
+.filterBtn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
 /* ============================================================
    GRILLE DE PROJETS
    ============================================================ */
@@ -136,16 +311,52 @@
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   padding: 0.75rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 55%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.projectCard:hover .cardOverlay {
+.projectCard:hover .cardOverlay,
+.projectCard:focus-visible .cardOverlay {
   opacity: 1;
+}
+
+/* Badge année, toujours visible (info utile au scan rapide) */
+.cardYear {
+  position: absolute;
+  top: 0.75rem;
+  inset-inline-end: 0.75rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-primary);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+/* CTA « Voir le projet » en bas de l'overlay */
+.cardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.cardCta svg {
+  transition: transform var(--t-fast);
+}
+
+.projectCard:hover .cardCta svg {
+  transform: translateX(3px);
 }
 
 .cardCategory {
@@ -385,12 +596,12 @@
 /* ============================================================
    RTL SUPPORT
    ============================================================ */
-.rtl .cardOverlay {
-  flex-direction: row-reverse;
+.rtl .cardCta svg {
+  transform: scaleX(-1);
 }
 
-.rtl .cardOverlay svg:last-child {
-  transform: scaleX(-1);
+.rtl .projectCard:hover .cardCta svg {
+  transform: scaleX(-1) translateX(3px);
 }
 
 .rtl .modalClose {
@@ -436,6 +647,20 @@
     gap: 1rem;
   }
 
+  /* La carte à la une passe en colonne : image au-dessus, texte en dessous */
+  .featuredCard {
+    grid-template-columns: 1fr;
+  }
+
+  .featuredMedia {
+    min-height: 200px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .featuredBody {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
   .modal {
     max-width: 100%;
     margin: 0.5rem;
@@ -479,5 +704,52 @@
   .rtl .modalMeta {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+/* ============================================================
+   PREFERS-REDUCED-MOTION
+   Toute animation/transition est neutralisée. La section reste
+   visible : sans transition, `.portfolioSection` garde bien son
+   opacity de base… d'où la règle explicite ci-dessous, qui rend
+   la section visible même si l'observateur n'ajoute jamais
+   `.inView` (l'utilisateur a demandé moins de mouvement, pas
+   moins de contenu).
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .portfolioSection {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .projectCard,
+  .featuredCard,
+  .featuredCard:hover,
+  .featuredMedia img,
+  .featuredCard:hover .featuredMedia img,
+  .cardImage img,
+  .projectCard:hover .cardImage img,
+  .cardOverlay,
+  .cardCta svg,
+  .featuredCta,
+  .featuredCta:hover,
+  .featuredCta svg,
+  .featuredCta:hover svg,
+  .filterBtn,
+  .modal,
+  .modalOverlay,
+  .modalLink,
+  .modalLink:hover {
+    transition: none;
+    animation: none;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .projectCard:hover,
+  .featuredCard:hover {
+    transform: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   }
 }
