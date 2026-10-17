@@ -706,8 +706,17 @@
     "title": "Nos réalisations",
     "subtitle": "Découvrez quelques-uns des projets réalisés par nos consultants.",
     "filter_all": "Tous",
+    "filters_label": "Filtrer les projets par catégorie",
     "aria_label": "Voir les détails du projet : {title}",
     "close_modal": "Fermer",
-    "client_label": "Client :"
+    "client_label": "Client :",
+    "view_project": "Voir le projet",
+    "featured_badge": "Projet à la une",
+    "sample_project": {
+      "title": "Réservation en ligne pour un réseau de cliniques",
+      "description": "Conception et développement d'un site de prise de rendez-vous : planning en temps réel, confirmations par e-mail, espace patient et tableau de bord administrateur. Un parcours patient repensé de bout en bout, du premier clic au rappel de rendez-vous.",
+      "client": "Réseau de cliniques El Wifa",
+      "results": "+40 % de rendez-vous pris en ligne · −30 % d'appels au secrétariat"
+    }
   }
 }

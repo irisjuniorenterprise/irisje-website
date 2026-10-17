@@ -706,8 +706,17 @@
     "title": "Our achievements",
     "subtitle": "Discover some of the projects carried out by our consultants.",
     "filter_all": "All",
+    "filters_label": "Filter projects by category",
     "aria_label": "View project details: {title}",
     "close_modal": "Close",
-    "client_label": "Client:"
+    "client_label": "Client:",
+    "view_project": "View project",
+    "featured_badge": "Featured project",
+    "sample_project": {
+      "title": "Online booking for a clinic network",
+      "description": "Design and build of an appointment-booking website: real-time scheduling, e-mail confirmations, a patient portal and an admin dashboard. A patient journey redesigned end to end, from the first click to the appointment reminder.",
+      "client": "El Wifa clinic network",
+      "results": "+40% of appointments booked online · −30% of front-desk calls"
+    }
   }
 }
