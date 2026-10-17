@@ -396,8 +396,10 @@
   flex-direction: row-reverse;
 }
 
+/* Le formulaire porte déjà dir="rtl" : en flex, le 1er enfant (la case) se place
+   donc naturellement à droite. Un `row-reverse` ici l'inversait à gauche. */
 .form.rtl .checkboxLabel {
-  flex-direction: row-reverse;
+  flex-direction: row;
   text-align: right;
 }
 
