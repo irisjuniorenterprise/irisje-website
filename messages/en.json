@@ -436,7 +436,37 @@
   },
   "Organigramme": {
     "title": "Organizational Chart",
-    "subtitle": "Discover the leadership team of IRIS Junior Entreprise"
+    "subtitle": "Discover the leadership team of IRIS Junior Entreprise",
+    "aria_label": "General organizational chart of IRIS Junior Entreprise",
+    "name_placeholder": "First and LAST name",
+    "extended_bureau": "Extended board",
+    "bureau_admin": "Administrative board",
+    "bureau_exec": "Executive board",
+    "roles": {
+      "president": "President",
+      "treasurer": "Treasurer",
+      "secretary_general": "Secretary General",
+      "hr_training": "Human Resources & Training Manager",
+      "project": "Project Manager",
+      "it": "IT Manager",
+      "studies": "Business Manager",
+      "business_dev": "Business Development Manager",
+      "marketing": "Marketing Manager",
+      "quality": "Quality Manager",
+      "assistant": "Assistant"
+    },
+    "assistant_of": {
+      "president": "President's Assistant",
+      "treasurer": "Treasurer's Assistant",
+      "secretary_general": "Secretary General's Assistant",
+      "hr_training": "HR & Training Assistant",
+      "project": "Project Assistant",
+      "it": "IT Assistant",
+      "studies": "Business Assistant",
+      "business_dev": "Business Dev. Assistant",
+      "marketing": "Marketing Assistant",
+      "quality": "Quality Assistant"
+    }
   },
   "RecruitmentPage": {
     "meta": {

@@ -436,7 +436,37 @@
   },
   "Organigramme": {
     "title": "Organigramme",
-    "subtitle": "Découvrez l'équipe dirigeante d'IRIS Junior Entreprise"
+    "subtitle": "Découvrez l'équipe dirigeante d'IRIS Junior Entreprise",
+    "aria_label": "Organigramme général d'IRIS Junior Entreprise",
+    "name_placeholder": "Prénom et NOM",
+    "extended_bureau": "Bureau étendu",
+    "bureau_admin": "Bureau administratif",
+    "bureau_exec": "Bureau exécutif",
+    "roles": {
+      "president": "Président",
+      "treasurer": "Trésorier",
+      "secretary_general": "Secrétaire Général",
+      "hr_training": "Responsable Ressources Humaines & Formation",
+      "project": "Responsable Projet",
+      "it": "Responsable IT",
+      "studies": "Responsable Études",
+      "business_dev": "Responsable Développement Commercial",
+      "marketing": "Responsable Marketing",
+      "quality": "Responsable Qualité",
+      "assistant": "Adjoint(e)"
+    },
+    "assistant_of": {
+      "president": "Adjoint(e) Président",
+      "treasurer": "Adjoint(e) Trésorier",
+      "secretary_general": "Adjoint(e) Secrétaire Général",
+      "hr_training": "Adjoint(e) RH & Formation",
+      "project": "Adjoint(e) Projet",
+      "it": "Adjoint(e) IT",
+      "studies": "Adjoint(e) Études",
+      "business_dev": "Adjoint(e) Dev-Co",
+      "marketing": "Adjoint(e) Marketing",
+      "quality": "Adjoint(e) Qualité"
+    }
   },
   "RecruitmentPage": {
     "meta": {

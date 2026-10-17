@@ -436,7 +436,37 @@
   },
   "Organigramme": {
     "title": "الهيكل التنظيمي",
-    "subtitle": "تعرف على الفريق الإداري لIRIS Junior Entreprise"
+    "subtitle": "تعرف على الفريق الإداري لIRIS Junior Entreprise",
+    "aria_label": "الهيكل التنظيمي العام لـ IRIS Junior Entreprise",
+    "name_placeholder": "الاسم واللقب",
+    "extended_bureau": "المكتب الموسّع",
+    "bureau_admin": "المكتب الإداري",
+    "bureau_exec": "المكتب التنفيذي",
+    "roles": {
+      "president": "الرئيس",
+      "treasurer": "أمين المال",
+      "secretary_general": "الكاتب العام",
+      "hr_training": "مسؤول الموارد البشرية والتكوين",
+      "project": "مسؤول المشاريع",
+      "it": "مسؤول تكنولوجيا المعلومات",
+      "studies": "مسؤول الدراسات",
+      "business_dev": "مسؤول التطوير التجاري",
+      "marketing": "مسؤول التسويق",
+      "quality": "مسؤول الجودة",
+      "assistant": "مساعد(ة)"
+    },
+    "assistant_of": {
+      "president": "مساعد(ة) الرئيس",
+      "treasurer": "مساعد(ة) أمين المال",
+      "secretary_general": "مساعد(ة) الكاتب العام",
+      "hr_training": "مساعد(ة) الموارد البشرية والتكوين",
+      "project": "مساعد(ة) المشاريع",
+      "it": "مساعد(ة) تكنولوجيا المعلومات",
+      "studies": "مساعد(ة) الدراسات",
+      "business_dev": "مساعد(ة) التطوير التجاري",
+      "marketing": "مساعد(ة) التسويق",
+      "quality": "مساعد(ة) الجودة"
+    }
   },
   "RecruitmentPage": {
     "meta": {

@@ -1,0 +1,1173 @@
+/* components/organigramme/Organigramme.module.css
+   ------------------------------------------------------------
+   Desktop (> 1100px) : arbre horizontal, connecteurs en pseudo-éléments.
+   Tablette / mobile  : liste verticale indentée, cartes horizontales.
+   RTL : propriétés logiques (inset-inline-*, margin-inline-*) ; seuls les
+   dégradés / inclinaisons du bandeau de nom ont un réglage [dir='rtl'].
+
+   Hiérarchie : Bureau administratif > Bureau exécutif > Bureau étendu.
+   - bureau étendu (.extendedBureau) : UN SEUL cadre en traits interrompus,
+     en bas de l'organigramme. Les adjoints réutilisent .ribbon (nom) et
+     .role (poste) des responsables. Seules deux étoiles bleues (✦) y sont
+     affichées : devant le titre « Bureau étendu » et devant le nom de
+     chaque adjoint. Tous les autres pseudo-éléments sont supprimés.
+   - animations en CSS pur, neutralisées avec prefers-reduced-motion.
+     Chorégraphie d'entrée : les instants de départ (--at, --link,
+     --link-before, --link-after, en ms) et les durées (--dur-*) sont fournis
+     par Organigramme.tsx (schedule() et DUR) ; ce fichier ne contient aucun
+     délai « en dur » pour la séquence. Ordre : Président > tronc > Trésorier
+     puis SG > barre qui s'étend du centre vers les bords > Bureau étendu.
+     Tablette / mobile : même séquence (la révélation au scroll liée à
+     animation-timeline: view() a été retirée : elle montrait les cadres des
+     cartes tout de suite et seulement ensuite leur contenu).
+   ------------------------------------------------------------ */
+
+.wrapper {
+  --line: var(--accent);
+  --line-w: 2px;
+  --gap-v: 1.25rem;
+  --card-w: 10rem;
+  --avatar: 4.75rem;
+  --name-fs: 0.7rem;
+
+  /* Mode vertical (mobile) */
+  --avatar-m: 3.75rem;
+  --card-pad-m: 0.65rem;
+  --indent-pad: 1.25rem;
+  --row-gap-m: 0.75rem;
+
+  /* Animations / effets */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-draw: cubic-bezier(0.45, 0, 0.2, 1); /* traits qui se dessinent */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* léger rebond */
+  --glow: color-mix(in srgb, var(--accent) 45%, transparent);
+  --tint: color-mix(in srgb, var(--accent) 9%, transparent);
+
+  width: 100%;
+}
+
+/* Niveaux hiérarchiques : la taille décroît avec le rang */
+.tierAdmin {
+  --card-w: 11.5rem;
+  --avatar: 5.75rem;
+  --name-fs: 0.76rem;
+}
+
+.tierExec {
+  --card-w: 10rem;
+  --avatar: 4.75rem;
+  --name-fs: 0.7rem;
+}
+
+.subtitle {
+  max-width: 42rem;
+  margin: -0.5rem auto 2.5rem;
+  text-align: center;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  padding: 1.25rem 0.5rem 2.25rem;
+}
+
+.scroller:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.tree {
+  width: max-content;
+  max-width: none;
+  margin-inline: auto;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes orgRise {
+  from {
+    opacity: 0;
+    translate: 0 26px;
+    scale: 0.92;
+  }
+  to {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+}
+
+@keyframes orgDrawV {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes orgDrawH {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Barre horizontale (80 %) puis descente vers la carte (20 %).
+   « Right » part du bord gauche, « Left » part du bord droit : le sens est
+   choisi selon le côté du centre et la direction du texte (voir .children). */
+@keyframes orgGrowRight {
+  0% {
+    clip-path: inset(0 100% calc(100% - var(--line-w)) 0);
+  }
+  80% {
+    clip-path: inset(0 0 calc(100% - var(--line-w)) 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes orgGrowLeft {
+  0% {
+    clip-path: inset(0 0 calc(100% - var(--line-w)) 100%);
+  }
+  80% {
+    clip-path: inset(0 0 calc(100% - var(--line-w)) 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes orgLabelIn {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+    scale: 0.9;
+  }
+  to {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+}
+
+/* Avatar : apparition avec un léger rebond */
+@keyframes orgPop {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Bandeau de nom : révélé de gauche à droite (de droite à gauche en RTL) */
+@keyframes orgWipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes orgWipeRtl {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes orgTextIn {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* Cadre du bureau étendu : le trait pointillé se déploie depuis le centre */
+@keyframes orgFrame {
+  from {
+    opacity: 0;
+    clip-path: inset(-1rem 50% -1rem 50%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-1rem -1rem -1rem -1rem);
+  }
+}
+
+@keyframes orgSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orgHalo {
+  from {
+    opacity: 0.65;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
+@keyframes orgShine {
+  from {
+    transform: translateX(-130%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(130%) skewX(-20deg);
+  }
+}
+
+/* ============================================================
+   ÉTIQUETTES DE BUREAU (administratif / exécutif)
+   ============================================================ */
+.tierLabel {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.32rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: orgLabelIn var(--dur-label) var(--ease-out) calc(var(--at, 0) * 1ms) backwards;
+}
+
+.tierLabel::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Bureau administratif : pastille pleine, coiffe le Président */
+.tierLabelAdmin {
+  margin-bottom: 1rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* Bureau exécutif : pastille contour, posée sur le tronc */
+.tierLabelExec {
+  background: var(--surface);
+  color: var(--primary);
+  border: 1.5px solid var(--accent);
+}
+
+/* ============================================================
+   CARTE D'UN POSTE (commun)
+   ============================================================ */
+.card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: var(--card-w);
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  animation: orgRise var(--dur-card) var(--ease-out) calc(var(--at, 0) * 1ms) backwards;
+  transition:
+    transform 0.35s var(--ease-out),
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+/* Conteneur non rogné : porte les anneaux (la photo, elle, est rognée) */
+.avatarWrap {
+  position: relative;
+  flex: none;
+  width: var(--avatar);
+  height: var(--avatar);
+  border-radius: 50%;
+  animation: orgPop 0.7s var(--ease-spring) calc(var(--at, 0) * 1ms + 120ms) backwards;
+}
+
+.president .avatarWrap {
+  width: 7rem;
+  height: 7rem;
+}
+
+.avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e2e8f0;
+  box-shadow: 0 0 0 1px var(--border), 0 6px 18px rgba(15, 23, 42, 0.16);
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s var(--ease-out);
+}
+
+/* Bureau administratif : anneau d'accent permanent */
+.tierAdmin > .card .avatar {
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 22px rgba(15, 23, 42, 0.2);
+}
+
+.tierAdmin > .president .avatar {
+  box-shadow: 0 0 0 3px var(--accent), 0 8px 22px rgba(15, 23, 42, 0.2);
+}
+
+/* Anneau conique : apparaît au survol, tourne autour de l'avatar */
+.avatarWrap::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent),
+    var(--primary),
+    var(--accent),
+    var(--primary),
+    var(--accent)
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 3px),
+    #000 calc(100% - 2px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 3px),
+    #000 calc(100% - 2px)
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+/* Halo discret qui « respire » autour du président */
+.president .avatarWrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0; /* invisible jusqu'au départ de l'animation (pas de fill-mode) */
+  animation: orgHalo 3.4s ease-out calc(var(--at, 0) * 1ms + 1400ms) infinite;
+}
+
+.photo {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.placeholderSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.ribbon {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  color: var(--on-primary);
+  font-size: var(--name-fs, 0.7rem);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  background: var(--primary);
+  animation: orgWipe 0.55s var(--ease-out) calc(var(--at, 0) * 1ms + 300ms) backwards;
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s var(--ease-out);
+}
+
+:global([dir='rtl']) .ribbon {
+  animation-name: orgWipeRtl;
+}
+
+.ribbon span {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+/* Reflet qui traverse le bandeau : une fois à l'apparition (::before),
+   puis à chaque survol (::after). Deux éléments distincts pour que le survol
+   ne relance pas l'animation d'entrée. */
+.ribbon::before,
+.ribbon::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.38),
+    transparent
+  );
+  transform: translateX(-130%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.ribbon::before {
+  animation: orgShine 0.9s var(--ease-out) calc(var(--at, 0) * 1ms + 800ms) backwards;
+}
+
+.role {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  animation: orgTextIn 0.5s var(--ease-out) calc(var(--at, 0) * 1ms + 480ms) backwards;
+  transition:
+    color 0.3s ease,
+    letter-spacing 0.3s ease;
+}
+
+/* ============================================================
+   BUREAU ÉTENDU — un seul cadre en pointillés, tous les adjoints dedans
+   ============================================================ */
+.extendedBureau {
+  position: relative;
+  align-self: stretch;
+  margin: 2.75rem 0 0;
+  padding: 1.6rem 1rem 1rem;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--background) 60%, transparent);
+  animation: orgFrame var(--dur-frame) var(--ease-out) calc(var(--at, 0) * 1ms) backwards;
+}
+
+/* 1) Supprime TOUTES les étoiles / pseudo-éléments hérités dans le cadre */
+.extendedBureau::before,
+.extendedBureau::after,
+.extendedBureau *::before,
+.extendedBureau *::after {
+  content: none !important;
+}
+
+/* Titre posé sur la bordure du cadre (left physique : symétrique en RTL) */
+.extendedTitle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -50%;
+  margin: 0;
+  padding: 0.28rem 0.9rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: orgPop 0.6s var(--ease-spring) calc(var(--at, 0) * 1ms + 350ms) backwards;
+}
+
+/* 2) Étoile bleue uniquement devant « Bureau étendu » */
+.extendedBureau .extendedTitle::before {
+  content: '✦' !important;
+  display: inline-block;
+  margin-inline-end: 0.4em;
+  color: var(--accent);
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+.extendedCount {
+  opacity: 0.75;
+}
+
+/* Une seule ligne sur desktop (retour à la ligne seulement si l'espace manque) */
+.assistantList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.75rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assistant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: 10rem;
+  padding: 0.5rem 0.4rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  animation: orgRise 0.55s var(--ease-out) calc(var(--at, 0) * 1ms) backwards;
+  transition: background-color 0.3s ease;
+}
+
+.miniAvatar {
+  position: relative;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e2e8f0;
+  box-shadow: 0 0 0 1px var(--border);
+  animation: orgPop 0.6s var(--ease-spring) calc(var(--at, 0) * 1ms + 100ms) backwards;
+}
+
+/* Bloc texte : contient .ribbon (nom) et .role (poste), comme les responsables */
+.assistantText {
+  --name-fs: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* 3) Étoile bleue uniquement devant le nom/prénom (dans le bandeau).
+      Spécificité supérieure au reset ci-dessus : elle l'emporte. */
+.extendedBureau .ribbon span::before {
+  content: '✦' !important;
+  display: inline-block;
+  margin-inline-end: 0.35em;
+  color: var(--accent);
+  font-size: 0.85em;
+  line-height: 1;
+}
+
+/* Notation optionnelle (0 à 5 étoiles, SVG : non concernée par le reset) */
+.stars {
+  display: inline-flex;
+  gap: 0.1rem;
+  margin-top: 0.15rem;
+}
+
+.stars svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.starOn {
+  fill: var(--accent);
+}
+
+.starOff {
+  fill: var(--border-strong);
+  opacity: 0.45;
+}
+
+@media (hover: hover) {
+  .assistant:hover {
+    background: var(--tint);
+  }
+}
+
+/* ============================================================
+   INTERACTIONS CARTE (survol / focus / clic)
+   ============================================================ */
+@media (hover: hover) {
+  .card:hover,
+  .card:focus-within {
+    z-index: 3;
+    transform: translateY(-6px);
+  }
+
+  .card:hover .avatar,
+  .card:focus-within .avatar {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 1px transparent, 0 14px 30px var(--glow);
+  }
+
+  .president:hover .avatar,
+  .president:focus-within .avatar {
+    box-shadow: 0 0 0 3px var(--accent), 0 14px 30px var(--glow);
+  }
+
+  .card:hover .avatarWrap::after,
+  .card:focus-within .avatarWrap::after {
+    opacity: 1;
+    animation: orgSpin 3s linear infinite;
+  }
+
+  .card:hover .photo,
+  .card:hover .placeholderSvg {
+    transform: scale(1.1);
+  }
+
+  .card:hover .ribbon,
+  .card:focus-within .ribbon {
+    box-shadow: 0 8px 20px var(--glow);
+  }
+
+  .card:hover .ribbon::after {
+    animation: orgShine 0.9s var(--ease-out);
+  }
+
+  .card:hover .role,
+  .card:focus-within .role {
+    color: var(--primary);
+    letter-spacing: 0.07em;
+  }
+
+  /* Spot : seules la carte visée et sa lignée (ancêtres) restent pleinement visibles.
+     Un poste qui ne contient pas la carte survolée est estompé. */
+  .tree:has(.card:hover) .item:not(:has(.card:hover)) .card,
+  .tree:has(.card:hover) .asideItem:not(:has(.card:hover)) > .card {
+    opacity: 0.5;
+    filter: saturate(0.6);
+  }
+}
+
+/* Clic / tap : effet d'enfoncement */
+.card:active {
+  transform: translateY(-2px) scale(0.98);
+  transition-duration: 0.12s;
+}
+
+/* ============================================================
+   DESKTOP — arbre horizontal
+   ============================================================ */
+@media (min-width: 1101px) {
+  .item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-inline: 0.5rem;
+  }
+
+  .tree > .item {
+    padding-inline: 0;
+  }
+
+  /* Fond « verre » qui apparaît derrière la carte au survol */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: -0.6rem -0.4rem;
+    z-index: -1;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: 0 16px 36px var(--shadow);
+    opacity: 0;
+    transform: scale(0.94);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s var(--ease-out);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .card:hover::before,
+    .card:focus-within::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Bandeau de nom incliné, avec liserés bleus (comme la maquette) */
+  .ribbon {
+    padding-inline: 0.9rem 1.35rem;
+    transform: skewX(-14deg);
+    background: linear-gradient(
+      to right,
+      var(--primary) 0,
+      var(--primary) calc(100% - 1rem),
+      var(--accent) calc(100% - 1rem),
+      var(--accent) calc(100% - 0.75rem),
+      var(--primary) calc(100% - 0.75rem),
+      var(--primary) calc(100% - 0.5rem),
+      var(--accent) calc(100% - 0.5rem),
+      var(--accent) calc(100% - 0.25rem),
+      var(--primary) calc(100% - 0.25rem),
+      var(--primary) 100%
+    );
+  }
+
+  .ribbon span {
+    transform: skewX(14deg);
+  }
+
+  :global([dir='rtl']) .ribbon {
+    transform: skewX(14deg);
+    background: linear-gradient(
+      to left,
+      var(--primary) 0,
+      var(--primary) calc(100% - 1rem),
+      var(--accent) calc(100% - 1rem),
+      var(--accent) calc(100% - 0.75rem),
+      var(--primary) calc(100% - 0.75rem),
+      var(--primary) calc(100% - 0.5rem),
+      var(--accent) calc(100% - 0.5rem),
+      var(--accent) calc(100% - 0.25rem),
+      var(--primary) calc(100% - 0.25rem),
+      var(--primary) 100%
+    );
+  }
+
+  :global([dir='rtl']) .ribbon span {
+    transform: skewX(-14deg);
+  }
+
+  /* Trait vertical sous une carte (se « dessine » de haut en bas) */
+  .stem {
+    display: block;
+    flex: none;
+    width: var(--line-w);
+    height: var(--gap-v);
+    background: var(--line);
+    transform-origin: top;
+    animation: orgDrawV var(--dur-stem) var(--ease-draw) calc(var(--at, 0) * 1ms) backwards;
+  }
+
+  /* ----- Postes de part et d'autre du tronc (Trésorier / Secrétaire) ----- */
+  .aside {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-self: stretch;
+  }
+
+  /* Tronc vertical qui traverse la rangée */
+  .aside::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: var(--line-w);
+    translate: -50% 0;
+    background: var(--line);
+    /* Le tronc descend depuis le Président */
+    transform-origin: top;
+    animation: orgDrawV var(--dur-trunk) var(--ease-draw) calc(var(--at, 0) * 1ms) backwards;
+  }
+
+  .asideItem {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .asideItem:nth-child(2) {
+    flex-direction: row-reverse;
+  }
+
+  .spacer {
+    flex: 1 1 0;
+  }
+
+  /* Trait horizontal vers le tronc, à hauteur du bandeau de nom */
+  .hLine {
+    flex: 1 1 0;
+    min-width: 1rem;
+    height: var(--line-w);
+    margin-top: calc(var(--avatar) + 0.55rem + 0.8rem - var(--line-w) / 2);
+    background: var(--line);
+    /* Le trait part du tronc et rejoint la carte (tronc = côté interne) */
+    transform-origin: right center;
+    animation: orgDrawH var(--dur-hline) var(--ease-draw) calc(var(--link, 0) * 1ms) backwards;
+  }
+
+  .asideItem:nth-child(2) .hLine {
+    transform-origin: left center;
+  }
+
+  :global([dir='rtl']) .hLine {
+    transform-origin: left center;
+  }
+
+  :global([dir='rtl']) .asideItem:nth-child(2) .hLine {
+    transform-origin: right center;
+  }
+
+  /* ----- Sous-arborescence : barre horizontale + descentes ----- */
+  .children {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .children > .item {
+    padding-top: var(--gap-v);
+  }
+
+  .children > .item::before,
+  .children > .item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: calc(50% + var(--line-w) / 2);
+    height: var(--gap-v);
+    border-top: var(--line-w) solid var(--line);
+    animation-duration: var(--dur-half);
+    animation-timing-function: linear;
+    animation-fill-mode: backwards;
+  }
+
+  /* ::before = moitié côté début de ligne, ::after = moitié côté fin (+ descente).
+     La barre part du centre de l'arbre : chaque responsable reçoit ses deux
+     demi-barres à des instants différents (--link-before / --link-after,
+     calculés dans schedule()). Sens du balayage selon le côté et la direction
+     du texte (LTR : « Right » = vers la droite). */
+  .children > .item::before {
+    inset-inline-end: calc(50% - var(--line-w) / 2);
+    animation-name: orgGrowLeft;
+    animation-delay: calc(var(--link-before, 0) * 1ms);
+  }
+
+  .children > .item::after {
+    inset-inline-start: calc(50% - var(--line-w) / 2);
+    border-inline-start: var(--line-w) solid var(--line);
+    animation-name: orgGrowRight;
+    animation-delay: calc(var(--link-after, 0) * 1ms);
+  }
+
+  .children > .item.sideEnd::before {
+    animation-name: orgGrowRight;
+  }
+
+  .children > .item.sideStart::after {
+    animation-name: orgGrowLeft;
+  }
+
+  :global([dir='rtl']) .children > .item::before {
+    animation-name: orgGrowRight;
+  }
+
+  :global([dir='rtl']) .children > .item::after {
+    animation-name: orgGrowLeft;
+  }
+
+  :global([dir='rtl']) .children > .item.sideEnd::before {
+    animation-name: orgGrowLeft;
+  }
+
+  :global([dir='rtl']) .children > .item.sideStart::after {
+    animation-name: orgGrowRight;
+  }
+
+  .children > .item:first-child::before,
+  .children > .item:last-child::after {
+    border-top: 0;
+  }
+
+  /* La descente est portée par ::after (y compris pour le dernier enfant) */
+
+  /* Enfant unique : seule la descente verticale est nécessaire */
+  .children > .item:only-child::before {
+    display: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE / MOBILE — liste verticale indentée
+   ============================================================ */
+@media (max-width: 1100px) {
+  .wrapper {
+    /* Position verticale des traits : milieu de l'avatar du poste */
+    --tick-y: calc(
+      var(--row-gap-m) + 1px + var(--card-pad-m) + var(--avatar-m) / 2 - var(--line-w) / 2
+    );
+  }
+
+  .scroller {
+    overflow: visible;
+    padding: 0.5rem 0 0;
+  }
+
+  .tree {
+    width: 100%;
+    max-width: 36rem;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stem,
+  .spacer,
+  .hLine,
+  .aside::before {
+    display: none;
+  }
+
+  /* Étiquettes de bureau : simples légendes dans la liste */
+  .tierLabel {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--primary);
+    white-space: normal;
+  }
+
+  .tierLabelAdmin {
+    align-self: flex-start;
+    margin: 0 0 0.6rem;
+    background: none;
+    box-shadow: none;
+    color: var(--primary);
+  }
+
+  /* Même retrait et même ligne verticale que les postes latéraux,
+     pour que le trait reste continu jusqu'aux responsables */
+  .tierLabelExec {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    margin-inline-start: calc(
+      var(--card-pad-m) + 1px + var(--avatar-m) / 2 - var(--line-w) / 2
+    );
+    padding-block: var(--row-gap-m) 0;
+    padding-inline-start: var(--indent-pad);
+    border: 0;
+    background: none;
+    color: var(--primary);
+  }
+
+  .tierLabelExec::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    width: var(--line-w);
+    background: var(--line);
+    transform-origin: top center;
+    animation: orgDrawV var(--dur-stem) var(--ease-draw) calc(var(--at, 0) * 1ms) backwards;
+  }
+
+  /* Carte horizontale : avatar à gauche (à droite en RTL), texte à côté */
+  .card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.9rem;
+    width: 100%;
+    padding: var(--card-pad-m);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: 0 2px 10px var(--shadow);
+    text-align: start;
+    transition:
+      transform 0.3s var(--ease-out),
+      box-shadow 0.3s ease,
+      border-color 0.3s ease,
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
+
+  /* Bureau administratif : bordure d'accent pour marquer le rang */
+  .tierAdmin > .card {
+    border-color: var(--accent);
+  }
+
+  @media (hover: hover) {
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 26px var(--shadow);
+    }
+  }
+
+  .avatarWrap,
+  .president .avatarWrap {
+    width: var(--avatar-m);
+    height: var(--avatar-m);
+  }
+
+  .avatar {
+    border-width: 3px;
+  }
+
+  .avatarWrap::after {
+    inset: -6px;
+  }
+
+  .identity {
+    flex: 1 1 0;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    min-height: var(--avatar-m);
+  }
+
+  .ribbon {
+    width: auto;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  /* Bureau étendu : cadre pointillé sous l'arbre, adjoints en liste */
+  .extendedBureau {
+    margin-top: 1.75rem;
+    padding: 1.4rem 0.6rem 0.6rem;
+  }
+
+  .assistantList {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0.15rem;
+  }
+
+  .assistant {
+    flex-direction: row;
+    width: auto;
+    gap: 0.7rem;
+    padding: 0.4rem 0.5rem;
+    text-align: start;
+  }
+
+  .miniAvatar {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .assistantText {
+    flex: 1;
+    width: auto;
+    align-items: flex-start;
+  }
+
+  /* Postes latéraux + sous-arborescence : même liste indentée */
+  .aside,
+  .children {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* Aligne la ligne verticale sous le centre de l'avatar du parent */
+    margin-inline-start: calc(
+      var(--card-pad-m) + 1px + var(--avatar-m) / 2 - var(--line-w) / 2
+    );
+    padding-inline-start: var(--indent-pad);
+  }
+
+  .aside > li,
+  .children > .item {
+    position: relative;
+    padding: var(--row-gap-m) 0 0;
+  }
+
+  /* Trait horizontal vers la carte (part de la ligne verticale) */
+  .aside > li::before,
+  .children > .item::before {
+    content: '';
+    position: absolute;
+    top: var(--tick-y);
+    inset-inline-start: calc(-1 * var(--indent-pad));
+    width: var(--indent-pad);
+    height: var(--line-w);
+    background: var(--line);
+    transform-origin: left center;
+    animation: orgDrawH 0.4s var(--ease-draw) calc(var(--link, 0) * 1ms + 150ms) backwards;
+  }
+
+  :global([dir='rtl']) .aside > li::before,
+  :global([dir='rtl']) .children > .item::before {
+    transform-origin: right center;
+  }
+
+  /* Trait vertical */
+  .aside > li::after,
+  .children > .item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: calc(-1 * var(--indent-pad));
+    width: var(--line-w);
+    background: var(--line);
+    transform-origin: top center;
+    animation: orgDrawV 0.5s var(--ease-draw) calc(var(--link, 0) * 1ms) backwards;
+  }
+
+  /* Le dernier élément s'arrête au niveau de son trait horizontal
+     (sauf les postes latéraux, suivis de la sous-arborescence) */
+  .children > .item:last-child::after,
+  .aside:not(:has(~ .children)) > li:last-child::after {
+    bottom: auto;
+    height: calc(var(--tick-y) + var(--line-w));
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITÉ — mouvement réduit
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .wrapper,
+  .wrapper *,
+  .wrapper *::before,
+  .wrapper *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .card:hover,
+  .card:focus-within,
+  .card:active,
+  .card:hover .avatar,
+  .card:hover .photo,
+  .card:hover .placeholderSvg {
+    transform: none !important;
+  }
+}
