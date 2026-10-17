@@ -828,7 +828,7 @@ html:has(body.menu-open) {
 
 /* ----- Section avec fond alterné ----- */
 .section-alt {
-  background: var(--background);
+  background: transparent;
 }
 
 /* ----- Titre de section ----- */

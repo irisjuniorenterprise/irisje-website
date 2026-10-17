@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: var(--background, #f8fafc);
+  background: transparent;
   position: relative;
 }
 
@@ -24,8 +24,7 @@
   inset: 0;
   background: 
     radial-gradient(ellipse at 20% 50%, rgba(26, 57, 105, 0.03) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 50%, rgba(90, 184, 222, 0.04) 0%, transparent 60%),
-    var(--background, #f8fafc);
+    radial-gradient(ellipse at 80% 50%, rgba(90, 184, 222, 0.04) 0%, transparent 60%);
   z-index: 0;
 }
 

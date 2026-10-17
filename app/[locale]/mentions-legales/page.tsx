@@ -70,7 +70,7 @@ export default async function MentionsLegalesPage({ params }: Props) {
         </span>
       </section>
 
-      <section style={{ padding: '3rem 0 5rem', background: 'var(--background)' }}>
+      <section style={{ padding: '3rem 0 5rem', background: 'transparent' }}>
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="legal-card">

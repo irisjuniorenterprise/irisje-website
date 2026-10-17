@@ -67,7 +67,7 @@ export default async function ContactPage({ params }: Props) {
       </section>
 
       {/* SECTION FORMULAIRE */}
-      <section style={{ padding: '3rem 0 5rem', background: 'var(--background)' }}>
+      <section style={{ padding: '3rem 0 5rem', background: 'transparent' }}>
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <div className="contact-card">

@@ -252,7 +252,7 @@
 
 /* ----- Section avec fond alterné ----- */
 .section-alt {
-  background: var(--background);
+  background: transparent; /* laisse voir le fond SVG fixe */
 }
 
 /* ============================================================

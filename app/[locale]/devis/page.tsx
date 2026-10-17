@@ -80,7 +80,7 @@ export default async function DevisPage({ params, searchParams }: Props) {
 
       <section
         id="formulaire-devis"
-        style={{ padding: '3rem 0 5rem', background: 'var(--background)', scrollMarginTop: '80px' }}
+        style={{ padding: '3rem 0 5rem', background: 'transparent', scrollMarginTop: '80px' }}
       >
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>

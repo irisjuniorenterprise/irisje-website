@@ -3,7 +3,7 @@
 .portfolioSection {
   padding: 4rem 0;
   /* var(--surface) = #fff → alterne avec Nos Valeurs qui utilise var(--background) = #f8fafc */
-  background: var(--surface);
+  background: transparent; /* laisse voir le fond SVG fixe du layout */
   /* Pas de border-top : la section précédente (Nos Valeurs) fournit déjà un border-bottom */
   border-bottom: 1px solid var(--border-light);
   /* Révélation au scroll : fondu + glissement, déclenchée par l'IntersectionObserver

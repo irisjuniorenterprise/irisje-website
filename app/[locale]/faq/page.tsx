@@ -67,7 +67,7 @@ export default async function FAQPage({ params }: Props) {
         </span>
       </section>
 
-      <section style={{ padding: '3rem 0 5rem', background: 'var(--background)' }}>
+      <section style={{ padding: '3rem 0 5rem', background: 'transparent' }}>
         <div className="container">
           <div style={{ maxWidth: '820px', margin: '0 auto' }}>
             <div className="faq-card">
