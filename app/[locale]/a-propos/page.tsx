@@ -5,6 +5,7 @@ import logoData from '@/public/logo-s-no-bg.png';
 import { Icons } from '@/components/icons/Icons';
 import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
 import ValueCards from '@/components/ui/ValueCards';
+import Organigramme from '@/components/organigramme/Organigramme';
 import TunisiaMapLoader from '@/components/map/TunisiaMapLoader';
 import ItineraryButton from '@/components/map/ItineraryButton';
 import styles from './page.module.css';
@@ -314,12 +315,33 @@ export default async function AProposPage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION 5 : NOUS TROUVER - CARTE DE LA TUNISIE
+          SECTION 5 : ORGANIGRAMME
           Fond blanc (placeholder) — alterne avec Nos Valeurs (section-alt).
-          Rendu client uniquement (Leaflet) via TunisiaMapLoader (ssr: false).
+          Structure et noms : lib/data/organigramme.ts
+          Intitulés des postes : namespace `Organigramme` des messages.
           ============================================================ */}
       <section
         className="placeholder"
+        suppressHydrationWarning
+        id="organigramme"
+        style={{
+          minHeight: 'auto',
+          padding: '4rem 0',
+          borderBottom: '1px solid var(--border-light)',
+        }}
+      >
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <Organigramme locale={locale} />
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 6 : NOUS TROUVER - CARTE DE LA TUNISIE
+          Fond alterné (section-alt) — alterne avec l'Organigramme (blanc).
+          Rendu client uniquement (Leaflet) via TunisiaMapLoader (ssr: false).
+          ============================================================ */}
+      <section
+        className="placeholder section-alt"
         suppressHydrationWarning
         id="nous-trouver"
         style={{
@@ -391,7 +413,7 @@ export default async function AProposPage({ params }: Props) {
       </section>
 
       {/* ============================================================
-          SECTION 6 : PORTFOLIO
+          SECTION 7 : PORTFOLIO
           Affiché uniquement si projects.length > 0.
           Fond blanc (var(--surface)) — alterne avec Nos Valeurs (section-alt).
           ============================================================ */}
