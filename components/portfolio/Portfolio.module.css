@@ -413,6 +413,18 @@
   composes: tag from '../ui/ToolTag.module.css';
 }
 
+/* Étoile « ✦ » et étiquette : composées depuis ToolTag.module.css pour que
+   la pastille du portfolio reprend EXACTEMENT la mise en page de celle de la
+   page services (étoile accent + marge, texte immunisé contre la fuite
+   `.placeholder span*` de globals.css). */
+.tagStar {
+  composes: star from '../ui/ToolTag.module.css';
+}
+
+.tagLabel {
+  composes: label from '../ui/ToolTag.module.css';
+}
+
 /* ============================================================
    MODAL
    ============================================================ */

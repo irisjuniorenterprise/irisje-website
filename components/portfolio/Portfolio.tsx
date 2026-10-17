@@ -219,7 +219,10 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
               {featuredProject.tags && featuredProject.tags.length > 0 && (
                 <div className={styles.cardTags}>
                   {featuredProject.tags.map((tag) => (
-                    <span key={tag} className={styles.cardTag}>{tag}</span>
+                    <span key={tag} className={styles.cardTag}>
+                      <span className={styles.tagStar} aria-hidden="true">✦</span>
+                      <span className={styles.tagLabel}>{tag}</span>
+                    </span>
                   ))}
                 </div>
               )}
@@ -281,10 +284,18 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 {project.tags && project.tags.length > 0 && (
                   <div className={styles.cardTags}>
                     {project.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className={styles.cardTag}>{tag}</span>
+                      <span key={tag} className={styles.cardTag}>
+                        <span className={styles.tagStar} aria-hidden="true">✦</span>
+                        <span className={styles.tagLabel}>{tag}</span>
+                      </span>
                     ))}
                     {project.tags.length > 3 && (
-                      <span className={styles.cardTag}>+{project.tags.length - 3}</span>
+                      <span className={styles.cardTag}>
+                        <span className={styles.tagStar} aria-hidden="true">✦</span>
+                        <span className={styles.tagLabel}>
+                          +{project.tags.length - 3}
+                        </span>
+                      </span>
                     )}
                   </div>
                 )}
@@ -366,7 +377,10 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 {selectedProject.tags && selectedProject.tags.length > 0 && (
                   <div className={styles.modalTags}>
                     {selectedProject.tags.map((tag) => (
-                      <span key={tag} className={styles.modalTag}>{tag}</span>
+                      <span key={tag} className={styles.modalTag}>
+                        <span className={styles.tagStar} aria-hidden="true">✦</span>
+                        <span className={styles.tagLabel}>{tag}</span>
+                      </span>
                     ))}
                   </div>
                 )}
