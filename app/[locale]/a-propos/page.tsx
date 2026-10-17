@@ -27,27 +27,33 @@ export async function generateMetadata({ params }: Props) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Projets — remplacer par un fetch CMS/API si besoin
-// Chaque projet peut avoir un champ `url` optionnel (voir type Project)
+// Projets — remplacer par un fetch CMS/API si besoin.
+// Le projet d'exemple est localisé via le namespace `Portfolio`
+// (clés `sample_project.*` dans messages/{fr,en,ar}.json).
+// Chaque projet peut avoir un champ `url` optionnel (voir type Project),
+// et `featured: true` pour la carte « à la une ».
 // ─────────────────────────────────────────────────────────────
-const projects: Project[] = [
-  /* {
-    id: 1,
-    title: 'Site web pour Startup XYZ',
-    description: "Développement d'un site vitrine moderne avec React et Next.js.",
-    category: 'IT',
-    tags: ['React', 'Next.js', 'Tailwind'],
-    client: 'Startup XYZ',
-    year: 2025,
-    results: '+40% de visibilité',
-    // url: 'https://example.com', // décommenter si disponible
-  }, */
-];
 
 export default async function AProposPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'AboutPage' });
+  const tp = await getTranslations({ locale, namespace: 'Portfolio' });
   const isRtl = locale === 'ar';
+
+  const projects: Project[] = [
+    {
+      id: 'sample-booking-platform',
+      title: tp('sample_project.title'),
+      description: tp('sample_project.description'),
+      category: 'IT',
+      image: '/portfolio/booking-platform.svg',
+      tags: ['Next.js', 'React', 'UI/UX', 'SEO'],
+      client: tp('sample_project.client'),
+      year: 2025,
+      results: tp('sample_project.results'),
+      featured: true,
+    },
+  ];
 
   const values = [
     {
