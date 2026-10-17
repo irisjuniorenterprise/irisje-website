@@ -155,6 +155,51 @@ body {
   overflow-x: hidden;
   overflow-x: clip;
 }
+/* =====================================================
+   FOND FIXE DU LAYOUT (SVG)
+   Deux calques fixes qui occupent la zone de contenu : de sous le header
+   jusqu'en bas de la fenêtre. Le header et le footer (opaques) restent au-dessus.
+   Aucune section ne pose d'autre fond par-dessus (seuls les bandeaux CTA
+   et les heros gardent le leur).
+
+   - body::before  : réseau de lignes, en `cover` (peut être recadré sans
+                     gravité selon la taille d'écran).
+   - body::after   : aigle + rocher, en `contain` ancré en bas à droite :
+                     il tient TOUJOURS en entier dans l'écran, quel que soit
+                     le format (mobile, tablette, desktop, très grand écran).
+
+   `position: fixed` plutôt que `background-attachment: fixed`
+   (saccadé / non supporté sur iOS Safari).
+   ===================================================== */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  top: var(--header-h-mobile);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+body::before {
+  background-image: url('/bg-lines.svg');
+  background-size: cover;
+  background-position: left top;
+}
+body::after {
+  background-image: url('/bg-eagle.svg');
+  background-size: contain;
+  background-position: right bottom;
+}
+@media (min-width: 768px) {
+  body::before,
+  body::after {
+    top: var(--header-h);
+  }
+}
+
 h1,
 h2,
 h3 {
