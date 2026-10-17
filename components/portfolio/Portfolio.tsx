@@ -146,6 +146,12 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
     >
       <div className="container">
 
+        {/* Contenu de fond : rendu `inert` pendant l'ouverture de la modale.
+            Le lecteur d'écran n'entrevoit plus le fond (titre, grilles, filtres)
+            et le clavier ne peut pas y revenir par accident, en plus du piège
+            de focal et de aria-modal. La modale, elle, reste hors de ce bloc. */}
+        <div inert={selectedProject !== null}>
+
         {/* ── En-tête ── */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -173,15 +179,28 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
           </div>
         )}
 
-        {/* ── Projet à la une ── */}
+        {/* Annonce (polie) du nombre de projets affichés : sans elle, un
+            lecteur d'écran ne saurait pas que le filtre a changé la grille. */}
+        <p className="sr-only" role="status">
+          {t('results_count', { count: filteredProjects.length })}
+        </p>
+
+        {/* ── Projet à la une ──
+            <article> nommé par son titre (aria-labelledby) : les lecteurs
+            d'écran annoncent « article : <titre> » et peuvent naviguer
+            directement jusqu'à ce titre. Le contrôle reste le <button> du CTA. */}
         {featuredProject && (
-          <article className={styles.featuredCard}>
+          <article
+            className={styles.featuredCard}
+            aria-labelledby="portfolio-featured-title"
+          >
             <div className={styles.featuredMedia}>
               {featuredProject.image ? (
+                // alt="" : illustration redondante avec le titre à côté.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={featuredProject.image} alt={featuredProject.title} loading="lazy" />
+                <img src={featuredProject.image} alt="" loading="lazy" />
               ) : (
-                <div className={styles.cardPlaceholder}>
+                <div className={styles.cardPlaceholder} aria-hidden="true">
                   <Icons.Code size={64} stroke="var(--text-muted)" strokeWidth={1.5} />
                 </div>
               )}
@@ -190,26 +209,28 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
 
             <div className={styles.featuredBody}>
               <span className={styles.cardCategoryStatic}>{featuredProject.category}</span>
-              <h3 className={styles.featuredTitle}>{featuredProject.title}</h3>
+              <h3 className={styles.featuredTitle} id="portfolio-featured-title">
+                {featuredProject.title}
+              </h3>
               <p className={styles.featuredDesc}>{featuredProject.description}</p>
 
               {(featuredProject.client || featuredProject.year || featuredProject.results) && (
                 <div className={styles.featuredMeta}>
                   {featuredProject.client && (
                     <div className={styles.metaItem}>
-                      <Icons.User size={16} stroke="var(--text-muted)" />
+                      <Icons.User size={16} stroke="var(--text-muted)" aria-hidden="true" />
                       <span>{t('client_label')} {featuredProject.client}</span>
                     </div>
                   )}
                   {featuredProject.year && (
                     <div className={styles.metaItem}>
-                      <Icons.Calendar size={16} stroke="var(--text-muted)" />
-                      <span>{featuredProject.year}</span>
+                      <Icons.Calendar size={16} stroke="var(--text-muted)" aria-hidden="true" />
+                      <span>{t('year_label')} {featuredProject.year}</span>
                     </div>
                   )}
                   {featuredProject.results && (
                     <div className={styles.metaItem}>
-                      <Icons.Chart size={16} stroke="var(--text-muted)" />
+                      <Icons.Chart size={16} stroke="var(--text-muted)" aria-hidden="true" />
                       <span>{featuredProject.results}</span>
                     </div>
                   )}
@@ -232,49 +253,63 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 className={styles.featuredCta}
                 onClick={(e) => openModal(featuredProject, e.currentTarget)}
                 aria-label={t('aria_label', { title: featuredProject.title })}
+                aria-haspopup="dialog"
               >
                 {t('view_project')}
-                <Icons.ChevronRight size={16} stroke="currentColor" />
+                <Icons.ChevronRight size={16} stroke="currentColor" aria-hidden="true" />
               </button>
             </div>
           </article>
         )}
 
-        {/* ── Grille ── */}
-        <div className={styles.grid}>
+        {/* ── Grille ──
+            Sémantique : une LISTE de projets (<ul>/<li>), annoncée comme
+            telle par les lecteurs d'écran (« liste de 3 éléments »).
+            La carte n'est plus un div[role=button] : ce rôle écrasait tout le
+            contenu (titre, description, tags) en un seul nom accessible et
+            cassait la navigation par titre. Le vrai contrôle clavier est le
+            <button> du CTA ; le clic direct sur la carte reste possible pour
+            la souris (confort d'usage, sans rôle ARIA). */}
+        <ul className={styles.grid}>
           {filteredProjects.map((project) => (
-            <div
+            <li
               key={project.id}
               className={styles.projectCard}
               onClick={(e) => openModal(project, e.currentTarget)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  openModal(project, e.currentTarget);
-                }
-              }}
-              aria-label={t('aria_label', { title: project.title })}
             >
               <div className={styles.cardImage}>
                 {project.image ? (
+                  // alt="" : l'image est une illustration du projet dont le
+                  // titre est juste à côté — la nommer dupliquerait l'info.
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={project.image} alt={project.title} loading="lazy" />
+                  <img src={project.image} alt="" loading="lazy" />
                 ) : (
-                  <div className={styles.cardPlaceholder}>
+                  <div className={styles.cardPlaceholder} aria-hidden="true">
                     <Icons.Code size={48} stroke="var(--text-muted)" strokeWidth={1.5} />
                   </div>
                 )}
                 {project.year && (
-                  <span className={styles.cardYear}>{project.year}</span>
+                  <span className={styles.cardYear}>
+                    <span className="sr-only">{t('year_label')} </span>
+                    {project.year}
+                  </span>
                 )}
                 <div className={styles.cardOverlay}>
                   <span className={styles.cardCategory}>{project.category}</span>
-                  <span className={styles.cardCta}>
+                  <button
+                    type="button"
+                    className={styles.cardCta}
+                    onClick={(e) => {
+                      // La carte <li> est déjà cliquable : on n'ouvre qu'une fois.
+                      e.stopPropagation();
+                      openModal(project, e.currentTarget);
+                    }}
+                    aria-label={t('aria_label', { title: project.title })}
+                    aria-haspopup="dialog"
+                  >
                     {t('view_project')}
-                    <Icons.ChevronRight size={16} stroke="currentColor" />
-                  </span>
+                    <Icons.ChevronRight size={16} stroke="currentColor" aria-hidden="true" />
+                  </button>
                 </div>
               </div>
 
@@ -293,16 +328,22 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                       <span className={styles.cardTag}>
                         <span className={styles.tagStar} aria-hidden="true">✦</span>
                         <span className={styles.tagLabel}>
-                          +{project.tags.length - 3}
+                          {/* « +2 » seul est ambigu à l'oral : on donne le sens */}
+                          <span aria-hidden="true">+{project.tags.length - 3}</span>
+                          <span className="sr-only">
+                            {t('more_tags', { count: project.tags.length - 3 })}
+                          </span>
                         </span>
                       </span>
                     )}
                   </div>
                 )}
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
+
+        </div>{/* fin du contenu de fond (inert pendant la modale) */}
 
         {/* ── Modal de détail ── */}
         {selectedProject && (
@@ -318,6 +359,9 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
               role="dialog"
               aria-modal="true"
               aria-labelledby="portfolio-modal-title"
+              aria-describedby={
+                selectedProject.description ? 'portfolio-modal-desc' : undefined
+              }
             >
 
               <button
@@ -326,16 +370,18 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 onClick={closeModal}
                 aria-label={t('close_modal')}
               >
-                <Icons.X size={24} stroke="currentColor" />
+                <Icons.X size={24} stroke="currentColor" aria-hidden="true" />
               </button>
 
               {/* Image */}
               <div className={styles.modalImage}>
                 {selectedProject.image ? (
+                  // alt=\"\" : le titre du projet est juste en dessous — nommer
+                  // l'image annoncerait deux fois le même texte.
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={selectedProject.image} alt={selectedProject.title} />
+                  <img src={selectedProject.image} alt="" />
                 ) : (
-                  <div className={styles.modalPlaceholder}>
+                  <div className={styles.modalPlaceholder} aria-hidden="true">
                     <Icons.Code size={64} stroke="var(--text-muted)" strokeWidth={1.5} />
                   </div>
                 )}
@@ -347,26 +393,28 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 <h3 className={styles.modalTitle} id="portfolio-modal-title">
                   {selectedProject.title}
                 </h3>
-                <p className={styles.modalDesc}>{selectedProject.description}</p>
+                <p className={styles.modalDesc} id="portfolio-modal-desc">
+                  {selectedProject.description}
+                </p>
 
                 {/* Méta */}
                 {(selectedProject.client || selectedProject.year || selectedProject.results) && (
                   <div className={styles.modalMeta}>
                     {selectedProject.client && (
                       <div className={styles.metaItem}>
-                        <Icons.User size={16} stroke="var(--text-muted)" />
+                        <Icons.User size={16} stroke="var(--text-muted)" aria-hidden="true" />
                         <span>{t('client_label')} {selectedProject.client}</span>
                       </div>
                     )}
                     {selectedProject.year && (
                       <div className={styles.metaItem}>
-                        <Icons.Calendar size={16} stroke="var(--text-muted)" />
-                        <span>{selectedProject.year}</span>
+                        <Icons.Calendar size={16} stroke="var(--text-muted)" aria-hidden="true" />
+                        <span>{t('year_label')} {selectedProject.year}</span>
                       </div>
                     )}
                     {selectedProject.results && (
                       <div className={styles.metaItem}>
-                        <Icons.Chart size={16} stroke="var(--text-muted)" />
+                        <Icons.Chart size={16} stroke="var(--text-muted)" aria-hidden="true" />
                         <span>{selectedProject.results}</span>
                       </div>
                     )}
@@ -394,7 +442,9 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                     className={styles.modalLink}
                   >
                     {t('view_project')}
-                    <Icons.ChevronRight size={16} stroke="currentColor" />
+                    <Icons.ChevronRight size={16} stroke="currentColor" aria-hidden="true" />
+                    {/* target=_blank n'est pas annoncé : on précise la nouvelle fenêtre */}
+                    <span className="sr-only">{t('new_tab')}</span>
                   </a>
                 )}
               </div>

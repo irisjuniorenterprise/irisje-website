@@ -286,7 +286,9 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
-.projectCard:focus-visible {
+/* La carte n'est plus focusable elle-même : le repère visuel du clavier est
+   le CTA réel qu'elle contient. */
+.cardCta:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
@@ -331,8 +333,11 @@
   transition: opacity 0.3s ease;
 }
 
+/* L'overlay apparaît au survol de la carte, ou dès que son CTA (vrai
+   <button> interne) reçoit le focus clavier — sinon le clavier atterrirait
+   sur un bouton invisible. */
 .projectCard:hover .cardOverlay,
-.projectCard:focus-visible .cardOverlay {
+.projectCard:focus-within .cardOverlay {
   opacity: 1;
 }
 
@@ -351,18 +356,24 @@
 }
 
 /* CTA « Voir le projet » en bas de l'overlay : pastille --secondary
-   (teinte CTA de la section), lisible sur le dégradé sombre. */
+   (teinte CTA de la section), lisible sur le dégradé sombre.
+   C'est un vrai <button> : on remet à zéro le style natif du navigateur. */
 .cardCta {
+  appearance: none;
+  border: 0;
+  margin: 0;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.35rem 0.9rem;
+  padding: 0.45rem 1rem;
   background: var(--secondary);
   color: var(--on-secondary);
   border-radius: var(--radius-pill);
   font-size: 0.8rem;
   font-weight: 600;
   font-family: var(--font-display);
+  line-height: 1.4;
+  cursor: pointer;
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
 }
 
@@ -370,7 +381,8 @@
   transition: transform var(--t-fast);
 }
 
-.projectCard:hover .cardCta svg {
+.projectCard:hover .cardCta svg,
+.projectCard:focus-within .cardCta svg {
   transform: translateX(3px);
 }
 
@@ -625,7 +637,8 @@
   transform: scaleX(-1);
 }
 
-.rtl .projectCard:hover .cardCta svg {
+.rtl .projectCard:hover .cardCta svg,
+.rtl .projectCard:focus-within .cardCta svg {
   transform: scaleX(-1) translateX(3px);
 }
 
