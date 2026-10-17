@@ -710,6 +710,10 @@
     "aria_label": "عرض تفاصيل المشروع: {title}",
     "close_modal": "إغلاق",
     "client_label": "العميل:",
+    "year_label": "السنة:",
+    "more_tags": "{count, plural, zero {وأداة} one {وأداة أخرى} two {وأداتان} few {و# أدوات أخرى} many {و# أداة أخرى} other {و# أداة أخرى}}",
+    "results_count": "{count, plural, zero {لا مشاريع معروضة} one {مشروع واحد معروض} two {مشروعان معروضان} few {# مشاريع معروضة} many {# مشروع معروض} other {# مشروع معروض}}",
+    "new_tab": "(يفتح في نافذة جديدة)",
     "view_project": "عرض المشروع",
     "featured_badge": "مشروع مميز",
     "sample_project": {

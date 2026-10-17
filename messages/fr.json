@@ -710,6 +710,10 @@
     "aria_label": "Voir les détails du projet : {title}",
     "close_modal": "Fermer",
     "client_label": "Client :",
+    "year_label": "Année :",
+    "more_tags": "{count, plural, one {et # autre outil} other {et # autres outils}}",
+    "results_count": "{count, plural, =0 {Aucun projet affiché} one {# projet affiché} other {# projets affichés}}",
+    "new_tab": "(s'ouvre dans un nouvel onglet)",
     "view_project": "Voir le projet",
     "featured_badge": "Projet à la une",
     "sample_project": {

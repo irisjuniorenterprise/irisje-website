@@ -191,6 +191,21 @@ h3 {
 .skip-link:focus {
   top: 12px;
 }
+
+/* Contenu réservé aux lecteurs d'écran : présent dans l'arbre
+   d'accessibilité, mais jamais affiché visuellement. Utilisé pour les
+   libellés d'images/états qui complètent le texte visible. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 /* Blocage du scroll quand le menu mobile est ouvert : appliqué à <html> (le
    viewport) et non à <body>, pour ne pas casser le header sticky. */
 html:has(body.menu-open) {
