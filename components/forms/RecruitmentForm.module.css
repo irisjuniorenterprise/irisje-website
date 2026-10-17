@@ -122,6 +122,20 @@
   box-shadow: 0 0 0 3px rgba(26, 57, 105, 0.15);
 }
 
+/* Survol : la bordure passe à l'accent avec un halo léger et l'icône suit,
+   pour signaler que le champ est interactif. Exclut l'état focus (déjà
+   stylé) et l'état invalide (le rouge garde la priorité). */
+@media (hover: hover) {
+  .input:hover:not(:focus):not(.invalid) {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(90, 184, 222, 0.18);
+  }
+
+  .input:hover:not(:focus):not(.invalid) ~ .inputIcon {
+    color: var(--accent);
+  }
+}
+
 .input.invalid {
   border-color: var(--danger);
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
