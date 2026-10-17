@@ -403,18 +403,14 @@
   gap: 0.5rem;
 }
 
-/* Pastille d'outil : apparence identique à ToolTag (cartes de prestations,
-   page services) — même fond, couleur, padding, typo et interlettrage.
-   Ces tags restent non interactifs (span) : c'est la carte entière qui est
-   cliquable, pas la pastille. */
+/* Pastille d'outil : la classe est COMPOSÉE depuis ToolTag.module.css —
+   c'est la même feuille de style que les cartes de prestations de la page
+   services (repos, survol, focus, retour « pression »), donc les deux
+   sections restent alignées par construction. Ce sont des spans non
+   interactifs ici : c'est la carte entière qui est cliquable, pas la
+   pastille (contrairement aux pastilles sélectionnables de services). */
 .cardTag {
-  background: var(--border-light);
-  color: var(--text-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  composes: tag from '../ui/ToolTag.module.css';
 }
 
 /* ============================================================
@@ -566,15 +562,9 @@
   gap: 0.5rem;
 }
 
-/* Même pastille que ToolTag (page services), voir .cardTag */
+/* Voir .cardTag : même composition depuis ToolTag.module.css */
 .modalTag {
-  background: var(--border-light);
-  color: var(--text-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  composes: tag from '../ui/ToolTag.module.css';
 }
 
 /* CTA lien externe dans la modale */
