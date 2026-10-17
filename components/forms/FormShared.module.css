@@ -34,7 +34,7 @@
   padding: 1.5rem 1.5rem 1rem 1.5rem;
   margin: 0;
   background: var(--surface-card-alt);
-  transition: border-color var(--t-base), box-shadow var(--t-base);
+  transition: border-color var(--t-base), box-shadow var(--t-base), translate var(--t-base);
   animation: fieldsetIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(var(--i, 0) * 120ms);
 }
@@ -55,6 +55,37 @@
   }
 }
 
+/* Survol de la section : effet plus marqué que celui des champs — barre
+   d'accent côté début (inversée en RTL), bordure + halo accentués, léger
+   soulèvement, et le titre/icône de la légende s'animent. Désactivé quand un
+   champ est actif (le style :focus-within garde la priorité). */
+@media (hover: hover) {
+  .fieldset:hover:not(:focus-within) {
+    border-color: var(--accent);
+    box-shadow:
+      inset 4px 0 0 var(--accent),
+      0 0 0 1px var(--accent),
+      0 12px 32px rgba(90, 184, 222, 0.22);
+    translate: 0 -2px;
+  }
+
+  .form.rtl .fieldset:hover:not(:focus-within) {
+    box-shadow:
+      inset -4px 0 0 var(--accent),
+      0 0 0 1px var(--accent),
+      0 12px 32px rgba(90, 184, 222, 0.22);
+  }
+
+  .fieldset:hover:not(:focus-within) .legend {
+    color: var(--primary);
+  }
+
+  .fieldset:hover:not(:focus-within) .legend svg {
+    color: var(--accent);
+    transform: scale(1.15);
+  }
+}
+
 .legend {
   display: flex;
   align-items: center;
@@ -72,6 +103,7 @@
 .legend svg {
   color: var(--secondary);
   flex-shrink: 0;
+  transition: color var(--t-base), transform var(--t-base);
 }
 
 /* ============================================================
