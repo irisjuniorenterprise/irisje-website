@@ -17,6 +17,9 @@
      par Organigramme.tsx (schedule() et DUR) ; ce fichier ne contient aucun
      délai « en dur » pour la séquence. Ordre : Président > tronc > Trésorier
      puis SG > barre qui s'étend du centre vers les bords > Bureau étendu.
+     Déclenchement : <OrganigrammeReplay> pilote data-anim sur .wrapper
+     (reset > idle = en pause > play dès que la section est visible), ce qui
+     rejoue la séquence à chaque rechargement / navigation vers la page.
      Tablette / mobile : même séquence (la révélation au scroll liée à
      animation-timeline: view() a été retirée : elle montrait les cadres des
      cartes tout de suite et seulement ensuite leur contenu).
@@ -1148,6 +1151,26 @@
     bottom: auto;
     height: calc(var(--tick-y) + var(--line-w));
   }
+}
+
+/* ============================================================
+   REJEU DE L'ANIMATION D'ENTRÉE (piloté par OrganigrammeReplay.tsx)
+   - reset : toutes les animations retirées (permet de repartir de zéro)
+   - idle  : animations en pause, éléments dans leur état initial
+   - play  : animations lancées (état par défaut, rien à déclarer)
+   ============================================================ */
+.wrapper[data-anim='reset'],
+.wrapper[data-anim='reset'] *,
+.wrapper[data-anim='reset'] *::before,
+.wrapper[data-anim='reset'] *::after {
+  animation: none !important;
+}
+
+.wrapper[data-anim='idle'],
+.wrapper[data-anim='idle'] *,
+.wrapper[data-anim='idle'] *::before,
+.wrapper[data-anim='idle'] *::after {
+  animation-play-state: paused !important;
 }
 
 /* ============================================================

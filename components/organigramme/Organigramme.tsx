@@ -28,11 +28,16 @@
 //   s'étend depuis le centre (responsables du centre vers les bords) >
 //   cadre du Bureau étendu > adjoints en cascade.
 //   Pour accélérer / ralentir : ajuster DUR, GAP, SETTLE et FLOW ci-dessous.
+//
+// Rejeu : l'enveloppe client <OrganigrammeReplay> met l'animation en pause
+// jusqu'à ce que la section soit visible, et la relance à chaque rechargement
+// ou navigation vers la page (voir OrganigrammeReplay.tsx).
 
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { ORGANIGRAMME, type OrgNode, type OrgPerson } from '@/lib/data/organigramme';
+import OrganigrammeReplay from './OrganigrammeReplay';
 import styles from './Organigramme.module.css';
 
 type TFunction = (key: string) => string;
@@ -489,7 +494,12 @@ export default async function Organigramme({ locale, root = ORGANIGRAMME }: Prop
   const timing = schedule(root, { side: 'mid', before: 0, after: 0 }, true);
 
   return (
-    <div className={styles.wrapper} style={DURATION_VARS}>
+    <OrganigrammeReplay className={styles.wrapper} style={DURATION_VARS}>
+      {/* Sans JavaScript, pas de déclencheur : on lance les animations directement */}
+      <noscript>
+        <style>{`div[data-anim][data-anim] *,div[data-anim][data-anim] *::before,div[data-anim][data-anim] *::after{animation-play-state:running!important}`}</style>
+      </noscript>
+
       <h2 className="section-title">{tr('title')}</h2>
       <p className={styles.subtitle}>{tr('subtitle')}</p>
 
@@ -505,6 +515,6 @@ export default async function Organigramme({ locale, root = ORGANIGRAMME }: Prop
           <OrgBranch node={root} tr={tr} timing={timing} isRoot />
         </ul>
       </div>
-    </div>
+    </OrganigrammeReplay>
   );
 }
