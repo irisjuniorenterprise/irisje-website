@@ -256,7 +256,13 @@
    ============================================================ */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* auto-fit (et non auto-fill) : les pistes vides se réduisent à 0, donc
+     une dernière rangée partielle — ou une carte seule — est CENTRÉE par
+     justify-content au lieu d'être collée à gauche. Les cartes sont plafonnées
+     à 380px pour qu'une carte unique ne s'étire pas sur toute la largeur ;
+     une rangée complète reste distribuée à parts égales comme avant. */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
+  justify-content: center;
   gap: 1.5rem;
 }
 
@@ -652,7 +658,8 @@
    ============================================================ */
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    /* Même logique de centrage qu'au-dessus, avec les seuils de la tablette */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 320px));
     gap: 1rem;
   }
 
