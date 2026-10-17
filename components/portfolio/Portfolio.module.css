@@ -400,16 +400,21 @@
 .cardTags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.5rem;
 }
 
+/* Pastille d'outil : apparence identique à ToolTag (cartes de prestations,
+   page services) — même fond, couleur, padding, typo et interlettrage.
+   Ces tags restent non interactifs (span) : c'est la carte entière qui est
+   cliquable, pas la pastille. */
 .cardTag {
   background: var(--border-light);
-  color: var(--text-muted);
-  padding: 0.15rem 0.6rem;
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-pill);
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* ============================================================
@@ -558,16 +563,18 @@
 .modalTags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
+/* Même pastille que ToolTag (page services), voir .cardTag */
 .modalTag {
   background: var(--border-light);
   color: var(--text-secondary);
-  padding: 0.2rem 0.8rem;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-pill);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* CTA lien externe dans la modale */
