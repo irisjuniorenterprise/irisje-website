@@ -51,7 +51,7 @@ Ce dépôt contient le **site web officiel** de l'association — conçu pour ce
 | ⚙️ Catalogue de services | Prestations détaillées en IT, Marketing et Études |
 | 📬 Formulaire de contact | Canal de communication direct avec l'équipe |
 | 💼 Demande de devis | Formulaire personnalisé pour les prospects |
-| 🎓 Espace recrutement | Candidature en ligne (ouvert en octobre) |
+| 🎓 Candidatures (IRIS JOIN) | Onglet vers la plateforme JOIN (ouvert en octobre) ; `/recrutement` redirige en 308 |
 | ❓ FAQ | Réponses aux questions les plus fréquentes |
 | 📄 Pages légales | Mentions légales, CGU, politique de confidentialité |
 | 🌍 Multilingue | Français, Anglais, Arabe — avec support RTL natif |
@@ -151,7 +151,7 @@ irisje/
 │   │   ├── contact/                        # Page Contact
 │   │   ├── devis/                          # Page Devis
 │   │   ├── faq/                            # Page FAQ
-│   │   ├── recrutement/                    # Page Recrutement
+│   │   ├── recrutement/                    # Redirection 308 vers IRIS JOIN
 │   │   ├── services/                       # Page Services
 │   │   ├── mentions-legales/               # Mentions légales
 │   │   ├── cgu/                            # Conditions générales d'utilisation
@@ -162,7 +162,7 @@ irisje/
 │   └── not-found.css                       # Styles de la page 404
 │
 ├── components/                             # Composants réutilisables
-│   ├── layout/                             # Header et Footer
+│   ├── layout/                             # Header, Footer et onglet JoinLink
 │   ├── forms/                              # Formulaires (Contact, Devis, Recrutement)
 │   ├── ui/                                 # Composants UI (Breadcrumb, Slider, Slogan)
 │   ├── faq/                                # Accordéon FAQ
@@ -177,6 +177,7 @@ irisje/
 ├── lib/                                    # Logique partagée et utilitaires
 │   ├── data/                               # Données statiques (slider…)
 │   ├── utils/                              # Fonctions utilitaires (dates…)
+│   ├── join.ts                             # URL de la plateforme IRIS JOIN
 │   └── metadata.ts                         # Métadonnées SEO centralisées
 │
 ├── messages/                               # Fichiers de traduction JSON
