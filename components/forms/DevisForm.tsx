@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import ChoiceGroup from './ChoiceGroup';
 import FormHeader from './FormHeader';
+import { describedBy, focusFirstInvalid } from './formA11y';
 import { PRESTATIONS, type PrestationValue } from '@/lib/data/prestations';
 import styles from './FormShared.module.css';
 
@@ -75,6 +76,19 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
     },
   });
 
+  // Ids des premiers contrôles de chaque champ, dans l'ordre visuel du
+  // formulaire : après un envoi refusé, le focal va sur le premier champ en
+  // erreur au lieu de rester figé sur le bouton d'envoi.
+  const FIRST_CONTROL: Record<string, string> = {
+    nom: 'devis-nom',
+    email: 'devis-email',
+    telephone: 'devis-telephone',
+    prestation: 'devis-prestation',
+    budget: 'devis-budget-0',
+    description: 'devis-description',
+    consentement: 'devis-consentement',
+  };
+
   const onSubmit: SubmitHandler<DevisFormData> = async (data) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -132,7 +146,9 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (errs) =>
+        focusFirstInvalid(errs, FIRST_CONTROL),
+      )}
       className={`${styles.form} ${isRtl ? styles.rtl : ''}`}
       noValidate
       dir={isRtl ? 'rtl' : 'ltr'}
@@ -160,16 +176,22 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
             <input
               id="devis-nom"
               type="text"
+              required
               {...register('nom')}
               className={`${styles.input} ${errors.nom ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.nom}
+              aria-describedby={describedBy(errors.nom && 'devis-nom-error')}
             />
             <label htmlFor="devis-nom" className={styles.floatingLabel}>
               {t('personal_info.nom')} *
             </label>
           </div>
-          {errors.nom && <p className={styles.error}>{errors.nom.message}</p>}
+          {errors.nom && (
+            <p id="devis-nom-error" className={styles.error}>
+              {errors.nom.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -178,16 +200,24 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
             <input
               id="devis-email"
               type="email"
+              required
               {...register('email')}
               className={`${styles.input} ${errors.email ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.email}
+              aria-describedby={describedBy(
+                errors.email && 'devis-email-error',
+              )}
             />
             <label htmlFor="devis-email" className={styles.floatingLabel}>
               {t('personal_info.email')} *
             </label>
           </div>
-          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+          {errors.email && (
+            <p id="devis-email-error" className={styles.error}>
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -196,17 +226,28 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
             <input
               id="devis-telephone"
               type="tel"
+              required
               {...register('telephone')}
               className={`${styles.input} ${errors.telephone ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.telephone}
+              aria-describedby={describedBy(
+                'devis-telephone-help',
+                errors.telephone && 'devis-telephone-error',
+              )}
             />
             <label htmlFor="devis-telephone" className={styles.floatingLabel}>
               {t('personal_info.telephone')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('personal_info.telephone_helper')}</small>
-          {errors.telephone && <p className={styles.error}>{errors.telephone.message}</p>}
+          <small id="devis-telephone-help" className={styles.helper}>
+            {t('personal_info.telephone_helper')}
+          </small>
+          {errors.telephone && (
+            <p id="devis-telephone-error" className={styles.error}>
+              {errors.telephone.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -222,9 +263,13 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
             <Icons.ServicePro size={20} className={styles.inputIcon} />
             <select
               id="devis-prestation"
+              required
               {...register('prestation')}
               className={`${styles.input} ${styles.select} ${errors.prestation ? styles.invalid : ''}`}
               aria-invalid={!!errors.prestation}
+              aria-describedby={describedBy(
+                errors.prestation && 'devis-prestation-error',
+              )}
             >
               <option value="">{t('project_details.select_prestation')}</option>
               {prestations.map((p) => (
@@ -238,7 +283,11 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
             </label>
             <Icons.ChevronDown size={18} className={styles.selectChevron} />
           </div>
-          {errors.prestation && <p className={styles.error}>{errors.prestation.message}</p>}
+          {errors.prestation && (
+            <p id="devis-prestation-error" className={styles.error}>
+              {errors.prestation.message}
+            </p>
+          )}
         </div>
 
         <ChoiceGroup
@@ -283,13 +332,23 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
               className={`${styles.input} ${styles.textarea} ${errors.description ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.description}
+              aria-describedby={describedBy(
+                'devis-description-help',
+                errors.description && 'devis-description-error',
+              )}
             />
             <label htmlFor="devis-description" className={styles.floatingLabel}>
               {t('project_details.description')} {/* ✅ Supprimé le * */}
             </label>
           </div>
-          <small className={styles.helper}>{t('project_details.description_helper')}</small>
-          {errors.description && <p className={styles.error}>{errors.description.message}</p>}
+          <small id="devis-description-help" className={styles.helper}>
+            {t('project_details.description_helper')}
+          </small>
+          {errors.description && (
+            <p id="devis-description-error" className={styles.error}>
+              {errors.description.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -303,10 +362,15 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
         <div className={styles.checkboxField}>
           <label className={styles.checkboxLabel}>
             <input
+              id="devis-consentement"
               type="checkbox"
+              required
               {...register('consentement')}
               className={styles.checkbox}
               aria-invalid={!!errors.consentement}
+              aria-describedby={describedBy(
+                errors.consentement && 'devis-consentement-error',
+              )}
             />
             <span className={styles.checkboxText}>
               {t('privacy.consent_text')}
@@ -320,7 +384,11 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
               </small>
             </span>
           </label>
-          {errors.consentement && <p className={styles.error}>{errors.consentement.message}</p>}
+          {errors.consentement && (
+            <p id="devis-consentement-error" className={styles.error}>
+              {errors.consentement.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -332,7 +400,7 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
       >
         {isSubmitting ? (
           <>
-            <span className={styles.spinner}></span>
+            <span className={styles.spinner} aria-hidden="true"></span>
             {t('buttons.sending')}
           </>
         ) : (
@@ -343,8 +411,9 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
         )}
       </button>
 
+      {/* Live regions : le résultat de l'envoi est annoncé sans voler le focal */}
       {submitSuccess && (
-        <div className={styles.successMessage}>
+        <div className={styles.successMessage} role="status">
           <Icons.Check size={24} />
           <div>
             <strong>{t('success.title')}</strong>
@@ -354,7 +423,7 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
       )}
 
       {submitError && (
-        <div className={styles.errorMessage}>
+        <div className={styles.errorMessage} role="alert">
           <Icons.Alert size={24} />
           <div>
             <strong>{t('error.title')}</strong>

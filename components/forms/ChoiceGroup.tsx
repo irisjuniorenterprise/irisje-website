@@ -29,6 +29,7 @@ export default function ChoiceGroup({
   error,
 }: ChoiceGroupProps) {
   const labelId = `${id}-label`;
+  const errorId = `${id}-error`;
 
   return (
     <div
@@ -37,6 +38,9 @@ export default function ChoiceGroup({
       aria-labelledby={labelId}
       aria-required="true"
       aria-invalid={!!error}
+      // Le message d'erreur est rattaché au groupe : il est annoncé dès
+      // l'entrée dans les radios, pas seulement s'il est survolé à la souris.
+      aria-describedby={error ? errorId : undefined}
     >
       <span id={labelId} className={styles.choiceLabel}>
         {icon}
@@ -44,10 +48,13 @@ export default function ChoiceGroup({
       </span>
 
       <div className={styles.choiceGrid}>
-        {options.map((option) => (
+        {options.map((option, index) => (
           <label key={option.value} className={styles.choiceOption}>
             <input
               type="radio"
+              // Id stable : sert au déplacement du focal sur le premier
+              // champ en erreur après un envoi refusé.
+              id={`${id}-${index}`}
               value={option.value}
               {...registration}
               className={styles.choiceRadio}
@@ -60,7 +67,11 @@ export default function ChoiceGroup({
         ))}
       </div>
 
-      {error && <p className={styles.error}>{error}</p>}
+      {error && (
+        <p id={errorId} className={styles.error}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

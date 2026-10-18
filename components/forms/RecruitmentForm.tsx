@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
+import { describedBy, focusFirstInvalid } from './formA11y';
 import styles from './RecruitmentForm.module.css';
 
 type RecruitmentFormData = {
@@ -81,6 +82,24 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
     },
   });
 
+  // Ids des premiers contrôles de chaque champ, dans l'ordre visuel du
+  // formulaire : après un envoi refusé, le focal va sur le premier champ en
+  // erreur au lieu de rester figé sur le bouton d'envoi.
+  const FIRST_CONTROL: Record<string, string> = {
+    nom: 'recruit-nom',
+    prenom: 'recruit-prenom',
+    cin: 'recruit-cin',
+    email: 'recruit-email',
+    telephone: 'recruit-telephone',
+    dateNaissance: 'recruit-dateNaissance',
+    adresse: 'recruit-adresse',
+    niveauEtudes: 'recruit-niveauEtudes',
+    departement: 'recruit-departement',
+    competences: 'recruit-competences',
+    motivation: 'recruit-motivation',
+    consentement: 'recruit-consentement',
+  };
+
   const onSubmit: SubmitHandler<RecruitmentFormData> = async (data) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -117,7 +136,9 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (errs) =>
+        focusFirstInvalid(errs, FIRST_CONTROL),
+      )}
       className={`${styles.form} ${isRtl ? styles.rtl : ''}`}
       noValidate
       dir={isRtl ? 'rtl' : 'ltr'}
@@ -136,16 +157,22 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               <input
                 id="recruit-nom"
                 type="text"
+                required
                 {...register('nom')}
                 className={`${styles.input} ${errors.nom ? styles.invalid : ''}`}
                 placeholder=" "
                 aria-invalid={!!errors.nom}
+                aria-describedby={describedBy(errors.nom && 'recruit-nom-error')}
               />
               <label htmlFor="recruit-nom" className={styles.floatingLabel}>
                 {t('personal_info.nom')} *
               </label>
             </div>
-            {errors.nom && <p className={styles.error}>{errors.nom.message}</p>}
+            {errors.nom && (
+              <p id="recruit-nom-error" className={styles.error}>
+                {errors.nom.message}
+              </p>
+            )}
           </div>
 
           <div className={styles.field}>
@@ -154,16 +181,24 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               <input
                 id="recruit-prenom"
                 type="text"
+                required
                 {...register('prenom')}
                 className={`${styles.input} ${errors.prenom ? styles.invalid : ''}`}
                 placeholder=" "
                 aria-invalid={!!errors.prenom}
+                aria-describedby={describedBy(
+                  errors.prenom && 'recruit-prenom-error',
+                )}
               />
               <label htmlFor="recruit-prenom" className={styles.floatingLabel}>
                 {t('personal_info.prenom')} *
               </label>
             </div>
-            {errors.prenom && <p className={styles.error}>{errors.prenom.message}</p>}
+            {errors.prenom && (
+              <p id="recruit-prenom-error" className={styles.error}>
+                {errors.prenom.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -174,17 +209,28 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               id="recruit-cin"
               type="text"
               inputMode="numeric"
+              required
               {...register('cin')}
               className={`${styles.input} ${errors.cin ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.cin}
+              aria-describedby={describedBy(
+                'recruit-cin-help',
+                errors.cin && 'recruit-cin-error',
+              )}
             />
             <label htmlFor="recruit-cin" className={styles.floatingLabel}>
               {t('personal_info.cin')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('personal_info.cin_helper')}</small>
-          {errors.cin && <p className={styles.error}>{errors.cin.message}</p>}
+          <small id="recruit-cin-help" className={styles.helper}>
+            {t('personal_info.cin_helper')}
+          </small>
+          {errors.cin && (
+            <p id="recruit-cin-error" className={styles.error}>
+              {errors.cin.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -193,16 +239,24 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <input
               id="recruit-email"
               type="email"
+              required
               {...register('email')}
               className={`${styles.input} ${errors.email ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.email}
+              aria-describedby={describedBy(
+                errors.email && 'recruit-email-error',
+              )}
             />
             <label htmlFor="recruit-email" className={styles.floatingLabel}>
               {t('personal_info.email')} *
             </label>
           </div>
-          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+          {errors.email && (
+            <p id="recruit-email-error" className={styles.error}>
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -211,17 +265,28 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <input
               id="recruit-telephone"
               type="tel"
+              required
               {...register('telephone')}
               className={`${styles.input} ${errors.telephone ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.telephone}
+              aria-describedby={describedBy(
+                'recruit-telephone-help',
+                errors.telephone && 'recruit-telephone-error',
+              )}
             />
             <label htmlFor="recruit-telephone" className={styles.floatingLabel}>
               {t('personal_info.telephone')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('personal_info.telephone_helper')}</small>
-          {errors.telephone && <p className={styles.error}>{errors.telephone.message}</p>}
+          <small id="recruit-telephone-help" className={styles.helper}>
+            {t('personal_info.telephone_helper')}
+          </small>
+          {errors.telephone && (
+            <p id="recruit-telephone-error" className={styles.error}>
+              {errors.telephone.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -230,17 +295,28 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <input
               id="recruit-dateNaissance"
               type="date"
+              required
               {...register('dateNaissance')}
               className={`${styles.input} ${errors.dateNaissance ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.dateNaissance}
+              aria-describedby={describedBy(
+                'recruit-dateNaissance-help',
+                errors.dateNaissance && 'recruit-dateNaissance-error',
+              )}
             />
             <label htmlFor="recruit-dateNaissance" className={styles.floatingLabel}>
               {t('personal_info.date_naissance')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('personal_info.date_helper')}</small>
-          {errors.dateNaissance && <p className={styles.error}>{errors.dateNaissance.message}</p>}
+          <small id="recruit-dateNaissance-help" className={styles.helper}>
+            {t('personal_info.date_helper')}
+          </small>
+          {errors.dateNaissance && (
+            <p id="recruit-dateNaissance-error" className={styles.error}>
+              {errors.dateNaissance.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -249,16 +325,24 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <input
               id="recruit-adresse"
               type="text"
+              required
               {...register('adresse')}
               className={`${styles.input} ${errors.adresse ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.adresse}
+              aria-describedby={describedBy(
+                errors.adresse && 'recruit-adresse-error',
+              )}
             />
             <label htmlFor="recruit-adresse" className={styles.floatingLabel}>
               {t('personal_info.adresse')} *
             </label>
           </div>
-          {errors.adresse && <p className={styles.error}>{errors.adresse.message}</p>}
+          {errors.adresse && (
+            <p id="recruit-adresse-error" className={styles.error}>
+              {errors.adresse.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -266,9 +350,13 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <Icons.GraduationCap size={20} className={styles.inputIcon} />
             <select
               id="recruit-niveauEtudes"
+              required
               {...register('niveauEtudes')}
               className={`${styles.input} ${styles.select} ${errors.niveauEtudes ? styles.invalid : ''}`}
               aria-invalid={!!errors.niveauEtudes}
+              aria-describedby={describedBy(
+                errors.niveauEtudes && 'recruit-niveauEtudes-error',
+              )}
             >
               <option value="">{t('personal_info.select_niveau')}</option>
               {niveauxEtudes.map((n) => (
@@ -281,7 +369,11 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               {t('personal_info.niveau_etudes')} *
             </label>
           </div>
-          {errors.niveauEtudes && <p className={styles.error}>{errors.niveauEtudes.message}</p>}
+          {errors.niveauEtudes && (
+            <p id="recruit-niveauEtudes-error" className={styles.error}>
+              {errors.niveauEtudes.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -297,9 +389,13 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <Icons.Code size={20} className={styles.inputIcon} />
             <select
               id="recruit-departement"
+              required
               {...register('departement')}
               className={`${styles.input} ${styles.select} ${errors.departement ? styles.invalid : ''}`}
               aria-invalid={!!errors.departement}
+              aria-describedby={describedBy(
+                errors.departement && 'recruit-departement-error',
+              )}
             >
               <option value="">{t('candidature.select_departement')}</option>
               {departements.map((d) => (
@@ -312,7 +408,11 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               {t('candidature.departement')} *
             </label>
           </div>
-          {errors.departement && <p className={styles.error}>{errors.departement.message}</p>}
+          {errors.departement && (
+            <p id="recruit-departement-error" className={styles.error}>
+              {errors.departement.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -321,17 +421,28 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <textarea
               id="recruit-competences"
               rows={3}
+              required
               {...register('competences')}
               className={`${styles.input} ${styles.textarea} ${errors.competences ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.competences}
+              aria-describedby={describedBy(
+                'recruit-competences-help',
+                errors.competences && 'recruit-competences-error',
+              )}
             />
             <label htmlFor="recruit-competences" className={styles.floatingLabel}>
               {t('candidature.competences')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('candidature.competences_helper')}</small>
-          {errors.competences && <p className={styles.error}>{errors.competences.message}</p>}
+          <small id="recruit-competences-help" className={styles.helper}>
+            {t('candidature.competences_helper')}
+          </small>
+          {errors.competences && (
+            <p id="recruit-competences-error" className={styles.error}>
+              {errors.competences.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -340,17 +451,28 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
             <textarea
               id="recruit-motivation"
               rows={4}
+              required
               {...register('motivation')}
               className={`${styles.input} ${styles.textarea} ${errors.motivation ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.motivation}
+              aria-describedby={describedBy(
+                'recruit-motivation-help',
+                errors.motivation && 'recruit-motivation-error',
+              )}
             />
             <label htmlFor="recruit-motivation" className={styles.floatingLabel}>
               {t('candidature.motivation')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('candidature.motivation_helper')}</small>
-          {errors.motivation && <p className={styles.error}>{errors.motivation.message}</p>}
+          <small id="recruit-motivation-help" className={styles.helper}>
+            {t('candidature.motivation_helper')}
+          </small>
+          {errors.motivation && (
+            <p id="recruit-motivation-error" className={styles.error}>
+              {errors.motivation.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -364,10 +486,15 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
         <div className={styles.checkboxField}>
           <label className={styles.checkboxLabel}>
             <input
+              id="recruit-consentement"
               type="checkbox"
+              required
               {...register('consentement')}
               className={styles.checkbox}
               aria-invalid={!!errors.consentement}
+              aria-describedby={describedBy(
+                errors.consentement && 'recruit-consentement-error',
+              )}
             />
             <span className={styles.checkboxText}>
               {t('privacy.consent_text')}
@@ -381,7 +508,11 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
               </small>
             </span>
           </label>
-          {errors.consentement && <p className={styles.error}>{errors.consentement.message}</p>}
+          {errors.consentement && (
+            <p id="recruit-consentement-error" className={styles.error}>
+              {errors.consentement.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -393,7 +524,7 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
       >
         {isSubmitting ? (
           <>
-            <span className={styles.spinner}></span>
+            <span className={styles.spinner} aria-hidden="true"></span>
             {t('buttons.sending')}
           </>
         ) : (
@@ -404,8 +535,9 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
         )}
       </button>
 
+      {/* Live regions : le résultat de l'envoi est annoncé sans voler le focal */}
       {submitSuccess && (
-        <div className={styles.successMessage}>
+        <div className={styles.successMessage} role="status">
           <Icons.Check size={24} />
           <div>
             <strong>{t('success.title')}</strong>
@@ -415,7 +547,7 @@ export default function RecruitmentForm({ locale }: RecruitmentFormProps) {
       )}
 
       {submitError && (
-        <div className={styles.errorMessage}>
+        <div className={styles.errorMessage} role="alert">
           <Icons.Alert size={24} />
           <div>
             <strong>{t('error.title')}</strong>

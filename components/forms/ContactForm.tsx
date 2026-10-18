@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import ChoiceGroup from './ChoiceGroup';
 import FormHeader from './FormHeader';
+import { describedBy, focusFirstInvalid } from './formA11y';
 import styles from './FormShared.module.css';
 
 type ContactFormData = {
@@ -65,6 +66,18 @@ export default function ContactForm({ locale }: ContactFormProps) {
     },
   });
 
+  // Ids des premiers contrôles de chaque champ, dans l'ordre visuel du
+  // formulaire : après un envoi refusé, le focal va sur le premier champ en
+  // erreur au lieu de rester figé sur le bouton d'envoi.
+  const FIRST_CONTROL: Record<string, string> = {
+    nom: 'contact-nom',
+    email: 'contact-email',
+    telephone: 'contact-telephone',
+    sujet: 'contact-sujet-0',
+    message: 'contact-message',
+    consentement: 'contact-consentement',
+  };
+
   const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -101,7 +114,9 @@ export default function ContactForm({ locale }: ContactFormProps) {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (errs) =>
+        focusFirstInvalid(errs, FIRST_CONTROL),
+      )}
       className={`${styles.form} ${isRtl ? styles.rtl : ''}`}
       noValidate
       dir={isRtl ? 'rtl' : 'ltr'}
@@ -129,16 +144,22 @@ export default function ContactForm({ locale }: ContactFormProps) {
             <input
               id="contact-nom"
               type="text"
+              required
               {...register('nom')}
               className={`${styles.input} ${errors.nom ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.nom}
+              aria-describedby={describedBy(errors.nom && 'contact-nom-error')}
             />
             <label htmlFor="contact-nom" className={styles.floatingLabel}>
               {t('personal_info.nom')} *
             </label>
           </div>
-          {errors.nom && <p className={styles.error}>{errors.nom.message}</p>}
+          {errors.nom && (
+            <p id="contact-nom-error" className={styles.error}>
+              {errors.nom.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -147,16 +168,24 @@ export default function ContactForm({ locale }: ContactFormProps) {
             <input
               id="contact-email"
               type="email"
+              required
               {...register('email')}
               className={`${styles.input} ${errors.email ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.email}
+              aria-describedby={describedBy(
+                errors.email && 'contact-email-error',
+              )}
             />
             <label htmlFor="contact-email" className={styles.floatingLabel}>
               {t('personal_info.email')} *
             </label>
           </div>
-          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+          {errors.email && (
+            <p id="contact-email-error" className={styles.error}>
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -165,17 +194,28 @@ export default function ContactForm({ locale }: ContactFormProps) {
             <input
               id="contact-telephone"
               type="tel"
+              required
               {...register('telephone')}
               className={`${styles.input} ${errors.telephone ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.telephone}
+              aria-describedby={describedBy(
+                'contact-telephone-help',
+                errors.telephone && 'contact-telephone-error',
+              )}
             />
             <label htmlFor="contact-telephone" className={styles.floatingLabel}>
               {t('personal_info.telephone')} *
             </label>
           </div>
-          <small className={styles.helper}>{t('personal_info.telephone_helper')}</small>
-          {errors.telephone && <p className={styles.error}>{errors.telephone.message}</p>}
+          <small id="contact-telephone-help" className={styles.helper}>
+            {t('personal_info.telephone_helper')}
+          </small>
+          {errors.telephone && (
+            <p id="contact-telephone-error" className={styles.error}>
+              {errors.telephone.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -205,13 +245,23 @@ export default function ContactForm({ locale }: ContactFormProps) {
               className={`${styles.input} ${styles.textarea} ${errors.message ? styles.invalid : ''}`}
               placeholder=" "
               aria-invalid={!!errors.message}
+              aria-describedby={describedBy(
+                'contact-message-help',
+                errors.message && 'contact-message-error',
+              )}
             />
             <label htmlFor="contact-message" className={styles.floatingLabel}>
               {t('demande.message')} {/* ✅ Supprimé le * */}
             </label>
           </div>
-          <small className={styles.helper}>{t('demande.message_helper')}</small>
-          {errors.message && <p className={styles.error}>{errors.message.message}</p>}
+          <small id="contact-message-help" className={styles.helper}>
+            {t('demande.message_helper')}
+          </small>
+          {errors.message && (
+            <p id="contact-message-error" className={styles.error}>
+              {errors.message.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -225,10 +275,15 @@ export default function ContactForm({ locale }: ContactFormProps) {
         <div className={styles.checkboxField}>
           <label className={styles.checkboxLabel}>
             <input
+              id="contact-consentement"
               type="checkbox"
+              required
               {...register('consentement')}
               className={styles.checkbox}
               aria-invalid={!!errors.consentement}
+              aria-describedby={describedBy(
+                errors.consentement && 'contact-consentement-error',
+              )}
             />
             <span className={styles.checkboxText}>
               {t('privacy.consent_text')}
@@ -242,7 +297,11 @@ export default function ContactForm({ locale }: ContactFormProps) {
               </small>
             </span>
           </label>
-          {errors.consentement && <p className={styles.error}>{errors.consentement.message}</p>}
+          {errors.consentement && (
+            <p id="contact-consentement-error" className={styles.error}>
+              {errors.consentement.message}
+            </p>
+          )}
         </div>
       </fieldset>
 
@@ -253,7 +312,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
       >
         {isSubmitting ? (
           <>
-            <span className={styles.spinner}></span>
+            <span className={styles.spinner} aria-hidden="true"></span>
             {t('buttons.sending')}
           </>
         ) : (
@@ -264,8 +323,9 @@ export default function ContactForm({ locale }: ContactFormProps) {
         )}
       </button>
 
+      {/* Live regions : le résultat de l'envoi est annoncé sans voler le focal */}
       {submitSuccess && (
-        <div className={styles.successMessage}>
+        <div className={styles.successMessage} role="status">
           <Icons.Check size={24} />
           <div>
             <strong>{t('success.title')}</strong>
@@ -275,7 +335,7 @@ export default function ContactForm({ locale }: ContactFormProps) {
       )}
 
       {submitError && (
-        <div className={styles.errorMessage}>
+        <div className={styles.errorMessage} role="alert">
           <Icons.Alert size={24} />
           <div>
             <strong>{t('error.title')}</strong>
