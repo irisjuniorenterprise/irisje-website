@@ -15,7 +15,9 @@
 
 .inView {
   opacity: 1;
-  transform: translateY(0);
+  /* `none` (et non translateY(0)) : plus aucun transform une fois révélée,
+     donc plus de repère de positionnement parasite pour les descendants. */
+  transform: none;
 }
 
 .header {
@@ -885,17 +887,17 @@
     font-size: 0.75rem;
   }
 
-  /* Fiche = « bottom sheet » : collée en bas, arrondie en haut */
+  /* Fiche centrée dans l'écran, avec une marge de 1 rem tout autour
+     (et non plus collée en bas) */
   .modalOverlay {
-    align-items: flex-end;
-    padding: 0;
+    align-items: center;
+    padding: 1rem;
   }
 
   .modal {
     max-width: 100%;
-    max-height: 92vh;
-    max-height: 92dvh;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    max-height: 88vh;
+    max-height: 88dvh;
   }
 
   .modalImage {

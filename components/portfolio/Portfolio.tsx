@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import styles from './Portfolio.module.css';
@@ -359,9 +360,18 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
             Structure : bouton de fermeture fixe (hors zone défilante) · zone
             défilante (visuel, introduction, informations clés, résultats,
             technologies) · pied de page fixe avec les actions. */}
-        {selectedProject && (
+        {/* Rendue dans un PORTAIL (document.body) : la section Portfolio porte un
+            `transform` (animation de révélation au scroll), et un ancêtre avec
+            transform devient le repère de ses descendants `position: fixed`.
+            L'overlay se centrait alors sur la SECTION (donc « en bas, au
+            milieu de la page ») au lieu de l'écran. Hors de la section, il se
+            centre toujours sur la fenêtre, quel que soit le défilement.
+            La classe `rtl` est reportée sur l'overlay : les règles `.rtl …`
+            de la modale ne dépendent plus de la section. */}
+        {selectedProject &&
+          createPortal(
           <div
-            className={styles.modalOverlay}
+            className={`${styles.modalOverlay} ${isRtl ? styles.rtl : ''}`}
             // Fermeture sur le fond seulement : `currentTarget` évite de
             // devoir stopper la propagation depuis la boîte de dialogue,
             // laquelle n'est pas un élément interactif.
@@ -500,7 +510,8 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 )}
               </div>
             </div>
-          </div>
+          </div>,
+          document.body,
         )}
 
       </div>
