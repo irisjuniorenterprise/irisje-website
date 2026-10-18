@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
 import SnapScroll from '@/components/layout/SnapScroll';
 import '../globals.css';
+import '../alignment.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
 import BackToTop from '@/components/ui/BackToTop';
