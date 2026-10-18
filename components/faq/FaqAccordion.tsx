@@ -42,6 +42,7 @@ export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
           return (
             <div key={item.id} className={styles.item}>
               <button
+                type="button"
                 className={styles.question}
                 onClick={() => toggle(item.id)}
                 aria-expanded={isOpen}
@@ -52,11 +53,17 @@ export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
                   <Icons.ChevronDown size={20} stroke="currentColor" />
                 </span>
               </button>
+              {/* Le panneau replié est masqué par CSS (max-height: 0), ce qui
+                  ne retire RIEN de l'arbre d'accessibilité : aria-hidden +
+                  inert le sortent réellement (et le rendent non focalisable).
+                  Pas de role="region" : 12 régions nommées seraient un
+                  brouillard de repères ; aria-expanded / aria-controls suffisent
+                  (modèle « disclosure » de l'APG). */}
               <div
                 id={`faq-answer-${item.id}`}
                 className={`${styles.answer} ${isOpen ? styles.answerOpen : ''}`}
-                role="region"
-                aria-labelledby={`faq-question-${item.id}`}
+                aria-hidden={!isOpen}
+                inert={!isOpen}
               >
                 <div className={styles.answerContent}>
                   {item.answer.split('\n').map((line, index) => (
