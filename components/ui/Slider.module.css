@@ -369,26 +369,48 @@
 
 .dot {
   position: relative;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  /* WCAG 2.2 (2.5.8) : la cible tactile doit faire au moins 24×24 px. Le
+     bouton est donc agrandi, le point visuel de 10 px est redessiné par
+     ::before pour ne pas changer l'apparence de la rangée. */
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
   border: none;
-  background: var(--text-secondary);
+  background: transparent;
   cursor: pointer;
-  /* Propriétés explicites (et non `all`) : seules celles qui changent sont animées */
-  transition: background-color 0.3s ease, width 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease;
   padding: 0;
 }
 
+.dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--text-secondary);
+  transition: background-color 0.3s ease, width 0.3s ease;
+}
+
 .dot:hover {
-  background: var(--primary);
   transform: scale(1.2);
 }
 
-.dotActive {
+.dot:hover::before {
   background: var(--primary);
-  width: 28px;
+}
+
+.dotActive {
+  background: transparent;
   border-radius: 999px;
+}
+
+.dotActive::before {
+  width: 20px;
+  background: var(--primary);
 }
 
 /* ============================================================
@@ -607,13 +629,14 @@
     left: 8px;
   }
 
-  .dot {
+  /* Le bouton garde 24×24 px (cible tactile) ; seul le point rétrécit. */
+  .dot::before {
     width: 7px;
     height: 7px;
   }
 
-  .dotActive {
-    width: 18px;
+  .dotActive::before {
+    width: 16px;
   }
 }
 
@@ -690,12 +713,13 @@
     left: 6px;
   }
 
-  .dot {
+  /* Le bouton garde 24×24 px (cible tactile) ; seul le point rétrécit. */
+  .dot::before {
     width: 6px;
     height: 6px;
   }
 
-  .dotActive {
-    width: 16px;
+  .dotActive::before {
+    width: 14px;
   }
 }
