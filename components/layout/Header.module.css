@@ -21,9 +21,18 @@
   height: 80px;
 }
 
+.logo {
+  /* Le logo ne doit JAMAIS être comprimé : sans cela, quand la place manque
+     (320 px), le conteneur flex le rétrécit. */
+  flex-shrink: 0;
+}
+
 .logo img {
   height: 40px;
   width: auto;
+  /* Neutralise le `img { max-width: 100% }` global, qui écraserait la largeur
+     du logo (hauteur fixe) au lieu de laisser le header s'adapter. */
+  max-width: none;
   display: block;
 }
 
@@ -48,23 +57,25 @@
   font-weight: 600;
   font-size: 0.95rem;
   position: relative;
-  padding-bottom: 6px;
+  padding-bottom: 7px;
   transition: color 0.3s;
 }
 
+/* Lien survolé ou correspondant à la page actuelle : couleur secondary */
 .navList a:hover,
 .navList a.active {
-  color: var(--secondary-strong);
+  color: var(--secondary);
 }
 
-/* Ligne sous le lien actif/survolé */
+/* Ligne sous le lien actif/survolé — extrémités arrondies */
 .navList a::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 3px;
+  border-radius: 999px;
   background-color: var(--secondary);
   transform: scaleX(0);
   transition: transform 0.3s ease;
@@ -74,6 +85,14 @@
 .navList a:hover::after,
 .navList a.active::after {
   transform: scaleX(1);
+}
+
+/* Focus clavier : même repère visuel que le survol */
+.navList a:focus-visible {
+  color: var(--secondary);
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 6px;
 }
 
 /* Sélecteur de langue + bouton contact + burger */
@@ -89,11 +108,41 @@
 
 .menuButton {
   display: none;
+  position: relative;
   width: 28px;
   height: 20px;
   flex-direction: column;
   justify-content: space-between;
   z-index: 70;
+}
+
+/* Zone de toucher agrandie (≈ 52 × 44 px) sans changer le dessin du burger */
+.menuButton::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
+/* Pastille de notification : signale qu'IRIS JOIN se trouve dans le menu.
+   Pseudo-élément ::before (le ::after porte déjà la zone de toucher) ; le
+   sélecteur « .menuButton span » ne la concerne donc pas. */
+.menuButton.hasNotice::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  inset-inline-end: -7px;
+  width: 11px;
+  height: 11px;
+  box-sizing: border-box;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: var(--secondary);
+}
+
+.menuButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 6px;
 }
 
 .menuButton span {
@@ -103,6 +152,10 @@
   background-color: var(--primary);
   transition: all 0.3s ease;
   border-radius: 2px;
+}
+
+.menuButton.isActive span {
+  background-color: var(--secondary);
 }
 
 .menuButton.isActive span:nth-child(1) {
@@ -124,22 +177,26 @@
    hauteur : 80px desktop / 70px mobile).
 
    Ouverture / fermeture : la hauteur est animée par grid-template-rows
-   (0fr ↔ 1fr), qui s'adapte au contenu réel du menu (liens traduits, lien
-   recrutement présent ou non…). Le padding n'est PAS sur le conteneur mais sur
-   la liste, à l'intérieur de la zone rognée : il ne saute donc plus d'un coup
-   à la fermeture (c'est ce saut qui faisait « sauter » les liens avant qu'ils
-   ne disparaissent). Les liens s'estompent pendant que le panneau se replie ;
-   fermé, le panneau est invisible et non focalisable (visibility). */
+   (0fr ↔ 1fr), qui s'adapte au contenu réel du menu. Le padding n'est PAS sur
+   le conteneur mais sur la liste, à l'intérieur de la zone rognée : il ne saute
+   donc pas à la fermeture. Fermé, le panneau est invisible et non focalisable
+   (visibility).
+
+   Design : panneau aux coins inférieurs arrondis (même langage que la ligne
+   arrondie du menu desktop), lignes tactiles de 52 px, page actuelle signalée
+   par un fond teinté secondary et une barre arrondie. Au dépliage, les lignes
+   apparaissent en cascade — un seul moment animé, déclenché par l'utilisateur. */
 .mobileNav {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
   background: var(--surface);
+  border-radius: 0 0 24px 24px;
   display: grid;
   grid-template-rows: 0fr;
   visibility: hidden;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0);
+  box-shadow: 0 14px 30px -12px rgba(26, 57, 105, 0);
   transition:
     grid-template-rows 0.35s ease,
     box-shadow 0.35s ease,
@@ -149,7 +206,7 @@
 .mobileNav.isOpen {
   grid-template-rows: 1fr;
   visibility: visible;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 14px 30px -12px rgba(26, 57, 105, 0.22);
   transition:
     grid-template-rows 0.35s ease,
     box-shadow 0.35s ease,
@@ -160,14 +217,16 @@
 .mobileNav > nav {
   min-height: 0;
   overflow: hidden;
+  border-radius: 0 0 24px 24px;
 }
 
 .mobileNav ul {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 24px 2rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 4px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 12px 16px 22px;
   /* Fermeture : les liens s'estompent vite, avant la fin du repli */
   opacity: 0;
   transform: translateY(-8px);
@@ -181,24 +240,147 @@
   transition: opacity 0.3s ease 0.1s, transform 0.35s ease 0.05s;
 }
 
-.mobileNav a {
-  font-weight: 600;
-  color: var(--primary);
-  font-size: 1.1rem;
-  display: block;
+/* Cascade d'apparition des lignes à l'ouverture */
+.mobileNav.isOpen li {
+  animation: navRowIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.mobileNav .mobileCta {
-  margin-top: 10px;
-  background: var(--secondary-strong);
+.mobileNav.isOpen li:nth-child(1) { animation-delay: 0.08s; }
+.mobileNav.isOpen li:nth-child(2) { animation-delay: 0.13s; }
+.mobileNav.isOpen li:nth-child(3) { animation-delay: 0.18s; }
+.mobileNav.isOpen li:nth-child(4) { animation-delay: 0.23s; }
+.mobileNav.isOpen li:nth-child(5) { animation-delay: 0.28s; }
+.mobileNav.isOpen li:nth-child(6) { animation-delay: 0.33s; }
+
+@keyframes navRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Ligne de navigation */
+.mobileNav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 1.05rem;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+/* Barre arrondie en début de ligne (côté début : gauche en LTR, droite en RTL) */
+.mobileNav a::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 6px;
+  top: 50%;
+  width: 4px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--secondary);
+  transform: translateY(-50%) scaleY(0);
+  transition: transform 0.25s ease;
+}
+
+/* Page actuelle / lien survolé : couleur secondary */
+.mobileNav a:hover,
+.mobileNav a.active {
+  color: var(--secondary);
+  background-color: rgba(255, 102, 51, 0.08);
+}
+
+.mobileNav a:hover::before,
+.mobileNav a.active::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.mobileNav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Élément de liste de la carte IRIS JOIN : détaché des liens de navigation */
+.mobileNav ul li.mobileJoinItem {
+  margin-top: 6px; /* laisse respirer la pastille « Nouveau » posée sur le bord */
+  margin-bottom: 10px;
+}
+
+/* Élément de liste du bouton Contact : pleine largeur, séparé des liens */
+.mobileNav ul li.mobileCtaItem {
+  margin-top: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(26, 57, 105, 0.08);
+}
+
+/* ------------------------------------------------------------
+   Bouton Contact du menu : pilule pleine largeur, icône + texte.
+   Mêmes couleurs que le bouton principal du site (.btn-cta) :
+   fond --secondary, texte --on-secondary (blanc), survol
+   --secondary-hover. (Variables toutes définies dans globals.css.)
+   Sélecteur volontairement plus spécifique que `.mobileNav a` pour ne
+   jamais être écrasé par les règles des lignes de navigation.
+   ------------------------------------------------------------ */
+.mobileNav ul li .mobileCta,
+.mobileNav ul li .mobileCta:hover,
+.mobileNav ul li .mobileCta.active {
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--secondary);
   color: var(--on-secondary);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   text-align: center;
-  border-radius: 50px;
-  padding: 12px;
+  box-shadow: 0 8px 18px -8px rgba(255, 102, 51, 0.6);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.15s ease;
+}
+
+.mobileNav ul li .mobileCta:hover {
+  background: var(--secondary-hover);
+  box-shadow: 0 10px 22px -8px rgba(255, 102, 51, 0.7);
+}
+
+.mobileNav ul li .mobileCta:active {
+  transform: scale(0.98);
+}
+
+/* L'icône garde sa taille, le texte ne passe jamais à la ligne */
+.mobileNav ul li .mobileCta svg {
+  flex-shrink: 0;
+}
+
+.mobileNav ul li .mobileCta span {
+  white-space: nowrap;
+}
+
+/* Le bouton n'a pas de barre latérale */
+.mobileNav ul li .mobileCta::before {
+  display: none;
+}
+
+.mobileNav ul li .mobileCta:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
 }
 
 /* ============================================================
-   SUPPORT RTL (CORRIGÉ & OPTIMISÉ)
+   SUPPORT RTL
    ============================================================ */
 
 /* Aligne le logo à droite et crée l'espace direct avec la navigation */
@@ -226,22 +408,15 @@
   transform-origin: right;
 }
 
-/* Alignement du menu mobile pour l'arabe */
-.header.rtl .mobileNav ul {
-  align-items: flex-end;
-}
-
-.header.rtl .mobileNav .mobileCta {
-  text-align: center;
-  width: 100%;
-}
+/* Menu mobile en arabe : le header porte dir="rtl", les lignes s'alignent à
+   droite d'elles-mêmes et la barre (inset-inline-start) passe à droite. */
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 /* Le menu mobile n'existe pas sur grand écran (évite qu'il reste ouvert si la
    fenêtre est agrandie alors qu'il était déployé) */
-@media (min-width: 769px) {
+@media (min-width: 1200px) {
   .mobileNav {
     display: none;
   }
@@ -252,38 +427,78 @@
   .mobileNav,
   .mobileNav.isOpen,
   .mobileNav ul,
-  .mobileNav.isOpen ul {
+  .mobileNav.isOpen ul,
+  .mobileNav a,
+  .mobileNav a::before,
+  .mobileNav ul li .mobileCta,
+  .navList a,
+  .navList a::after {
     transition: none;
+  }
+
+  .mobileNav.isOpen li {
+    animation: none;
   }
 }
 
-@media (max-width: 768px) {
-  .nav, .desktopCta { 
-    display: none; 
+/* Burger jusqu'à 1199 px : au-dessus, le header contient logo, 4 liens,
+   sélecteur de langue, pastille IRIS JOIN et bouton Contact (≈ 1 030 px de
+   contenu) ; en dessous, il manquait de place (texte qui passe à la ligne,
+   pastille écrasée). Tablettes et petits laptops utilisent donc le menu. */
+@media (max-width: 1199px) {
+  .nav, .desktopCta {
+    display: none;
   }
-  
-  .menuButton { 
-    display: flex; 
+
+  .menuButton {
+    display: flex;
   }
 
   .actions {
     gap: 14px;
   }
-  
-  .inner { 
-    height: 70px; 
-  }
-  
-  .logo img { 
-    height: 32px; 
-  }
 
-  /* Ajustements mobiles spécifiques pour le mode RTL */
+  /* Mode RTL avec burger : le logo reste à droite, le burger va à gauche */
   .header.rtl .inner {
-    justify-content: space-between; /* Le logo reste à droite, le bouton burger va à gauche */
+    justify-content: space-between;
   }
 
   .header.rtl .rightSection {
     flex: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .inner {
+    height: 70px;
+  }
+
+  .logo img {
+    height: 32px;
+  }
+}
+
+/* Très petits écrans (≤ 400 px) : le logo (≈ 108 px), le sélecteur de langue
+   et le burger demandent ≈ 274 px, soit plus que les 272 px restants à 320 px
+   avec des marges de 24 px. On resserre les marges et l'espacement plutôt que
+   de laisser le logo se déformer. */
+@media (max-width: 400px) {
+  .header .inner {
+    padding-inline: 16px;
+  }
+
+  .actions {
+    gap: 10px;
+  }
+}
+
+/* Écrans de ≤ 300 px (ex. appareils pliants repliés) */
+@media (max-width: 300px) {
+  .header .inner {
+    padding-inline: 12px;
+  }
+
+  .logo img {
+    height: 28px;
   }
 }

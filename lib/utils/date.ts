@@ -62,3 +62,13 @@ export const formatRecruitmentDate = (date: Date, locale: string): string =>
     year: 'numeric',
     timeZone: 'UTC',
   });
+
+/**
+ * Dernier jour d'ouverture, sans l'année (ex. « 7 octobre »). Dérivé des
+ * constantes de la fenêtre : aucune date n'est écrite en dur dans l'interface.
+ */
+export const formatRecruitmentEnd = (locale: string): string =>
+  new Date(Date.UTC(2000, RECRUITMENT_MONTH - 1, RECRUITMENT_CLOSE_DAY - 1, 12)).toLocaleDateString(
+    locale,
+    { day: 'numeric', month: 'long', timeZone: 'UTC' },
+  );

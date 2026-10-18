@@ -18,6 +18,7 @@ import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
 import PageJsonLd from '@/components/seo/PageJsonLd';
 import { getRequestSite } from '@/lib/request-site';
+import { formatRecruitmentEnd, isRecruitmentOpen } from '@/lib/utils/date';
 
 type Props = {
   children: React.ReactNode;
@@ -101,6 +102,7 @@ async function LocaleChrome({
   const messages = await getMessages({ locale });
   // Domaine réellement servi (.com / .tn) : sert aux URLs du JSON-LD
   const { origin } = await getRequestSite();
+  const recruitmentOpen = isRecruitmentOpen();
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
@@ -111,9 +113,14 @@ async function LocaleChrome({
       </a>
       {/* Données structurées schema.org de la page (Organization, WebSite, fil d'Ariane…) */}
       <PageJsonLd origin={origin} />
-      <Header />
+      {/* IRIS JOIN vit dans le header (pastille desktop, carte du menu mobile) :
+          plus d'onglet flottant qui recouvre le contenu. Les deux valeurs sont
+          calculées ici, côté serveur, pour éviter tout écart d'hydratation. */}
+      <Header joinOpen={recruitmentOpen} joinUntil={formatRecruitmentEnd(locale)} />
       <Breadcrumb />
-      <main id="main">{children}</main>
+      <main id="main">
+        {children}
+      </main>
       <Slogan />
       <Footer />
       <BackToTop />

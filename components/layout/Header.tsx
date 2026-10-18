@@ -8,10 +8,18 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Header.module.css';
 import logoData from '@/public/horiz-logo.png';
-import { isRecruitmentOpen } from '@/lib/utils/date';
 import LanguageSwitcher from './LanguageSwitcher';
+import { Icons } from '@/components/icons/Icons';
+import JoinLink from './JoinLink';
 
-export default function Header() {
+type HeaderProps = {
+  /** Période de recrutement ouverte : affiche IRIS JOIN dans le header. */
+  joinOpen?: boolean;
+  /** Dernier jour de candidature, déjà formaté (ex. « 7 octobre »). */
+  joinUntil?: string;
+};
+
+export default function Header({ joinOpen = false, joinUntil }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -69,8 +77,6 @@ export default function Header() {
   // « page courante » attendu pour une navigation (APG Navigation Bar).
   const ariaCurrent = (path: string) => (isActive(path) ? 'page' : undefined);
 
-  const showRecruitment = isRecruitmentOpen();
-
   const localHref = (path: string) => {
     if (path.startsWith('/#')) return path;
     if (path === '/') return `/${locale}`;
@@ -127,17 +133,6 @@ export default function Header() {
                   {t('devis')}
                 </Link>
               </li>
-              {showRecruitment && (
-                <li>
-                  <Link
-                    href={localHref('/recrutement')}
-                    className={isActive('/recrutement') ? styles.active : ''}
-                    aria-current={ariaCurrent('/recrutement')}
-                  >
-                    {t('recruitment')}
-                  </Link>
-                </li>
-              )}
             </ul>
           </nav>
 
@@ -149,6 +144,11 @@ export default function Header() {
               onNavigate={closeMenu}
             />
 
+            {/* IRIS JOIN (desktop) : pastille discrète à côté du CTA principal,
+                sans lui voler la vedette. En petit écran : carte du menu. */}
+            {joinOpen && <JoinLink locale={locale} variant="pill" />}
+
+            {/* Bouton Contact desktop : en petit écran il passe dans le menu déroulant */}
             <Link href={localHref('/contact')} className={`btn btn-cta ${styles.desktopCta}`}>
               {t('contact')}
             </Link>
@@ -156,7 +156,7 @@ export default function Header() {
             <button
               ref={menuButtonRef}
               type="button"
-              className={`${styles.menuButton} ${isOpen ? styles.isActive : ''}`}
+              className={`${styles.menuButton} ${isOpen ? styles.isActive : ''} ${joinOpen && !isOpen ? styles.hasNotice : ''}`}
               onClick={toggleMenu}
               aria-label={t('menu')}
               aria-expanded={isOpen}
@@ -176,6 +176,13 @@ export default function Header() {
       >
         <nav aria-label={t('aria_label_mobile')}>
           <ul>
+            {/* Carte IRIS JOIN : en tête du menu, c'est l'info temporaire et
+                prioritaire de la période. */}
+            {joinOpen && (
+              <li className={styles.mobileJoinItem}>
+                <JoinLink locale={locale} variant="card" until={joinUntil} onNavigate={closeMenu} />
+              </li>
+            )}
             <li>
               <Link
                 href={localHref('/')}
@@ -216,21 +223,17 @@ export default function Header() {
                 {t('devis')}
               </Link>
             </li>
-            {showRecruitment && (
-              <li>
-                <Link
-                  href={localHref('/recrutement')}
-                  className={isActive('/recrutement') ? styles.active : ''}
-                  aria-current={ariaCurrent('/recrutement')}
-                  onClick={closeMenu}
-                >
-                  {t('recruitment')}
-                </Link>
-              </li>
-            )}
-            <li>
-              <Link href={localHref('/contact')} className={styles.mobileCta} onClick={closeMenu}>
-                {t('contact')}
+            {/* Bouton Contact du menu déroulant (petits écrans) : pilule
+                pleine largeur, icône + texte */}
+            <li className={styles.mobileCtaItem}>
+              <Link
+                href={localHref('/contact')}
+                className={styles.mobileCta}
+                aria-current={ariaCurrent('/contact')}
+                onClick={closeMenu}
+              >
+                <Icons.Mail size={20} />
+                <span>{t('contact')}</span>
               </Link>
             </li>
           </ul>

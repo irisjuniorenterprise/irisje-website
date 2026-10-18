@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Footer.module.css';
 import logoData from '@/public/logo-s-no-bg.png';
-import { isRecruitmentOpen } from '@/lib/utils/date';
 
 const socialIcons = {
   linkedin: (
@@ -50,7 +49,6 @@ export default function Footer() {
     setYear(new Date().getFullYear());
   }, []);
 
-  const showRecruitment = isRecruitmentOpen();
   const isRtl = locale === 'ar';
 
   const localHref = (path: string) => {
@@ -70,10 +68,6 @@ export default function Footer() {
               <li><Link href={localHref('#a-propos')}>{t('about')}</Link></li>
               <li><Link href={localHref('#services')}>{t('services')}</Link></li>
               <li><Link href={localHref('#devis')}>{t('devis')}</Link></li>
-              {showRecruitment && (
-                /* Pas d'ancre #recrutement sur l'accueil : on cible la page dédiée */
-                <li><Link href={localHref('/recrutement')}>{t('recruitment')}</Link></li>
-              )}
               <li><Link href={localHref('#contact')}>{t('contact')}</Link></li>
             </ul>
           </div>
@@ -83,9 +77,6 @@ export default function Footer() {
               <li><Link href={localHref('/services')}>{t('services')}</Link></li>
               <li><Link href={localHref('/a-propos')}>{t('about')}</Link></li>
               <li><Link href={localHref('/devis')}>{t('devis')}</Link></li>
-              {showRecruitment && (
-                <li><Link href={localHref('/recrutement')}>{t('recruitment')}</Link></li>
-              )}
               <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
             </ul>
           </div>
