@@ -93,12 +93,6 @@ button {
   /* ----- Hover ----- */
   --primary-hover: #12284a;
   --secondary-hover: #e55a2b;
-  /* Variante AA du jaune-orange, réservée aux SURFACES qui portent du texte
-     blanc (blanc sur #c2410c = 5,17:1). `--secondary` reste la teinte vive,
-     utilisée pour les accents, les bordures et les éléments décoratifs qui
-     ne portent pas de texte. */
-  --secondary-strong: #c2410c;
-  --secondary-strong-hover: #9a3412;
   --accent-hover: #48a4c9;
   --footer-text-hover: #ffffff;
   --success-hover: #16a34a;
@@ -316,12 +310,12 @@ html:has(body.menu-open) {
   transform: translateY(1px) scale(0.98);
 }
 .btn-cta {
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   box-shadow: 0 2px 10px -2px rgba(255, 102, 51, 0.45);
 }
 .btn-cta:hover {
-  background: var(--secondary-strong-hover);
+  background: var(--secondary-hover);
   box-shadow: 0 8px 22px -6px rgba(255, 102, 51, 0.55);
   transform: translateY(-2px);
 }
@@ -507,7 +501,7 @@ html:has(body.menu-open) {
 }
 .mobile-cta {
   margin-top: 14px;
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary) !important;
   text-align: center;
   border-radius: var(--radius-pill);
@@ -515,7 +509,7 @@ html:has(body.menu-open) {
   padding: 14px;
 }
 .mobile-cta:hover {
-  background: var(--secondary-strong-hover);
+  background: var(--secondary-hover);
   padding-left: 14px;
 }
 
@@ -727,7 +721,7 @@ html:has(body.menu-open) {
   fill: currentColor;
 }
 .social-links a:hover {
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   transform: translateY(-3px);
 }

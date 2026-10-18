@@ -71,20 +71,20 @@
 }
 
 .filterBtn:hover {
-  border-color: var(--secondary-strong);
-  color: var(--secondary-strong);
+  border-color: var(--secondary);
+  color: var(--secondary);
 }
 
-/* Filtre actif : teinte AA du CTA, pour que le texte blanc tienne le contraste */
+/* Filtre actif : même teinte CTA que le reste de la section (--secondary) */
 .filterActive {
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
-  border-color: var(--secondary-strong);
+  border-color: var(--secondary);
 }
 
 .filterActive:hover {
-  background: var(--secondary-strong-hover);
-  border-color: var(--secondary-strong-hover);
+  background: var(--secondary-hover);
+  border-color: var(--secondary-hover);
   color: var(--on-secondary);
 }
 
@@ -216,7 +216,7 @@
   gap: 0.4rem;
   margin-top: 0.4rem;
   padding: 0.55rem 1.4rem;
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   border: none;
   border-radius: var(--radius-pill);
@@ -366,7 +366,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.45rem 1rem;
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   border-radius: var(--radius-pill);
   font-size: 0.8rem;
@@ -739,7 +739,7 @@
   justify-content: center;
   gap: 0.4rem;
   padding: 0.55rem 1.25rem;
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   border-radius: var(--radius-pill);
   font-size: 0.85rem;

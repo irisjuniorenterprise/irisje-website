@@ -84,7 +84,7 @@
 }
 
 .socialLinks a:hover {
-  background: var(--secondary-strong);
+  background: var(--secondary);
   color: var(--on-secondary);
   transform: translateY(-3px);
 }
