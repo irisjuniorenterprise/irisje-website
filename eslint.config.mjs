@@ -12,7 +12,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 //    de liste). Cf. components/organigramme/Organigramme.module.css.
 const a11yRuleTweaks = {
   "jsx-a11y/no-noninteractive-tabindex": ["error", { roles: ["region"] }],
-  "jsx-a11y/no-redundant-roles": ["error", { ignore: ["ul"] }],
+  "jsx-a11y/no-redundant-roles": ["error", { ul: ["list"] }],
 };
 
 // eslint-config-next enregistre déjà le plugin `jsx-a11y` (6 règles seulement,
