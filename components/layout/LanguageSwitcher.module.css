@@ -78,6 +78,14 @@ a.selected:hover {
   }
 }
 
+/* ≤ 360 px : cellules resserrées pour laisser la place au logo (l'indicateur
+   glisse en % de sa propre largeur : il suit automatiquement --cell). */
+@media (max-width: 360px) {
+  .switcher {
+    --cell: 36px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .thumb,
   .item {
