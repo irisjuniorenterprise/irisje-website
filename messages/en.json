@@ -49,9 +49,12 @@
     "legal_cgu": "Terms of use",
     "copyright": "All rights reserved",
     "aria_label": "Main navigation",
-    "language": "Language"
+    "aria_label_mobile": "Mobile navigation",
+    "language": "Language",
+    "menu": "Menu"
   },
   "Breadcrumb": {
+    "label": "Breadcrumb",
     "home": "Home",
     "notFound": "Page not found",
     "routes": {

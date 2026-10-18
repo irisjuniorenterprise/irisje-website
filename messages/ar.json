@@ -49,9 +49,12 @@
     "legal_cgu": "شروط الاستخدام",
     "copyright": "جميع الحقوق محفوظة",
     "aria_label": "التنقل الرئيسي",
-    "language": "اللغة"
+    "aria_label_mobile": "التنقل عبر الجوال",
+    "language": "اللغة",
+    "menu": "القائمة"
   },
   "Breadcrumb": {
+    "label": "مسار التنقل",
     "home": "الرئيسية",
     "notFound": "الصفحة غير موجودة",
     "routes": {

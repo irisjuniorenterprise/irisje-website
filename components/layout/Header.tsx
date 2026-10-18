@@ -15,6 +15,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
@@ -42,10 +43,31 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Le menu mobile est un « disclosure » (APG) : aucun piège de focal, mais
+  // Échap doit le refermer et rendre le focal au bouton qui l'a ouvert,
+  // sinon le clavier se retrouve en haut de page sans repère.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setIsOpen(false);
+      document.body.classList.remove('menu-open');
+      menuButtonRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
   const isActive = (path: string) => {
     if (path === '/') return pathWithoutLocale === '/';
     return pathWithoutLocale.startsWith(path);
   };
+
+  // La classe CSS ne dit rien à un lecteur d'écran : on expose en plus l'état
+  // « page courante » attendu pour une navigation (APG Navigation Bar).
+  const ariaCurrent = (path: string) => (isActive(path) ? 'page' : undefined);
 
   const showRecruitment = isRecruitmentOpen();
 
@@ -70,28 +92,48 @@ export default function Header() {
           <nav className={styles.nav} aria-label={t('aria_label')}>
             <ul className={styles.navList}>
               <li>
-                <Link href={localHref('/')} className={isActive('/') ? styles.active : ''}>
+                <Link
+                  href={localHref('/')}
+                  className={isActive('/') ? styles.active : ''}
+                  aria-current={ariaCurrent('/')}
+                >
                   {t('home')}
                 </Link>
               </li>
               <li>
-                <Link href={localHref('/a-propos')} className={isActive('/a-propos') ? styles.active : ''}>
+                <Link
+                  href={localHref('/a-propos')}
+                  className={isActive('/a-propos') ? styles.active : ''}
+                  aria-current={ariaCurrent('/a-propos')}
+                >
                   {t('about')}
                 </Link>
               </li>
               <li>
-                <Link href={localHref('/services')} className={isActive('/services') ? styles.active : ''}>
+                <Link
+                  href={localHref('/services')}
+                  className={isActive('/services') ? styles.active : ''}
+                  aria-current={ariaCurrent('/services')}
+                >
                   {t('services')}
                 </Link>
               </li>
               <li>
-                <Link href={localHref('/devis')} className={isActive('/devis') ? styles.active : ''}>
+                <Link
+                  href={localHref('/devis')}
+                  className={isActive('/devis') ? styles.active : ''}
+                  aria-current={ariaCurrent('/devis')}
+                >
                   {t('devis')}
                 </Link>
               </li>
               {showRecruitment && (
                 <li>
-                  <Link href={localHref('/recrutement')} className={isActive('/recrutement') ? styles.active : ''}>
+                  <Link
+                    href={localHref('/recrutement')}
+                    className={isActive('/recrutement') ? styles.active : ''}
+                    aria-current={ariaCurrent('/recrutement')}
+                  >
                     {t('recruitment')}
                   </Link>
                 </li>
@@ -112,10 +154,13 @@ export default function Header() {
             </Link>
 
             <button
+              ref={menuButtonRef}
+              type="button"
               className={`${styles.menuButton} ${isOpen ? styles.isActive : ''}`}
               onClick={toggleMenu}
-              aria-label="Menu"
+              aria-label={t('menu')}
               aria-expanded={isOpen}
+              aria-controls="mobile-nav"
             >
               <span></span><span></span><span></span>
             </button>
@@ -123,32 +168,62 @@ export default function Header() {
         </div>
       </div>
 
-      <div className={`${styles.mobileNav} ${isOpen ? styles.isOpen : ''}`}>
-        <nav aria-label={t('aria_label')}>
+      {/* Panneau mobile : `visibility: hidden` au repos (voir le module CSS),
+          donc déjà hors de l'arbre d'accessibilité et non focalisable. */}
+      <div
+        id="mobile-nav"
+        className={`${styles.mobileNav} ${isOpen ? styles.isOpen : ''}`}
+      >
+        <nav aria-label={t('aria_label_mobile')}>
           <ul>
             <li>
-              <Link href={localHref('/')} className={isActive('/') ? styles.active : ''} onClick={closeMenu}>
+              <Link
+                href={localHref('/')}
+                className={isActive('/') ? styles.active : ''}
+                aria-current={ariaCurrent('/')}
+                onClick={closeMenu}
+              >
                 {t('home')}
               </Link>
             </li>
             <li>
-              <Link href={localHref('/a-propos')} className={isActive('/a-propos') ? styles.active : ''} onClick={closeMenu}>
+              <Link
+                href={localHref('/a-propos')}
+                className={isActive('/a-propos') ? styles.active : ''}
+                aria-current={ariaCurrent('/a-propos')}
+                onClick={closeMenu}
+              >
                 {t('about')}
               </Link>
             </li>
             <li>
-              <Link href={localHref('/services')} className={isActive('/services') ? styles.active : ''} onClick={closeMenu}>
+              <Link
+                href={localHref('/services')}
+                className={isActive('/services') ? styles.active : ''}
+                aria-current={ariaCurrent('/services')}
+                onClick={closeMenu}
+              >
                 {t('services')}
               </Link>
             </li>
             <li>
-              <Link href={localHref('/devis')} className={isActive('/devis') ? styles.active : ''} onClick={closeMenu}>
+              <Link
+                href={localHref('/devis')}
+                className={isActive('/devis') ? styles.active : ''}
+                aria-current={ariaCurrent('/devis')}
+                onClick={closeMenu}
+              >
                 {t('devis')}
               </Link>
             </li>
             {showRecruitment && (
               <li>
-                <Link href={localHref('/recrutement')} className={isActive('/recrutement') ? styles.active : ''} onClick={closeMenu}>
+                <Link
+                  href={localHref('/recrutement')}
+                  className={isActive('/recrutement') ? styles.active : ''}
+                  aria-current={ariaCurrent('/recrutement')}
+                  onClick={closeMenu}
+                >
                   {t('recruitment')}
                 </Link>
               </li>

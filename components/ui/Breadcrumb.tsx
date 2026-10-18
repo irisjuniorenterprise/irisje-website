@@ -51,7 +51,7 @@ export default function Breadcrumb() {
     <nav
       className={`${styles.breadcrumb} ${isRtl ? styles.rtl : ''}`}
       dir={isRtl ? 'rtl' : 'ltr'}
-      aria-label="Fil d'Ariane"
+      aria-label={t('label')}
     >
       <div className="container">
         <ol className={styles.list}>
@@ -65,7 +65,9 @@ export default function Breadcrumb() {
           {breadcrumbs.map((crumb, index) => (
             <li key={crumb.path} className={styles.item}>
               {crumb.isLast ? (
-                <span className={`${styles.link} ${styles.active}`}>
+                // Élément courant du fil d'Ariane : annoncé tel quel, et le
+                // style `.active` n'est plus le seul indicateur d'état.
+                <span className={`${styles.link} ${styles.active}`} aria-current="page">
                   {crumb.label}
                 </span>
               ) : (

@@ -49,9 +49,12 @@
     "legal_cgu": "Conditions d'utilisation",
     "copyright": "Tous droits réservés",
     "aria_label": "Navigation principale",
-    "language": "Langue"
+    "aria_label_mobile": "Navigation mobile",
+    "language": "Langue",
+    "menu": "Menu"
   },
   "Breadcrumb": {
+    "label": "Fil d'Ariane",
     "home": "Accueil",
     "notFound": "Page introuvable",
     "routes": {
