@@ -912,7 +912,10 @@
     box-shadow: none;
   }
 
+  /* L'ombre au repos fait partie du design : seule l'animation est coupée */
+  .projectCard,
   .projectCard:hover,
+  .featuredCard,
   .featuredCard:hover {
     transform: none;
     box-shadow: var(--card-shadow);
