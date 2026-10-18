@@ -22,6 +22,7 @@ import styles from './RouteBadge.module.css';
 
 export default function RouteBadge() {
   const t = useTranslations('AboutPage');
+  const tCommon = useTranslations('Common');
   const locale = useLocale();
   const { status, route, origin } = useDirections();
 
@@ -43,7 +44,7 @@ export default function RouteBadge() {
         href={googleMapsUrl(IRIS_DESTINATION, origin)}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={t('map.itinerary_open_google')}
+        aria-label={`${t('map.itinerary_open_google')} ${tCommon('new_tab')}`}
       >
         <b className={styles.actionText}>Google Maps</b>
         <ExternalIcon className={styles.ext} />

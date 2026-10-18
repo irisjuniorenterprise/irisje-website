@@ -181,7 +181,8 @@
   },
   "Common": {
     "required": "Champ requis",
-    "back_to_top": "Retour en haut de la page"
+    "back_to_top": "Retour en haut de la page",
+    "new_tab": "(s'ouvre dans un nouvel onglet)"
   },
   "DevisPage": {
     "meta": {

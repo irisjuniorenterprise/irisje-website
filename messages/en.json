@@ -181,7 +181,8 @@
   },
   "Common": {
     "required": "Required field",
-    "back_to_top": "Back to top of page"
+    "back_to_top": "Back to top of page",
+    "new_tab": "(opens in a new tab)"
   },
   "DevisPage": {
     "meta": {

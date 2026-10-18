@@ -59,6 +59,7 @@ const RETRYABLE: DirectionsError[] = ['denied', 'unavailable', 'timeout', 'netwo
 
 export default function ItineraryButton({ destination, className }: ItineraryButtonProps) {
   const t = useTranslations('AboutPage');
+  const tCommon = useTranslations('Common');
   const locale = useLocale();
   const { status, error, origin, route } = useDirections();
 
@@ -147,6 +148,7 @@ export default function ItineraryButton({ destination, className }: ItineraryBut
           >
             {t('map.itinerary_direct')}
             <ExternalIcon className={styles.ext} />
+            <span className={styles.srOnly}>{tCommon('new_tab')}</span>
           </a>
         </>
       )}
@@ -182,6 +184,7 @@ export default function ItineraryButton({ destination, className }: ItineraryBut
             >
               {t('map.itinerary_open_google')}
               <ExternalIcon className={styles.ext} />
+              <span className={styles.srOnly}>{tCommon('new_tab')}</span>
             </a>
             <a
               className={`btn ${styles.actionBtn} ${styles.outline}`}
@@ -191,6 +194,7 @@ export default function ItineraryButton({ destination, className }: ItineraryBut
             >
               {t('map.itinerary_open_waze')}
               <ExternalIcon className={styles.ext} />
+              <span className={styles.srOnly}>{tCommon('new_tab')}</span>
             </a>
             <button
               type="button"
@@ -231,6 +235,7 @@ export default function ItineraryButton({ destination, className }: ItineraryBut
             >
               {t('map.itinerary_open_google')}
               <ExternalIcon className={styles.ext} />
+              <span className={styles.srOnly}>{tCommon('new_tab')}</span>
             </a>
             <button
               type="button"
