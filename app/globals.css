@@ -193,16 +193,34 @@ body::before {
   background-image: url('/bg-lines.svg');
   background-size: cover;
   background-position: left top;
+  /* Réseau en filigrane : présent mais jamais concurrent du contenu */
+  opacity: 0.6;
 }
 body::after {
   background-image: url('/bg-eagle.svg');
   background-size: contain;
   background-position: right bottom;
+  /* Silhouette bornée (et non plus plein écran) : un accent en bas à droite,
+     pas une masse de couleur. Elle reste entière grâce à `contain`.
+     ⚠️ Aucune `opacity` ici : l'aigle doit rester OPAQUE pour masquer le
+     réseau de lignes (`body::before`, dessiné dessous). La douceur vient de
+     la couleur du SVG, déjà éclaircie. */
+  left: auto;
+  width: min(36vw, 480px);
+  /* Fondu du bord gauche du rocher uniquement (la tête de l'aigle, plus à
+     droite, reste pleinement visible). */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 40%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 40%);
 }
 @media (min-width: 768px) {
   body::before,
   body::after {
     top: var(--header-h);
+  }
+}
+@media (max-width: 767px) {
+  body::after {
+    width: min(58vw, 240px);
   }
 }
 
