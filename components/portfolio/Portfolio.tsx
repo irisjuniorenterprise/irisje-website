@@ -128,6 +128,12 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
   const featuredProject = filteredProjects.find((p) => p.featured);
 
   const openModal = (project: Project, trigger: HTMLElement | null) => {
+    // Le déclencheur est parfois un raccourci non focalisable (clic direct sur
+    // la carte) : on mémorise un VRAI contrôle, sinon le retour de focal à la
+    // fermeture tomberait sur <body>.
+    if (trigger && !trigger.matches(FOCUSABLE_SELECTOR)) {
+      trigger = trigger.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+    }
     openerRef.current = trigger;
     setSelectedProject(project);
   };
@@ -272,6 +278,11 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
             la souris (confort d'usage, sans rôle ARIA). */}
         <ul className={styles.grid}>
           {filteredProjects.map((project) => (
+            // Raccourci pointeur sur toute la carte : le contrôle accessible
+            // est le <button> « Voir le projet » qu'elle contient, rendu
+            // visible par :focus-within (l'overlay est à opacity:0 au repos,
+            // ce qui fait du clic sur la carte le seul chemin tactile).
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
             <li
               key={project.id}
               className={styles.projectCard}
@@ -352,13 +363,17 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
         {selectedProject && (
           <div
             className={styles.modalOverlay}
-            onClick={closeModal}
+            // Fermeture sur le fond seulement : `currentTarget` évite de
+            // devoir stopper la propagation depuis la boîte de dialogue,
+            // laquelle n'est pas un élément interactif.
+            onClick={(e) => {
+              if (e.target === e.currentTarget) closeModal();
+            }}
             role="presentation"
           >
             <div
               ref={modalRef}
               className={styles.modal}
-              onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
               aria-labelledby="portfolio-modal-title"
