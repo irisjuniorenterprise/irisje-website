@@ -23,9 +23,9 @@
   padding-inline-start: 0.45rem;
   padding-inline-end: 1.25rem;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.4;
@@ -202,9 +202,9 @@
   justify-content: center;
   text-align: center;
   background: var(--surface);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -213,7 +213,7 @@
 
 .card:hover .face,
 .card[data-flipped='true'] .face {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ------------------------------------------------------------------ */

@@ -203,8 +203,8 @@ export default async function HomePage({ params }: Props) {
               background: 'var(--surface)',
               padding: '3rem 2.5rem',
               borderRadius: 'var(--radius-md)',
-              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.06)',
-              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--card-shadow)',
+              border: '1px solid var(--border)',
             }}
           >
             <div

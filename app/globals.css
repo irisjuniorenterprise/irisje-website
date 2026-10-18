@@ -105,6 +105,12 @@ button {
 
   /* ----- Ombres et accessibilité ----- */
   --shadow: rgba(15, 23, 42, 0.08);
+  /* Cartes : anneau + ombre à deux niveaux, pour qu'elles se détachent du décor */
+  --card-ring: 0 0 0 1px rgba(15, 23, 42, 0.07);
+  --card-shadow: var(--card-ring), 0 1px 2px rgba(15, 23, 42, 0.05),
+    0 10px 28px -10px rgba(15, 23, 42, 0.16);
+  --card-shadow-hover: var(--card-ring), 0 2px 4px rgba(15, 23, 42, 0.06),
+    0 18px 40px -12px rgba(15, 23, 42, 0.22);
   --focus: #5ab8de;
   --disabled: #d1d5db;
 
@@ -721,14 +727,14 @@ html:has(body.menu-open) {
   background: var(--surface);
   padding: 1.5rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .value-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ----- Carte membre de l'équipe ----- */
@@ -736,14 +742,14 @@ html:has(body.menu-open) {
   background: var(--surface);
   padding: 1.5rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .team-member:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ----- Avatar ----- */
@@ -767,14 +773,14 @@ html:has(body.menu-open) {
   padding: 2rem 2.5rem;
   border-radius: var(--radius-md);
   border-left: 4px solid var(--secondary);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease,
     border-left-color 0.3s ease;
 }
 
 .mission-block:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
   border-left-color: var(--primary);
 }
 @media (max-width: 480px) {
@@ -848,13 +854,13 @@ html:has(body.menu-open) {
 .contact-card {
   background: var(--surface);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--card-shadow);
   padding: 2rem 2.5rem;
   transition: box-shadow 0.3s ease;
 }
 
 .contact-card:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--card-shadow-hover);
 }
 
 @media (max-width: 480px) {
@@ -871,15 +877,15 @@ html:has(body.menu-open) {
   background: var(--surface);
   padding: 1.75rem 2rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
   margin-bottom: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .service-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .service-card:last-child {
@@ -1101,13 +1107,13 @@ html:has(body.menu-open) {
 .legal-card {
   background: var(--surface);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--card-shadow);
   padding: 2.5rem;
   transition: box-shadow 0.3s ease;
 }
 
 .legal-card:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .legal-section {

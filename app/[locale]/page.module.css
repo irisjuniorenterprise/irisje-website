@@ -268,8 +268,8 @@
   background: var(--surface);
   padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2.5rem);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -278,7 +278,7 @@
 
 .placeholder .devis-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ============================================================
@@ -305,7 +305,7 @@
 
 :global(.devis-card:hover) {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .placeholder .devis-card .icon-wrapper {

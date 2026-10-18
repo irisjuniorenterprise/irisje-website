@@ -117,15 +117,15 @@
   /* Séparation nette avec la grille de projets en dessous */
   margin-bottom: 4.5rem;
   background: var(--surface);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   transition: box-shadow 0.3s ease;
 }
 
 .featuredCard:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .featuredMedia {
@@ -275,15 +275,15 @@
   background: var(--surface);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
 }
 
 .projectCard:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* La carte n'est plus focusable elle-même : le repère visuel du clavier est
@@ -789,6 +789,6 @@
   .projectCard:hover,
   .featuredCard:hover {
     transform: none;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--card-shadow);
   }
 }
