@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
 import SnapScroll from '@/components/layout/SnapScroll';
+import ScrollToHash from '@/components/layout/ScrollToHash';
 import '../globals.css';
 import '../alignment.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
@@ -126,6 +127,10 @@ async function LocaleChrome({
       <BackToTop />
       <ClientSideEffects />
       <SnapScroll />
+      {/* En dernier : son effet s'exécute après celui de SnapScroll, donc
+          `data-snap` (et son scroll-padding-top de 81 px) est déjà en place
+          au moment du premier alignement sur l'ancre. */}
+      <ScrollToHash />
     </NextIntlClientProvider>
   );
 }
