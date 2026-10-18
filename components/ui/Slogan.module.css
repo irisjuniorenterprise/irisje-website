@@ -343,9 +343,22 @@
   }
   .textFrame {
     align-self: flex-end;
+    /* Ne dépasse jamais la largeur disponible : sans cela, aligné en fin de
+       ligne et en flex-shrink: 0, un slogan trop large déborde à gauche et
+       son « # » est rogné par l'overflow du bandeau. */
+    max-width: 100%;
   }
   .decor {
     order: -1;
+  }
+
+  /* Taille FLUIDE : le slogan occupe ≈ 9,2 em de large. On réserve la marge
+     du container (2 × 24 px) et le cadre (≈ 24 px) = 4,5 rem, puis on divise
+     par 9,8 (marge de sécurité) : le slogan tient dans n'importe quelle largeur
+     de téléphone. Au-delà de ≈ 385 px on retrouve les 2 rem d'origine. */
+  .hashtag,
+  .text {
+    font-size: clamp(1.25rem, calc((100vw - 4.5rem) / 9.8), 2rem);
   }
 }
 
