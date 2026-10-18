@@ -147,6 +147,11 @@ export default function Slider({
   // Seule pause temporaire : glissement en cours (évite un changement
   // de diapositive en plein geste). Le survol et le focus ne bloquent plus l'avance.
   const [isDragging, setIsDragging] = useState(false);
+  // Appui en cours (doigt ou souris) sur la piste : l'avance automatique est
+  // gelée le temps de l'appui. Sans cela, un tick du timer peut tomber entre
+  // le pointerdown et le clic sur le CTA : la diapositive change, l'ancre
+  // devient `inert` et le clic est avalé.
+  const [isPointerDown, setIsPointerDown] = useState(false);
   // Pas d'avance auto si hors écran ou onglet masqué
   const [isInView, setIsInView] = useState(true);
   const [isTabVisible, setIsTabVisible] = useState(true);
@@ -163,6 +168,8 @@ export default function Slider({
 
   // --- état du glissement (hors rendu) ---
   const suppressClickRef = useRef(false);
+  // Miroir de `isPointerDown` lisible sans re-render (relâché côté window)
+  const pointerDownRef = useRef(false);
   const dragRef = useRef<{
     pointerId: number | null;
     startX: number;
@@ -308,6 +315,25 @@ export default function Slider({
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
 
+  // Fin d'appui écoutée sur `window` (et non sur le conteneur) : le
+  // relâchement peut avoir lieu hors du slider — notamment quand aucun
+  // glissement n'a démarré, donc sans capture du pointeur. Sans ce filet,
+  // un appui terminé hors piste laisserait l'avance automatique gelée
+  // à jamais.
+  useEffect(() => {
+    const release = () => {
+      if (!pointerDownRef.current) return;
+      pointerDownRef.current = false;
+      setIsPointerDown(false);
+    };
+    window.addEventListener('pointerup', release);
+    window.addEventListener('pointercancel', release);
+    return () => {
+      window.removeEventListener('pointerup', release);
+      window.removeEventListener('pointercancel', release);
+    };
+  }, []);
+
   useEffect(() => {
     const el = rootRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
@@ -321,14 +347,16 @@ export default function Slider({
 
   // Chaque diapositive (y compris après une navigation manuelle) reste
   // affichée exactement `interval` ms avant l'avance suivante.
+  // `isPointerDown` gèle le compte à rebours tant que l'utilisateur appuie :
+  // la diapositive ne peut pas changer sous le doigt pendant un clic sur le CTA.
   useEffect(() => {
-    if (autoPlayRunning && !isDragging && isOnScreen) {
+    if (autoPlayRunning && !isDragging && !isPointerDown && isOnScreen) {
       timerRef.current = setTimeout(goToNext, interval);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [autoPlayRunning, isDragging, isOnScreen, goToNext, interval, currentIndex]);
+  }, [autoPlayRunning, isDragging, isPointerDown, isOnScreen, goToNext, interval, currentIndex]);
 
   // ------------------------------------------------------------
   // Glissement : pointer events → un seul code pour doigt + souris
@@ -338,6 +366,22 @@ export default function Slider({
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const target = e.target as HTMLElement;
     if (target.closest('input, textarea, select')) return;
+
+    // Appui enregistré quel qu'il soit (y compris sur le CTA) : sert à geler
+    // l'avance automatique jusqu'au relâchement.
+    pointerDownRef.current = true;
+    setIsPointerDown(true);
+
+    // UN APPI SUR UN LIEN NE CAPTURE PAS LE POINTEUR. C'est la cause des
+    // « liens du slider qui ne marchent pas » : avec setPointerCapture posé
+    // au pointerdown, le navigateur redirige le pointerup sur le conteneur
+    // et calcule la cible du `click` comme l'ancêtre commun des deux (spec
+    // Pointer Events / UI Events — voir w3c/pointerevents#75). L'ancre du CTA
+    // n'est jamais cet ancêtre : elle ne reçoit pas le clic et rien ne se
+    // passe, sur Chrome comme sur Edge. Sans capture, le clic natif suit son
+    // cours normal jusqu'à l'ancre. Le glissement reste possible depuis
+    // n'importe quel autre point de la diapositive (fond, texte, icône).
+    if (target.closest('a, button')) return;
 
     suppressClickRef.current = false;
     dragRef.current = {
@@ -443,6 +487,12 @@ export default function Slider({
     endDrag(e, false);
 
   const handleClickCapture = (e: React.MouseEvent) => {
+    // Un clic synthétisé (Entrée sur le lien focalisé, lecteur d'écran,
+    // automation) porte `detail === 0` et ne peut jamais faire suite à un
+    // glissement : on le laisse toujours passer. Sans ce garde-fou, un
+    // glissement antérieur laisserait suppressClickRef à `true` et le
+    // prochain activation CLAVIER du CTA serait avalée.
+    if (e.detail === 0) return;
     if (suppressClickRef.current) {
       suppressClickRef.current = false;
       e.stopPropagation();
