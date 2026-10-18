@@ -7,7 +7,7 @@
 const TIMEZONE = 'Africa/Tunis';
 export const RECRUITMENT_MONTH = 10; // Octobre
 export const RECRUITMENT_OPEN_DAY = 1; // Ouvert à partir du 01/10 (inclus)
-export const RECRUITMENT_CLOSE_DAY = 7; // Fermé dès le 07/10 (jour de fermeture inclus)
+export const RECRUITMENT_CLOSE_DAY = 8; // Jour de fermeture EXCLU : 07/10 inclus reste ouvert
 
 type DateParts = { year: number; month: number; day: number };
 
@@ -28,7 +28,7 @@ const getTunisDateParts = (date: Date = new Date()): DateParts => {
 
 /**
  * Vérifie si la période de recrutement est ouverte.
- * @returns true du 01/10 au 06/10 inclus (heure de Tunis), false dès le 07/10.
+ * @returns true du 01/10 au 07/10 inclus (heure de Tunis), false le reste de l'année.
  */
 export const isRecruitmentOpen = (date: Date = new Date()): boolean => {
   const { month, day } = getTunisDateParts(date);

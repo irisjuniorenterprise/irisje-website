@@ -482,7 +482,7 @@
       "title_open": "Join <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recruitment <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "Want to develop your skills and live an enriching consulting firm experience? Apply now!",
-      "description_closed": "Applications to join IRIS Junior Entreprise are only open from October 1st to 6th. Come back to see us then!"
+      "description_closed": "Applications to join IRIS Junior Entreprise are only open from October 1st to 7th. Come back to see us then!"
     }
   },
   "RecruitmentForm": {
@@ -551,7 +551,7 @@
   },
   "RecruitmentClosed": {
     "title": "Applications closed",
-    "description": "Applications to join IRIS Junior Entreprise are open <strong>only from October 1st to 6th</strong>.",
+    "description": "Applications to join IRIS Junior Entreprise are open <strong>only from October 1st to 7th</strong>.",
     "note": "Next opening:",
     "actions": {
       "home": "Back to home",

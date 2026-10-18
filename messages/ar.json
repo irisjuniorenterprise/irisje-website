@@ -482,7 +482,7 @@
       "title_open": "انضم إلى <span class=\"accent-text\">IRIS Junior Entreprise</span>",
       "title_closed": "الانضمام إلى <span class=\"accent-text\">IRIS Junior Entreprise</span>",
       "description_open": "هل ترغب في تطوير مهاراتك وعيش تجربة غنية داخل شركة استشارية؟ قدّم طلبك الآن!",
-      "description_closed": "تُفتح طلبات الانضمام إلى IRIS Junior Entreprise حصرياً من 1 إلى 6 أكتوبر. عُد لزيارتنا في ذلك الوقت!"
+      "description_closed": "تُفتح طلبات الانضمام إلى IRIS Junior Entreprise حصرياً من 1 إلى 7 أكتوبر. عُد لزيارتنا في ذلك الوقت!"
     }
   },
   "RecruitmentForm": {
@@ -551,7 +551,7 @@
   },
   "RecruitmentClosed": {
     "title": "التسجيل مغلق",
-    "description": "تُفتح طلبات الانضمام إلى IRIS Junior Entreprise <strong>حصرياً من 1 إلى 6 أكتوبر</strong>.",
+    "description": "تُفتح طلبات الانضمام إلى IRIS Junior Entreprise <strong>حصرياً من 1 إلى 7 أكتوبر</strong>.",
     "note": "تاريخ الفتح القادم:",
     "actions": {
       "home": "العودة إلى الصفحة الرئيسية",

@@ -482,7 +482,7 @@
       "title_open": "Rejoignez <span class=\"accent-text\">IRIS JE</span>",
       "title_closed": "Recrutement <span class=\"accent-text\">IRIS JE</span>",
       "description_open": "Envie de développer vos compétences et de vivre une expérience enrichissante en cabinet de conseil ? Postulez dès maintenant !",
-      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement du 1er au 6 octobre. Revenez nous voir à ce moment-là !"
+      "description_closed": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes uniquement du 1er au 7 octobre. Revenez nous voir à ce moment-là !"
     }
   },
   "RecruitmentForm": {
@@ -551,7 +551,7 @@
   },
   "RecruitmentClosed": {
     "title": "Candidatures fermées",
-    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement du 1er au 6 octobre</strong>.",
+    "description": "Les candidatures pour rejoindre IRIS Junior Entreprise sont ouvertes <strong>uniquement du 1er au 7 octobre</strong>.",
     "note": "Prochaine ouverture :",
     "actions": {
       "home": "Retour à l'accueil",
