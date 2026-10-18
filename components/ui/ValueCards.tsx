@@ -198,6 +198,8 @@ export default function ValueCards({
     setFlipped(opening ? key : null);
     if (opening) {
       // Le focus suit la face visible, pour les utilisateurs au clavier.
+      // En rAF : React a posé `inert` sur la face avant au même rendu, un
+      // focus synchrone serait refusé.
       requestAnimationFrame(() => backRefs.current[key]?.focus({ preventScroll: true }));
     }
   }
@@ -206,7 +208,11 @@ export default function ValueCards({
     lastPointer.current = '';
     if (e.key === 'Escape' && flipped === key) {
       setFlipped(null);
-      frontRefs.current[key]?.focus({ preventScroll: true });
+      // La face avant redevient focusable au rendu suivant : on attend donc
+      // la prochaine image pour lui rendre le focal.
+      requestAnimationFrame(() =>
+        frontRefs.current[key]?.focus({ preventScroll: true }),
+      );
     }
   }
 
@@ -228,6 +234,10 @@ export default function ValueCards({
           const isFlipped = flipped === item.key;
           const descId = `${baseId}-${item.key}-desc`;
           return (
+            // Raccourci souris / tactile sur la carte : le contrôle accessible
+            // est le <button> « Découvrir » qu'elle contient (focus, Entrée,
+            // Échap) — cf. son aria-expanded / aria-describedby.
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
               key={item.key}
               className={styles.card}
@@ -243,8 +253,16 @@ export default function ValueCards({
             >
               <div className={styles.tilt}>
                 <div className={styles.inner}>
-                  {/* Face avant : icône + nom de la valeur */}
-                  <div className={`${styles.face} ${styles.front}`}>
+                  {/* Face avant : icône + nom de la valeur.
+                      Retournée, elle disparaît visuellement (backface) mais
+                      restait exposée au lecteur d'écran : le titre était alors
+                      annoncé deux fois et le bouton restait un arrêt de tabulation
+                      invisible. `inert` + `aria-hidden` la retirent réellement. */}
+                  <div
+                    className={`${styles.face} ${styles.front}`}
+                    aria-hidden={isFlipped}
+                    inert={isFlipped}
+                  >
                     <div
                       className={styles.iconTile}
                       data-icon-tile
@@ -268,11 +286,15 @@ export default function ValueCards({
                     </button>
                   </div>
 
-                  {/* Face arrière : description */}
+                  {/* Face arrière : description. `inert` au repos (elle n'est
+                      alors pas affichée) et tabindex=-1 : elle ne doit jamais
+                      entrer dans l'ordre de tabulation — on n'y arrive que par
+                      le focus programmatique après le retournement. */}
                   <div
                     className={`${styles.face} ${styles.back}`}
                     aria-hidden={!isFlipped}
-                    tabIndex={isFlipped ? 0 : -1}
+                    inert={!isFlipped}
+                    tabIndex={-1}
                     ref={(el) => {
                       backRefs.current[item.key] = el;
                     }}

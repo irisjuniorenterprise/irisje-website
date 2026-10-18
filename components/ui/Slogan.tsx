@@ -86,6 +86,11 @@ export default function Slogan() {
   return (
     <div className={styles.sloganWrapper}>
       <div className="container">
+        {/* Effet purement décoratif : des anneaux se propagent au clic. Aucune
+            information ni action n'en dépend, il n'y a donc rien à reproduire au
+            clavier — le conteneur porte en revanche le texte du slogan et ne
+            peut pas être masqué de l'arbre d'accessibilité. */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
         <div
           ref={contentRef}
           className={`${styles.sloganContent} ${isRtl ? styles.rtl : ''} ${

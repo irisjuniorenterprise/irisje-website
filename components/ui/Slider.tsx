@@ -337,7 +337,7 @@ export default function Slider({
     if (totalSlides <= 1) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const target = e.target as HTMLElement;
-    if (target.closest('input, textarea, select, [role="tab"]')) return;
+    if (target.closest('input, textarea, select')) return;
 
     suppressClickRef.current = false;
     dragRef.current = {
@@ -498,6 +498,11 @@ export default function Slider({
   if (totalSlides === 0) return null;
 
   return (
+    // Le défilement aux flèches est attaché au conteneur du carrousel, comme
+    // le veut l'APG (« carousel ») : l'événement clavier doit partir de la
+    // région qui contient les diapositives, pas d'un contrôle isolé. C'est un
+    // conteneur composite, pas un élément de contenu statique.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
       className={`${styles.slider} ${className} ${isRtl ? styles.rtl : ''} ${
         isDragging ? styles.sliderDragging : ''
@@ -585,10 +590,15 @@ export default function Slider({
             <Icons.ChevronRight size={24} />
           </button>
 
+          {/* Indicateurs : groupe de boutons simples et non un « tablist ».
+              Un tablist exige des tabpanels, une navigation par flèches et un
+              roving tabindex (APG) — ni l'un ni l'autre n'existait ici, ce qui
+              donnait un pattern ARIA incomplet. aria-current suffit à marquer la
+              diapositive affichée. */}
           <div
             className={styles.dots}
             style={{ direction: isRtl ? 'rtl' : 'ltr' }}
-            role="tablist"
+            role="group"
             aria-label={l.dots}
           >
             {slides.map((_, index) => (
@@ -597,8 +607,7 @@ export default function Slider({
                 className={`${styles.dot} ${index === currentIndex ? styles.dotActive : ''}`}
                 type="button"
                 onClick={() => goToSlide(index)}
-                role="tab"
-                aria-selected={index === currentIndex}
+                aria-current={index === currentIndex ? 'true' : undefined}
                 aria-label={l.goTo(index + 1)}
               />
             ))}
