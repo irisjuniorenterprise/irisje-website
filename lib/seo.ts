@@ -175,7 +175,11 @@ export const ROUTES: SeoRoute[] = [
   { path: '/a-propos', namespace: 'AboutPage', schema: 'AboutPage', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/devis', namespace: 'DevisPage', schema: 'WebPage', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/contact', namespace: 'ContactPage', schema: 'ContactPage', priority: 0.7, changeFrequency: 'yearly' },
-  { path: '/recrutement', namespace: 'RecruitmentPage', schema: 'WebPage', priority: 0.6, changeFrequency: 'weekly' },
+  // /recrutement volontairement ABSENT : la route sert désormais un 308 vers
+  // la plateforme IRIS JOIN (next.config.js). Google ne veut que des URL
+  // rendant un 200 canonique dans un sitemap — une URL qui redirige y est
+  // ignorée, voire pénalisée. Le namespace RecruitmentPage reste dans les
+  // messages : la page est conservée et réactivable.
   { path: '/faq', namespace: 'FAQPage', schema: 'FAQPage', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/mentions-legales', namespace: 'MentionsLegalesPage', schema: 'WebPage', priority: 0.3, changeFrequency: 'yearly' },
   { path: '/politique-confidentialite', namespace: 'PolitiqueConfidentialitePage', schema: 'WebPage', priority: 0.3, changeFrequency: 'yearly' },

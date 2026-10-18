@@ -18,7 +18,9 @@ const ROUTES = [
   '/faq',
   '/mentions-legales',
   '/politique-confidentialite',
-  '/recrutement',
+  // /recrutement retiré : la route sert un 308 vers la plateforme IRIS JOIN
+  // (domaine externe). Playwright suivrait la redirection et scannerait un
+  // site qui n'est pas le nôtre.
   '/services',
   '/route-inexistante',
 ];
