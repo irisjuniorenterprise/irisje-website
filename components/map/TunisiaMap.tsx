@@ -153,7 +153,14 @@ function IrisMarker({ label }: { label: string }) {
     <Marker
       position={IRIS_POSITION}
       icon={IRIS_ICON}
+      title={label}
       eventHandlers={{
+        // Leaflet pose `role="button"` + `tabindex="0"` sur l'icône dès que
+        // `keyboard` est actif, mais n'y attache aucun nom accessible : axe
+        // signale alors `aria-command-name`. On le renseigne explicitement.
+        add: (e) => {
+          (e.target as L.Marker).getElement()?.setAttribute('aria-label', label);
+        },
         click: () => {
           if (prefersReducedMotion()) {
             map.setView(IRIS_POSITION, IRIS_FOCUS_ZOOM, { animate: false });

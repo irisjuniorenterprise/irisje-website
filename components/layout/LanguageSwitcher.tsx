@@ -61,8 +61,11 @@ export default function LanguageSwitcher({
 
         if (isCurrent) {
           return (
-            <span key={code} className={itemClass} lang={code} aria-label={name} aria-current="true">
+            <span key={code} className={itemClass} lang={code} aria-current="true">
               {short}
+              {/* Pas d'aria-label sur un <span> (rôle generic) : le nom
+                  complet est ajouté en texte visuellement masqué. */}
+              <span className="sr-only"> ({name})</span>
             </span>
           );
         }
@@ -74,8 +77,11 @@ export default function LanguageSwitcher({
             className={itemClass}
             lang={code}
             hrefLang={code}
-            aria-label={name}
-            title={name}
+            // Le libellé doit CONTENIR le texte visible (WCAG 2.5.3) :
+            // « EN » seul ne décrit pas la langue, « English » seul casse
+            // la correspondance nom/texte visible.
+            aria-label={`${short} — ${name}`}
+            title={`${short} — ${name}`}
             prefetch={false}
             onClick={() => {
               setPending(code);
