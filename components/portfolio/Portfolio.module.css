@@ -453,19 +453,22 @@
 }
 
 /* ============================================================
-   MODAL
+   MODAL — fiche détaillée d'un projet
+   Colonne flex : fermeture (absolue) · zone défilante · pied d'actions fixe.
+   Propriétés logiques (inset-inline-*) : le RTL est géré sans règle dédiée.
    ============================================================ */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
   z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  animation: fadeIn 0.3s ease;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
@@ -474,58 +477,73 @@
 }
 
 .modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  max-height: min(90dvh, 860px);
   background: var(--surface);
   border-radius: var(--radius-md);
-  max-width: 680px;
-  width: 100%;
-  max-height: 90vh;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 30px 80px -20px rgba(15, 23, 42, 0.45);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Seule zone qui défile : fermeture et actions restent toujours visibles */
+.modalScroll {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  position: relative;
-  animation: slideUp 0.35s ease;
-  /* Scrollbar discrète */
+  overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
 .modalClose {
-  position: sticky;
-  top: 0.75rem;
-  right: 0.75rem;
-  float: right;
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  position: absolute;
+  top: 0.9rem;
+  inset-inline-end: 0.9rem;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-primary);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.18);
   cursor: pointer;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
-  margin: 0.75rem 0.75rem 0 0;
 }
 
 .modalClose:hover {
-  background: var(--danger);
+  background: var(--primary);
   color: var(--on-primary);
-  border-color: var(--danger);
+  border-color: var(--primary);
 }
 
+/* ----- Visuel ----- */
 .modalImage {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: var(--background);
-  margin-top: -0.75rem;
+  background: var(--border-light);
 }
 
 .modalImage img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -540,59 +558,134 @@
   background: var(--border-light);
 }
 
-.modalCategory {
+.modalImageShade {
   position: absolute;
-  bottom: 0.75rem;
-  left: 0.75rem;
-  background: var(--primary);
-  color: var(--on-primary);
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.55), transparent);
+  pointer-events: none;
 }
 
+.modalBadges {
+  position: absolute;
+  inset-inline-start: 1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modalCategory {
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ----- Contenu ----- */
 .modalBody {
-  padding: 1.5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.75rem 2rem 2rem;
+}
+
+.modalIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .modalTitle {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
   font-weight: 700;
+  line-height: 1.25;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  text-wrap: balance;
 }
 
 .modalDesc {
-  font-size: 0.95rem;
-  line-height: 1.7;
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1rem;
+  line-height: 1.75;
   color: var(--text-secondary);
-  margin-bottom: 1.25rem;
+  text-align: start;
+  text-wrap: pretty;
 }
 
-.modalMeta {
+/* Informations clés : cartes étiquette / valeur */
+.modalFacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.modalFact {
+  padding: 0.85rem 1rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.modalFact dt {
+  margin: 0 0 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.modalFact dd {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.modalSectionTitle {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Résultats : une ligne par résultat, coche accent */
+.modalResults {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.modalResults li {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
 }
 
-.metaItem {
+.resultIcon {
+  flex: none;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.metaItem svg {
-  flex-shrink: 0;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 22%, white);
+  color: var(--primary);
 }
 
 .modalTags {
@@ -606,13 +699,46 @@
   composes: tag from '../ui/ToolTag.module.css';
 }
 
-/* CTA lien externe dans la modale — même teinte que .featuredCta */
+/* ----- Pied d'actions fixe ----- */
+.modalFooter {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.modalCloseText {
+  appearance: none;
+  padding: 0.55rem 1.25rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+
+.modalCloseText:hover {
+  background: var(--surface-hover);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* CTA lien externe — même teinte que .featuredCta */
 .modalLink {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  margin-top: 1.25rem;
-  padding: 0.5rem 1.25rem;
+  padding: 0.55rem 1.25rem;
   background: var(--secondary);
   color: var(--on-secondary);
   border-radius: var(--radius-pill);
@@ -642,18 +768,6 @@
   transform: scaleX(-1) translateX(3px);
 }
 
-.rtl .modalClose {
-  right: auto;
-  left: 0.75rem;
-  float: left;
-  margin: 0.75rem 0 0 0.75rem;
-}
-
-.rtl .modalImage .modalCategory {
-  left: auto;
-  right: 0.75rem;
-}
-
 .rtl .metaItem {
   flex-direction: row-reverse;
 }
@@ -669,11 +783,6 @@
 .rtl .cardTags,
 .rtl .modalTags {
   flex-direction: row-reverse;
-}
-
-.rtl .modalMeta {
-  flex-direction: row-reverse;
-  justify-content: flex-start;
 }
 
 /* ============================================================
@@ -700,24 +809,12 @@
     padding: 1.25rem 1.25rem 1.5rem;
   }
 
-  .modal {
-    max-width: 100%;
-    margin: 0.5rem;
-  }
-
   .modalBody {
-    padding: 1.25rem 1.25rem 1.5rem;
+    padding: 1.5rem 1.5rem 1.75rem;
   }
 
-  .modalTitle {
-    font-size: 1.1rem;
-  }
-
-  .rtl .modalClose {
-    right: auto;
-    left: 0.5rem;
-    float: left;
-    margin: 0.5rem 0 0 0.5rem;
+  .modalFooter {
+    padding: 0.9rem 1.5rem;
   }
 }
 
@@ -735,14 +832,41 @@
     font-size: 0.75rem;
   }
 
-  .modalMeta {
-    flex-direction: column;
-    gap: 0.5rem;
+  /* Fiche = « bottom sheet » : collée en bas, arrondie en haut */
+  .modalOverlay {
+    align-items: flex-end;
+    padding: 0;
   }
 
-  .rtl .modalMeta {
-    flex-direction: column;
-    align-items: stretch;
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .modalImage {
+    aspect-ratio: 16 / 10;
+  }
+
+  .modalBody {
+    gap: 1.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .modalFacts {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFooter {
+    padding: 0.9rem 1.25rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modalCloseText,
+  .modalLink {
+    flex: 1 1 0;
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -778,6 +902,8 @@
   .filterBtn,
   .modal,
   .modalOverlay,
+  .modalClose,
+  .modalCloseText,
   .modalLink,
   .modalLink:hover {
     transition: none;
@@ -790,5 +916,11 @@
   .featuredCard:hover {
     transform: none;
     box-shadow: var(--card-shadow);
+  }
+
+  .modal {
+    box-shadow:
+      0 0 0 1px rgba(15, 23, 42, 0.08),
+      0 30px 80px -20px rgba(15, 23, 42, 0.45);
   }
 }

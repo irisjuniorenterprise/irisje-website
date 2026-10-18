@@ -746,6 +746,10 @@
     "new_tab": "(s'ouvre dans un nouvel onglet)",
     "view_project": "Voir le projet",
     "featured_badge": "Projet à la une",
+    "details_client": "Client",
+    "details_year": "Année",
+    "results_title": "Résultats",
+    "technologies_title": "Technologies",
     "sample_project": {
       "title": "Réservation en ligne pour un réseau de cliniques",
       "description": "Conception et développement d'un site de prise de rendez-vous : planning en temps réel, confirmations par e-mail, espace patient et tableau de bord administrateur. Un parcours patient repensé de bout en bout, du premier clic au rappel de rendez-vous.",

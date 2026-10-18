@@ -345,7 +345,10 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
 
         </div>{/* fin du contenu de fond (inert pendant la modale) */}
 
-        {/* ── Modal de détail ── */}
+        {/* ── Modal de détail ──
+            Structure : bouton de fermeture fixe (hors zone défilante) · zone
+            défilante (visuel, introduction, informations clés, résultats,
+            technologies) · pied de page fixe avec les actions. */}
         {selectedProject && (
           <div
             className={styles.modalOverlay}
@@ -363,77 +366,110 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 selectedProject.description ? 'portfolio-modal-desc' : undefined
               }
             >
-
               <button
                 ref={closeButtonRef}
+                type="button"
                 className={styles.modalClose}
                 onClick={closeModal}
                 aria-label={t('close_modal')}
               >
-                <Icons.X size={24} stroke="currentColor" aria-hidden="true" />
+                <Icons.X size={20} stroke="currentColor" aria-hidden="true" />
               </button>
 
-              {/* Image */}
-              <div className={styles.modalImage}>
-                {selectedProject.image ? (
-                  // alt=\"\" : le titre du projet est juste en dessous — nommer
-                  // l'image annoncerait deux fois le même texte.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={selectedProject.image} alt="" />
-                ) : (
-                  <div className={styles.modalPlaceholder} aria-hidden="true">
-                    <Icons.Code size={64} stroke="var(--text-muted)" strokeWidth={1.5} />
+              <div className={styles.modalScroll}>
+                {/* Visuel : dégradé en bas pour la lisibilité de la pastille */}
+                <div className={styles.modalImage}>
+                  {selectedProject.image ? (
+                    // alt="" : le titre du projet est juste en dessous — nommer
+                    // l'image annoncerait deux fois le même texte.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={selectedProject.image} alt="" />
+                  ) : (
+                    <div className={styles.modalPlaceholder} aria-hidden="true">
+                      <Icons.Code size={64} stroke="var(--text-muted)" strokeWidth={1.5} />
+                    </div>
+                  )}
+                  <div className={styles.modalImageShade} aria-hidden="true" />
+                  <div className={styles.modalBadges}>
+                    <span className={styles.modalCategory}>{selectedProject.category}</span>
                   </div>
-                )}
-                <span className={styles.modalCategory}>{selectedProject.category}</span>
+                </div>
+
+                <div className={styles.modalBody}>
+                  {/* Introduction */}
+                  <div className={styles.modalIntro}>
+                    <h3 className={styles.modalTitle} id="portfolio-modal-title">
+                      {selectedProject.title}
+                    </h3>
+                    <p className={styles.modalDesc} id="portfolio-modal-desc">
+                      {selectedProject.description}
+                    </p>
+                  </div>
+
+                  {/* Informations clés */}
+                  {(selectedProject.client || selectedProject.year) && (
+                    <dl className={styles.modalFacts}>
+                      {selectedProject.client && (
+                        <div className={styles.modalFact}>
+                          <dt>{t('details_client')}</dt>
+                          <dd>{selectedProject.client}</dd>
+                        </div>
+                      )}
+                      {selectedProject.year && (
+                        <div className={styles.modalFact}>
+                          <dt>{t('details_year')}</dt>
+                          <dd>{selectedProject.year}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  )}
+
+                  {/* Résultats : la chaîne « A · B » devient une liste lisible */}
+                  {selectedProject.results && (
+                    <section aria-labelledby="portfolio-modal-results">
+                      <h4 className={styles.modalSectionTitle} id="portfolio-modal-results">
+                        {t('results_title')}
+                      </h4>
+                      <ul className={styles.modalResults}>
+                        {selectedProject.results
+                          .split(/\s*[·•|]\s*/)
+                          .filter(Boolean)
+                          .map((result) => (
+                            <li key={result}>
+                              <div className={styles.resultIcon} aria-hidden="true">
+                                <Icons.Check size={14} stroke="currentColor" strokeWidth={2.5} />
+                              </div>
+                              {result}
+                            </li>
+                          ))}
+                      </ul>
+                    </section>
+                  )}
+
+                  {/* Technologies */}
+                  {selectedProject.tags && selectedProject.tags.length > 0 && (
+                    <section aria-labelledby="portfolio-modal-stack">
+                      <h4 className={styles.modalSectionTitle} id="portfolio-modal-stack">
+                        {t('technologies_title')}
+                      </h4>
+                      <div className={styles.modalTags}>
+                        {selectedProject.tags.map((tag) => (
+                          <span key={tag} className={styles.modalTag}>
+                            <span className={styles.tagStar} aria-hidden="true">✦</span>
+                            <span className={styles.tagLabel}>{tag}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </div>
               </div>
 
-              {/* Corps */}
-              <div className={styles.modalBody}>
-                <h3 className={styles.modalTitle} id="portfolio-modal-title">
-                  {selectedProject.title}
-                </h3>
-                <p className={styles.modalDesc} id="portfolio-modal-desc">
-                  {selectedProject.description}
-                </p>
-
-                {/* Méta */}
-                {(selectedProject.client || selectedProject.year || selectedProject.results) && (
-                  <div className={styles.modalMeta}>
-                    {selectedProject.client && (
-                      <div className={styles.metaItem}>
-                        <Icons.User size={16} stroke="var(--text-muted)" aria-hidden="true" />
-                        <span>{t('client_label')} {selectedProject.client}</span>
-                      </div>
-                    )}
-                    {selectedProject.year && (
-                      <div className={styles.metaItem}>
-                        <Icons.Calendar size={16} stroke="var(--text-muted)" aria-hidden="true" />
-                        <span>{t('year_label')} {selectedProject.year}</span>
-                      </div>
-                    )}
-                    {selectedProject.results && (
-                      <div className={styles.metaItem}>
-                        <Icons.Chart size={16} stroke="var(--text-muted)" aria-hidden="true" />
-                        <span>{selectedProject.results}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Tags */}
-                {selectedProject.tags && selectedProject.tags.length > 0 && (
-                  <div className={styles.modalTags}>
-                    {selectedProject.tags.map((tag) => (
-                      <span key={tag} className={styles.modalTag}>
-                        <span className={styles.tagStar} aria-hidden="true">✦</span>
-                        <span className={styles.tagLabel}>{tag}</span>
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* CTA lien externe */}
+              {/* Pied de page fixe : les actions restent visibles pendant le défilement */}
+              <div className={styles.modalFooter}>
+                <button type="button" className={styles.modalCloseText} onClick={closeModal}>
+                  {t('close_modal')}
+                </button>
                 {selectedProject.url && (
                   <a
                     href={selectedProject.url}

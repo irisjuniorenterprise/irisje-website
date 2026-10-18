@@ -746,6 +746,10 @@
     "new_tab": "(opens in a new tab)",
     "view_project": "View project",
     "featured_badge": "Featured project",
+    "details_client": "Client",
+    "details_year": "Year",
+    "results_title": "Results",
+    "technologies_title": "Technologies",
     "sample_project": {
       "title": "Online booking for a clinic network",
       "description": "Design and build of an appointment-booking website: real-time scheduling, e-mail confirmations, a patient portal and an admin dashboard. A patient journey redesigned end to end, from the first click to the appointment reminder.",
