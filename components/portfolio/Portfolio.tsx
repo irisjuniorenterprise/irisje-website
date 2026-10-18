@@ -258,7 +258,6 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 type="button"
                 className={styles.featuredCta}
                 onClick={(e) => openModal(featuredProject, e.currentTarget)}
-                aria-label={t('aria_label', { title: featuredProject.title })}
                 aria-haspopup="dialog"
               >
                 {t('view_project')}
@@ -391,7 +390,8 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 <Icons.X size={20} stroke="currentColor" aria-hidden="true" />
               </button>
 
-              <div className={styles.modalScroll}>
+              <div className={styles.modalScroll}
+                tabIndex={0}>
                 {/* Visuel : dégradé en bas pour la lisibilité de la pastille */}
                 <div className={styles.modalImage}>
                   {selectedProject.image ? (
