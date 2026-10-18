@@ -65,7 +65,7 @@ test('contact : erreurs de validation affichées', async ({ page }) => {
 test('devis : erreurs de validation affichées', async ({ page }) => {
   await page.goto('/fr/devis');
   await revealLazyContent(page);
-  const submit = page.getByRole('button', { name: /Envoyer/ });
+  const submit = page.getByRole('button', { name: /Demander un devis/ });
   await submit.scrollIntoViewIfNeeded();
   await submit.click();
   await expect(page.locator('#devis-nom-error')).toBeVisible();

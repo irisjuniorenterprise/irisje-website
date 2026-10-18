@@ -4,6 +4,31 @@
 import { expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+/**
+ * Fait passer toutes les animations a duree finie a leur etat final.
+ *
+ * Les entrees animees (orgPop, orgTextIn...) passent par un etat ou le
+ * texte est plus clair que sa valeur de contraste finale : axe peut
+ * echantillonne ce frame et signaler un faux positif. Les boucles
+ * infinies (carrousel, marquee) sont laissees telles quelles.
+ */
+async function settleAnimations(page) {
+  await page.evaluate(() => {
+    if (typeof document.getAnimations !== 'function') return;
+    for (const animation of document.getAnimations()) {
+      const timing = animation.effect && animation.effect.getComputedTiming
+        ? animation.effect.getComputedTiming()
+        : null;
+      if (timing && (timing.iterations === Infinity || !Number.isFinite(timing.iterations))) continue;
+      try {
+        animation.finish();
+      } catch {
+        // animation sans piste : ignoree
+      }
+    }
+  });
+}
+
 // WCAG 2.2 niveau AA, plus les niveaux A/AA des versions antérieures.
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -74,6 +99,7 @@ export async function revealLazyContent(page) {
       await new Promise((resolve) => setTimeout(resolve, 120));
     }
   });
+  await settleAnimations(page);
   await page.waitForTimeout(600);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(200);
