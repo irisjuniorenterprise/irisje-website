@@ -5,6 +5,8 @@ import Link from 'next/link';
 import logoData from '@/public/logo-s-no-bg.png';
 import Slider from '@/components/ui/Slider';
 import { getSliderSlides } from '@/lib/data/sliderData';
+import { joinUrlFromHostname } from '@/lib/join';
+import { getRequestSite } from '@/lib/request-site';
 import { Icons } from '@/components/icons/Icons';
 import { visuallyHidden } from '@/components/ui/visuallyHidden';
 import CtaBand from '@/components/ui/CtaBand';
@@ -34,7 +36,10 @@ export default async function HomePage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: 'HomePage' });
   const tSlider = await getTranslations({ locale, namespace: 'Slider' });
 
-  const slides = getSliderSlides(locale, tSlider);
+  // URL de la plateforme JOIN pour le domaine visité (.com / .tn) : rendue
+  // côté serveur, à l'image de JoinLink qui fait de même côté client.
+  const { origin } = await getRequestSite();
+  const slides = getSliderSlides(locale, tSlider, joinUrlFromHostname(new URL(origin).hostname));
   const isRtl = locale === 'ar';
 
   return (

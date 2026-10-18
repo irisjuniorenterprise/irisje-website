@@ -5,7 +5,14 @@ import { isRecruitmentOpen } from '@/lib/utils/date';
 
 type TFunction = (key: string) => string;
 
-export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
+/**
+ * @param joinUrl Sous-domaine IRIS JOIN à viser depuis la diapositive de
+ * recrutement. Résolu par l'appelant (côté serveur) : il dépend du domaine
+ * réellement servi, .com ou .tn — voir lib/join.ts. La page /recrutement
+ * elle-même sert un 308 vers JOIN, mais on n'a aucun intérêt à faire
+ * rebondir un visiteur de l'accueil sur une URL fermée.
+ */
+export const getSliderSlides = (locale: string, t: TFunction, joinUrl: string): Slide[] => {
   const recruitmentOpen = isRecruitmentOpen();
 
   const slides: Slide[] = [
@@ -58,7 +65,9 @@ export const getSliderSlides = (locale: string, t: TFunction): Slide[] => {
       description: t('recrutement.description'),
       icon: <Icons.User size={32} stroke="currentColor" />,
       image: '/slider/recrutement-bg.svg',
-      cta: { label: t('recrutement.cta'), href: `/${locale}/recrutement` },
+      // Destination externe directe : jamais /recrutement, la page ne sert
+      // plus qu'un 308 (next.config.js).
+      cta: { label: t('recrutement.cta'), href: joinUrl },
     });
   }
 
