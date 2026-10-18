@@ -1,0 +1,234 @@
+/* components/layout/JoinLink.module.css
+   IRIS JOIN intégré au header, en deux variantes :
+   - .pill : pastille du header desktop (≥ 1200 px), à côté du bouton Contact ;
+   - .card : carte en tête du menu burger (≤ 1199 px).
+   Plus d'onglet flottant : rien ne recouvre le contenu ni ne rivalise avec
+   le bouton « retour en haut ». Tout est en propriétés logiques (RTL gratuit). */
+
+/* ---------- Pastille « Nouveau » (commune) ---------- */
+.chip {
+  position: relative;
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--secondary);
+  color: var(--primary-hover); /* 5,0:1 — le blanc n'atteindrait que 2,9:1 */
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Halo discret, une seule fois par cycle de 2,6 s */
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--secondary);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  animation: joinPing 2.6s ease-out infinite;
+}
+
+@keyframes joinPing {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.5, 1.3);
+  }
+}
+
+/* ============================================================
+   PASTILLE DU HEADER (desktop)
+   Contour navy, fond transparent : elle se distingue du CTA orange
+   « Contact » sans lui voler la vedette. Survol : elle se remplit.
+   ============================================================ */
+.pill {
+  position: relative;
+  flex-shrink: 0; /* le header ne doit jamais comprimer la pastille */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--primary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.pillLogo {
+  display: block;
+  /* Dimensions FIXES (ratio 72 / 26) et flex-shrink: 0 : dans un conteneur
+     flex, un logo en `width: auto` peut être écrasé quand la place manque. */
+  width: 50px;
+  height: 18px;
+  flex-shrink: 0;
+  max-width: none; /* neutralise `img { max-width: 100% }` global */
+  object-fit: contain;
+  transition: filter 0.25s ease;
+}
+
+.pillIcon {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.pill:hover,
+.pill:focus-visible {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Logo SVG monochrome navy : il passe en blanc quand le fond devient navy */
+.pill:hover .pillLogo,
+.pill:focus-visible .pillLogo {
+  filter: brightness(0) invert(1);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Sous 1200 px la pastille laisse la place à la carte du menu burger */
+@media (max-width: 1199px) {
+  .pill {
+    display: none;
+  }
+}
+
+/* ============================================================
+   CARTE DU MENU BURGER
+   Le doublement du sélecteur (.card.card) l'emporte sur les règles
+   génériques « .mobileNav a » du header (ligne de navigation, barre
+   latérale, fond au survol) sans recourir à !important.
+   ============================================================ */
+.card.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 10px 22px -10px rgba(26, 57, 105, 0.55);
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
+}
+
+.card.card:hover,
+.card.card:focus-visible {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 26px -10px rgba(26, 57, 105, 0.7);
+}
+
+.card.card:active {
+  transform: scale(0.985);
+}
+
+.card.card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Pas de barre latérale : c'est une carte, pas une ligne de navigation */
+.card.card::before {
+  display: none;
+}
+
+/* « Nouveau » posé sur le bord supérieur de la carte, comme une étiquette */
+.card .chip {
+  position: absolute;
+  top: -9px;
+  inset-inline-end: 16px;
+  box-shadow: 0 0 0 3px var(--surface);
+}
+
+.cardLogoTile {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cardLogo {
+  display: block;
+  width: 55px;
+  height: 20px;
+  flex-shrink: 0;
+  max-width: none;
+  object-fit: contain;
+  /* SVG monochrome #1a3969 sur fond navy : on force le blanc */
+  filter: brightness(0) invert(1);
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.cardSub {
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.cardArrow {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  margin-inline-start: auto;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: var(--primary-hover);
+  transition: transform 0.25s ease;
+}
+
+.card:hover .cardArrow,
+.card:focus-visible .cardArrow {
+  transform: translate(2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip::after {
+    animation: none;
+  }
+
+  .pill,
+  .pillLogo,
+  .card.card,
+  .cardArrow {
+    transition: none;
+  }
+}
