@@ -54,7 +54,7 @@
 
 .navList a:hover,
 .navList a.active {
-  color: var(--secondary);
+  color: var(--secondary-strong);
 }
 
 /* Ligne sous le lien actif/survolé */
@@ -190,7 +190,7 @@
 
 .mobileNav .mobileCta {
   margin-top: 10px;
-  background: var(--secondary);
+  background: var(--secondary-strong);
   color: var(--on-secondary);
   text-align: center;
   border-radius: 50px;

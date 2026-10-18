@@ -84,7 +84,7 @@
 }
 
 .socialLinks a:hover {
-  background: var(--secondary);
+  background: var(--secondary-strong);
   color: var(--on-secondary);
   transform: translateY(-3px);
 }
@@ -98,7 +98,9 @@
   text-align: center;
   padding: 24px 0;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  /* Jeton dédié au fond sombre du footer : --text-muted est calibré pour
+     les fonds clairs et ne tient pas le contraste ici. */
+  color: var(--footer-text-secondary);
 }
 
 /* ============================================================

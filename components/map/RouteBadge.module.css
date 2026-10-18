@@ -81,7 +81,7 @@
   flex-shrink: 0;
   padding: 8px 14px;
   border-radius: var(--radius-pill);
-  background: var(--secondary);
+  background: var(--secondary-strong);
   color: var(--on-secondary);
   font-size: 0.8rem;
   font-weight: 700;
