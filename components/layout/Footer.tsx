@@ -71,7 +71,8 @@ export default function Footer() {
               <li><Link href={localHref('#services')}>{t('services')}</Link></li>
               <li><Link href={localHref('#devis')}>{t('devis')}</Link></li>
               {showRecruitment && (
-                <li><Link href={localHref('#recrutement')}>{t('recruitment')}</Link></li>
+                /* Pas d'ancre #recrutement sur l'accueil : on cible la page dédiée */
+                <li><Link href={localHref('/recrutement')}>{t('recruitment')}</Link></li>
               )}
               <li><Link href={localHref('#contact')}>{t('contact')}</Link></li>
             </ul>
