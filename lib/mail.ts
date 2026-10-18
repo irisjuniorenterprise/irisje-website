@@ -1,25 +1,20 @@
 // lib/mail.ts
 // Envoi des emails de formulaire via SMTP.
 //
-// Chaque formulaire possède sa propre configuration (variables d'env dédiées,
-// voir .env.example) — chacun peut ainsi adresser sa propre boîte :
-//   contact -> CONTACT_SMTP_HOST / _PORT / _SECURE / _USER / _PASS
-//              CONTACT_MAIL_FROM / CONTACT_MAIL_TO
-//   devis   -> DEVIS_SMTP_* et DEVIS_MAIL_*
+// Tous les formulaires (contact et devis) partagent UNE SEULE configuration
+// SMTP et arrivent dans la même boîte (voir .env.example) :
+//   MAIL_SMTP_HOST / _PORT / _SECURE / _USER / _PASS
+//   MAIL_FROM / MAIL_TO
 //
 // Les variables sont lues à chaque envoi (pas de figement au démarrage),
 // ainsi un changement dans .env.local est pris en compte au prochain submit.
 
 import nodemailer from 'nodemailer';
 
-export type MailForm = 'contact' | 'devis';
-
-/** Erreur levée quand la configuration SMTP d'un formulaire est incomplète/invalid. */
+/** Erreur levée quand la configuration SMTP est incomplète/invalid. */
 export class MailConfigError extends Error {
-  constructor(form: MailForm, problems: string[]) {
-    super(
-      `[mail] Configuration SMTP invalide pour le formulaire « ${form} » : ${problems.join(', ')}`,
-    );
+  constructor(problems: string[]) {
+    super(`[mail] Configuration SMTP invalide : ${problems.join(', ')}`);
     this.name = 'MailConfigError';
   }
 }
@@ -33,32 +28,30 @@ type SmtpConfig = {
   to: string;
 };
 
-/** Lit la configuration SMTP d'un formulaire dans les variables d'environnement. */
-export function getSmtpConfig(form: MailForm): SmtpConfig {
-  const prefix = form.toUpperCase(); // CONTACT | DEVIS
-
-  const host = process.env[`${prefix}_SMTP_HOST`];
-  const port = process.env[`${prefix}_SMTP_PORT`];
-  const secure = process.env[`${prefix}_SMTP_SECURE`];
-  const user = process.env[`${prefix}_SMTP_USER`];
-  const pass = process.env[`${prefix}_SMTP_PASS`];
-  const from = process.env[`${prefix}_MAIL_FROM`];
-  const to = process.env[`${prefix}_MAIL_TO`];
+/** Lit la configuration SMTP partagée dans les variables d'environnement. */
+export function getSmtpConfig(): SmtpConfig {
+  const host = process.env.MAIL_SMTP_HOST;
+  const port = process.env.MAIL_SMTP_PORT;
+  const secure = process.env.MAIL_SMTP_SECURE;
+  const user = process.env.MAIL_SMTP_USER;
+  const pass = process.env.MAIL_SMTP_PASS;
+  const from = process.env.MAIL_FROM;
+  const to = process.env.MAIL_TO;
 
   const problems: string[] = [];
-  if (!host) problems.push(`${prefix}_SMTP_HOST`);
-  if (!port) problems.push(`${prefix}_SMTP_PORT`);
-  if (!user) problems.push(`${prefix}_SMTP_USER`);
-  if (!pass) problems.push(`${prefix}_SMTP_PASS`);
-  if (!from) problems.push(`${prefix}_MAIL_FROM`);
-  if (!to) problems.push(`${prefix}_MAIL_TO`);
+  if (!host) problems.push('MAIL_SMTP_HOST');
+  if (!port) problems.push('MAIL_SMTP_PORT');
+  if (!user) problems.push('MAIL_SMTP_USER');
+  if (!pass) problems.push('MAIL_SMTP_PASS');
+  if (!from) problems.push('MAIL_FROM');
+  if (!to) problems.push('MAIL_TO');
 
   const parsedPort = Number(port);
   if (port && (!Number.isInteger(parsedPort) || parsedPort < 1 || parsedPort > 65535)) {
-    problems.push(`${prefix}_SMTP_PORT (« ${port} » n'est pas un port valide)`);
+    problems.push(`MAIL_SMTP_PORT (« ${port} » n'est pas un port valide)`);
   }
 
-  if (problems.length > 0) throw new MailConfigError(form, problems);
+  if (problems.length > 0) throw new MailConfigError(problems);
 
   return {
     host: host as string,
@@ -110,9 +103,9 @@ function buildHtml(fields: FormMailPayload['fields']): string {
     </div>`.trim();
 }
 
-/** Envoie l'email d'un formulaire via le SMTP configuré pour ce formulaire. */
-export async function sendFormMail(form: MailForm, payload: FormMailPayload): Promise<void> {
-  const config = getSmtpConfig(form);
+/** Envoie l'email d'un formulaire via le SMTP partagé. */
+export async function sendFormMail(payload: FormMailPayload): Promise<void> {
+  const config = getSmtpConfig();
 
   const transporter = nodemailer.createTransport({
     host: config.host,

@@ -1,6 +1,6 @@
 // app/api/contact/route.ts
 // Réception du formulaire de contact (page /contact) et envoi de l'email
-// via le SMTP configuré avec les variables CONTACT_* (voir .env.example).
+// via le SMTP partagé des variables MAIL_* (voir .env.example).
 
 import { z } from 'zod';
 import { MailConfigError, sendFormMail } from '@/lib/mail';
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   const sujetLabel = SUJETS[data.sujet] ?? data.sujet;
 
   try {
-    await sendFormMail('contact', {
+    await sendFormMail({
       subject: `[Site IRIS] Contact — ${sujetLabel}`,
       replyTo: data.email,
       fields: [
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof MailConfigError) {
-      // Variables CONTACT_* manquantes côté serveur → 503 explicite
+      // Variables MAIL_* manquantes côté serveur → 503 explicite
       console.error(error.message);
       return Response.json({ ok: false, error: 'mail_config' }, { status: 503 });
     }

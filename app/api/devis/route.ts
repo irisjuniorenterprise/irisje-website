@@ -1,6 +1,6 @@
 // app/api/devis/route.ts
 // Réception du formulaire de devis (page /devis) et envoi de l'email
-// via le SMTP configuré avec les variables DEVIS_* (voir .env.example).
+// via le SMTP partagé des variables MAIL_* (voir .env.example).
 
 import { z } from 'zod';
 import { MailConfigError, sendFormMail } from '@/lib/mail';
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   const prestationLabel = PRESTATION_LABELS[data.prestation] ?? data.prestation;
 
   try {
-    await sendFormMail('devis', {
+    await sendFormMail({
       subject: `[Site IRIS] Demande de devis — ${prestationLabel}`,
       replyTo: data.email,
       fields: [
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof MailConfigError) {
-      // Variables DEVIS_* manquantes côté serveur → 503 explicite
+      // Variables MAIL_* manquantes côté serveur → 503 explicite
       console.error(error.message);
       return Response.json({ ok: false, error: 'mail_config' }, { status: 503 });
     }
