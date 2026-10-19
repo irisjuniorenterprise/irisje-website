@@ -8,8 +8,8 @@ import { getSliderSlides } from '@/lib/data/sliderData';
 import { joinUrlFromHostname } from '@/lib/join';
 import { getRequestSite } from '@/lib/request-site';
 import { Icons } from '@/components/icons/Icons';
-import { visuallyHidden } from '@/components/ui/visuallyHidden';
 import CtaBand from '@/components/ui/CtaBand';
+import IntroSection from '@/components/ui/IntroSection';
 import styles from './page.module.css';
 
 import { buildMetadata } from '@/lib/metadata';
@@ -109,83 +109,30 @@ export default async function HomePage({ params }: Props) {
       {/* ============================================================
           SECTION SERVICES
           ============================================================ */}
-      <section className="placeholder" suppressHydrationWarning id="services">
-        <div className="container">
-          <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 className="section-title" style={{ marginBottom: '1rem' }}>
-              {t('services.title')}
-            </h2>
-            <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.8',
-                color: 'var(--text-secondary)',
-                maxWidth: '720px',
-                margin: '0 auto',
-                textAlign: 'justify',
-              }}
-            >
-              {t('services.description')}
-            </p>
-            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
-              <Link href={`/${locale}/services`} className="btn btn-cta">
-                {t('services.cta')}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Carte de texte lisible en mobile : voir components/ui/IntroSection */}
+      <IntroSection
+        id="services"
+        title={t('services.title')}
+        paragraphs={[t('services.description')]}
+        cta={{ href: `/${locale}/services`, label: t('services.cta') }}
+      />
 
       {/* ============================================================
           SECTION À PROPOS
           ============================================================ */}
-      <section
-        className="placeholder section-alt"
-        suppressHydrationWarning
+      <IntroSection
         id="a-propos"
-        style={{
-          borderBottom: '1px solid var(--border-light)',
+        alt
+        bordered
+        title={t('about.title')}
+        paragraphs={[t('about.description_1'), t('about.description_2')]}
+        cta={{
+          href: `/${locale}/a-propos`,
+          label: t('about.cta'),
+          // Complète « En savoir plus » avec le sujet du lien (lien descriptif)
+          srSuffix: t('about.title'),
         }}
-      >
-        <div className="container">
-          <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 className="section-title" style={{ marginBottom: '1rem' }}>
-              {t('about.title')}
-            </h2>
-            <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.8',
-                color: 'var(--text-secondary)',
-                maxWidth: '720px',
-                margin: '0 auto',
-                textAlign: 'justify',
-              }}
-            >
-              {t('about.description_1')}
-            </p>
-            <p
-              style={{
-                fontSize: '1.05rem',
-                lineHeight: '1.8',
-                color: 'var(--text-secondary)',
-                maxWidth: '720px',
-                margin: '1.5rem auto 0',
-                textAlign: 'justify',
-              }}
-            >
-              {t('about.description_2')}
-            </p>
-            <div className="btn-wrapper" style={{ marginTop: '2rem' }}>
-              <Link href={`/${locale}/a-propos`} className="btn btn-cta">
-                {t('about.cta')}
-                {/* Complète « En savoir plus » avec le sujet du lien (lien descriptif) */}
-                <span style={visuallyHidden}>{` — ${t('about.title')}`}</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      />
 
       {/* ============================================================
           SECTION DEVIS (CTA) - CARTE CONSERVÉE INTACTE
