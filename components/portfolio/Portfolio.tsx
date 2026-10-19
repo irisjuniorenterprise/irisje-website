@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
+import ComingSoon from './ComingSoon';
 import styles from './Portfolio.module.css';
 
 export type Project = {
@@ -118,7 +119,30 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
     };
   }, [selectedProject]);
 
-  if (!projects || projects.length === 0) return null;
+  // ── Aucun projet publié : état « Bientôt disponible » ──
+  // La section (et son ancre #portfolio) reste en place : elle prépare
+  // l'arrivée des projets au lieu de disparaître de la page. Dès que
+  // `projects` contient au moins un élément, la grille habituelle prend le relais.
+  if (!projects || projects.length === 0) {
+    return (
+      <section
+        ref={sectionRef}
+        className={`${styles.portfolioSection} ${inView ? styles.inView : ''} ${isRtl ? styles.rtl : ''}`}
+        id="portfolio"
+        aria-labelledby="portfolio-title"
+      >
+        <div className="container">
+          <div className={styles.header}>
+            <div className={styles.headerLeft}>
+              <Icons.Briefcase size={32} stroke="var(--primary)" strokeWidth={1.8} />
+              <h2 className={styles.title} id="portfolio-title">{t('title')}</h2>
+            </div>
+          </div>
+          <ComingSoon locale={locale} active={inView} />
+        </div>
+      </section>
+    );
+  }
 
   const categories = ['all', ...new Set(projects.map((p) => p.category))];
 
