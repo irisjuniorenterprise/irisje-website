@@ -62,8 +62,11 @@ export default function ComingSoon({ locale, active }: ComingSoonProps) {
             {t('eyebrow')}
           </p>
 
+          {/* Un mot du titre est mis en lumière (balise <hl> dans les messages) */}
           <h3 className={`${styles.title} ${styles.reveal}`} style={{ '--d': '90ms' } as React.CSSProperties}>
-            {t('title')}
+            {t.rich('title', {
+              hl: (chunks) => <span className={styles.hl}>{chunks}</span>,
+            })}
           </h3>
 
           <p className={`${styles.text} ${styles.reveal}`} style={{ '--d': '180ms' } as React.CSSProperties}>

@@ -756,7 +756,7 @@
     "technologies_title": "Technologies",
     "coming_soon": {
       "eyebrow": "Bientôt disponible",
-      "title": "Le rideau est sur le point de se lever",
+      "title": "Le rideau est sur le point de se <hl>lever</hl>",
       "text": "Nos projets sont réalisés. Nous peaufinons à présent leur présentation : l'histoire, les résultats et les outils derrière chacun d'eux. Très bientôt, vous pourrez les découvrir.",
       "steps_label": "Avancement du dévoilement de nos réalisations",
       "steps": {

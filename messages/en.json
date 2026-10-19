@@ -756,7 +756,7 @@
     "technologies_title": "Technologies",
     "coming_soon": {
       "eyebrow": "Coming soon",
-      "title": "The curtain is about to rise",
+      "title": "The curtain is about to <hl>rise</hl>",
       "text": "Our projects are done. We are now polishing how we present them: the story, the results and the tools behind each one. Very soon, you will be able to discover them.",
       "steps_label": "Progress towards unveiling our projects",
       "steps": {

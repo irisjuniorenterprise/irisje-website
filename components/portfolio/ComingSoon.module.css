@@ -153,6 +153,16 @@
   color: #fff;
 }
 
+/* Mot mis en lumière : dégradé orange clair → pêche, toujours AA sur le fond bleu */
+.hl {
+  color: #ff8a66; /* repli si background-clip:text n'est pas supporté */
+  background: linear-gradient(100deg, #ff7a4d 0%, #ffb59c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-inline: 0.04em; /* évite de rogner les glyphes inclinés */
+}
+
 .text {
   max-width: 52ch;
   margin: 0 0 2rem;
