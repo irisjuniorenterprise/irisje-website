@@ -439,6 +439,14 @@
   display: block;
 }
 
+/* Nom / prénom : toujours clair sur le bandeau foncé. La règle globale
+   `.placeholder span` (couleur « muted », gris foncé) s'appliquait au <span>
+   du nom, à spécificité égale ; `.wrapper .ribbon span` (0,2,1) l'emporte
+   quel que soit l'ordre de chargement des CSS. */
+.wrapper .ribbon span {
+  color: var(--on-primary);
+}
+
 /* Reflet qui traverse le bandeau : une fois à l'apparition (::before),
    puis à chaque survol (::after). Deux éléments distincts pour que le survol
    ne relance pas l'animation d'entrée. */
