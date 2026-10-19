@@ -754,11 +754,26 @@
     "details_year": "Year",
     "results_title": "Results",
     "technologies_title": "Technologies",
-    "sample_project": {
-      "title": "Online booking for a clinic network",
-      "description": "Design and build of an appointment-booking website: real-time scheduling, e-mail confirmations, a patient portal and an admin dashboard. A patient journey redesigned end to end, from the first click to the appointment reminder.",
-      "client": "El Wifa clinic network",
-      "results": "+40% of appointments booked online · −30% of front-desk calls"
+    "coming_soon": {
+      "eyebrow": "Coming soon",
+      "title": "The curtain is about to rise",
+      "text": "Our projects are done. We are now polishing how we present them: the story, the results and the tools behind each one. Very soon, you will be able to discover them.",
+      "steps_label": "Progress towards unveiling our projects",
+      "steps": {
+        "delivered": "Delivered",
+        "polish": "Polishing",
+        "reveal": "Unveiling"
+      },
+      "status": {
+        "done": "completed",
+        "current": "in progress",
+        "upcoming": "upcoming"
+      },
+      "badge": "Soon",
+      "stay_tuned": "Stay tuned.",
+      "pitch": "Our first case studies will be unveiled very soon.",
+      "cta_primary": "Request a quote",
+      "cta_secondary": "Contact us"
     }
   }
 }

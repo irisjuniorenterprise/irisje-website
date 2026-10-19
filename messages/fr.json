@@ -754,11 +754,26 @@
     "details_year": "Année",
     "results_title": "Résultats",
     "technologies_title": "Technologies",
-    "sample_project": {
-      "title": "Réservation en ligne pour un réseau de cliniques",
-      "description": "Conception et développement d'un site de prise de rendez-vous : planning en temps réel, confirmations par e-mail, espace patient et tableau de bord administrateur. Un parcours patient repensé de bout en bout, du premier clic au rappel de rendez-vous.",
-      "client": "Réseau de cliniques El Wifa",
-      "results": "+40 % de rendez-vous pris en ligne · −30 % d'appels au secrétariat"
+    "coming_soon": {
+      "eyebrow": "Bientôt disponible",
+      "title": "Le rideau est sur le point de se lever",
+      "text": "Nos projets sont réalisés. Nous peaufinons à présent leur présentation : l'histoire, les résultats et les outils derrière chacun d'eux. Très bientôt, vous pourrez les découvrir.",
+      "steps_label": "Avancement du dévoilement de nos réalisations",
+      "steps": {
+        "delivered": "Réalisation",
+        "polish": "Mise en valeur",
+        "reveal": "Dévoilement"
+      },
+      "status": {
+        "done": "terminé",
+        "current": "en cours",
+        "upcoming": "à venir"
+      },
+      "badge": "Bientôt",
+      "stay_tuned": "Restez connectés.",
+      "pitch": "Nos premières études de cas seront dévoilées très prochainement.",
+      "cta_primary": "Demander un devis",
+      "cta_secondary": "Nous contacter"
     }
   }
 }

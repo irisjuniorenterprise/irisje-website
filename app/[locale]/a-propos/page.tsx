@@ -30,32 +30,34 @@ export async function generateMetadata({ params }: Props) {
 
 // ─────────────────────────────────────────────────────────────
 // Projets — remplacer par un fetch CMS/API si besoin.
-// Le projet d'exemple est localisé via le namespace `Portfolio`
-// (clés `sample_project.*` dans messages/{fr,en,ar}.json).
-// Chaque projet peut avoir un champ `url` optionnel (voir type Project),
-// et `featured: true` pour la carte « à la une ».
+// Tant que la liste est VIDE, la section « Nos réalisations » affiche
+// l'état « Bientôt disponible » (components/portfolio/ComingSoon.tsx).
+// Dès qu'un projet est ajouté, la grille, les filtres et la modale
+// prennent automatiquement le relais — aucun autre changement requis.
+//
+// Exemple de projet (textes à placer dans le namespace `Portfolio` de
+// messages/{fr,en,ar}.json, par ex. sous `projects.<id>.*`, lus avec
+// `const tp = await getTranslations({ locale, namespace: 'Portfolio' })`) :
+//   {
+//     id: 'mon-projet',
+//     title: tp('projects.mon-projet.title'),
+//     description: tp('projects.mon-projet.description'),
+//     category: 'IT',
+//     image: '/portfolio/mon-projet.webp',   // optionnel (placé dans /public)
+//     tags: ['Next.js', 'UI/UX'],            // optionnel
+//     client: '…', year: 2026,               // optionnels
+//     results: 'Résultat A · Résultat B',    // optionnel
+//     url: 'https://…',                      // optionnel
+//     featured: true,                        // optionnel : carte « à la une »
+//   }
 // ─────────────────────────────────────────────────────────────
 
 export default async function AProposPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'AboutPage' });
-  const tp = await getTranslations({ locale, namespace: 'Portfolio' });
   const isRtl = locale === 'ar';
 
-  const projects: Project[] = [
-    {
-      id: 'sample-booking-platform',
-      title: tp('sample_project.title'),
-      description: tp('sample_project.description'),
-      category: 'IT',
-      image: '/portfolio/booking-platform.svg',
-      tags: ['Next.js', 'React', 'UI/UX', 'SEO'],
-      client: tp('sample_project.client'),
-      year: 2025,
-      results: tp('sample_project.results'),
-      featured: true,
-    },
-  ];
+  const projects: Project[] = [];
 
   const values = [
     {
@@ -399,7 +401,7 @@ export default async function AProposPage({ params }: Props) {
 
       {/* ============================================================
           SECTION 7 : PORTFOLIO
-          Affiché uniquement si projects.length > 0.
+          Sans projet : état « Bientôt disponible ». Avec projets : grille.
           Fond blanc (var(--surface)) — alterne avec Nos Valeurs (section-alt).
           ============================================================ */}
       <Portfolio projects={projects} locale={locale} />
