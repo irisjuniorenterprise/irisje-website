@@ -31,6 +31,8 @@
 .wrapper {
   --line: var(--accent);
   --line-w: 2px;
+  --elbow-r: 0.75rem; /* rayon des coudes des connecteurs (0 = angles droits) */
+  --node-size: 0.5rem; /* point de jonction au-dessus des cartes (0 = masqué) */
   --gap-v: 1.25rem;
   --card-w: 10rem;
   --avatar: 4.75rem;
@@ -124,6 +126,16 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+/* Tracé de haut en bas par rognage (sans déformer le coude arrondi) */
+@keyframes orgDrawDown {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -952,6 +964,7 @@
     width: var(--line-w);
     height: var(--gap-v);
     background: var(--line);
+    border-radius: var(--radius-pill);
     transform-origin: top;
     animation: orgDrawV var(--dur-stem) var(--ease-draw) calc(var(--at, 0) * 1ms) backwards;
   }
@@ -979,6 +992,7 @@
     width: var(--line-w);
     translate: -50% 0;
     background: var(--line);
+    border-radius: var(--radius-pill);
     /* Le tronc descend depuis le Président */
     transform-origin: top;
     animation: orgDrawV var(--dur-trunk) var(--ease-draw) calc(var(--at, 0) * 1ms) backwards;
@@ -1005,6 +1019,7 @@
     height: var(--line-w);
     margin-top: calc(var(--avatar) + 0.55rem + 0.8rem - var(--line-w) / 2);
     background: var(--line);
+    border-radius: var(--radius-pill);
     /* Le trait part du tronc et rejoint la carte (tronc = côté interne) */
     transform-origin: right center;
     animation: orgDrawH var(--dur-hline) var(--ease-draw) calc(var(--link, 0) * 1ms) backwards;
@@ -1093,11 +1108,53 @@
     border-top: 0;
   }
 
+  /* Coudes arrondis aux deux extrémités de la barre (les jonctions en T des
+     responsables du milieu restent droites).
+     • Premier responsable : le coin haut-début de ::after (barre + descente).
+     • Dernier responsable : le coin est formé par ::before (barre venant du
+       centre). ::before porte donc le coude (hauteur = rayon) et ::after ne
+       garde que la suite de la descente : chaque moitié conserve son propre
+       instant d'apparition (--link-before / --link-after). */
+  .children > .item:first-child:not(:only-child)::after {
+    border-start-start-radius: var(--elbow-r);
+  }
+
+  .children > .item:last-child:not(:only-child)::before {
+    height: var(--elbow-r);
+    border-inline-end: var(--line-w) solid var(--line);
+    border-start-end-radius: var(--elbow-r);
+  }
+
+  .children > .item:last-child:not(:only-child)::after {
+    top: var(--elbow-r);
+    height: calc(var(--gap-v) - var(--elbow-r));
+  }
+
   /* La descente est portée par ::after (y compris pour le dernier enfant) */
 
   /* Enfant unique : seule la descente verticale est nécessaire */
   .children > .item:only-child::before {
     display: none;
+  }
+
+  /* Point de jonction : marque l'arrivée du trait sur la carte. Il apparaît
+     avec la carte (même animation, pas de déformation du trait). `left`
+     physique : le point est centré, identique en LTR et en RTL.
+     --node-size: 0 le masque entièrement (halo compris). */
+  .children > .item > .card::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--node-size) * -0.75);
+    left: 50%;
+    z-index: 2;
+    width: var(--node-size);
+    height: var(--node-size);
+    translate: -50% 0;
+    border-radius: 50%;
+    background: var(--line);
+    box-shadow: 0 0 0 calc(var(--node-size) * 0.5)
+      color-mix(in srgb, var(--accent) 22%, transparent);
+    pointer-events: none;
   }
 }
 
@@ -1359,6 +1416,31 @@
   .aside:not(:has(~ .children)) > li:last-child::after {
     bottom: auto;
     height: calc(var(--tick-y) + var(--line-w));
+  }
+
+  /* Coude arrondi : le dernier élément ferme la ligne par un « L » (trait
+     vertical + trait horizontal vers la carte) au lieu d'un angle droit.
+     Le « L » remplace le petit trait horizontal ::before de cet élément. */
+  .children > .item:last-child::after,
+  .aside:not(:has(~ .children)) > li:last-child::after {
+    width: var(--indent-pad);
+    background: none;
+    border-inline-start: var(--line-w) solid var(--line);
+    border-bottom: var(--line-w) solid var(--line);
+    border-end-start-radius: var(--elbow-r);
+    animation-name: orgDrawDown;
+  }
+
+  .children > .item:last-child::before,
+  .aside:not(:has(~ .children)) > li:last-child::before {
+    display: none;
+  }
+
+  /* Extrémités arrondies des lignes verticales / horizontales */
+  .tierLabelExec::after,
+  .aside > li::before,
+  .children > .item::before {
+    border-radius: var(--radius-pill);
   }
 }
 
