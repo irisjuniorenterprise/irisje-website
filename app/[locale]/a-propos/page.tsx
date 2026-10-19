@@ -6,6 +6,7 @@ import { Icons } from '@/components/icons/Icons';
 import Portfolio, { type Project } from '@/components/portfolio/Portfolio';
 import ValueCards from '@/components/ui/ValueCards';
 import Organigramme from '@/components/organigramme/Organigramme';
+import IntroSection from '@/components/ui/IntroSection';
 import TunisiaMapLoader from '@/components/map/TunisiaMapLoader';
 import ItineraryButton from '@/components/map/ItineraryButton';
 import styles from './page.module.css';
@@ -134,71 +135,55 @@ export default async function AProposPage({ params }: Props) {
       {/* ============================================================
           SECTION 1 : QUI SOMMES-NOUS
           ============================================================ */}
-      <section
-        className="placeholder"
-        suppressHydrationWarning
+      <IntroSection
         id="qui-sommes-nous"
-        style={{ minHeight: 'auto', padding: '4rem 0' }}
+        title={t('who_we_are.title')}
+        paragraphs={[t.raw('who_we_are.description_1') as string]}
+        allowHtml
       >
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className="section-title">{t('who_we_are.title')}</h2>
+        {/* Cartes « double vocation » désactivées (conservées telles quelles) :
+            pour les réactiver, les entourer de <div className="vocation-grid">. */}
+        {/* Carte Pédagogique */}
+        {/* <div className="value-card">
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem',
-              textAlign: 'justify',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '0.75rem',
+              color: 'var(--primary)',
             }}
           >
-            <p
-              style={{ fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}
-              dangerouslySetInnerHTML={{ __html: t.raw('who_we_are.description_1') }}
-            />
-            <div className="vocation-grid">
-              {/* Carte Pédagogique */}
-              {/* <div className="value-card">
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '0.75rem',
-                    color: 'var(--primary)',
-                  }}
-                >
-                  <Icons.Education size={36} stroke="var(--primary)" strokeWidth={1.8} />
-                </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                  {t('who_we_are.vocation_pedagogique')}
-                </h3>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                  {t('who_we_are.vocation_pedagogique_desc')}
-                </p>
-              </div> */}
-              {/* Carte Économique */}
-              {/* <div className="value-card">
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '0.75rem',
-                    color: 'var(--primary)',
-                  }}
-                >
-                  <Icons.Business size={36} stroke="var(--primary)" strokeWidth={1.8} />
-                </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                  {t('who_we_are.vocation_economique')}
-                </h3>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                  {t('who_we_are.vocation_economique_desc')}
-                </p>
-              </div> */}
-            </div>
+            <Icons.Education size={36} stroke="var(--primary)" strokeWidth={1.8} />
           </div>
-        </div>
-      </section>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+            {t('who_we_are.vocation_pedagogique')}
+          </h3>
+          <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+            {t('who_we_are.vocation_pedagogique_desc')}
+          </p>
+        </div> */}
+        {/* Carte Économique */}
+        {/* <div className="value-card">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '0.75rem',
+              color: 'var(--primary)',
+            }}
+          >
+            <Icons.Business size={36} stroke="var(--primary)" strokeWidth={1.8} />
+          </div>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+            {t('who_we_are.vocation_economique')}
+          </h3>
+          <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+            {t('who_we_are.vocation_economique_desc')}
+          </p>
+        </div> */}
+      </IntroSection>
 
       {/* ============================================================
           SECTION 2 : NOTRE MISSION
