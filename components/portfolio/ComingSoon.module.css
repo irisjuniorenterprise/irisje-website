@@ -1,0 +1,582 @@
+/* components/portfolio/ComingSoon.module.css
+   État « Bientôt disponible » de la section Réalisations.
+   Propriétés logiques (inline-start/end) partout : le rendu RTL (arabe) est
+   automatique, sans règle .rtl dédiée. */
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  padding: clamp(1.75rem, 4.5vw, 3.75rem);
+  color: var(--text-inverse);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 102, 51, 0.16) 0%, transparent 55%),
+    linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 55%, #234a85 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 24px 60px -24px rgba(18, 40, 74, 0.55);
+}
+
+/* ============================================================
+   DÉCOR
+   ============================================================ */
+.decor {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Quadrillage « blueprint », estompé vers les bords */
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 38px 38px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 25%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 25%, transparent 85%);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.orbA {
+  width: 280px;
+  height: 280px;
+  inset-block-start: -90px;
+  inset-inline-end: 8%;
+  background: rgba(255, 102, 51, 0.5);
+}
+
+.orbB {
+  width: 340px;
+  height: 340px;
+  inset-block-end: -160px;
+  inset-inline-start: -60px;
+  background: rgba(56, 120, 210, 0.55);
+  animation-duration: 18s;
+  animation-delay: -6s;
+}
+
+/* Étincelles : petits losanges qui scintillent à contretemps */
+.spark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  opacity: 0.2;
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+
+.sparkA { inset-block-start: 14%; inset-inline-start: 46%; animation-delay: 0s; }
+.sparkB { inset-block-start: 68%; inset-inline-start: 52%; width: 14px; height: 14px; animation-delay: 1.2s; }
+.sparkC { inset-block-start: 22%; inset-inline-end: 6%; width: 8px; height: 8px; animation-delay: 2.1s; }
+.sparkD { inset-block-end: 12%; inset-inline-start: 6%; width: 8px; height: 8px; animation-delay: 0.7s; }
+
+/* ============================================================
+   MISE EN PAGE
+   ============================================================ */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.content {
+  text-align: start;
+}
+
+/* ── Entrée en scène : déclenchée par data-active (section visible) ── */
+.reveal {
+  opacity: 0;
+}
+
+.stage[data-active='true'] .reveal {
+  animation: rise 0.85s var(--ease-out) var(--d, 0ms) both;
+}
+
+/* ── Pastille « Bientôt disponible » ── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.1rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pulseDot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--secondary);
+  flex-shrink: 0;
+}
+
+.pulseDot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--secondary);
+  animation: ping 1.9s var(--ease-out) infinite;
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.text {
+  max-width: 52ch;
+  margin: 0 0 2rem;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+/* ============================================================
+   PROGRESSION : Conception ✓ → Réalisation ● → Dévoilement ○
+   ============================================================ */
+.steps {
+  display: flex;
+  list-style: none;
+  margin: 0 0 2.25rem;
+  padding: 0;
+  max-width: 30rem;
+}
+
+.step {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+/* Trait reliant le centre d'un marqueur au suivant */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 15px;
+  inset-inline-start: calc(50% + 24px);
+  width: calc(100% - 48px);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.step[data-state='done']:not(:last-child)::after {
+  background: var(--secondary);
+}
+
+/* Trait « en cours » : se remplit puis se dissout vers l'inconnu */
+.step[data-state='current']:not(:last-child)::after {
+  background: linear-gradient(
+    to right,
+    var(--secondary) 0%,
+    rgba(255, 255, 255, 0.22) 55%
+  );
+}
+
+[dir='rtl'] .step[data-state='current']:not(:last-child)::after {
+  background: linear-gradient(
+    to left,
+    var(--secondary) 0%,
+    rgba(255, 255, 255, 0.22) 55%
+  );
+}
+
+.marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.step[data-state='done'] .marker {
+  background: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.step[data-state='current'] .marker {
+  border-color: var(--secondary);
+  background: rgba(255, 102, 51, 0.18);
+}
+
+/* Cœur + halo pulsé de l'étape en cours */
+.step[data-state='current'] .marker::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--secondary);
+}
+
+.step[data-state='current'] .marker::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary);
+  animation: ring 2.2s var(--ease-out) infinite;
+}
+
+/* Étape à venir : cercle en pointillés, volontairement « inachevé » */
+.step[data-state='upcoming'] .marker {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.stepLabel {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.78);
+  overflow-wrap: anywhere;
+}
+
+.step[data-state='current'] .stepLabel {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ============================================================
+   APPEL À L'ACTION
+   ============================================================ */
+.pitch {
+  margin: 0 0 1.1rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pitch strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #fff;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ============================================================
+   APERÇU « MYSTÈRE » DE LA GRILLE
+   ============================================================ */
+.teasers {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.teaser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.5);
+}
+
+/* Décalage alterné : la pile respire au lieu d'être une colonne rigide */
+.teaser[data-index='1'] {
+  margin-inline-start: clamp(0.75rem, 4vw, 2.25rem);
+}
+
+.teaser[data-index='2'] {
+  margin-inline-end: clamp(0.75rem, 4vw, 2.25rem);
+}
+
+.stage[data-active='true'] .teaser {
+  animation:
+    rise 0.85s var(--ease-out) var(--d, 0ms) both,
+    float 6.5s ease-in-out calc(var(--d, 0ms) + 0.9s) infinite;
+}
+
+.thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Reflet qui balaie la vignette : évoque un contenu « en chargement » */
+.thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 75%
+  );
+  background-size: 250% 100%;
+  animation: shimmer 2.8s linear infinite;
+}
+
+.thumbGlyph {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lines {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.line {
+  display: block;
+  height: 9px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lineShort {
+  width: 55%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pill {
+  flex-shrink: 0;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 102, 51, 0.22);
+  border: 1px solid rgba(255, 140, 105, 0.5);
+  color: #ffe1d6;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .steps {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Les boutons globaux sont en nowrap : on autorise le retour à la ligne
+     pour que « Demander un devis » ne déborde jamais d'un petit écran. */
+  .buttons :global(.btn) {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .thumb {
+    width: 52px;
+    height: 52px;
+  }
+
+  .pill {
+    display: none;
+  }
+
+  .teaser[data-index='1'],
+  .teaser[data-index='2'] {
+    margin-inline: 0;
+  }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  80%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15) rotate(20deg);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(40px, 24px) scale(1.12);
+  }
+}
+
+/* Mouvement réduit : tout est visible immédiatement, rien ne bouge. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stage[data-active='true'] .reveal,
+  .stage[data-active='true'] .teaser {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+
+  .orb,
+  .spark,
+  .thumb::after,
+  .pulseDot::after,
+  .step[data-state='current'] .marker::after {
+    animation: none;
+  }
+
+  .spark {
+    opacity: 0.45;
+  }
+
+  .thumb::after {
+    display: none;
+  }
+}
+
+/* Mode contraste élevé : on garde des contours lisibles, on retire le décor. */
+@media (forced-colors: active) {
+  .stage {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .decor {
+    display: none;
+  }
+
+  .marker,
+  .teaser,
+  .eyebrow,
+  .pill {
+    border-color: CanvasText;
+  }
+
+  .title,
+  .text,
+  .pitch,
+  .pitch strong,
+  .stepLabel,
+  .eyebrow {
+    color: CanvasText;
+  }
+}
