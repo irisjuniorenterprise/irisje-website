@@ -1,0 +1,205 @@
+/* components/ui/IntroSection.module.css
+ *
+ * Mobile d'abord. Aucune valeur « left / right » : propriétés logiques, donc
+ * identique en LTR (FR/EN) et en RTL (AR).
+ */
+
+/* ---------- Section ----------
+   `section.section` (0,1,1) bat `.placeholder` (0,1,0) quel que soit l'ordre
+   de chargement des CSS. Les marges latérales passent de 24px à 16px et le
+   conteneur global (+24px) n'est plus empilé par-dessus : en mobile, la zone
+   de texte passe d'environ 270px à environ 310px de large (écran 380px). */
+section.section {
+  padding-block: 2rem;
+  padding-inline: 1rem;
+}
+
+.inner {
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ---------- Titre ---------- */
+.title {
+  margin-bottom: 0;
+  font-size: clamp(1.5rem, 5.4vw, 2.4rem);
+  line-height: 1.2;
+}
+
+/* ---------- Carte de texte ---------- */
+.card {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.125rem;
+  text-align: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  transition: transform var(--t-base), box-shadow var(--t-base),
+    border-color var(--t-base);
+}
+
+/* ---------- Survol / clic ----------
+   Survol : la carte se soulève, l'ombre s'amplifie, la bordure passe à
+   l'accent. Réservé aux appareils avec vrai survol (souris) : pas d'état
+   « collé » après un tap sur mobile.
+   Clic / appui (souris et tactile) : la carte s'enfonce légèrement. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--accent);
+  }
+}
+
+.card:active {
+  transform: translateY(-1px) scale(0.995);
+  box-shadow: var(--card-shadow);
+  border-color: var(--accent);
+  transition-duration: 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:active {
+    transform: none;
+  }
+}
+
+@supports (background: color-mix(in srgb, white 50%, transparent)) {
+  .card {
+    /* Légère transparence : le motif d'arrière-plan reste perceptible */
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
+
+.lead,
+.body,
+.note {
+  margin: 0;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+  hyphens: manual;
+}
+
+/* Accroche : 1ʳᵉ phrase */
+.lead {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* Le gras des traductions (<strong>) ressort sans alourdir l'accroche */
+.lead strong {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Texte courant */
+.body {
+  margin-top: 0.75rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.body strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Paragraphes suivants : note avec filet d'accent au début de la ligne */
+.note {
+  margin-top: 1rem;
+  padding-block: 0.15rem;
+  padding-inline-start: 0.9rem;
+  border-inline-start: 3px solid var(--secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ---------- Bouton ---------- */
+.cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* `.cta .button` (0,2,0) bat `.btn` (0,1,0) ; `.btn` impose nowrap,
+   on l'autorise à passer à la ligne pour les libellés longs (EN/AR). */
+.cta .button {
+  inline-size: 100%;
+  max-inline-size: 22rem;
+  white-space: normal;
+  text-align: center;
+}
+
+/* ---------- ≥ 480px ---------- */
+@media (min-width: 480px) {
+  .card {
+    padding: 1.5rem 1.5rem;
+  }
+}
+
+/* ---------- ≥ 768px : tablette / bureau ---------- */
+@media (min-width: 768px) {
+  section.section {
+    padding-block: 3rem;
+    padding-inline: 2rem;
+  }
+
+  .card {
+    margin-top: 1.75rem;
+    padding: 2.25rem 2.5rem;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+  }
+
+  .body {
+    margin-top: 1rem;
+    font-size: 1.02rem;
+  }
+
+  .note {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .cta {
+    margin-top: 2rem;
+  }
+
+  .cta .button {
+    inline-size: auto;
+    max-inline-size: none;
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Écrans très étroits (≤ 360px) ---------- */
+@media (max-width: 360px) {
+  .card {
+    padding: 1.1rem 0.95rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  .body,
+  .note {
+    font-size: 0.94rem;
+  }
+}
