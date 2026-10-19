@@ -49,7 +49,7 @@ type Props = {
 
 /** « Phrase 1. Phrase 2. » → [« Phrase 1. », « Phrase 2. »] (une seule phrase → reste vide). */
 function splitLead(text: string): [string, string] {
-  const match = text.match(/^(.+?[.!?؟…])\s+(.+)$/s);
+  const match = text.match(/^([\s\S]+?[.!?؟…])\s+([\s\S]+)$/);
   return match ? [match[1], match[2]] : [text, ''];
 }
 
