@@ -2,7 +2,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { locales, defaultLocale } from './i18n/config';
-import { canonicalHostFor, normalizeHost } from './lib/seo';
+import { ROUTES, canonicalHostFor, isLocale, normalizeHost } from './lib/seo';
 
 // Middleware next-intl officiel
 const intlMiddleware = createMiddleware({
@@ -22,6 +22,14 @@ const isLocalHost = (host: string): boolean =>
   host === 'localhost' ||
   host.endsWith('.localhost') ||
   /^\d{1,3}(\.\d{1,3}){3}$/.test(host);
+
+// Chemins (hors préfixe de langue) servis par l'application. /recrutement est
+// redirigé en 308 par next.config.js avant d'arriver ici : il reste listé par
+// prudence. Une nouvelle page ajoutée dans ROUTES est reconnue automatiquement.
+const KNOWN_SUBPATHS = new Set<string>([
+  ...ROUTES.map((route) => route.path).filter((path) => path !== '/'),
+  '/recrutement'
+]);
 
 export default function middleware(request: NextRequest) {
   const host = normalizeHost(
@@ -56,6 +64,26 @@ export default function middleware(request: NextRequest) {
     pathname.includes('.') // fichiers (images, css, js, etc.)
   ) {
     return finish(NextResponse.next());
+  }
+
+  // 🧭 Vrai 404 pour les URL inconnues sous un préfixe de langue valide.
+  // Le layout [locale] enveloppe la page dans un <Suspense> (écran de
+  // chargement) : le statut HTTP part donc AVANT que notFound() ne soit
+  // appelé et une URL inexistante répondait « 200 » (soft 404). On répond
+  // ici en 404 avec la même page not-found.tsx (design inchangé).
+  const [firstSegment, ...restSegments] = pathname.split('/').filter(Boolean);
+  if (firstSegment && isLocale(firstSegment) && restSegments.length > 0) {
+    const subPath = `/${restSegments.join('/')}`;
+    if (!KNOWN_SUBPATHS.has(subPath)) {
+      const forwarded = new Headers(request.headers);
+      forwarded.set('x-next-intl-locale', firstSegment);
+      return finish(
+        NextResponse.rewrite(new URL('/_not-found', request.url), {
+          status: 404,
+          request: { headers: forwarded }
+        })
+      );
+    }
   }
 
   // ✅ Appliquer next-intl
