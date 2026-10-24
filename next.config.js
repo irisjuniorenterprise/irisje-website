@@ -69,7 +69,29 @@ const joinOrigin = (origin) => {
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [],
+    // AVIF puis WebP : images plus légères (LCP) sans changer le rendu.
+    formats: ['image/avif', 'image/webp'],
+  },
+
+  async headers() {
+    // Les fichiers de /public ne sont pas versionnés par hash : cache d'un
+    // jour + revalidation en arrière-plan (jamais « immutable »).
+    const cacheControl = [
+      {
+        key: 'Cache-Control',
+        value: 'public, max-age=86400, stale-while-revalidate=604800',
+      },
+    ];
+    return [
+      { source: '/geojson/:path*', headers: cacheControl },
+      { source: '/slider/:path*', headers: cacheControl },
+      { source: '/portfolio/:path*', headers: cacheControl },
+      {
+        source:
+          '/:file(og-image\\.png|logo-iris\\.png|logo-s-no-bg\\.png|horiz-logo\\.png|cta-bg\\.webp|bg-eagle\\.svg|bg-lines\\.svg|bg_sans_logo\\.svg|iris-join-logo\\.svg|iris-junior-entreprise-logo\\.svg)',
+        headers: cacheControl,
+      },
+    ];
   },
 
   async redirects() {
