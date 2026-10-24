@@ -49,7 +49,7 @@ export default async function DevisPage({ params, searchParams }: Props) {
             <Image
               className="hero-logo"
               src={logoData}
-              alt="IRIS Junior Entreprise"
+              alt=""
               width={300}
               height={300}
               priority

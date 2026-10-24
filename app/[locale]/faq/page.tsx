@@ -42,7 +42,7 @@ export default async function FAQPage({ params }: Props) {
             <Image
               className="hero-logo"
               src={logoData}
-              alt="IRIS Junior Entreprise"
+              alt=""
               width={300}
               height={300}
               priority
