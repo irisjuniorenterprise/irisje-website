@@ -9,7 +9,12 @@ const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
-  localeDetection: true
+  localeDetection: true,
+  // Le hreflang est déjà déclaré dans le HTML et le sitemap (lib/seo.ts), avec
+  // les deux domaines et les variantes fr-TN / en-TN / ar-TN. L'en-tête HTTP
+  // `Link` ajouté par défaut par next-intl ne connaît que le domaine visité :
+  // il contredirait ces annotations sur le .tn.
+  alternateLinks: false
 });
 
 const isLocalHost = (host: string): boolean =>
