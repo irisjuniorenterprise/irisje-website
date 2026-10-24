@@ -10,8 +10,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'IRIS Junior Entreprise — Propulsez votre potentiel',
-  description: 'IRIS Junior Entreprise : propulsez votre potentiel.',
+  title: 'IRIS Junior Entreprise — Services web, marketing et études à Sfax',
+  description: 'IRIS Junior Entreprise, junior-entreprise de l\'ENIS à Sfax : web, mobile, branding, marketing et études de marché.',
 };
 
 export const viewport: Viewport = {

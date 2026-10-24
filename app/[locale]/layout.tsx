@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     default: 'IRIS Junior Entreprise',
     template: '%s | IRIS Junior Entreprise',
   },
-  description: 'IRIS Junior Entreprise — Propulsez votre potentiel',
+  description: 'IRIS Junior Entreprise, junior-entreprise de l\'ENIS à Sfax : web, mobile, branding, marketing et études de marché.',
   manifest: '/manifest.json?v=2',
   icons: {
     icon: [
