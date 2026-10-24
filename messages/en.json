@@ -1,8 +1,8 @@
 {
   "HomePage": {
     "meta": {
-      "title": "IRIS Junior Entreprise — Boost your potential",
-      "description": "IRIS Junior Entreprise supports entrepreneurs, startups and SMEs with innovative solutions in IT, business and marketing. Boost your potential with IRIS JE.",
+      "title": "IRIS Junior Entreprise — Web, Marketing & Research in Sfax",
+      "description": "IRIS Junior Entreprise, the junior enterprise of ENIS in Sfax: web and mobile development, branding, marketing and market research for startups and SMEs.",
       "keywords": "junior enterprise, consulting, IT, marketing, business, ENIS, Sfax"
     },
     "hero": {
@@ -104,8 +104,8 @@
   },
   "ServicesPage": {
     "meta": {
-      "title": "Services | IRIS Junior Entreprise",
-      "description": "Discover our services in IT, Marketing and Business. We put our expertise at the service of your projects.",
+      "title": "Web, Marketing & Research Services | IRIS Junior Entreprise",
+      "description": "Web and mobile development, chatbots, branding, community management and market research by IRIS Junior Entreprise, the junior enterprise of ENIS in Sfax.",
       "keywords": "services, IT, web development, marketing, business, consulting"
     },
     "hero": {
@@ -186,8 +186,8 @@
   },
   "DevisPage": {
     "meta": {
-      "title": "Quote request | IRIS Junior Entreprise",
-      "description": "Request a personalized quote for your IT, Marketing or Business projects from IRIS Junior Entreprise.",
+      "title": "Web, Marketing & Research Quote | IRIS Junior Entreprise",
+      "description": "Describe your project (web, mobile, branding, market research) and get a tailored quote from IRIS Junior Entreprise, the junior enterprise of ENIS in Sfax.",
       "keywords": "quote, request, project, budget, deadline, IT, marketing, business"
     },
     "hero": {
@@ -274,8 +274,8 @@
   },
   "ContactPage": {
     "meta": {
-      "title": "Contact | IRIS Junior Entreprise",
-      "description": "Contact IRIS Junior Entreprise for any information, quote or partnership request.",
+      "title": "Contact & Partnerships | IRIS Junior Entreprise",
+      "description": "Contact IRIS Junior Entreprise, the junior enterprise of ENIS in Sfax, for information, a quote request, a partnership or sponsorship.",
       "keywords": "contact, IRIS JE, quote, partnership, sponsoring"
     },
     "hero": {
@@ -345,8 +345,8 @@
   },
   "AboutPage": {
     "meta": {
-      "title": "About | IRIS Junior Entreprise",
-      "description": "Discover IRIS Junior Entreprise, the Junior-Creation of ENIS. Our mission, vision, values and team.",
+      "title": "About the ENIS Junior Enterprise | IRIS Junior Entreprise",
+      "description": "Discover IRIS Junior Entreprise, the junior enterprise of ENIS in Sfax: our mission, vision, values, team and projects.",
       "keywords": "about, IRIS JE, ENIS, mission, values, team"
     },
     "hero": {
@@ -661,8 +661,8 @@
   },
   "FAQPage": {
     "meta": {
-      "title": "FAQ | IRIS Junior Entreprise",
-      "description": "Frequently asked questions about IRIS Junior Entreprise: services, recruitment, quotes, operations and more.",
+      "title": "FAQ: Services, Quotes & How We Work | IRIS Junior Entreprise",
+      "description": "Answers to frequently asked questions about IRIS Junior Entreprise: our services, quote requests, contact and how a junior enterprise works.",
       "keywords": "FAQ, frequently asked questions, recruitment, services, IRIS JE"
     },
     "hero": {

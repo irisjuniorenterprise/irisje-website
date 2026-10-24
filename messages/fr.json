@@ -1,8 +1,8 @@
 {
   "HomePage": {
     "meta": {
-      "title": "IRIS Junior Entreprise — Boostez votre potentiel",
-      "description": "IRIS Junior Entreprise accompagne les entrepreneurs, startups et PME avec des solutions innovantes en IT, études et marketing. Boostez votre potentiel avec IRIS JE.",
+      "title": "IRIS Junior Entreprise — Services web, marketing et études à Sfax",
+      "description": "IRIS Junior Entreprise, junior-entreprise de l'ENIS à Sfax : développement web et mobile, branding, marketing et études de marché pour startups et PME.",
       "keywords": "junior entreprise, conseil, IT, marketing, études, ENIS, Sfax"
     },
     "hero": {
@@ -104,8 +104,8 @@
   },
   "ServicesPage": {
     "meta": {
-      "title": "Services | IRIS Junior Entreprise",
-      "description": "Découvrez nos services en IT, Marketing et Business. Nous mettons notre expertise au service de vos projets.",
+      "title": "Services web, marketing et études | IRIS Junior Entreprise",
+      "description": "Développement web et mobile, chatbots, branding, community management et études de marché par IRIS Junior Entreprise, junior-entreprise de l'ENIS à Sfax.",
       "keywords": "services, IT, développement web, marketing, études, conseil"
     },
     "hero": {
@@ -186,8 +186,8 @@
   },
   "DevisPage": {
     "meta": {
-      "title": "Demande de devis | IRIS Junior Entreprise",
-      "description": "Demandez un devis personnalisé pour vos projets IT, Marketing ou Business auprès d'IRIS Junior Entreprise.",
+      "title": "Devis web, marketing et études | IRIS Junior Entreprise",
+      "description": "Décrivez votre projet (web, mobile, branding, études de marché) et recevez un devis personnalisé d'IRIS Junior Entreprise, junior-entreprise de l'ENIS à Sfax.",
       "keywords": "devis, demande, projet, budget, délai, IT, marketing, études"
     },
     "hero": {
@@ -274,8 +274,8 @@
   },
   "ContactPage": {
     "meta": {
-      "title": "Contact | IRIS Junior Entreprise",
-      "description": "Contactez IRIS Junior Entreprise pour toute information, demande de devis ou de partenariat.",
+      "title": "Contact et partenariats | IRIS Junior Entreprise",
+      "description": "Contactez IRIS Junior Entreprise, junior-entreprise de l'ENIS à Sfax, pour une information, une demande de devis, un partenariat ou un sponsoring.",
       "keywords": "contact, IRIS JE, devis, partenariat, sponsoring"
     },
     "hero": {
@@ -345,8 +345,8 @@
   },
   "AboutPage": {
     "meta": {
-      "title": "À propos | IRIS Junior Entreprise",
-      "description": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS. Notre mission, notre vision, nos valeurs et notre équipe.",
+      "title": "À propos – Junior-entreprise de l'ENIS | IRIS Junior Entreprise",
+      "description": "Découvrez IRIS Junior Entreprise, la Junior-Création de l'ENIS à Sfax : notre mission, notre vision, nos valeurs, notre équipe et nos projets.",
       "keywords": "à propos, IRIS JE, ENIS, mission, valeurs, équipe"
     },
     "hero": {
@@ -661,8 +661,8 @@
   },
   "FAQPage": {
     "meta": {
-      "title": "FAQ | IRIS Junior Entreprise",
-      "description": "Foire aux questions concernant IRIS Junior Entreprise : services, recrutement, devis, fonctionnement et plus encore.",
+      "title": "FAQ : services, devis et fonctionnement | IRIS Junior Entreprise",
+      "description": "Réponses aux questions fréquentes sur IRIS Junior Entreprise : services proposés, demande de devis, contact et fonctionnement d'une junior-entreprise.",
       "keywords": "FAQ, foire aux questions, recrutement, services, IRIS JE"
     },
     "hero": {

@@ -1,8 +1,8 @@
 {
   "HomePage": {
     "meta": {
-      "title": "IRIS Junior Entreprise — ارتقِ بإمكاناتك",
-      "description": "ترافق IRIS Junior Entreprise رواد الأعمال والشركات الناشئة والصغرى والمتوسطة بحلول مبتكرة في مجالات تكنولوجيا المعلومات، الدراسات، والتسويق. ارتقِ بإمكاناتك معنا.",
+      "title": "IRIS Junior Entreprise — خدمات الويب والتسويق والدراسات في صفاقس",
+      "description": "IRIS Junior Entreprise، المؤسسة الطلابية المصغرة بالمدرسة الوطنية للمهندسين بصفاقس: تطوير مواقع وتطبيقات، هوية بصرية، تسويق ودراسات سوق للشركات الناشئة والصغرى والمتوسطة.",
       "keywords": "مؤسسة طلابية مصغرة, استشارات, تكنولوجيا المعلومات, تسويق, دراسات, المدرسة الوطنية للمهندسين بصفاقس, صفاقس"
     },
     "hero": {
@@ -104,8 +104,8 @@
   },
   "ServicesPage": {
     "meta": {
-      "title": "الخدمات | IRIS Junior Entreprise",
-      "description": "اكتشف خدماتنا في تكنولوجيا المعلومات، التسويق، والأعمال. نضع خبراتنا في خدمة مشاريعك.",
+      "title": "خدمات الويب والتسويق والدراسات | IRIS Junior Entreprise",
+      "description": "تطوير المواقع والتطبيقات، روبوتات المحادثة، الهوية البصرية، إدارة المجتمعات الرقمية ودراسات السوق مع IRIS Junior Entreprise بصفاقس.",
       "keywords": "خدمات, تكنولوجيا المعلومات, تطوير الويب, تسويق, دراسات, استشارات"
     },
     "hero": {
@@ -186,8 +186,8 @@
   },
   "DevisPage": {
     "meta": {
-      "title": "طلب عرض سعر | IRIS Junior Entreprise",
-      "description": "اطلب عرض سعر مخصص لمشاريعك في تكنولوجيا المعلومات، التسويق أو الأعمال من IRIS Junior Entreprise.",
+      "title": "عرض سعر: ويب وتسويق ودراسات | IRIS Junior Entreprise",
+      "description": "صِف مشروعك (ويب، تطبيقات، هوية بصرية، دراسات سوق) واحصل على عرض سعر مخصص من IRIS Junior Entreprise بصفاقس.",
       "keywords": "عرض سعر, طلب, مشروع, ميزانية, مهلة, تكنولوجيا المعلومات, تسويق, دراسات"
     },
     "hero": {
@@ -274,8 +274,8 @@
   },
   "ContactPage": {
     "meta": {
-      "title": "اتصل بنا | IRIS Junior Entreprise",
-      "description": "اتصل بIRIS Junior Entreprise للحصول على أي معلومات، أو لطلب عرض سعر أو شراكة.",
+      "title": "اتصل بنا والشراكات | IRIS Junior Entreprise",
+      "description": "تواصل مع IRIS Junior Entreprise بصفاقس للاستفسار أو طلب عرض سعر أو الشراكة أو الرعاية.",
       "keywords": "اتصال, IRIS Junior Entreprise, عرض سعر, شراكة, رعاية"
     },
     "hero": {
@@ -345,8 +345,8 @@
   },
   "AboutPage": {
     "meta": {
-      "title": "من نحن | IRIS Junior Entreprise",
-      "description": "تعرف على IRIS Junior Entreprise، المؤسسة المصغرة التابعة لـ ENIS. مهمتنا، ورؤيتنا، وقيمنا وفريقنا.",
+      "title": "من نحن: المؤسسة الطلابية المصغرة بـ ENIS | IRIS Junior Entreprise",
+      "description": "تعرّف على IRIS Junior Entreprise بالمدرسة الوطنية للمهندسين بصفاقس: مهمتنا ورؤيتنا وقيمنا وفريقنا ومشاريعنا.",
       "keywords": "من نحن, IRIS Junior Entreprise, ENIS, مهمة, قيم, فريق"
     },
     "hero": {
@@ -661,8 +661,8 @@
   },
   "FAQPage": {
     "meta": {
-      "title": "الأسئلة الشائعة | IRIS Junior Entreprise",
-      "description": "الأسئلة الشائعة حول IRIS Junior Entreprise: الخدمات، التوظيف، عروض الأسعار، طريقة العمل والمزيد.",
+      "title": "الأسئلة الشائعة: الخدمات وعروض الأسعار | IRIS Junior Entreprise",
+      "description": "إجابات عن أسئلتكم حول IRIS Junior Entreprise: الخدمات، طلب عرض سعر، والتواصل وسير العمل.",
       "keywords": "أسئلة شائعة, توظيف, خدمات, IRIS Junior Entreprise"
     },
     "hero": {
