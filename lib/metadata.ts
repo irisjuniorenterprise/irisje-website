@@ -137,8 +137,8 @@ export async function buildMetadata({
       title,
       description,
       images: [image],
-      site: '@IRIS_JE',
-      creator: '@IRIS_JE',
+      site: '@irisjuniorentre',
+      creator: '@irisjuniorentre',
     },
     other: {
       // Signaux géographiques (secondaires, mais cohérents avec le JSON-LD)
