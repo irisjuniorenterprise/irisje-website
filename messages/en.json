@@ -487,7 +487,20 @@
       "contact_github": "View GitHub profile",
       "contact_phone": "Call"
     },
-    "stars_label": "Rating"
+    "stars_label": "Rating",
+    "missions": {
+      "president": "Carries the firm's vision, represents IRIS Junior Entreprise to its partners and steers the board.",
+      "treasurer": "Tracks the budget, income and spending, keeping every mission's finances transparent.",
+      "secretary_general": "Keeps the minutes, archives and board decisions, and runs the day-to-day life of the association.",
+      "hr_training": "Welcomes, trains and coaches members, and builds the team's skills paths.",
+      "project": "Oversees consulting engagements from pitch to delivery and arbitrates priorities across departments.",
+      "it": "Designs and builds the technical solutions (websites, apps, internal tools) of our engagements.",
+      "studies": "Runs studies, analysis and benchmarks, producing the figures and recommendations behind them.",
+      "business_dev": "Grows the client portfolio, prepares proposals and builds the firm's partnerships.",
+      "marketing": "Carries the firm's image: content, social media, events and communication with students.",
+      "quality": "Checks deliverable quality and method compliance, measures client satisfaction and reuses the feedback.",
+      "assistant": "Supports their manager with the department's day-to-day work and stands in when they are away."
+    }
   },
   "RecruitmentPage": {
     "meta": {

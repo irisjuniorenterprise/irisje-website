@@ -487,7 +487,20 @@
       "contact_github": "Voir le profil GitHub",
       "contact_phone": "Appeler"
     },
-    "stars_label": "Note"
+    "stars_label": "Note",
+    "missions": {
+      "president": "Porte la vision du cabinet, représente IRIS Junior Entreprise auprès des partenaires et pilote le bureau.",
+      "treasurer": "Suit le budget, les encaissements et les dépenses, et garantit la traçabilité financière de chaque mission.",
+      "secretary_general": "Tient les comptes rendus, les archives et les décisions du bureau, et organise la vie associative au quotidien.",
+      "hr_training": "Accueille, forme et accompagne les membres, et construit les parcours de compétences de l'équipe.",
+      "project": "Supervise les missions de conseil, de la proposition commerciale à la livraison, et arbitre les priorités entre les pôles.",
+      "it": "Conçoit et développe les solutions techniques (sites, applications, outils internes) des missions confiées au cabinet.",
+      "studies": "Réalise les études, analyses et benchmarks, et produit les livrables chiffrés ainsi que les recommandations.",
+      "business_dev": "Développe le portefeuille clients, prépare les propositions commerciales et noue les partenariats du cabinet.",
+      "marketing": "Porte l'image du cabinet : contenus, réseaux sociaux, événements et communication auprès des étudiants.",
+      "quality": "Contrôle la qualité des livrables et le respect des méthodes, mesure la satisfaction client et capitalise les retours.",
+      "assistant": "Appuie son responsable sur les tâches courantes de son pôle et le remplace en son absence."
+    }
   },
   "RecruitmentPage": {
     "meta": {
