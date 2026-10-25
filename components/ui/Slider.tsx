@@ -70,13 +70,14 @@ const LABELS = {
 // ----------------------------------------------------------
 // Tempo FIXE : chaque diapositive reste affichée la même durée,
 // quel que soit son contenu. Modifiable via la prop `interval`.
+// 7 s : laisse le temps de lire le texte, transition (≈0,9 s) comprise.
 // ============================================================
-const DEFAULT_INTERVAL_MS = 5000;
+const DEFAULT_INTERVAL_MS = 7000;
 
 type SliderProps = {
   slides: Slide[];
   autoplay?: boolean;
-  /** Durée fixe par diapositive, en millisecondes (défaut : 5000). */
+  /** Durée fixe par diapositive, en millisecondes (défaut : 7000). */
   interval?: number;
   className?: string;
   locale?: string;
@@ -98,10 +99,12 @@ const getReducedMotion = () =>
 // (transform: translate3d en pixels), sans passer par l'état
 // React : un changement de diapositive ne fait qu'une écriture.
 // ============================================================
-const SETTLE_MS = 500;       // durée pour une diapositive voisine
-const SETTLE_EXTRA_MS = 120; // + par diapositive supplémentaire franchie
-const MAX_SETTLE_MS = 900;   // plafond : un long trajet reste vif
-const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const SETTLE_MS = 900;       // durée pour une diapositive voisine (douce, non brusque)
+const SETTLE_EXTRA_MS = 200; // + par diapositive supplémentaire franchie
+const MAX_SETTLE_MS = 1500;  // plafond : le retour 1re↔dernière reste fluide, sans balayage éclair
+// ease-in-out : démarrage et arrivée progressifs, vitesse régulière au milieu
+// (l'ancienne courbe « expo-out » faisait l'essentiel du trajet en ~150 ms).
+const EASING = 'cubic-bezier(0.45, 0, 0.25, 1)';
 
 // ============================================================
 // GLISSEMENT (DOIGT + SOURIS)
