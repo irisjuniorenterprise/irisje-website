@@ -528,8 +528,14 @@ export default function Slider({
       if (now - w.lastEventAt > WHEEL_PAUSE_MS) w.accum = 0;
       w.lastEventAt = now;
 
-      // Verrou post-validation : absorbe l'inertie du trackpad
-      if (now < w.lockedUntil) return;
+      // Verrou post-validation : absorbe l'inertie du trackpad.
+      // Safari (macOS) prolonge l'inertie bien au-delà de WHEEL_LOCK_MS : tant
+      // que des événements arrivent, le verrou est RENOUVELÉ. Il ne se libère
+      // qu'après un vrai silence → un geste = un seul changement.
+      if (now < w.lockedUntil) {
+        w.lockedUntil = now + WHEEL_LOCK_MS;
+        return;
+      }
 
       w.accum += e.deltaX;
       if (Math.abs(w.accum) < WHEEL_THRESHOLD) return;
