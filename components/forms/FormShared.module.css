@@ -96,6 +96,7 @@
   color: var(--text-primary);
   padding: 0 0.5rem;
   background: var(--surface-card-alt);
+  border-radius: var(--radius-sm);
   max-width: calc(100% - 1rem);
   margin-bottom: 0.25rem;
 }
