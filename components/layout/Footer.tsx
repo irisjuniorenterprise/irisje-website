@@ -35,6 +35,11 @@ const socialIcons = {
       <path d="M16.6 5.4a4.5 4.5 0 0 1-3.18-1.83V14.9a4.65 4.65 0 1 1-4-4.6v2.36a2.3 2.3 0 1 0 1.62 2.2V2.6h2.3a4.5 4.5 0 0 0 3.26 4.13V9a6.8 6.8 0 0 1-3.26-1.04v.01-.01z" />
     </svg>
   ),
+  x: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  ),
 };
 
 export default function Footer() {
@@ -97,6 +102,7 @@ export default function Footer() {
               <a href="https://www.instagram.com/iris.junior.creation/" aria-label="Instagram">{socialIcons.instagram}</a>
               <a href="https://github.com/irisjuniorenterprise" aria-label="GitHub">{socialIcons.github}</a>
               <a href="https://www.tiktok.com/@iris.junior.entreprise" aria-label="TikTok">{socialIcons.tiktok}</a>
+              <a href="https://x.com/irisjuniorentre" aria-label="X">{socialIcons.x}</a>
             </div>
           </div>
         </div>
