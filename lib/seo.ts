@@ -108,6 +108,7 @@ export const ORGANIZATION = {
     'https://www.instagram.com/iris.junior.creation/',
     'https://github.com/irisjuniorenterprise',
     'https://www.tiktok.com/@iris.junior.entreprise',
+    'https://x.com/irisjuniorentre',
   ],
 };
 
