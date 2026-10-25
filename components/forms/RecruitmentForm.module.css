@@ -75,9 +75,12 @@
   font-weight: 700;
   font-size: 1rem;
   color: var(--text-primary);
-  padding: 0 0.5rem;
+  padding: 0.3rem 0.85rem;
+  /* Titre en « pastille » sans bordure : coins arrondis, même fond que le
+     fieldset (opaque : il masque le trait du fieldset qui passe derrière) */
   background: var(--surface);
   border-radius: var(--radius-sm);
+  transition: color 0.3s ease;
   width: auto;
   margin-bottom: 0.25rem;
 }
