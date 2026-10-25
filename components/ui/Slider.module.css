@@ -486,12 +486,38 @@
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — MOBILE (≤ 768 px)
+   ----------------------------------------------------------
+   Principes de la refonte mobile :
+   1. Une carte de LECTURE, pas une bannière rétrécie : icône +
+      titre sur une ligne, description complète, bouton d'action.
+   2. Texte aligné au début de ligne (jamais justifié ni centré
+      sur plusieurs lignes), 15 px minimum, jamais tronqué.
+   3. Plus de chevrons : le glissement au doigt, les points
+      (cibles de 24 px, alternative sans glisser) et les flèches
+      du clavier suffisent ; la colonne de texte gagne ≈ 70 px.
+   4. Les commandes (points + pause) vivent dans une RANGÉE
+      dédiée sous la carte, au lieu de recouvrir le contenu.
+   5. L'illustration de fond est conservée mais CONFINÉE dans une
+      bande en haut de carte (--band) : le texte commence toujours
+      sous la bande, il ne peut donc jamais passer sur l'image,
+      quelles que soient la langue, la longueur du texte ou la
+      taille de police. L'icône chevauche le bord de la bande.
+   6. Le bouton d'action est un vrai bouton (≥ 44 px de haut),
+      aligné en bas de carte : même position d'une diapositive
+      à l'autre.
    ============================================================ */
 @media (max-width: 768px) {
-  /* Hauteur pilotée par le contenu (et non par un ratio fixe) : la diapositive la plus
-     haute fixe la hauteur de toutes, donc le texte n'est jamais rogné, quelle que soit
-     la largeur, la langue (fr/en/ar) ou la taille de police du système. */
+  /* --- Carte et rangée de commandes ------------------------- */
+  .slider {
+    margin: 1rem 0;
+    /* Réserve la rangée de commandes (points + pause) sous les diapositives */
+    padding-bottom: 52px;
+  }
+
+  /* Hauteur pilotée par le contenu : la diapositive la plus haute fixe la
+     hauteur de toutes, donc aucun texte n'est jamais rogné, quelle que soit
+     la langue (fr/en/ar) ou la taille de police du système. */
   .sliderContainer {
     aspect-ratio: auto;
     min-height: 0;
@@ -501,225 +527,253 @@
     height: auto;
   }
 
+  /* --- Diapositive ------------------------------------------ */
   .slide {
-    /* padding latéral réduit (chevrons 32px) + padding-bottom réservé pour les dots */
-    padding: 1.25rem 2.75rem 2.75rem;
-    align-items: flex-start;
-    padding-top: 1.5rem;
+    /* Hauteur de la bande d'illustration : fluide, bornée (≈ 3,7:1 à 375 px,
+       soit presque tout le visuel 16:5 d'origine) ; plafonnée pour les tablettes */
+    --band: clamp(76px, 22vw, 120px);
+    --icon: 44px;
+
     height: auto;
-    min-height: 200px;
+    min-height: 0;
+    align-items: stretch; /* le bloc de contenu occupe toute la hauteur */
+    /* Le contenu démarre TOUJOURS sous la bande : aucune interférence possible */
+    padding: calc(var(--band) + 0.875rem) 1.25rem 1.375rem;
   }
 
-  /* Mobile : l'illustration est recadrée sur la droite et atténuée par un voile
-     clair pour que le texte reste parfaitement lisible */
-  .slideWithImage .slideContent {
-    padding: 0.5rem 0.75rem;
-    border-radius: 18px;
-    box-shadow: 0 0 16px 10px rgba(255, 255, 255, 0.82);
+  /* --- Fond : bande illustrée en haut, surface unie dessous ---
+     Calques (du dessus au dessous) :
+       1. fondu vers la surface en bas de la bande (raccord sans arête) ;
+       2. illustration SVG, recadrée dans la bande (`slice` déjà défini dans
+          chaque SVG) et fusionnée en `multiply` avec…
+       3. …une teinte bleu marque : sans elle, les motifs (très pâles) se
+          perdent sur le blanc ;
+       4. dégradé de surface sur toute la carte (zone de lecture, unie).
+     La bande ne couvre QUE le haut : le texte reste sur fond uni. */
+  .slide {
+    background-image:
+      linear-gradient(to bottom, rgba(255, 255, 255, 0) 55%, var(--surface) 100%),
+      linear-gradient(120deg, #cfdff5 0%, #e8f0fb 55%, #d6e6f8 100%),
+      linear-gradient(180deg, var(--surface) 0%, var(--background) 100%);
+    background-size: 100% calc(var(--band) + 1px), 100% var(--band), auto;
+    background-position: 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-blend-mode: normal, normal, normal;
   }
 
   .slideWithImage {
     background-image:
-      linear-gradient(rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.6)),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0) 55%, var(--surface) 100%),
       var(--slide-bg),
-      linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
-    background-size: auto, cover, auto;
-    background-position: 0 0, 100% center, 0 0;
-    background-repeat: no-repeat, no-repeat, no-repeat;
+      linear-gradient(120deg, #cfdff5 0%, #e8f0fb 55%, #d6e6f8 100%),
+      linear-gradient(180deg, var(--surface) 0%, var(--background) 100%);
+    background-size: 100% calc(var(--band) + 1px), 100% var(--band), 100% var(--band), auto;
+    /* Illustration ancrée en haut : sur tablette (bande large), on garde les motifs
+       du haut entiers plutôt que de les couper par le milieu. */
+    background-position: 0 0, 50% 0, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-blend-mode: normal, multiply, normal, normal;
   }
 
+  /* Plus de voile blanc derrière le texte : il n'est plus nécessaire, le
+     texte ne chevauche jamais l'illustration. */
+  .slideWithImage .slideContent {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  /* --- Contenu : grille « icône + titre / texte / bouton » --- */
   .slideContent {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-    margin: auto 0; /* centre verticalement le bloc dans l'espace restant au-dessus des dots */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'title icon'
+      'desc  desc'
+      'cta   cta';
+    column-gap: 0.875rem;
+    row-gap: 0.75rem;
+    align-items: start;
+    max-width: 40rem;
+    margin: 0 auto;
+    text-align: start;
   }
 
-  .slider.rtl .slideContent {
-    flex-direction: column;
-  }
-
+  /* Les enfants du bloc texte deviennent des éléments de la grille. */
   .slideText {
-    width: 100%;
+    display: contents;
   }
 
-  /* Sur mobile le texte est centré : la justification crée des espacements
-     disgracieux sur colonnes étroites, donc on centre proprement */
-  .slideDescription,
-  .slider.rtl .slideDescription {
-    text-align: center;
-    text-align-last: center;
-    hyphens: auto;
+  /* L'arabe se lit de droite à gauche : le conteneur du slider est forcé en
+     LTR (pour le glissement), on rétablit RTL à l'intérieur de la carte. */
+  .slider.rtl .slideContent {
+    direction: rtl;
+    flex-direction: initial;
   }
 
-  .slider.rtl .slideText {
-    text-align: center;
-  }
-
+  /* L'icône est à la FIN de la ligne du titre (à droite en LTR, à gauche en
+     RTL : la grille suit `direction`) et chevauche le bord inférieur de la
+     bande : son centre est exactement sur l'arête. Un anneau de la couleur de
+     la carte la détache de l'illustration. */
   .slideIcon {
-    width: 44px;
-    height: 44px;
+    grid-area: icon;
+    align-self: start;
+    box-sizing: border-box;
+    width: var(--icon);
+    height: var(--icon);
+    margin-top: calc(-1 * (var(--icon) / 2 + 0.875rem));
+    border: 3px solid var(--surface);
+    box-shadow: 0 4px 12px rgba(26, 57, 105, 0.25);
   }
 
   .slideIcon svg {
-    width: 22px;
-    height: 22px;
+    width: calc(var(--icon) / 2);
+    height: calc(var(--icon) / 2);
   }
 
+  /* Pas d'icône qui flotte à côté d'un titre : le mouvement distrait de la
+     lecture, et coûte de la batterie pour rien. */
+  .slideActive .slideIcon {
+    animation: none;
+  }
+
+  /* --- Typographie : 15 px mini, aligné au début de ligne ---- */
   .slideTitle {
-    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    grid-area: title;
+    margin: 0;
+    font-size: clamp(1.0625rem, 4.8vw, 1.3125rem);
+    line-height: 1.25;
+    text-wrap: balance;
   }
 
-  .slideDescription {
-    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
-    /* limite le nombre de lignes affichées pour éviter tout débordement vers les dots */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .slideDescription,
+  .slider.rtl .slideDescription {
+    grid-area: desc;
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    text-align: start;
+    text-align-last: auto;
+    text-justify: auto;
+    hyphens: auto;
+    /* Plus aucune troncature (line-clamp) : tout le texte est lisible. */
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
   }
 
-  .navButton,
-  .autoPlayToggle {
-    width: 32px;
-    height: 32px;
-    top: 38%; /* remonté légèrement pour ne pas chevaucher la zone des dots */
+  /* --- Bouton d'action : cible tactile ≥ 44 px, bas de carte -- */
+  .slideCta {
+    grid-area: cta;
+    justify-self: start;
+    align-self: end;
+    min-height: 44px;
+    margin-top: 0.25rem;
+    padding: 0.5rem 1.125rem;
+    gap: 0.375rem;
+    border: 2px solid transparent; /* reste visible en mode contraste forcé */
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 0.9375rem;
+    line-height: 1.25;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
-  .navButton svg,
-  .autoPlayToggle svg {
-    width: 18px;
-    height: 18px;
+  /* Écrase le survol « lien » de base (couleur secondaire, écart qui grandit) :
+     sur écran tactile, il resterait « collé » après l'appui. */
+  .slideCta:hover {
+    color: var(--on-primary);
+    gap: 0.375rem;
   }
 
-  .navPrev {
-    left: 6px;
+  .slideCta:hover svg {
+    transform: none;
   }
 
-  .navNext {
-    right: 6px;
+  .slideCta:active {
+    transform: scale(0.97);
+    background: #122a52; /* bleu marque assombri : l'orange --secondary ne tient que 3,2:1 avec du texte blanc */
   }
 
-  .slider.rtl .navPrev {
-    right: 6px;
-    left: auto;
+  .slideCta:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
   }
 
-  .slider.rtl .navNext {
-    left: 6px;
-    right: auto;
+  /* En RTL, direction: rtl range déjà le libellé à droite et l'icône à
+     gauche : on annule l'inversion supplémentaire de la règle de base. */
+  .slider.rtl .slideCta {
+    flex-direction: row;
+  }
+
+  /* --- Commandes ---------------------------------------------
+     Les chevrons disparaissent (glissement + points + clavier).
+     Les points et la pause se calent dans la rangée du bas. */
+  .navButton {
+    display: none;
   }
 
   .dots {
-    bottom: 8px;
-    padding: 4px 10px;
-    gap: 6px;
+    bottom: 14px; /* (52 − 24) / 2 : centré dans la rangée de 52 px */
+    gap: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
   }
 
-  /* Même taille que les chevrons (héritée ci-dessus) ; seule la
-     position change : calé en bas à droite, sur la ligne des points. */
+  /* Le bouton garde 24×24 px (cible tactile, WCAG 2.5.8) ; seul le point est dessiné plus petit. */
+  .dot::before {
+    width: 8px;
+    height: 8px;
+  }
+
+  .dotActive::before {
+    width: 20px;
+  }
+
   .autoPlayToggle {
     top: auto;
-    bottom: 8px;
-    right: 8px;
+    bottom: 10px; /* (52 − 32) / 2 */
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    box-shadow: none;
   }
 
   .slider.rtl .autoPlayToggle {
     right: auto;
-    left: 8px;
+    left: 12px;
   }
 
-  /* Le bouton garde 24×24 px (cible tactile) ; seul le point rétrécit. */
-  .dot::before {
-    width: 7px;
-    height: 7px;
-  }
-
-  .dotActive::before {
-    width: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .slide {
-    padding: 1rem 2.25rem 2.5rem;
-    min-height: 220px; /* garantit l'espace pour texte + dots */
-  }
-
-  .slideIcon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .slideIcon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .slideTitle {
-    font-size: 0.95rem;
-  }
-
-  .slideDescription {
-    font-size: 0.8rem;
-    -webkit-line-clamp: 2; /* encore plus restrictif sur très petit écran */
-  }
-
-  .navButton,
-  .autoPlayToggle {
-    width: 28px;
-    height: 28px;
-    top: 35%;
-  }
-
-  .navButton svg,
   .autoPlayToggle svg {
     width: 16px;
     height: 16px;
   }
+}
 
-  .navPrev {
-    left: 4px;
+/* Très petits écrans (≤ 380 px) : on resserre sans réduire la lisibilité */
+@media (max-width: 380px) {
+  .slide {
+    --icon: 40px;
+    padding: calc(var(--band) + 0.875rem) 1rem 1.25rem;
   }
 
-  .navNext {
-    right: 4px;
+  .slideContent {
+    column-gap: 0.75rem;
   }
+}
 
-  .slider.rtl .navPrev {
-    right: 4px;
-    left: auto;
-  }
-
-  .slider.rtl .navNext {
-    left: 4px;
-    right: auto;
-  }
-
-  .dots {
-    bottom: 6px;
-    padding: 3px 8px;
-    gap: 5px;
-  }
-
-  .autoPlayToggle {
-    top: auto;
-    bottom: 5px;
-    right: 6px;
-  }
-
-  .slider.rtl .autoPlayToggle {
-    right: auto;
-    left: 6px;
-  }
-
-  /* Le bouton garde 24×24 px (cible tactile) ; seul le point rétrécit. */
-  .dot::before {
-    width: 6px;
-    height: 6px;
-  }
-
-  .dotActive::before {
-    width: 14px;
+/* Téléphones : le bouton prend toute la largeur et se centre (cible tactile maximale,
+   et pas de pastille étroite qui casse un libellé long en deux lignes). */
+@media (max-width: 480px) {
+  .slideCta {
+    justify-self: stretch;
+    justify-content: center;
+    text-align: center;
   }
 }
