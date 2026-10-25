@@ -94,9 +94,12 @@
   font-weight: 700;
   font-size: 1rem;
   color: var(--text-primary);
-  padding: 0 0.5rem;
+  padding: 0.3rem 0.85rem;
+  /* Titre en « pastille » sans bordure : coins arrondis, même fond que le
+     fieldset (opaque : il masque le trait du fieldset qui passe derrière) */
   background: var(--surface-card-alt);
   border-radius: var(--radius-sm);
+  transition: color var(--t-base);
   max-width: calc(100% - 1rem);
   margin-bottom: 0.25rem;
 }
