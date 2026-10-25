@@ -470,7 +470,24 @@
       "business_dev": "Adjoint(e) Dev-Co",
       "marketing": "Adjoint(e) Marketing",
       "quality": "Adjoint(e) Qualité"
-    }
+    },
+    "card": {
+      "open": "Ouvrir la fiche de {name}",
+      "dialog": "Fiche de {name}",
+      "about": "À propos",
+      "mission": "Mission",
+      "team_count": "{count, plural, one {# personne} other {# personnes}}",
+      "since": "Membre depuis {since}",
+      "close": "Fermer",
+      "reports_to": "Rattaché à",
+      "team": "Équipe",
+      "pin_hint": "Cliquez pour fixer la fiche",
+      "contact_email": "Envoyer un e-mail",
+      "contact_linkedin": "Voir le profil LinkedIn",
+      "contact_github": "Voir le profil GitHub",
+      "contact_phone": "Appeler"
+    },
+    "stars_label": "Note"
   },
   "RecruitmentPage": {
     "meta": {

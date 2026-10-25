@@ -470,7 +470,24 @@
       "business_dev": "مساعد(ة) التطوير التجاري",
       "marketing": "مساعد(ة) التسويق",
       "quality": "مساعد(ة) الجودة"
-    }
+    },
+    "card": {
+      "open": "فتح بطاقة {name}",
+      "dialog": "بطاقة {name}",
+      "about": "نبذة",
+      "mission": "المهمة",
+      "team_count": "{count, plural, zero {# أفراد} one {فرد واحد} two {فردان} few {# أفراد} many {# فرداً} other {# فرداً}}",
+      "since": "عضو منذ {since}",
+      "close": "إغلاق",
+      "reports_to": "يتبع لـ",
+      "team": "الفريق",
+      "pin_hint": "انقر لتثبيت البطاقة",
+      "contact_email": "إرسال بريد إلكتروني",
+      "contact_linkedin": "عرض ملف LinkedIn",
+      "contact_github": "عرض ملف GitHub",
+      "contact_phone": "اتصال"
+    },
+    "stars_label": "التقييم"
   },
   "RecruitmentPage": {
     "meta": {

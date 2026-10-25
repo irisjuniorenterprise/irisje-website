@@ -470,7 +470,24 @@
       "business_dev": "Business Dev. Assistant",
       "marketing": "Marketing Assistant",
       "quality": "Quality Assistant"
-    }
+    },
+    "card": {
+      "open": "Open the profile of {name}",
+      "dialog": "Profile of {name}",
+      "about": "About",
+      "mission": "Mission",
+      "team_count": "{count, plural, one {# person} other {# people}}",
+      "since": "Member since {since}",
+      "close": "Close",
+      "reports_to": "Reports to",
+      "team": "Team",
+      "pin_hint": "Click to keep this card open",
+      "contact_email": "Send an email",
+      "contact_linkedin": "View LinkedIn profile",
+      "contact_github": "View GitHub profile",
+      "contact_phone": "Call"
+    },
+    "stars_label": "Rating"
   },
   "RecruitmentPage": {
     "meta": {
