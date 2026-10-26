@@ -1,0 +1,772 @@
+/* components/organigramme/MemberCard.module.css
+   ------------------------------------------------------------
+   Fiche membre (« member card ») de l'organigramme.
+
+   Elle s'ouvre au survol (souris, aperçu) et au clic / tap / Entrée (épinglée) :
+     • souris, fenêtre ≥ 640px : popover ancré à la carte, avec flèche, qui se
+       retourne au-dessus / en dessous selon la place disponible ;
+     • tactile ou petit écran  : bottom-sheet avec fond assombri.
+
+   Le calque est rendu dans <body> (portail) : il échappe donc au défilement
+   (.scroller) et aux transform des sections. Les variables locales de
+   Organigramme.module.css (.wrapper) n'y sont pas disponibles : celles dont la
+   fiche a besoin sont redéfinies dans .root. Seuls les tokens globaux
+   (--primary, --accent, --surface…) sont utilisés.
+
+   Forme « ticket » : deux moitiés (.top / .bottom) dont les coins de jonction
+   sont découpés au masque (encoches latérales) ; l'ombre est une série de
+   drop-shadow sur .mc, ce qui suit la silhouette découpée. RTL : propriétés
+   logiques partout, seules les coordonnées calculées en JS sont physiques.
+   Mouvement réduit : toutes les animations et l'inclinaison sont retirées.
+   ------------------------------------------------------------ */
+
+/* ============================================================
+   1. DÉCLENCHEUR — bouton transparent étiré sur toute la carte
+   (vrai <button> : clavier, lecteurs d'écran, focus natifs, sans
+   toucher à la structure des cartes ni des <li> des adjoints)
+   ============================================================ */
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hit:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   2. CALQUES
+   ============================================================ */
+.root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --mc-r: 1.35rem; /* rayon des coins de la fiche */
+  --mc-notch: 0.7rem; /* rayon des encoches latérales */
+  --banner-a: var(--primary);
+  --banner-b: color-mix(in srgb, var(--primary) 55%, var(--accent));
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  text-align: start;
+}
+
+/* Popover ancré : position (left / top) calculée en JS */
+.pop {
+  position: fixed;
+  z-index: 50; /* sous le header sticky (60) */
+  width: min(21.5rem, calc(100vw - 1.5rem));
+  pointer-events: none; /* seule la fiche (.mc) capte la souris */
+}
+
+/* Bottom-sheet (tactile / petit écran) */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 0.75rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #0b1a33 55%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: mcFade 0.25s ease backwards;
+}
+
+/* ============================================================
+   3. FICHE (conteneur + ombre + entrée)
+   ============================================================ */
+.mc {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
+  outline: none;
+  filter: drop-shadow(0 0 0.6px rgba(15, 23, 42, 0.5))
+    drop-shadow(0 4px 8px rgba(15, 23, 42, 0.12))
+    drop-shadow(0 18px 30px rgba(15, 23, 42, 0.24));
+  transform-origin: var(--arrow-x, 50%) 0;
+  animation: mcIn 0.4s var(--ease-spring) backwards;
+}
+
+.pop[data-placement='top'] .mc {
+  transform-origin: var(--arrow-x, 50%) 100%;
+  animation-name: mcInUp;
+}
+
+/* Pont invisible entre la carte et la fiche : le pointeur peut traverser
+   l'écart sans fermer l'aperçu */
+.pop .mc::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 1rem;
+}
+
+.pop[data-placement='bottom'] .mc::before {
+  top: -1rem;
+}
+
+.pop[data-placement='top'] .mc::before {
+  bottom: -1rem;
+}
+
+.sheet .mc {
+  width: min(100%, 27rem);
+  max-height: calc(100svh - 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform-origin: 50% 100%;
+  animation: mcSheetIn 0.45s var(--ease-out) backwards;
+}
+
+/* Teintes de bannière selon le bureau */
+.mc[data-tier='admin'] {
+  --banner-a: #0d2644;
+  --banner-b: color-mix(in srgb, var(--primary) 62%, var(--accent));
+}
+
+.mc[data-tier='exec'] {
+  --banner-a: var(--primary);
+  --banner-b: color-mix(in srgb, var(--primary) 52%, var(--accent));
+}
+
+.mc[data-tier='extended'] {
+  --banner-a: color-mix(in srgb, var(--primary) 72%, var(--accent));
+  --banner-b: var(--accent);
+}
+
+/* Flèche : pointe vers la carte, couleur de la moitié qui la touche */
+.arrow {
+  position: absolute;
+  left: var(--arrow-x, 50%);
+  z-index: -1;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: -0.55rem;
+  border-radius: 0.28rem;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.pop[data-placement='bottom'] .arrow {
+  top: -0.5rem;
+  background: var(--banner-a);
+}
+
+.pop[data-placement='top'] .arrow {
+  bottom: -0.5rem;
+  background: var(--surface);
+}
+
+/* Inclinaison 3D + reflet (piloté en JS : --rx, --ry, --mx, --my) */
+.tilt {
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.28s var(--ease-out);
+  will-change: transform;
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: var(--mc-r);
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255, 255, 255, 0.34),
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity 0.3s ease;
+}
+
+.tilt[data-tilt='on'] .glare {
+  opacity: 1;
+}
+
+/* ============================================================
+   4. MOITIÉ HAUTE — bannière, avatar, identité
+   ============================================================ */
+.top,
+.bottom {
+  position: relative;
+  background: var(--surface);
+}
+
+/* Encoches (demi-cercles découpés) sur le bord de jonction */
+.top {
+  border-radius: var(--mc-r) var(--mc-r) 0 0;
+  padding-bottom: 1.15rem;
+  -webkit-mask:
+    radial-gradient(circle var(--mc-notch) at 0 100%, #0000 calc(100% - 0.5px), #000) left / 51% 100%
+      no-repeat,
+    radial-gradient(circle var(--mc-notch) at 100% 100%, #0000 calc(100% - 0.5px), #000) right /
+      51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--mc-notch) at 0 100%, #0000 calc(100% - 0.5px), #000) left / 51% 100%
+      no-repeat,
+    radial-gradient(circle var(--mc-notch) at 100% 100%, #0000 calc(100% - 0.5px), #000) right /
+      51% 100% no-repeat;
+}
+
+.bottom {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.3rem 1rem;
+  border-radius: 0 0 var(--mc-r) var(--mc-r);
+  -webkit-mask:
+    radial-gradient(circle var(--mc-notch) at 0 0, #0000 calc(100% - 0.5px), #000) left / 51% 100%
+      no-repeat,
+    radial-gradient(circle var(--mc-notch) at 100% 0, #0000 calc(100% - 0.5px), #000) right / 51%
+      100% no-repeat;
+  mask:
+    radial-gradient(circle var(--mc-notch) at 0 0, #0000 calc(100% - 0.5px), #000) left / 51% 100%
+      no-repeat,
+    radial-gradient(circle var(--mc-notch) at 100% 0, #0000 calc(100% - 0.5px), #000) right / 51%
+      100% no-repeat;
+}
+
+/* Perforation entre les deux moitiés */
+.perf {
+  position: relative;
+  z-index: 2;
+  height: 0;
+  margin-inline: calc(var(--mc-notch) + 0.5rem);
+  border-top: 2px dashed color-mix(in srgb, var(--primary) 24%, transparent);
+  pointer-events: none;
+}
+
+.banner {
+  position: relative;
+  height: 6.4rem;
+  overflow: hidden;
+  border-radius: var(--mc-r) var(--mc-r) 0 0;
+  background:
+    radial-gradient(
+      120% 150% at 88% -25%,
+      color-mix(in srgb, var(--accent) 60%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(135deg, var(--banner-a), var(--banner-b));
+}
+
+/* Fines rayures diagonales */
+.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.07) 0 2px,
+    transparent 2px 15px
+  );
+  pointer-events: none;
+}
+
+/* Filigrane : l'aigle IRIS */
+.eagle {
+  position: absolute;
+  inset-block-start: -1.5rem;
+  inset-inline-end: -1.6rem;
+  width: 9rem;
+  height: 9rem;
+  opacity: 0.13;
+  pointer-events: none;
+}
+
+.tier {
+  position: absolute;
+  inset-block-start: 0.85rem;
+  inset-inline-start: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: calc(100% - 4.2rem);
+  padding: 0.3rem 0.75rem 0.3rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 24, 48, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: mcRise 0.45s var(--ease-out) 0.1s backwards;
+}
+
+.tier::before {
+  content: '✦';
+  color: var(--accent);
+  font-size: 0.7rem;
+}
+
+.close {
+  position: absolute;
+  inset-block-start: 0.7rem;
+  inset-inline-end: 0.7rem;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(8, 24, 48, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s var(--ease-spring),
+    background-color 0.2s ease;
+}
+
+.mc[data-pinned='true'] .close {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.close:hover {
+  background: rgba(8, 24, 48, 0.62);
+}
+
+.close:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Poignée de la bottom-sheet (glisser vers le bas pour fermer) */
+.grab {
+  display: none;
+}
+
+.sheet .grab {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 3;
+  display: block;
+  height: 2.2rem;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet .grab::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 50%;
+  width: 2.6rem;
+  height: 0.28rem;
+  margin-inline-start: -1.3rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Avatar qui chevauche la bannière */
+.avatarRing {
+  position: relative;
+  z-index: 2;
+  width: 6.2rem;
+  height: 6.2rem;
+  margin: -3.4rem auto 0;
+  border-radius: 50%;
+  animation: mcPop 0.6s var(--ease-spring) 0.08s backwards;
+}
+
+.mc[data-level='president'] .avatarRing {
+  width: 6.9rem;
+  height: 6.9rem;
+  margin-top: -3.75rem;
+}
+
+/* Anneau conique qui tourne en continu */
+.avatarRing::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent),
+    var(--primary),
+    var(--accent),
+    var(--primary),
+    var(--accent)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  animation: mcSpin 6s linear infinite;
+}
+
+.avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  background: #e2e8f0;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.silhouette {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.identity {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.4rem 0;
+  text-align: center;
+}
+
+.name {
+  margin: 0;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  animation: mcRise 0.45s var(--ease-out) 0.14s backwards;
+}
+
+.nameEmpty {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.role {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: mcRise 0.45s var(--ease-out) 0.2s backwards;
+}
+
+.role::after {
+  content: '';
+  display: block;
+  width: 2.4rem;
+  height: 3px;
+  margin: 0.55rem auto 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--accent), var(--secondary));
+}
+
+.since {
+  margin: 0.2rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  animation: mcRise 0.45s var(--ease-out) 0.26s backwards;
+}
+
+/* ============================================================
+   5. MOITIÉ BASSE — mission, faits, tags, contacts
+   ============================================================ */
+.block {
+  animation: mcRise 0.45s var(--ease-out) calc(var(--i, 0) * 60ms + 0.22s) backwards;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--primary) 22%, transparent),
+    transparent
+  );
+}
+
+:global([dir='rtl']) .label::after {
+  background: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--primary) 22%, transparent),
+    transparent
+  );
+}
+
+.text {
+  margin: 0.5rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 0.55rem;
+}
+
+.fact {
+  min-width: 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--primary) 5%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 9%, transparent);
+}
+
+.factLabel {
+  display: block;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.factValue {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stars {
+  display: inline-flex;
+  gap: 0.2rem;
+}
+
+.stars svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.starOn {
+  fill: var(--secondary);
+}
+
+.starOff {
+  fill: color-mix(in srgb, var(--primary) 16%, var(--surface));
+}
+
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.contact {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 7%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 13%, transparent);
+  color: var(--primary);
+  transition:
+    transform 0.28s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.contact svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.contact:hover,
+.contact:focus-visible {
+  background: var(--primary);
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--primary) 38%, transparent);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.contact:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Pied de ticket : marque + code-barres décoratif (ou aide à l'épinglage) */
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 1.3rem;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footText {
+  min-width: 0;
+}
+
+.barcode {
+  flex: none;
+  width: 4.6rem;
+  height: 1.1rem;
+  opacity: 0.4;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--text-primary) 0 2px,
+    transparent 2px 4px,
+    var(--text-primary) 4px 5px,
+    transparent 5px 8px,
+    var(--text-primary) 8px 11px,
+    transparent 11px 13px,
+    var(--text-primary) 13px 14px,
+    transparent 14px 17px
+  );
+}
+
+/* ============================================================
+   6. KEYFRAMES
+   ============================================================ */
+@keyframes mcIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+}
+
+@keyframes mcInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+}
+
+@keyframes mcSheetIn {
+  from {
+    opacity: 0.6;
+    transform: translateY(110%);
+  }
+}
+
+@keyframes mcFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mcPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes mcRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes mcSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   7. ACCESSIBILITÉ — mouvement réduit
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .mc,
+  .mc *,
+  .mc *::before,
+  .mc *::after,
+  .backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .tilt {
+    transform: none !important;
+  }
+
+  .glare {
+    display: none;
+  }
+}
