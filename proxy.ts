@@ -89,6 +89,20 @@ export default function middleware(request: NextRequest) {
   // ✅ Appliquer next-intl
   const response = intlMiddleware(request);
 
+  // 🔁 next-intl redirige les URL sans langue (/ → /fr, /services → /fr/services)
+  // avec un 307 (temporaire). Google conserve alors l'URL d'origine dans
+  // l'index au lieu de la version /fr : accueil, services et mentions légales
+  // étaient indexés SANS préfixe pendant que leur version /fr ne l'était pas.
+  // On les convertit en 308 (permanent). La cible dépend du cookie / de
+  // Accept-Language : on interdit donc tout cache partagé de cette réponse.
+  const location = response.headers.get('location');
+  if (response.status === 307 && location) {
+    const permanent = NextResponse.redirect(location, 308);
+    for (const cookie of response.cookies.getAll()) permanent.cookies.set(cookie);
+    permanent.headers.set('Cache-Control', 'private, no-store');
+    return finish(permanent);
+  }
+
   // ⚠️ IMPORTANT : ne JAMAIS casser le flux pour les 404
   // → on ne modifie PAS la réponse si ce n’est pas nécessaire
 
