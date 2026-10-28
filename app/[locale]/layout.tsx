@@ -11,7 +11,6 @@ import SnapScroll from '@/components/layout/SnapScroll';
 import ScrollToHash from '@/components/layout/ScrollToHash';
 import '../globals.css';
 import '../alignment.css';
-import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
 import BackToTop from '@/components/ui/BackToTop';
 import SectionNav from '@/components/layout/SectionNav';
@@ -119,8 +118,9 @@ async function LocaleChrome({
           plus d'onglet flottant qui recouvre le contenu. Les deux valeurs sont
           calculées ici, côté serveur, pour éviter tout écart d'hydratation. */}
       <Header joinOpen={recruitmentOpen} joinUntil={formatRecruitmentEnd(locale)} />
-      <Breadcrumb />
-      {/* Barre « Sur cette page » : en flux, collée sous le header (jamais flottante) */}
+      {/* Barre unique : fil d'Ariane (gauche) + « Sur cette page » (droite), en
+          flux sous le header (jamais flottante). Sticky seulement s'il y a un
+          sommaire ; sinon elle défile avec la page. */}
       <SectionNav />
       <main id="main">
         {children}

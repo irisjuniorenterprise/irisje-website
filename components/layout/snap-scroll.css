@@ -4,7 +4,7 @@
 :root {
   /* Hauteur du header sticky (80px + 1px de bordure ; 70px + 1px en mobile) */
   --snap-header-base: 81px;
-  /* Barre « Sur cette page » (SectionNav) quand la page en a une */
+  /* Barre fusionnée fil d'Ariane + « Sur cette page » (SectionNav), quand la page a un sommaire */
   --section-bar-h: 48px;
   /* Hauteur à réserver en haut : ancres (scroll-padding) et sections plein écran */
   --snap-header-h: var(--snap-header-base);
@@ -16,7 +16,7 @@
   }
 }
 
-/* La barre est dans la page (data-section-bar, rendue côté serveur) : tout ce
+/* La barre sticky est dans la page (data-section-bar, rendue côté serveur) : tout ce
    qui se cale sous le header se cale aussi sous elle. Aucun JS : pas de saut
    de mise en page à l'hydratation. */
 html:has([data-section-bar]) {

@@ -1,6 +1,7 @@
 /* components/layout/SectionNav.module.css
  *
- * Barre « Sur cette page » collée sous le header (voir SectionNav.tsx).
+ * Barre unique sous le header : fil d'Ariane (début) + « Sur cette page » (fin).
+ * Voir SectionNav.tsx.
  *
  * - Elle est DANS le flux : elle réserve sa propre place, elle ne recouvre
  *   jamais le contenu. Fond verre identique à celui du fil d'Ariane (blanc
@@ -41,15 +42,30 @@
   }
 }
 
+/* Pas de sommaire (fil d'Ariane seul) : la barre défile avec la page */
+.bar[data-sticky='false'] {
+  position: relative;
+  /* Annule le `top` du mode sticky : en `relative`, il décalerait la barre de
+     la hauteur du header vers le bas (elle passerait sous le hero). */
+  top: auto;
+  z-index: auto;
+  box-shadow: none;
+}
+
 .inner {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   height: var(--section-bar-h, 48px);
 }
 
+/* Bouton + panneau : calé en fin de ligne (à droite en LTR, à gauche en RTL) */
 .anchor {
   position: relative;
-  width: min(100%, 26rem);
+  flex: 0 1 22rem;
+  min-width: 0;
+  margin-inline-start: auto;
 }
 
 /* ---------------- Bouton ---------------- */
@@ -218,6 +234,47 @@
 :global(body.menu-open) .panel,
 :global(body.menu-open) .backdrop {
   display: none;
+}
+
+/* ---------------- Mobile : tout tient sur UNE ligne ----------------
+   Fil d'Ariane réduit (icône maison + page courante, voir Breadcrumb.module.css)
+   et bouton compact : pas de libellé « Sur cette page » (conservé pour les
+   lecteurs d'écran), juste l'icône + la section en cours tronquée. */
+@media (max-width: 559px) {
+  .inner {
+    gap: 0.5rem;
+  }
+
+  .anchor {
+    /* Le panneau se cale sur la barre (pleine largeur), pas sur le bouton étroit */
+    position: static;
+    flex: 0 1 auto;
+    max-width: 58%;
+  }
+
+  .toggle {
+    gap: 0.4rem;
+    padding-inline: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .current {
+    text-align: start;
+  }
+
+  .panel {
+    top: calc(100% + 0.5rem);
+    inset-inline: 0.75rem;
+  }
 }
 
 @media print {

@@ -1,8 +1,17 @@
 // components/layout/SectionNav.tsx
 'use client';
 
-// Sommaire de la page : une barre fine collée sous le header avec UN bouton
-// « Sur cette page » (+ la section en cours). Il ouvre la liste des sections.
+// Barre unique sous le header : fil d'Ariane à gauche, bouton « Sur cette page »
+// (+ la section en cours) à droite. Le bouton ouvre la liste des sections.
+//
+// Fusion fil d'Ariane + sommaire : une seule ligne au lieu de deux.
+//  - avec sommaire : la barre est sticky (elle réserve sa place via
+//    `data-section-bar`, voir snap-scroll.css) ;
+//  - sans sommaire (FAQ, pages légales…) : fil d'Ariane seul, la barre défile
+//    avec la page (pas de bande fixe qui mange la hauteur) ;
+//  - accueil : pas de fil d'Ariane, seul le bouton s'affiche.
+// Les données structurées Google (BreadcrumbList) viennent de PageJsonLd.tsx :
+// elles ne dépendent pas de ce rendu.
 //
 // Pourquoi une barre et pas un bouton flottant ?
 //  - elle occupe sa propre place dans la page : elle ne peut JAMAIS recouvrir
@@ -23,6 +32,7 @@ import type { MouseEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { PAGE_SECTIONS, sectionPageKey } from '@/lib/data/pageSections';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 import styles from './SectionNav.module.css';
 
 const NO_SECTIONS: readonly string[] = [];
@@ -266,80 +276,96 @@ export default function SectionNav() {
     close();
   };
 
-  // Pas de sommaire sur cette page, ou une seule section : rien à afficher.
-  if (!pageKey || present.length < 2) return null;
+  // Fil d'Ariane : toutes les pages sauf l'accueil (même règle que <Breadcrumb />).
+  const hasCrumb = route !== '';
+  // Sommaire : page configurée avec au moins deux sections.
+  const showToggle = Boolean(pageKey) && present.length >= 2;
+
+  // Ni fil d'Ariane ni sommaire : rien à afficher.
+  if (!hasCrumb && !showToggle) return null;
 
   const currentId = activeId && present.includes(activeId) ? activeId : present[0];
 
   return (
     <>
-      {open && <div className={styles.backdrop} aria-hidden="true" onClick={close} />}
+      {open && showToggle && <div className={styles.backdrop} aria-hidden="true" onClick={close} />}
 
       {/* data-section-bar : repéré par snap-scroll.css (:has) pour décaler les
-          ancres et la hauteur des sections de la hauteur de cette barre. */}
-      <div className={styles.bar} data-section-bar data-open={open}>
+          ancres et la hauteur des sections de la hauteur de cette barre. Il
+          n'est posé que si la barre est sticky (= il y a un sommaire). */}
+      <div
+        className={styles.bar}
+        data-section-bar={showToggle ? '' : undefined}
+        data-sticky={showToggle}
+        data-open={open}
+      >
         <div className={`container ${styles.inner}`}>
-          <div className={styles.anchor}>
-            <button
-              ref={toggleRef}
-              type="button"
-              className={styles.toggle}
-              aria-expanded={open}
-              aria-controls={panelId}
-              onClick={() => (open ? close() : setOpen(true))}
-            >
-              <span className={styles.icon} aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+          {hasCrumb && <Breadcrumb inline />}
+
+          {showToggle && pageKey && (
+            <div className={styles.anchor}>
+              <button
+                ref={toggleRef}
+                type="button"
+                className={styles.toggle}
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => (open ? close() : setOpen(true))}
+              >
+                <span className={styles.icon} aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+                    <path
+                      d="M4 6h2M9 6h11M4 12h2M9 12h11M4 18h2M9 18h11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+                {/* Masqué visuellement sur mobile (reste lu par les lecteurs d'écran) */}
+                <span className={styles.label}>{t('title')}</span>
+                <span className={styles.current}>{t(`items.${pageKey}.${currentId}`)}</span>
+                <svg
+                  className={styles.chevron}
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  focusable="false"
+                >
                   <path
-                    d="M4 6h2M9 6h11M4 12h2M9 12h11M4 18h2M9 18h11"
+                    d="M6 9l6 6 6-6"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2.2"
+                    strokeWidth="2.4"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
-              </span>
-              <span className={styles.label}>{t('title')}</span>
-              <span className={styles.current}>{t(`items.${pageKey}.${currentId}`)}</span>
-              <svg
-                className={styles.chevron}
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M6 9l6 6 6-6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+              </button>
 
-            <nav id={panelId} className={styles.panel} aria-label={t('aria_label')} inert={!open}>
-              <ol className={styles.list}>
-                {present.map((id) => {
-                  const isActive = id === currentId;
-                  return (
-                    <li key={id}>
-                      <a
-                        href={`#${id}`}
-                        className={`${styles.link} ${isActive ? styles.active : ''}`}
-                        aria-current={isActive ? 'location' : undefined}
-                        onClick={(event) => onLinkClick(event, id)}
-                      >
-                        {t(`items.${pageKey}.${id}`)}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
-          </div>
+              <nav id={panelId} className={styles.panel} aria-label={t('aria_label')} inert={!open}>
+                <ol className={styles.list}>
+                  {present.map((id) => {
+                    const isActive = id === currentId;
+                    return (
+                      <li key={id}>
+                        <a
+                          href={`#${id}`}
+                          className={`${styles.link} ${isActive ? styles.active : ''}`}
+                          aria-current={isActive ? 'location' : undefined}
+                          onClick={(event) => onLinkClick(event, id)}
+                        >
+                          {t(`items.${pageKey}.${id}`)}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+            </div>
+          )}
         </div>
       </div>
     </>
