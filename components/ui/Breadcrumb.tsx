@@ -6,7 +6,16 @@ import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
 import styles from './Breadcrumb.module.css';
 
-export default function Breadcrumb() {
+type BreadcrumbProps = {
+  /**
+   * `true` : version « en ligne », sans fond, sans bordure ni conteneur, pour
+   * être intégrée à la barre fusionnée (components/layout/SectionNav.tsx).
+   * `false` (défaut) : barre autonome pleine largeur (pages 404 racine).
+   */
+  inline?: boolean;
+};
+
+export default function Breadcrumb({ inline = false }: BreadcrumbProps) {
   const pathname = usePathname();
   const t = useTranslations('Breadcrumb');
 
@@ -47,43 +56,45 @@ export default function Breadcrumb() {
     });
   }
 
+  const list = (
+    <ol className={styles.list}>
+      <li className={styles.item}>
+        <Link href={`/${locale}`} className={styles.link}>
+          <Icons.Home size={16} className={styles.homeIcon} />
+          <span className={styles.homeLabel}>{t('home')}</span>
+        </Link>
+        <Icons.ChevronRight size={14} className={styles.separator} />
+      </li>
+      {breadcrumbs.map((crumb, index) => (
+        <li key={crumb.path} className={styles.item}>
+          {crumb.isLast ? (
+            // Élément courant du fil d'Ariane : annoncé tel quel, et le
+            // style `.active` n'est plus le seul indicateur d'état.
+            <span className={`${styles.link} ${styles.active}`} aria-current="page">
+              {crumb.label}
+            </span>
+          ) : (
+            <>
+              <Link href={crumb.path} className={styles.link}>
+                {crumb.label}
+              </Link>
+              {index < breadcrumbs.length - 1 && (
+                <Icons.ChevronRight size={14} className={styles.separator} />
+              )}
+            </>
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+
   return (
     <nav
-      className={`${styles.breadcrumb} ${isRtl ? styles.rtl : ''}`}
+      className={`${styles.breadcrumb} ${inline ? styles.inline : ''} ${isRtl ? styles.rtl : ''}`}
       dir={isRtl ? 'rtl' : 'ltr'}
       aria-label={t('label')}
     >
-      <div className="container">
-        <ol className={styles.list}>
-          <li className={styles.item}>
-            <Link href={`/${locale}`} className={styles.link}>
-              <Icons.Home size={16} className={styles.homeIcon} />
-              <span className={styles.homeLabel}>{t('home')}</span>
-            </Link>
-            <Icons.ChevronRight size={14} className={styles.separator} />
-          </li>
-          {breadcrumbs.map((crumb, index) => (
-            <li key={crumb.path} className={styles.item}>
-              {crumb.isLast ? (
-                // Élément courant du fil d'Ariane : annoncé tel quel, et le
-                // style `.active` n'est plus le seul indicateur d'état.
-                <span className={`${styles.link} ${styles.active}`} aria-current="page">
-                  {crumb.label}
-                </span>
-              ) : (
-                <>
-                  <Link href={crumb.path} className={styles.link}>
-                    {crumb.label}
-                  </Link>
-                  {index < breadcrumbs.length - 1 && (
-                    <Icons.ChevronRight size={14} className={styles.separator} />
-                  )}
-                </>
-              )}
-            </li>
-          ))}
-        </ol>
-      </div>
+      {inline ? list : <div className="container">{list}</div>}
     </nav>
   );
 }

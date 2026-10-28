@@ -145,3 +145,40 @@
 .breadcrumb.rtl .separator {
   transform: scaleX(-1);
 }
+
+/* ============================================================
+   VARIANTE « EN LIGNE » (barre fusionnée avec « Sur cette page »)
+   Le fond, la bordure et le conteneur sont fournis par la barre
+   (SectionNav.module.css) : ici, uniquement la mise en ligne.
+   ============================================================ */
+.breadcrumb.inline {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border-bottom: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Une seule ligne : le dernier maillon se tronque avec « … » si la place manque */
+.inline .list {
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.inline .item {
+  min-width: 0;
+}
+
+.inline .item:not(:last-child) {
+  flex: none;
+}
+
+.inline .link.active {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
