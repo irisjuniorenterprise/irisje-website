@@ -12,6 +12,20 @@
 //  - /faq : questions / réponses (FAQPage).
 // Les pages inconnues (404) n'émettent rien.
 //
+// Choix volontaires (rapports Search Console « Améliorations », 2026) :
+//  - BreadcrumbList : seul rapport pertinent ici → conservé sur toutes les
+//    pages (sauf l'accueil).
+//  - Organization / LocalBusiness : pas de rapport dédié, mais utilisés par
+//    Google (panneau de connaissances, Maps) → conservés sur l'accueil.
+//  - FAQPage : Google n'affiche plus les résultats enrichis FAQ depuis le
+//    07/05/2026 (rapport retiré en juin). Le balisage reste valide et sans
+//    effet négatif : conservé tel quel (compréhension de la page).
+//  - Product / Merchant / Review / AggregateRating / VideoObject / AMP /
+//    SearchAction : NON ajoutés. Pas de produit à prix, pas d'avis clients
+//    publiés (les avis auto-promotionnels sont interdits), pas de vidéo, pas
+//    de moteur de recherche interne. N'ajouter ces types qu'avec des données
+//    réelles et visibles sur la page.
+//
 // `origin` = domaine réellement servi (.com ou .tn), fourni par le layout :
 // les @id et les URLs du JSON-LD suivent le domaine de la page.
 import { usePathname } from 'next/navigation';
@@ -68,7 +82,7 @@ export default function PageJsonLd({ origin }: { origin: string }) {
     const institution = read('AboutPage.map.institution');
 
     graph.push({
-      '@type': ['Organization', 'ProfessionalService'],
+      '@type': ['Organization', 'LocalBusiness', 'ProfessionalService'],
       '@id': orgId,
       name: SITE_NAME,
       alternateName: ORGANIZATION.alternateName,
@@ -143,6 +157,10 @@ export default function PageJsonLd({ origin }: { origin: string }) {
             '@type': 'Service',
             name: read(`ServicesPage.${key}.${item}.title`),
             description: stripHtml(read(`ServicesPage.${key}.${item}.desc`)),
+            // Ancre = id de la <section> de la catégorie sur la page Services
+            url: `${pageUrl}#${key}`,
+            serviceType: read(`ServicesPage.${key}.title`),
+            areaServed: { '@type': 'Country', name: 'Tunisia' },
             provider: { '@type': 'Organization', '@id': orgId, name: SITE_NAME },
           },
         })),
