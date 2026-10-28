@@ -1,0 +1,228 @@
+/* components/layout/SectionNav.module.css
+ *
+ * Barre « Sur cette page » collée sous le header (voir SectionNav.tsx).
+ *
+ * - Elle est DANS le flux : elle réserve sa propre place, elle ne recouvre
+ *   jamais le contenu. Fond verre identique à celui du fil d'Ariane (blanc
+ *   translucide + léger flou).
+ * - Sa hauteur (--section-bar-h) et la hauteur du header (--snap-header-base)
+ *   sont définies dans snap-scroll.css, qui en déduit aussi les décalages
+ *   d'ancres et la hauteur des sections.
+ * - Propriétés logiques partout : correct en RTL sans règle dédiée.
+ * - Animations neutralisées par prefers-reduced-motion (globals.css).
+ */
+
+/* ---------------- Voile (clic = fermer) ---------------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 54; /* sous la barre (55) et le header (60), au-dessus du contenu */
+  background: rgba(15, 23, 42, 0.3);
+}
+
+/* ---------------- Barre ---------------- */
+.bar {
+  position: sticky;
+  top: var(--snap-header-base, 81px); /* juste sous le header sticky */
+  z-index: 55;
+  /* Même effet verre que le fil d'Ariane (Breadcrumb.module.css) : fond blanc
+     translucide + léger flou du décor derrière. */
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(2px) saturate(110%);
+  backdrop-filter: blur(2px) saturate(110%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px -12px rgba(15, 23, 42, 0.3);
+}
+
+/* Navigateurs sans backdrop-filter : fond plus opaque pour garder la lisibilité */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bar {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  height: var(--section-bar-h, 48px);
+}
+
+.anchor {
+  position: relative;
+  width: min(100%, 26rem);
+}
+
+/* ---------------- Bouton ---------------- */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  height: 2.75rem; /* 44 px : cible tactile confortable */
+  padding: 0 0.75rem 0 0.25rem;
+  padding-inline: 0.25rem 0.75rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.toggle:hover {
+  background: color-mix(in srgb, var(--primary) 9%, var(--surface));
+  border-color: var(--primary);
+}
+
+.bar[data-open='true'] .toggle {
+  border-color: var(--primary);
+}
+
+.toggle:focus-visible,
+.link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.label {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* Section en cours : repère d'orientation, tronquée si la place manque */
+.current {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.chevron {
+  flex: none;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.bar[data-open='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------------- Panneau (sous le bouton, même largeur) ---------------- */
+.panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  inset-inline: 0;
+  box-sizing: border-box;
+  max-height: calc(100dvh - var(--snap-header-base, 81px) - var(--section-bar-h, 48px) - 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--card-shadow-hover);
+
+  /* Fermé */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.3s var(--ease-out),
+    visibility 0s linear 0.3s;
+}
+
+.bar[data-open='true'] .panel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  transition:
+    background-color var(--t-fast),
+    color var(--t-fast);
+}
+
+/* Pastille : repère de la section courante (en plus de la couleur) */
+.link::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.link:hover {
+  background: var(--surface-hover);
+}
+
+.active {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.active::before {
+  border-color: var(--secondary);
+  background: var(--secondary);
+}
+
+/* ---------------- Cohabitation ---------------- */
+
+/* Menu mobile du header ouvert : on évite deux panneaux superposés */
+:global(body.menu-open) .panel,
+:global(body.menu-open) .backdrop {
+  display: none;
+}
+
+@media print {
+  .bar,
+  .backdrop {
+    display: none;
+  }
+}
