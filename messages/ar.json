@@ -805,5 +805,37 @@
       "cta_primary": "اطلب عرض سعر",
       "cta_secondary": "اتصل بنا"
     }
+  },
+  "SectionNav": {
+    "aria_label": "أقسام الصفحة",
+    "title": "في هذه الصفحة",
+    "items": {
+      "home": {
+        "accueil": "الرئيسية",
+        "slider": "أبرز المحتوى",
+        "services": "خدماتنا",
+        "a-propos": "من نحن",
+        "devis": "طلب عرض سعر",
+        "contact": "اتصل بنا"
+      },
+      "a-propos": {
+        "apropos-hero": "أعلى الصفحة",
+        "qui-sommes-nous": "من نحن؟",
+        "notre-mission": "مهمتنا",
+        "notre-vision": "رؤيتنا",
+        "nos-valeurs": "قيمنا",
+        "organigramme": "الهيكل التنظيمي",
+        "nous-trouver": "أين تجدنا؟",
+        "portfolio": "إنجازاتنا"
+      },
+      "services": {
+        "services-hero": "أعلى الصفحة",
+        "introduction": "عروض خدماتنا",
+        "it": "تكنولوجيا المعلومات",
+        "marketing": "التسويق",
+        "etudes": "الأعمال والدراسات",
+        "cta": "مشروعك"
+      }
+    }
   }
 }

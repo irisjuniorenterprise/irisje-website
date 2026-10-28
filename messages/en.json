@@ -805,5 +805,37 @@
       "cta_primary": "Request a quote",
       "cta_secondary": "Contact us"
     }
+  },
+  "SectionNav": {
+    "aria_label": "Page sections",
+    "title": "On this page",
+    "items": {
+      "home": {
+        "accueil": "Home",
+        "slider": "Highlights",
+        "services": "Our services",
+        "a-propos": "About us",
+        "devis": "Quote",
+        "contact": "Contact"
+      },
+      "a-propos": {
+        "apropos-hero": "Top of page",
+        "qui-sommes-nous": "Who we are",
+        "notre-mission": "Our mission",
+        "notre-vision": "Our vision",
+        "nos-valeurs": "Our values",
+        "organigramme": "Organization chart",
+        "nous-trouver": "Find us",
+        "portfolio": "Our achievements"
+      },
+      "services": {
+        "services-hero": "Top of page",
+        "introduction": "Our offer",
+        "it": "IT",
+        "marketing": "Marketing",
+        "etudes": "Business",
+        "cta": "Your project"
+      }
+    }
   }
 }

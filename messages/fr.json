@@ -805,5 +805,37 @@
       "cta_primary": "Demander un devis",
       "cta_secondary": "Nous contacter"
     }
+  },
+  "SectionNav": {
+    "aria_label": "Sections de la page",
+    "title": "Sur cette page",
+    "items": {
+      "home": {
+        "accueil": "Accueil",
+        "slider": "À la une",
+        "services": "Nos services",
+        "a-propos": "À propos",
+        "devis": "Devis",
+        "contact": "Contact"
+      },
+      "a-propos": {
+        "apropos-hero": "Haut de page",
+        "qui-sommes-nous": "Qui sommes-nous ?",
+        "notre-mission": "Notre mission",
+        "notre-vision": "Notre vision",
+        "nos-valeurs": "Nos valeurs",
+        "organigramme": "Organigramme",
+        "nous-trouver": "Où nous trouver ?",
+        "portfolio": "Nos réalisations"
+      },
+      "services": {
+        "services-hero": "Haut de page",
+        "introduction": "Notre offre",
+        "it": "IT",
+        "marketing": "Marketing",
+        "etudes": "Business",
+        "cta": "Votre projet"
+      }
+    }
   }
 }
