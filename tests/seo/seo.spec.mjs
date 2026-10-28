@@ -82,3 +82,49 @@ test('sitemap.xml liste les pages localisées, sans /recrutement', async ({ requ
   expect(body).toContain('/fr/services');
   expect(body).not.toContain('/recrutement');
 });
+
+// Données structurées : le balisage doit rester valide et « honnête ».
+// Les types absents de la liste ne doivent PAS apparaître tant qu'on n'a pas
+// de données réelles (avis clients, produits à prix, vidéos…) : un balisage
+// Review / Product inventé expose le site à une action manuelle de Google.
+const FORBIDDEN_LD_TYPES = [
+  'Review',
+  'AggregateRating',
+  'Product',
+  'VideoObject',
+  'SearchAction',
+];
+
+const collectTypes = (node, out = new Set()) => {
+  if (Array.isArray(node)) node.forEach((n) => collectTypes(n, out));
+  else if (node && typeof node === 'object') {
+    const type = node['@type'];
+    for (const t of Array.isArray(type) ? type : type ? [type] : []) out.add(t);
+    Object.values(node).forEach((v) => collectTypes(v, out));
+  }
+  return out;
+};
+
+test.describe('Données structurées JSON-LD', () => {
+  for (const locale of LOCALES) {
+    test(`/${locale} : Organization, LocalBusiness, WebSite, sans type interdit`, async ({ request }) => {
+      const html = await (await request.get(`/${locale}`)).text();
+      const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+      expect(blocks.length).toBeGreaterThan(0);
+      const types = collectTypes(blocks.map((m) => JSON.parse(m[1])));
+      for (const t of ['Organization', 'LocalBusiness', 'WebSite', 'PostalAddress']) {
+        expect(types, `${t} manquant`).toContain(t);
+      }
+      for (const t of FORBIDDEN_LD_TYPES) expect(types, `${t} interdit`).not.toContain(t);
+    });
+
+    test(`/${locale}/services : BreadcrumbList + OfferCatalog avec Service`, async ({ request }) => {
+      const html = await (await request.get(`/${locale}/services`)).text();
+      const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+      const types = collectTypes(blocks.map((m) => JSON.parse(m[1])));
+      for (const t of ['BreadcrumbList', 'ListItem', 'OfferCatalog', 'Service']) {
+        expect(types, `${t} manquant`).toContain(t);
+      }
+    });
+  }
+});
