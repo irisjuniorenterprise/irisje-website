@@ -60,6 +60,27 @@
   height: var(--section-bar-h, 48px);
 }
 
+/* Fil d'Ariane : visible seulement en haut de page. Dès que la page défile, il
+   s'efface en fondu (visibility → sort de la tabulation et des lecteurs
+   d'écran) ; la barre garde sa hauteur : rien ne bouge, seul le bouton
+   « Sur cette page » reste affiché. */
+.crumb {
+  flex: 1 1 auto;
+  min-width: 0;
+  transition:
+    opacity 0.2s var(--ease),
+    visibility 0s linear 0s;
+}
+
+.crumb[data-hidden='true'] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s var(--ease),
+    visibility 0s linear 0.2s;
+}
+
 /* Bouton + panneau : calé en fin de ligne (à droite en LTR, à gauche en RTL) */
 .anchor {
   position: relative;

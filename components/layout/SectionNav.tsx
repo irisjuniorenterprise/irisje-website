@@ -6,7 +6,9 @@
 //
 // Fusion fil d'Ariane + sommaire : une seule ligne au lieu de deux.
 //  - avec sommaire : la barre est sticky (elle réserve sa place via
-//    `data-section-bar`, voir snap-scroll.css) ;
+//    `data-section-bar`, voir snap-scroll.css). Le bouton « Sur cette page »
+//    reste visible PARTOUT pendant le défilement, mais le fil d'Ariane, lui,
+//    n'apparaît qu'en haut de la page : il s'efface dès qu'on défile ;
 //  - sans sommaire (FAQ, pages légales…) : fil d'Ariane seul, la barre défile
 //    avec la page (pas de bande fixe qui mange la hauteur) ;
 //  - accueil : pas de fil d'Ariane, seul le bouton s'affiche.
@@ -49,6 +51,8 @@ const SCROLL_IDLE_MS = 400;
 const SCROLL_MAX_MS = 3_000;
 /** Plafond d'attente de l'animation de révélation de la section cible. */
 const SETTLE_MAX_MS = 1_500;
+/** Au-delà de ce défilement (px), le fil d'Ariane est masqué (« en haut de page » seulement). */
+const CRUMB_HIDE_AFTER_PX = 24;
 
 /** Annule le défilement fluide en cours (un seul à la fois). */
 let cancelActiveScroll: (() => void) | null = null;
@@ -157,6 +161,8 @@ export default function SectionNav() {
   const configured: readonly string[] = pageKey ? PAGE_SECTIONS[pageKey] : NO_SECTIONS;
 
   const [open, setOpen] = useState(false);
+  // Vrai dès que la page a défilé : le fil d'Ariane n'est visible qu'en haut.
+  const [scrolled, setScrolled] = useState(false);
   // L'état est rattaché à la page (`key`) : en changeant de page, il est
   // simplement ignoré — pas de remise à zéro à faire dans un effet.
   const [found, setFound] = useState<{ key: string; ids: readonly string[] } | null>(null);
@@ -281,6 +287,23 @@ export default function SectionNav() {
   // Sommaire : page configurée avec au moins deux sections.
   const showToggle = Boolean(pageKey) && present.length >= 2;
 
+  // Fil d'Ariane visible uniquement en haut de page (barre sticky seulement :
+  // sans sommaire la barre défile déjà avec la page). Le bouton « Sur cette
+  // page » n'est pas concerné. La mesure se fait hors du corps de l'effet
+  // (écouteur / requestAnimationFrame) ; elle est aussi relancée à chaque
+  // changement de page.
+  useEffect(() => {
+    if (!showToggle) return;
+    const update = () => setScrolled(window.scrollY > CRUMB_HIDE_AFTER_PX);
+    const frame = window.requestAnimationFrame(update);
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', update);
+    };
+  }, [showToggle, pathname]);
+  const crumbHidden = showToggle && scrolled;
+
   // Ni fil d'Ariane ni sommaire : rien à afficher.
   if (!hasCrumb && !showToggle) return null;
 
@@ -300,7 +323,13 @@ export default function SectionNav() {
         data-open={open}
       >
         <div className={`container ${styles.inner}`}>
-          {hasCrumb && <Breadcrumb inline />}
+          {hasCrumb && (
+            // `visibility: hidden` une fois masqué : le fil d'Ariane sort aussi
+            // de l'ordre de tabulation et de l'arbre d'accessibilité.
+            <div className={styles.crumb} data-hidden={crumbHidden}>
+              <Breadcrumb inline />
+            </div>
+          )}
 
           {showToggle && pageKey && (
             <div className={styles.anchor}>
