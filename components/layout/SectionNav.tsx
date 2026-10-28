@@ -14,9 +14,9 @@
 //
 // Comportement : un clic ouvre / ferme ; un clic sur une section, sur le voile
 // ou sur Échap ferme aussi. La section visible est mise en évidence
-// (scrollspy). Les liens sont de simples ancres `#id` : le défilement est pris
-// en charge par ScrollToHash (snap scroll, header sticky, animation de
-// révélation) — aucune logique de scroll dupliquée ici.
+// (scrollspy). Un clic sur une section fait DÉFILER la page jusqu'à elle avec
+// une animation fluide (voir smoothScrollToId ci-dessous). Les liens restent
+// de vraies ancres `#id` (clic droit, ouverture dans un onglet, clavier).
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
@@ -28,6 +28,111 @@ import styles from './SectionNav.module.css';
 const NO_SECTIONS: readonly string[] = [];
 /** Durée max. d'attente d'une section pas encore streamée. */
 const MAX_WAIT_MS = 10_000;
+
+/** Intervalle de surveillance du défilement (ms). */
+const SCROLL_POLL_MS = 50;
+/** Position stable pendant ce nombre de relevés = défilement terminé. */
+const SCROLL_STABLE_TICKS = 3;
+/** Sans mouvement détecté, on considère le défilement terminé après ce délai. */
+const SCROLL_IDLE_MS = 400;
+/** Plafond de l'animation de défilement. */
+const SCROLL_MAX_MS = 3_000;
+/** Plafond d'attente de l'animation de révélation de la section cible. */
+const SETTLE_MAX_MS = 1_500;
+
+/** Annule le défilement fluide en cours (un seul à la fois). */
+let cancelActiveScroll: (() => void) | null = null;
+
+/** Vrai quand l'élément n'a plus aucune transformation (révélation terminée). */
+function isTransformSettled(el: Element): boolean {
+  const { transform } = getComputedStyle(el);
+  return transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)';
+}
+
+/**
+ * Défile en douceur jusqu'à la section `id`.
+ *
+ * - `scrollIntoView` tient compte de `scroll-padding-top` (header + barre) et
+ *   de `scroll-margin-top` : l'arrivée est calée sous la barre.
+ * - Le snap scroll (`mandatory`) est suspendu PENDANT l'animation : sinon il
+ *   peut l'interrompre ou la dévier vers un point d'arrêt intermédiaire. Il
+ *   est rétabli à l'arrivée, déjà aligné : aucun saut.
+ * - Les sections `.placeholder` se décalent de 18 px à leur apparition
+ *   (ClientSideEffects) : un dernier alignement instantané est fait une fois
+ *   cette révélation terminée.
+ * - Si l'utilisateur reprend la main (molette, toucher, clavier), on s'efface.
+ * - `prefers-reduced-motion` : défilement instantané, sans animation.
+ */
+function smoothScrollToId(id: string): void {
+  const target = document.getElementById(id);
+  if (!target) return;
+  cancelActiveScroll?.();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    return;
+  }
+
+  const root = document.documentElement;
+  const startedAt = performance.now();
+  let lastY = window.scrollY;
+  let stableTicks = 0;
+  let moved = false;
+  let settling = false;
+  let settleStartedAt = 0;
+  let finished = false;
+
+  const events = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
+
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    window.clearInterval(timer);
+    for (const name of events) window.removeEventListener(name, finish, { capture: true });
+    root.style.removeProperty('scroll-snap-type');
+    if (cancelActiveScroll === finish) cancelActiveScroll = null;
+  };
+
+  const tick = () => {
+    const now = performance.now();
+
+    if (settling) {
+      // Animation de révélation terminée (ou délai dépassé) : ajustement final.
+      if (isTransformSettled(target) || now - settleStartedAt > SETTLE_MAX_MS) {
+        target.scrollIntoView({ behavior: 'instant', block: 'start' });
+        finish();
+      }
+      return;
+    }
+
+    const y = window.scrollY;
+    if (Math.abs(y - lastY) > 0.5) {
+      moved = true;
+      stableTicks = 0;
+    } else {
+      stableTicks += 1;
+    }
+    lastY = y;
+
+    const arrived =
+      (moved && stableTicks >= SCROLL_STABLE_TICKS) ||
+      (!moved && now - startedAt > SCROLL_IDLE_MS) ||
+      now - startedAt > SCROLL_MAX_MS;
+    if (arrived) {
+      settling = true;
+      settleStartedAt = now;
+    }
+  };
+
+  const timer = window.setInterval(tick, SCROLL_POLL_MS);
+  for (const name of events) {
+    window.addEventListener(name, finish, { passive: true, capture: true });
+  }
+  cancelActiveScroll = finish;
+
+  root.style.setProperty('scroll-snap-type', 'none');
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 export default function SectionNav() {
   const pathname = usePathname();
@@ -136,12 +241,28 @@ export default function SectionNav() {
   }, [open, close]);
 
   const onLinkClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
-    // Même ancre que l'URL : aucun `hashchange` n'est émis, ScrollToHash ne
-    // se déclenche pas. On défile donc nous-mêmes (instantané, comme lui).
-    if (window.location.hash === `#${id}`) {
-      event.preventDefault();
-      document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    // Clic « normal » uniquement : Ctrl/Cmd/Maj/clic milieu gardent le
+    // comportement natif du lien (ouverture dans un nouvel onglet…).
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      close();
+      return;
     }
+
+    // On remplace la navigation native (saut instantané via ScrollToHash)
+    // par un défilement fluide. pushState ne déclenche pas `hashchange` :
+    // ScrollToHash ne vient donc pas se battre avec l'animation.
+    event.preventDefault();
+    if (window.location.hash !== `#${id}`) {
+      window.history.pushState(null, '', `#${id}`);
+    }
+    smoothScrollToId(id);
     close();
   };
 
