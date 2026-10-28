@@ -16,9 +16,10 @@ const SLIDES = [
   { slide: 3, anchor: 'marketing' },
   { slide: 4, anchor: 'etudes' },
 ];
-// Hauteur du header sticky (snap-scroll.css : --snap-header-h). Le contenu
-// démarre sous lui ; l'ancre doit y reposer la section cible.
-const HEADER_H = 81;
+// Hauteur à réserver en haut (snap-scroll.css : --snap-header-h) : header sticky
+// (81 px) + barre « Sur cette page » (48 px, présente sur la page services).
+// Le contenu démarre sous eux ; l'ancre doit y reposer la section cible.
+const HEADER_H = 81 + 48;
 
 /**
  * Met en pause l'avance automatique via le bouton ⏸ du slider, pour que la
