@@ -14,6 +14,7 @@ import '../alignment.css';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
 import BackToTop from '@/components/ui/BackToTop';
+import SectionNav from '@/components/layout/SectionNav';
 import LoadingScreen from '@/components/layout/LoadingScreen';
 import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
@@ -119,6 +120,8 @@ async function LocaleChrome({
           calculées ici, côté serveur, pour éviter tout écart d'hydratation. */}
       <Header joinOpen={recruitmentOpen} joinUntil={formatRecruitmentEnd(locale)} />
       <Breadcrumb />
+      {/* Barre « Sur cette page » : en flux, collée sous le header (jamais flottante) */}
+      <SectionNav />
       <main id="main">
         {children}
       </main>
