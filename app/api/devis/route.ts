@@ -4,6 +4,7 @@
 
 import { z } from 'zod';
 import { MailConfigError, sendFormMail } from '@/lib/mail';
+import { checkRateLimit, clientIp } from '@/lib/rateLimit';
 import { isPrestationValue, PRESTATIONS } from '@/lib/data/prestations';
 
 // Libellés FR des prestations / budgets / délais pour le corps de l'email
@@ -49,7 +50,18 @@ const devisSchema = z.object({
   consentement: z.literal(true),
 });
 
+// 5 envois par IP et par tranche de 10 minutes (anti-spam, voir lib/rateLimit.ts)
+const RATE_LIMIT = { limit: 5, windowMs: 10 * 60 * 1000 };
+
 export async function POST(request: Request) {
+  const rate = checkRateLimit(`devis:${clientIp(request)}`, RATE_LIMIT);
+  if (!rate.allowed) {
+    return Response.json(
+      { ok: false, error: 'rate_limited' },
+      { status: 429, headers: { 'Retry-After': String(rate.retryAfterSec ?? 600) } },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();

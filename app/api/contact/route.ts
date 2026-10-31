@@ -4,6 +4,7 @@
 
 import { z } from 'zod';
 import { MailConfigError, sendFormMail } from '@/lib/mail';
+import { checkRateLimit, clientIp } from '@/lib/rateLimit';
 
 // Sujets proposés par ContactForm.tsx (libellés FR pour l'email)
 const SUJETS: Record<string, string> = {
@@ -24,7 +25,18 @@ const contactSchema = z.object({
   consentement: z.literal(true),
 });
 
+// 5 envois par IP et par tranche de 10 minutes (anti-spam, voir lib/rateLimit.ts)
+const RATE_LIMIT = { limit: 5, windowMs: 10 * 60 * 1000 };
+
 export async function POST(request: Request) {
+  const rate = checkRateLimit(`contact:${clientIp(request)}`, RATE_LIMIT);
+  if (!rate.allowed) {
+    return Response.json(
+      { ok: false, error: 'rate_limited' },
+      { status: 429, headers: { 'Retry-After': String(rate.retryAfterSec ?? 600) } },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
