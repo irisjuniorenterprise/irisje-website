@@ -88,7 +88,7 @@ const nextConfig = {
       { source: '/portfolio/:path*', headers: cacheControl },
       {
         source:
-          '/:file(og-image\\.png|logo-iris\\.png|logo-s-no-bg\\.png|horiz-logo\\.png|cta-bg\\.webp|bg-eagle\\.svg|bg-lines\\.svg|bg_sans_logo\\.svg|iris-join-logo\\.svg|iris-junior-entreprise-logo\\.svg)',
+          '/:file(favicon\\.ico|icon-192\\.png|icon-512\\.png|apple-touch-icon\\.png|og-image\\.png|logo-iris\\.png|logo-s-no-bg\\.png|horiz-logo\\.png|cta-bg\\.webp|bg-eagle\\.svg|bg-lines\\.svg|bg_sans_logo\\.svg|iris-join-logo\\.svg|iris-junior-entreprise-logo\\.svg)',
         headers: cacheControl,
       },
     ];

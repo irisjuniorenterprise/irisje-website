@@ -40,18 +40,23 @@ export const metadata: Metadata = {
     template: '%s | IRIS Junior Entreprise',
   },
   description: 'IRIS Junior Entreprise, junior-entreprise de l\'ENIS à Sfax : web, mobile, branding, marketing et études de marché.',
-  manifest: '/manifest.json?v=2',
+  manifest: '/manifest.json?v=3',
+  // Icônes carrées, recadrées sur le logo, sur fond blanc (lisibles en thème
+  // sombre et à 16 px). Chaque icône déclare sa taille : Bing et Google
+  // choisissent sans ambiguïté. /favicon.ico vit dans public/ (pas de doublon
+  // avec app/favicon.ico) et contient 16, 32 et 48 px.
   icons: {
     icon: [
-      { url: '/favicon.ico' },                          // fallback universel
-      { url: '/logo-iris.png', type: 'image/png' },     // navigateurs modernes
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    apple: '/logo-iris.png',                            // iOS home screen
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/favicon.ico',
   },
   other: {
     'msapplication-TileColor': '#1a3969',               // tuile Windows
-    'msapplication-TileImage': '/logo-iris.png',
+    'msapplication-TileImage': '/icon-192.png',
   },
 };
 
