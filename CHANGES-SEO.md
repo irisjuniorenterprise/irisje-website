@@ -29,3 +29,25 @@ Les tests Playwright qui ouvrent un navigateur (balises par page) n'ont pas pu �
 **Conservé** : `BreadcrumbList` (seul rapport pertinent), `Organization`/`LocalBusiness`/`WebSite`, `OfferCatalog`.
 **FAQPage** : conservé. Google n'affiche plus les résultats enrichis FAQ depuis le 07/05/2026 et le rapport a disparu de Search Console en juin ; le balisage reste valide et sans effet négatif. Ne pas s'attendre à voir « FAQ » dans Search Console.
 **Non applicable** : Product, Merchant listings, Review snippets, Video, AMP (pas de produit à prix, pas d'avis publiés, pas de vidéo, pas d'AMP) ; `SearchAction` (retiré, pas de recherche interne).
+
+## Favicon / icônes (Bing affichait un globe gris)
+| Fichier | Changement |
+|---|---|
+| `public/favicon.ico` (+ suppression de `app/favicon.ico`) | Nouveau favicon 16/32/48 px, logo **recadré** (le logo occupait ~55 % du canevas : illisible à 16 px) sur fond **blanc** (la transparence rendait l'aigle invisible en thème sombre). Une seule source : plus de doublon avec la convention `app/favicon.ico`. |
+| `public/icon-192.png`, `icon-512.png`, `apple-touch-icon.png` | Icônes carrées aux vraies tailles déclarées. |
+| `app/[locale]/layout.tsx` | `metadata.icons` avec une taille par icône ; tuile Windows → `icon-192.png` ; manifest `?v=3` pour forcer le rafraîchissement. |
+| `public/manifest.json` | Les icônes 192/512 pointent vers de vrais fichiers 192/512 (avant : le même PNG 500×500 déclaré deux fois). |
+| `next.config.js` | Cache d'un jour ajouté aux nouvelles icônes. |
+
+⚠️ Bing met à jour ses favicons lentement (1 à 3 semaines). Après déploiement : Bing Webmaster Tools → « Soumettre des URL » pour la page d'accueil.
+
+## Autres corrections
+| Fichier | Changement |
+|---|---|
+| `package.json` / `package-lock.json` | `react-hook-form` déclaré explicitement (importé par 4 fichiers mais absent des dépendances). Lock régénéré avec `npm install` : `npm ci` doit maintenant passer. |
+| `lib/rateLimit.ts`, `app/api/contact`, `app/api/devis` | Anti-spam : 5 envois / IP / 10 min, réponse 429 + `Retry-After`. En mémoire, donc partiel en serverless ; pour du strict, Redis ou Turnstile. |
+| `app/404.tsx`, `app/[locale]/404.tsx`, `components/404/` | Supprimés : code mort (non reconnu par Next, jamais importé). Les `not-found.tsx` restent. |
+| `README.md` | Next 16, Node ≥ 20.9, `proxy.ts`, licence MIT personnalisée (`LICENSE.md`), structure à jour. |
+
+## Non traité
+`error.tsx` / `global-error.tsx` (à concevoir avec les traductions FR/EN/AR), erreurs ESLint existantes (`react-hooks/set-state-in-effect`, `any`, `require`), poids de `tunisia.geojson`.

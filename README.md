@@ -13,7 +13,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![next-intl](https://img.shields.io/badge/next--intl-1a3969?style=for-the-badge&logo=next.js&logoColor=white)
-![Licence MIT](https://img.shields.io/badge/Licence-MIT-yellow.svg?style=for-the-badge)
+![Licence MIT](https://img.shields.io/badge/Licence-MIT%20personnalis%C3%A9e-yellow.svg?style=for-the-badge)
 
 <br />
 
@@ -62,7 +62,7 @@ Ce dépôt contient le **site web officiel** de l'association — conçu pour ce
 
 | Technologie | Rôle | Version |
 |-------------|------|---------|
-| **Next.js** | Framework principal — App Router | 15 |
+| **Next.js** | Framework principal — App Router | 16 |
 | **TypeScript** | Langage de développement typé | — |
 | **React** | Bibliothèque UI | 19 |
 | **next-intl** | Internationalisation (i18n) | — |
@@ -77,7 +77,7 @@ Ce dépôt contient le **site web officiel** de l'association — conçu pour ce
 
 ### Prérequis
 
-- **Node.js** v18 ou supérieur
+- **Node.js** v20.9 ou supérieur (requis par Next.js 16)
 - **npm**, **yarn** ou **pnpm**
 - **Git**
 
@@ -178,6 +178,7 @@ irisje/
 │   ├── data/                               # Données statiques (slider…)
 │   ├── utils/                              # Fonctions utilitaires (dates…)
 │   ├── join.ts                             # URL de la plateforme IRIS JOIN
+│   ├── rateLimit.ts                        # Limiteur de débit des API contact/devis
 │   └── metadata.ts                         # Métadonnées SEO centralisées
 │
 ├── messages/                               # Fichiers de traduction JSON
@@ -186,11 +187,12 @@ irisje/
 │   └── ar.json                             # Traductions arabes
 │
 ├── public/                                 # Assets publics (images, favicon…)
+│   ├── favicon.ico / icon-192.png / icon-512.png / apple-touch-icon.png   # icônes (fond blanc, recadrées)
 │   ├── logo-iris.png
 │   ├── logo-s-no-bg.png
 │   └── horiz-logo.png
 │
-├── middleware.ts                           # Middleware de routage i18n
+├── proxy.ts                                # Proxy (ex-middleware) : i18n, redirections, 404, noindex hors prod
 ├── package.json
 └── CONTRIBUTING.md
 ```
@@ -201,7 +203,7 @@ irisje/
 
 ### ✅ Phase 1 — Initialisation du projet
 
-- [x] Configuration Next.js 15 avec App Router
+- [x] Configuration Next.js avec App Router
 - [x] Mise en place de next-intl (FR, EN, AR)
 - [x] Support RTL natif pour l'arabe
 - [x] Structure de dossiers et architecture du projet
@@ -291,7 +293,7 @@ Le projet suit le standard **[Conventional Commits](https://www.conventionalcomm
 
 ## 📄 Licence
 
-Distribué sous la licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus d'informations.
+Distribué sous une licence **MIT personnalisée**. Voir le fichier [LICENSE.md](LICENSE.md) pour plus d'informations.
 
 ---
 
