@@ -104,6 +104,15 @@ export default function PageJsonLd({ origin }: { origin: string }) {
       telephone: ORGANIZATION.telephone,
       address: { '@type': 'PostalAddress', ...ORGANIZATION.address },
       geo: { '@type': 'GeoCoordinates', ...ORGANIZATION.geo },
+      foundingLocation: {
+        '@type': 'Place',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: ORGANIZATION.address.addressLocality,
+          addressCountry: ORGANIZATION.address.addressCountry,
+        },
+      },
+      hasMap: `https://www.google.com/maps?q=${ORGANIZATION.geo.latitude},${ORGANIZATION.geo.longitude}`,
       areaServed: { '@type': 'Country', name: 'Tunisia' },
       knowsAbout: ORGANIZATION.knowsAbout,
       contactPoint: [
