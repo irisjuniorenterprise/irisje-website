@@ -7,6 +7,9 @@
 // télécharger un (aucun binaire n'est téléchargé à l'exécution).
 import { defineConfig } from '@playwright/test';
 
+// BASE_URL permet de tester un `next start` (ex. BASE_URL=http://localhost:3100).
+const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3000';
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -17,7 +20,7 @@ export default defineConfig({
   timeout: 120_000,
   expect: { timeout: 15_000 },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: BASE_URL,
     channel: 'msedge',
     headless: true,
     viewport: { width: 1440, height: 900 },
@@ -27,7 +30,7 @@ export default defineConfig({
   // tourne déjà (c'est le cas pendant l'audit), sinon on le lance.
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3000',
+    url: BASE_URL,
     reuseExistingServer: true,
     timeout: 120_000,
   },
