@@ -19,15 +19,23 @@
 // logo est déjà dans le HTML initial, affiché avant toute hydratation.
 //
 // Filet de sécurité sans JavaScript : l'overlay se retire tout seul après
-// 6 s (voir PageLoader.module.css), le contenu n'est jamais bloqué.
+// 2,5 s (voir PageLoader.module.css), le contenu n'est jamais bloqué.
 import { useEffect, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './PageLoader.module.css';
 
-/** Une pulsation complète du logo = période de ldg-pulse (1,2 s). */
-const MIN_DURATION_MS = 1200;
-/** Mouvement réduit : le logo ne pulse pas, on raccourcit l'attente. */
-const MIN_DURATION_REDUCED_MS = 400;
+/**
+ * Durée minimale d'affichage de l'écran de chargement.
+ *
+ * ⚠️ SEO / Core Web Vitals : cet overlay recouvre la page ; tant qu'il est
+ * visible, le contenu réel n'est pas « vu » par l'utilisateur ni par la mesure
+ * LCP. Une valeur élevée (1,2 s auparavant) ajoutait donc cette durée entière
+ * au LCP de CHAQUE page et de chaque navigation. On garde un bref éclat de
+ * marque, sans retarder le contenu.
+ */
+const MIN_DURATION_MS = 300;
+/** Mouvement réduit : pas d'animation, donc pas d'attente artificielle. */
+const MIN_DURATION_REDUCED_MS = 0;
 
 // Passe à true quand l'overlay du tout premier chargement a été retiré.
 // Reste en mémoire pendant la navigation côté client : un remontage du

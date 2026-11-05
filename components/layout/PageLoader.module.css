@@ -12,7 +12,7 @@
   opacity: 1;
   visibility: visible;
   /* Filet de sécurité sans JavaScript : l'overlay se retire seul après 6 s. */
-  animation: ldg-failsafe 0.3s ease-out 6s forwards;
+  animation: ldg-failsafe 0.3s ease-out 2.5s forwards;
 }
 
 /* Changement de page : apparition rapide en fondu (pas au premier chargement,
@@ -20,7 +20,7 @@
 .overlay[data-nav='true'] {
   animation:
     ldg-overlay-in 0.2s ease-out,
-    ldg-failsafe 0.3s ease-out 6s forwards;
+    ldg-failsafe 0.3s ease-out 2.5s forwards;
 }
 
 /* Durée minimale écoulée : fondu de sortie, puis le calque ne bloque plus rien. */
@@ -57,7 +57,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .overlay[data-nav='true'] {
-    animation: ldg-failsafe 0.3s ease-out 6s forwards;
+    animation: ldg-failsafe 0.3s ease-out 2.5s forwards;
   }
   .overlay[data-state='hidden'] {
     transition-duration: 0s;
