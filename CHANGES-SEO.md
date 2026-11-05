@@ -51,3 +51,28 @@ Les tests Playwright qui ouvrent un navigateur (balises par page) n'ont pas pu �
 
 ## Non traité
 `error.tsx` / `global-error.tsx` (à concevoir avec les traductions FR/EN/AR), erreurs ESLint existantes (`react-hooks/set-state-in-effect`, `any`, `require`), poids de `tunisia.geojson`.
+
+
+---
+
+## Mise à jour — consolidation SEO / GEO / AEO
+
+Détail et mode d'emploi : **docs/SEO-GEO-AEO.md**.
+
+- **Un seul domaine indexé** : le `.tn` redirige en 308 vers le domaine principal
+  (`NEXT_PUBLIC_REDIRECT_SITE_URLS`, `proxy.ts`, `lib/seo.ts`). `lib/request-site.ts`
+  ne lit plus `headers()`.
+- **Rendu statique (SSG + ISR 1 h)** : `app/[locale]/layout.tsx` (`generateStaticParams`,
+  `setRequestLocale`, `revalidate`). ⚠️ Ne jamais lire `cookies()`/`headers()` dans un
+  `not-found.tsx` : cela rend TOUT le site dynamique (cause trouvée dans `app/not-found.tsx`).
+  Les 404 sous une langue passent par `/[locale]/page-not-found` (réécriture du proxy).
+  `/devis` reste dynamique (lit `?prestation=`).
+- **Core Web Vitals** : écran de chargement ramené de 1,2 s à 0,3 s (`PageLoader`),
+  geojson 1,9 Mo → 0,5 Mo.
+- **Contenu** : `/services/<slug>` (9 prestations), `/guides` et `/guides/<slug>` en FR/EN/AR
+  (`lib/data/servicesIndex.ts`, `servicesContent.*.ts`, `guides.ts`), maillage interne
+  (`ServiceLinks`, footer), JSON-LD `Service` / `Article` / `FAQPage`.
+- **GEO / AEO** : `app/robots.ts` (robots IA), `app/llms.txt/route.ts`, réponses directes en tête de page.
+- **Robustesse** : `error.tsx` et `global-error.tsx` trilingues.
+- **Outils** : `npm run seo:check -- <url>` ; tests `tests/seo/detail-pages.spec.mjs`
+  (`BASE_URL=http://localhost:3000 npm run test:seo`).

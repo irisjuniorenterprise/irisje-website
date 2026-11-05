@@ -23,6 +23,9 @@
 
 ---
 
+
+> **SEO / GEO / AEO** : voir [docs/SEO-GEO-AEO.md](docs/SEO-GEO-AEO.md) (guide de pilotage) et [CHANGES-SEO.md](CHANGES-SEO.md). Les tâches « métadonnées, loading.tsx, error.tsx » de la feuille de route ci-dessous sont faites.
+
 ## 📋 Table des matières
 
 - [À propos du projet](#à-propos-du-projet)
