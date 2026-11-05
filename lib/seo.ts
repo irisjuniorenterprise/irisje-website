@@ -33,7 +33,15 @@ import {
 /* ------------------------------------------------------------------ */
 
 const DEFAULT_PRIMARY_ORIGIN = 'https://www.iris-junior-entreprise.com';
-const DEFAULT_ALTERNATE_ORIGINS = ['https://www.iris-junior-entreprise.tn'];
+// Un SEUL domaine indexé par défaut : deux domaines servant le même contenu se
+// font concurrence (canonical choisi par Google, signaux et liens répartis).
+// Pour réactiver le double domaine, renseigner NEXT_PUBLIC_ALTERNATE_SITE_URLS.
+const DEFAULT_ALTERNATE_ORIGINS: string[] = [];
+
+// Domaines qui redirigent (308) vers le domaine principal, chemin conservé :
+// ils ne sont jamais indexés eux-mêmes. Variable : NEXT_PUBLIC_REDIRECT_SITE_URLS
+// (laisser vide = aucune redirection).
+const DEFAULT_REDIRECT_ORIGINS = ['https://www.iris-junior-entreprise.tn'];
 
 /** « https://www.exemple.com/chemin/ » → « https://www.exemple.com » ('' si invalide). */
 const toOrigin = (value: string): string => {
@@ -63,8 +71,20 @@ const alternateOrigins = (
   .map(toOrigin)
   .filter(Boolean);
 
-/** Tous les domaines de production (le principal en premier). */
-export const SITE_ORIGINS: string[] = Array.from(new Set([SITE_URL, ...alternateOrigins]));
+const redirectEnv = process.env.NEXT_PUBLIC_REDIRECT_SITE_URLS;
+const redirectOrigins: string[] = (
+  redirectEnv === undefined ? DEFAULT_REDIRECT_ORIGINS : redirectEnv.split(',')
+)
+  .map(toOrigin)
+  .filter(Boolean)
+  .filter((origin) => origin !== SITE_URL);
+
+const redirectHostnames = new Set(redirectOrigins.map((o) => new URL(o).hostname.toLowerCase()));
+
+/** Tous les domaines de production indexables (le principal en premier). */
+export const SITE_ORIGINS: string[] = Array.from(new Set([SITE_URL, ...alternateOrigins])).filter(
+  (origin, index) => index === 0 || !redirectHostnames.has(new URL(origin).hostname.toLowerCase()),
+);
 
 export const SITE_NAME = 'IRIS Junior Entreprise';
 
@@ -131,6 +151,23 @@ export const normalizeHost = (host?: string | null): string =>
 export const findOrigin = (host?: string | null): string | undefined => {
   const hostname = normalizeHost(host);
   return SITE_ORIGINS.find((origin) => hostnameOf(origin) === hostname);
+};
+
+/**
+ * Origine PRINCIPALE vers laquelle rediriger un domaine « de redirection »
+ * (ou sa variante apex / www). undefined = hôte non concerné.
+ */
+export const redirectTargetFor = (host?: string | null): string | undefined => {
+  const hostname = normalizeHost(host);
+  if (!hostname) return undefined;
+  for (const origin of redirectOrigins) {
+    const canonical = hostnameOf(origin);
+    const bare = canonical.replace(/^www\./, '');
+    if (hostname === canonical || hostname === bare || hostname === `www.${bare}`) {
+      return SITE_URL;
+    }
+  }
+  return undefined;
 };
 
 /**

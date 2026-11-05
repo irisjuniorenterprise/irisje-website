@@ -21,7 +21,9 @@ const toOrigin = (value) => {
 };
 
 const DEFAULT_PRIMARY_ORIGIN = 'https://www.iris-junior-entreprise.com';
-const DEFAULT_ALTERNATE_ORIGINS = ['https://www.iris-junior-entreprise.tn'];
+// Un seul domaine indexé (le .tn redirige vers le principal : voir proxy.ts et
+// lib/seo.ts). Même défaut que lib/seo.ts.
+const DEFAULT_ALTERNATE_ORIGINS = [];
 
 /**
  * Origine CANONIQUE, indépendante de l'env. Sert de destination au filet de

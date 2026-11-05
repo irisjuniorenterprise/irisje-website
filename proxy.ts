@@ -2,7 +2,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { locales, defaultLocale } from './i18n/config';
-import { ROUTES, canonicalHostFor, isLocale, normalizeHost } from './lib/seo';
+import { ROUTES, canonicalHostFor, isLocale, normalizeHost, redirectTargetFor } from './lib/seo';
 
 // Middleware next-intl officiel
 const intlMiddleware = createMiddleware({
@@ -35,6 +35,20 @@ export default function middleware(request: NextRequest) {
   const host = normalizeHost(
     request.headers.get('x-forwarded-host') ?? request.headers.get('host')
   );
+
+  // 🔁 Domaine secondaire (ex. .tn) → domaine principal, chemin et requête
+  // conservés (308). Deux domaines servant le même contenu se concurrencent :
+  // Google choisit seul le « canonical » et répartit les signaux entre eux.
+  // Voir NEXT_PUBLIC_REDIRECT_SITE_URLS (.env.example).
+  const redirectTarget = redirectTargetFor(host);
+  if (redirectTarget) {
+    const url = request.nextUrl.clone();
+    const target = new URL(redirectTarget);
+    url.protocol = target.protocol;
+    url.hostname = target.hostname;
+    url.port = '';
+    return NextResponse.redirect(url, 308);
+  }
 
   // 🔁 Un seul hôte par domaine : iris-junior-entreprise.com → www.… (308).
   // Sans cela, apex et www se concurrencent (contenu dupliqué) et l'URL

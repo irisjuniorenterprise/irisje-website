@@ -1,23 +1,25 @@
 // lib/request-site.ts
 //
-// Domaine réellement servi pour la requête en cours (serveur uniquement).
-// L'en-tête Host n'est jamais recopié tel quel : il est comparé à la liste
-// blanche des domaines de production (lib/seo.ts). Un hôte inconnu
-// (*.vercel.app, preview, localhost…) retombe sur le domaine principal et est
-// marqué non indexable — impossible d'injecter un faux canonical via Host.
-import { headers } from 'next/headers';
-import { SITE_URL, findOrigin } from '@/lib/seo';
+// Origine du site pour canonical, Open Graph, sitemap et JSON-LD.
+//
+// Le site est servi par UN SEUL domaine indexable (SITE_URL, voir lib/seo.ts) :
+// les autres domaines redirigent en 308 (proxy.ts). L'origine ne dépend donc
+// plus de l'en-tête Host, ce qui permet le RENDU STATIQUE des pages (avant,
+// la lecture de headers() rendait chaque page dynamique : pas de cache CDN,
+// TTFB plus long).
+//
+// Hôtes hors production (preview *.vercel.app, localhost) : ils ne sont pas
+// détectés ici mais dans proxy.ts, qui ajoute l'en-tête
+// `X-Robots-Tag: noindex, nofollow` à chacune de leurs réponses.
+import { SITE_URL } from '@/lib/seo';
 
 export type RequestSite = {
   /** Origine à utiliser pour canonical, Open Graph, sitemap, JSON-LD. */
   origin: string;
-  /** false pour un hôte hors production (à exclure des moteurs de recherche). */
+  /** Toujours true : le noindex des hôtes de preview est posé par le proxy. */
   indexable: boolean;
 };
 
 export async function getRequestSite(): Promise<RequestSite> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host');
-  const known = findOrigin(host);
-  return { origin: known ?? SITE_URL, indexable: known !== undefined };
+  return { origin: SITE_URL, indexable: true };
 }
