@@ -1,7 +1,7 @@
 // app/[locale]/layout.tsx
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/config';
 import Header from '@/components/layout/Header';
@@ -25,6 +25,16 @@ type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
+
+// ⚡ Rendu STATIQUE (SEO / Core Web Vitals) : une page HTML par langue, générée
+// au build et servie par le CDN (TTFB minimal), puis régénérée toutes les
+// heures en arrière-plan. La régénération est nécessaire car la fenêtre de
+// recrutement (1er–7 octobre, lib/utils/date.ts) dépend de la date du jour.
+export const revalidate = 3600;
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 // ✅ Viewport géré uniquement ici — supprime les <meta> manuels
 export const viewport: Viewport = {
@@ -66,6 +76,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!locales.includes(locale as any)) {
     notFound();
   }
+
+  // Indique la langue à next-intl sans lire les en-têtes (rendu statique).
+  setRequestLocale(locale);
 
   const isRtl = locale === 'ar';
 

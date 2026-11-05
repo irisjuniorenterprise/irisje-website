@@ -1,29 +1,21 @@
-import { cookies } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
-import { locales, defaultLocale } from '@/i18n/config';
+// app/[locale]/not-found.tsx
+//
+// 404 DANS une langue du site. ⚠️ Ne lire ni cookies() ni headers() ici : un
+// not-found fait partie de l'arbre de rendu de [locale], et une lecture
+// dynamique rendait TOUTES les pages du site dynamiques (pas de rendu statique,
+// pas de cache CDN, TTFB plus long). La langue vient de next-intl
+// (setRequestLocale, appelé par app/[locale]/layout.tsx), sans en-têtes.
+import type { Metadata } from 'next';
+import { getLocale } from 'next-intl/server';
 import NotFoundContent from '@/components/NotFoundContent';
 
-export async function generateMetadata() {
-  const locale = await resolveLocale();
-  const t = await getTranslations({ locale, namespace: 'NotFound' });
-  return {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
-  };
-}
-
-async function resolveLocale(): Promise<string> {
-  const cookieStore = await cookies();
-  const cookieLocale = cookieStore.get('NEXT_LOCALE')?.value;
-
-  if (cookieLocale && locales.includes(cookieLocale as any)) {
-    return cookieLocale;
-  }
-
-  return defaultLocale;
-}
+// Statique : un titre neutre suffit (une page 404 n'est pas indexée).
+export const metadata: Metadata = {
+  title: 'Page introuvable — Page not found — الصفحة غير موجودة',
+  robots: { index: false, follow: false },
+};
 
 export default async function LocaleNotFound() {
-  const locale = await resolveLocale();
+  const locale = await getLocale();
   return <NotFoundContent locale={locale} />;
 }

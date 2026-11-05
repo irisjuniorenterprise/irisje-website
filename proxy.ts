@@ -89,12 +89,14 @@ export default function middleware(request: NextRequest) {
   if (firstSegment && isLocale(firstSegment) && restSegments.length > 0) {
     const subPath = `/${restSegments.join('/')}`;
     if (!KNOWN_SUBPATHS.has(subPath)) {
-      const forwarded = new Headers(request.headers);
-      forwarded.set('x-next-intl-locale', firstSegment);
+      // Réécriture vers la route attrape-tout de la langue (/[locale]/[...rest]
+      // → notFound() → app/[locale]/not-found.tsx) : la page 404 est ainsi
+      // rendue DANS le layout de la langue (header, footer, traductions), sans
+      // lire cookies() ni headers(). Un not-found racine dynamique rendait en
+      // effet toutes les pages du site dynamiques.
       return finish(
-        NextResponse.rewrite(new URL('/_not-found', request.url), {
-          status: 404,
-          request: { headers: forwarded }
+        NextResponse.rewrite(new URL(`/${firstSegment}/page-not-found`, request.url), {
+          status: 404
         })
       );
     }

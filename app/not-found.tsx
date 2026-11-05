@@ -1,71 +1,42 @@
 // app/not-found.tsx
+//
+// 404 RACINE (hors préfixe de langue valide) : volontairement STATIQUE et
+// trilingue. ⚠️ Ne lire ni headers() ni cookies() ici : un not-found racine
+// dynamique rend TOUTES les pages du site dynamiques (pas de rendu statique,
+// pas de CDN). Les 404 sous /fr, /en, /ar passent par app/[locale]/not-found.tsx
+// (voir proxy.ts), avec le design complet du site.
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { locales, defaultLocale } from '@/i18n/config';
-import NotFoundContent from '@/components/NotFoundContent';
-import Header from '@/components/layout/Header';
-import Breadcrumb from '@/components/ui/Breadcrumb';
-import Slogan from '@/components/ui/Slogan';
-import Footer from '@/components/layout/Footer';
-import './not-found.css';
-
-async function getLocale(): Promise<string> {
-  const headersList = await headers();
-
-  const nextIntlLocale = headersList.get('x-next-intl-locale');
-  if (nextIntlLocale && locales.includes(nextIntlLocale as any)) return nextIntlLocale;
-
-  const xLocale = headersList.get('x-locale');
-  if (xLocale && locales.includes(xLocale as any)) return xLocale;
-
-  const referer = headersList.get('referer') || '';
-  try {
-    const refLocale = new URL(referer).pathname.split('/')[1];
-    if (refLocale && locales.includes(refLocale as any)) return refLocale;
-  } catch {}
-
-  const acceptLang = headersList.get('accept-language') || '';
-  const preferred = acceptLang.split(',')[0].split('-')[0];
-  return locales.includes(preferred as any) ? preferred : defaultLocale;
-}
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Page non trouvée | IRIS Junior Entreprise',
-  description: "La page que vous recherchez n'existe pas.",
-  openGraph: {
-    title: 'Page non trouvée | IRIS Junior Entreprise',
-    description: "La page que vous recherchez n'existe pas.",
-    images: ['/logo-iris.png'],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Page non trouvée | IRIS Junior Entreprise',
-    description: "La page que vous recherchez n'existe pas.",
-    images: ['/logo-iris.png'],
-  },
+  title: 'Page introuvable | IRIS Junior Entreprise',
+  robots: { index: false, follow: false },
 };
 
-export default async function RootNotFound() {
-  const locale = await getLocale();
-  const isRtl = locale === 'ar';
-  const messages = await getMessages({ locale });
-
+export default function RootNotFound() {
+  const link = { color: '#1a3969', fontWeight: 600 } as const;
   return (
-    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        {/* ✅ Tous les composants qui utilisent useTranslations
-            doivent être DANS le provider */}
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <Header />
-          <Breadcrumb />
-          <main id="main">
-            <NotFoundContent locale={locale} />
-          </main>
-          <Slogan />
-          <Footer />
-        </NextIntlClientProvider>
+    <html lang="fr">
+      <body style={{ margin: 0, fontFamily: 'system-ui, sans-serif', color: '#1f2937' }}>
+        <main
+          style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.75rem',
+            padding: '2rem',
+            textAlign: 'center',
+          }}
+        >
+          <h1 style={{ margin: 0, color: '#1a3969' }}>404</h1>
+          <p style={{ margin: 0 }}>Page introuvable · Page not found · الصفحة غير موجودة</p>
+          <p style={{ margin: 0 }}>
+            <Link href="/fr" style={link}>Accueil</Link> · <Link href="/en" style={link}>Home</Link> ·{' '}
+            <Link href="/ar" style={link}>الرئيسية</Link>
+          </p>
+        </main>
       </body>
     </html>
   );
