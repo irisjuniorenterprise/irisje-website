@@ -51,7 +51,8 @@
     "aria_label": "Main navigation",
     "aria_label_mobile": "Mobile navigation",
     "language": "Language",
-    "menu": "Menu"
+    "menu": "Menu",
+    "guides": "Guides"
   },
   "Breadcrumb": {
     "label": "Breadcrumb",
@@ -67,7 +68,19 @@
       "/faq": "FAQ",
       "/mentions-legales": "Legal notice",
       "/politique-confidentialite": "Privacy policy",
-      "/cgu": "Terms of use"
+      "/cgu": "Terms of use",
+      "/services/developpement-web": "Web development",
+      "/services/developpement-mobile": "Mobile app development",
+      "/services/chatbot": "Chatbot development",
+      "/services/branding": "Branding and visual identity",
+      "/services/community-management": "Community management",
+      "/services/etude-marche": "Market research",
+      "/services/etude-notoriete": "Brand awareness study",
+      "/services/etude-satisfaction": "Customer satisfaction study",
+      "/services/business-plan": "Business plan",
+      "/guides": "Guides",
+      "/guides/qu-est-ce-qu-une-junior-entreprise": "What is a junior enterprise?",
+      "/guides/cahier-des-charges-site-web": "Website requirements document"
     }
   },
   "Slider": {

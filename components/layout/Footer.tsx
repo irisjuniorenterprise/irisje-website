@@ -82,6 +82,7 @@ export default function Footer() {
               <li><Link href={localHref('/services')}>{t('services')}</Link></li>
               <li><Link href={localHref('/a-propos')}>{t('about')}</Link></li>
               <li><Link href={localHref('/devis')}>{t('devis')}</Link></li>
+              <li><Link href={localHref('/guides')}>{t('guides')}</Link></li>
               <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
             </ul>
           </div>

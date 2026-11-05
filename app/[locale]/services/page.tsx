@@ -9,6 +9,8 @@ import { buildMetadata } from '@/lib/metadata';
 import { PRESTATIONS, devisHref } from '@/lib/data/prestations';
 import ToolTag from '@/components/ui/ToolTag';
 import CtaBand from '@/components/ui/CtaBand';
+import ServiceLinks from '@/components/ui/ServiceLinks';
+import type { Locale } from '@/i18n/config';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -471,6 +473,9 @@ export default async function ServicesPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* MAILLAGE INTERNE : une page de détail par prestation + guides */}
+      <ServiceLinks locale={locale as Locale} />
 
       {/* CTA FINAL */}
       <CtaBand

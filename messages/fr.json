@@ -51,7 +51,8 @@
     "aria_label": "Navigation principale",
     "aria_label_mobile": "Navigation mobile",
     "language": "Langue",
-    "menu": "Menu"
+    "menu": "Menu",
+    "guides": "Guides"
   },
   "Breadcrumb": {
     "label": "Fil d'Ariane",
@@ -67,7 +68,19 @@
       "/faq": "FAQ",
       "/mentions-legales": "Mentions légales",
       "/politique-confidentialite": "Politique de confidentialité",
-      "/cgu": "Conditions d'utilisation"
+      "/cgu": "Conditions d'utilisation",
+      "/services/developpement-web": "Développement web",
+      "/services/developpement-mobile": "Développement mobile",
+      "/services/chatbot": "Chatbot",
+      "/services/branding": "Branding et identité visuelle",
+      "/services/community-management": "Community management",
+      "/services/etude-marche": "Étude de marché",
+      "/services/etude-notoriete": "Étude de notoriété",
+      "/services/etude-satisfaction": "Étude de satisfaction",
+      "/services/business-plan": "Business plan",
+      "/guides": "Guides",
+      "/guides/qu-est-ce-qu-une-junior-entreprise": "Qu'est-ce qu'une junior-entreprise ?",
+      "/guides/cahier-des-charges-site-web": "Cahier des charges d'un site web"
     }
   },
   "Slider": {

@@ -73,7 +73,7 @@ export async function buildMetadata({
   let keywords = fallbackKeywords;
 
   const route = getRoute(path);
-  if (route) {
+  if (route?.namespace) {
     const t = (await getTranslations({
       locale,
       namespace: route.namespace as never,

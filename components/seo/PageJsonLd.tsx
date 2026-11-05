@@ -72,8 +72,12 @@ export default function PageJsonLd({ origin }: { origin: string }) {
   const orgId = `${origin}/#organization`;
   const siteId = `${homeUrl}#website`;
 
-  const title = read(`${route.namespace}.meta.title`);
-  const description = read(`${route.namespace}.meta.description`);
+  // Pages de détail (services, guides) : pas de namespace de traduction. Leur
+  // contenu et leur JSON-LD (Service / Article / FAQPage) sont émis par la page
+  // elle-même ; ici, seul le fil d'Ariane est ajouté.
+  const namespace = route.namespace;
+  const title = namespace ? read(`${namespace}.meta.title`) : '';
+  const description = namespace ? read(`${namespace}.meta.description`) : '';
 
   const graph: Record<string, unknown>[] = [];
 
@@ -129,6 +133,7 @@ export default function PageJsonLd({ origin }: { origin: string }) {
   }
 
   /* ---------- Page courante ---------- */
+  if (namespace) {
   const page: Record<string, unknown> = {
     '@type': route.schema,
     '@id': `${pageUrl}#webpage`,
@@ -195,6 +200,7 @@ export default function PageJsonLd({ origin }: { origin: string }) {
   }
 
   graph.push(page);
+  }
 
   /* ---------- Fil d'Ariane ---------- */
   if (path !== '/') {

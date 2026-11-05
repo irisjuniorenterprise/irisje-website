@@ -22,6 +22,11 @@
 // Google affiche alors la bonne version selon le pays de la recherche, et
 // chaque domaine peut obtenir ses propres liens de site (sitelinks).
 import { locales, defaultLocale, type Locale } from '@/i18n/config';
+import {
+  CONTENT_LAST_MODIFIED,
+  GUIDE_SLUGS,
+  SERVICE_SLUGS,
+} from '@/lib/data/servicesIndex';
 
 /* ------------------------------------------------------------------ */
 /* Origines du site                                                    */
@@ -155,8 +160,12 @@ export type SchemaPageType = 'WebPage' | 'AboutPage' | 'ContactPage' | 'FAQPage'
 export type SeoRoute = {
   /** Chemin sans locale ('/' pour l'accueil). */
   path: string;
-  /** Namespace des messages contenant `meta.title|description|keywords`. */
-  namespace: string;
+  /**
+   * Namespace des messages contenant `meta.title|description|keywords`.
+   * Absent pour les pages de détail (services, guides) : leur contenu vient
+   * de lib/data/* et elles émettent leur propre JSON-LD.
+   */
+  namespace?: string;
   /** Type schema.org de la page. */
   schema: SchemaPageType;
   /** Priorité relative dans le sitemap (0–1). */
@@ -185,6 +194,22 @@ export const ROUTES: SeoRoute[] = [
   { path: '/mentions-legales', namespace: 'MentionsLegalesPage', schema: 'WebPage', priority: 0.3, changeFrequency: 'yearly' },
   { path: '/politique-confidentialite', namespace: 'PolitiqueConfidentialitePage', schema: 'WebPage', priority: 0.3, changeFrequency: 'yearly' },
   { path: '/cgu', namespace: 'CGUPage', schema: 'WebPage', priority: 0.3, changeFrequency: 'yearly' },
+  // Pages de détail : une par prestation + les guides (contenu dans lib/data/*).
+  ...SERVICE_SLUGS.map((slug): SeoRoute => ({
+    path: `/services/${slug}`,
+    schema: 'WebPage',
+    priority: 0.8,
+    changeFrequency: 'monthly',
+    lastModified: CONTENT_LAST_MODIFIED,
+  })),
+  { path: '/guides', schema: 'WebPage', priority: 0.7, changeFrequency: 'monthly', lastModified: CONTENT_LAST_MODIFIED },
+  ...GUIDE_SLUGS.map((slug): SeoRoute => ({
+    path: `/guides/${slug}`,
+    schema: 'WebPage',
+    priority: 0.7,
+    changeFrequency: 'monthly',
+    lastModified: CONTENT_LAST_MODIFIED,
+  })),
 ];
 
 /* ------------------------------------------------------------------ */

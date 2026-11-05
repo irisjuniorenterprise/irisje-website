@@ -1,0 +1,235 @@
+/* components/detail/Detail.module.css
+ *
+ * Styles partagés des pages de détail (services, guides). Mêmes variables que
+ * le reste du site (--surface, --border, --card-shadow, --primary…) ; propriétés
+ * logiques (inline-start / inline-end) : la mise en page s'inverse seule en
+ * arabe. Le hero réutilise les classes globales `.hero` des autres pages.
+ */
+
+.rtl :global(.hero-content) {
+  text-align: right;
+}
+
+.heroLead {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.65;
+  max-width: 640px;
+  margin: 1rem auto 0;
+}
+
+.heroLabel {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section {
+  padding: 2.5rem 0;
+}
+
+.narrow {
+  max-width: 820px;
+  margin-inline: auto;
+}
+
+.h2 {
+  margin: 0 0 1.1rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1.25;
+  color: var(--primary);
+}
+
+.text {
+  margin: 0 0 1rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.cards {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+  color: var(--text-primary);
+  line-height: 1.55;
+  border-inline-start: 4px solid var(--primary);
+}
+
+.steps {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding: 1.1rem 1.2rem 1.1rem 3.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+  counter-increment: step;
+}
+
+[dir='rtl'] .step,
+.rtl .step {
+  padding: 1.1rem 3.6rem 1.1rem 1.2rem;
+}
+
+.step::before {
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.stepTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.stepText {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* FAQ : <details> natif (sans JavaScript, indexable, accessible au clavier) */
+.faq {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.faqItem {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+
+.faqQuestion {
+  cursor: pointer;
+  padding: 1rem 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+.faqQuestion:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.faqAnswer {
+  margin: 0;
+  padding: 0 1.2rem 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.list {
+  margin: 0 0 1rem;
+  padding-inline-start: 1.4rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.list li + li {
+  margin-top: 0.35rem;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: inline-block;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.link:hover {
+  background: var(--surface-hover);
+}
+
+.link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.byline {
+  margin: 0 0 1.2rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.guideGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.guideCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+
+.guideCard h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: var(--primary);
+}
+
+.guideCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}

@@ -51,7 +51,8 @@
     "aria_label": "التنقل الرئيسي",
     "aria_label_mobile": "التنقل عبر الجوال",
     "language": "اللغة",
-    "menu": "القائمة"
+    "menu": "القائمة",
+    "guides": "أدلة"
   },
   "Breadcrumb": {
     "label": "مسار التنقل",
@@ -67,7 +68,19 @@
       "/faq": "الأسئلة الشائعة",
       "/mentions-legales": "الإشعارات القانونية",
       "/politique-confidentialite": "سياسة الخصوصية",
-      "/cgu": "شروط الاستخدام"
+      "/cgu": "شروط الاستخدام",
+      "/services/developpement-web": "تطوير المواقع الإلكترونية",
+      "/services/developpement-mobile": "تطوير تطبيقات الجوال",
+      "/services/chatbot": "تطوير روبوتات المحادثة",
+      "/services/branding": "العلامة التجارية والهوية البصرية",
+      "/services/community-management": "إدارة المجتمعات الرقمية",
+      "/services/etude-marche": "دراسة السوق",
+      "/services/etude-notoriete": "دراسة الشهرة",
+      "/services/etude-satisfaction": "دراسة رضا العملاء",
+      "/services/business-plan": "خطة العمل (Business Plan)",
+      "/guides": "أدلة",
+      "/guides/qu-est-ce-qu-une-junior-entreprise": "ما هي المؤسسة الصغرى الطلابية؟",
+      "/guides/cahier-des-charges-site-web": "كراس الشروط لموقع إلكتروني"
     }
   },
   "Slider": {
