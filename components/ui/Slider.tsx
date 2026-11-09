@@ -206,9 +206,13 @@ export default function Slider({
   const isRtl = locale === 'ar';
   const l = LABELS[locale as keyof typeof LABELS] ?? LABELS.fr;
 
-  useEffect(() => {
+  // Nouveau jeu de diapositives → retour à la première. Ajustement de l'état
+  // PENDANT le rendu (et non dans un effet) : évite un rendu intermédiaire.
+  const [previousSlides, setPreviousSlides] = useState(slides);
+  if (slides !== previousSlides) {
+    setPreviousSlides(slides);
     setCurrentIndex(0);
-  }, [slides]);
+  }
 
   // ------------------------------------------------------------
   // Position de la piste (écriture directe dans le style)
@@ -296,10 +300,12 @@ export default function Slider({
     (e: React.KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        isRtl ? goToPrev() : goToNext();
+        if (isRtl) goToPrev();
+        else goToNext();
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        isRtl ? goToNext() : goToPrev();
+        if (isRtl) goToNext();
+        else goToPrev();
       } else if (e.key === 'Home') {
         e.preventDefault();
         goToSlide(0);

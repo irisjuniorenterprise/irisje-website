@@ -1,8 +1,6 @@
 // components/NotFoundContent.tsx
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import ClientSideEffects from '@/components/ClientSideEffects';
 import '../app/not-found.css';
 type Props = {

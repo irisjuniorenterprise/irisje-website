@@ -424,8 +424,12 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
                 <Icons.X size={20} stroke="currentColor" aria-hidden="true" />
               </button>
 
-              <div className={styles.modalScroll}
-                tabIndex={0}>
+              <div
+                className={styles.modalScroll}
+                role="region"
+                aria-labelledby="portfolio-modal-title"
+                tabIndex={0}
+              >
                 {/* Visuel : dégradé en bas pour la lisibilité de la pastille */}
                 <div className={styles.modalImage}>
                   {selectedProject.image ? (

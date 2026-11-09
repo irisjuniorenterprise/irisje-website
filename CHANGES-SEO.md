@@ -76,3 +76,26 @@ Détail et mode d'emploi : **docs/SEO-GEO-AEO.md**.
 - **Robustesse** : `error.tsx` et `global-error.tsx` trilingues.
 - **Outils** : `npm run seo:check -- <url>` ; tests `tests/seo/detail-pages.spec.mjs`
   (`BASE_URL=http://localhost:3000 npm run test:seo`).
+
+---
+
+## Revue de code (ESLint, a11y, SMTP)
+
+`tsc --noEmit` : 0 erreur. `eslint` : 5 erreurs et 6 avertissements corrigés (0 restant).
+
+| Fichier | Changement |
+|---|---|
+| `components/layout/Footer.tsx` | Année calculée au rendu : plus de `setState` dans un effet (`react-hooks/set-state-in-effect`). |
+| `components/ui/Slider.tsx` | Remise à zéro de l'index quand `slides` change **pendant le rendu** (plus d'effet) ; ternaires utilisés comme instructions remplacés par des `if/else`. |
+| `components/ui/Slogan.tsx` | Exception documentée (`eslint-disable-next-line`) pour le repli sans `IntersectionObserver`. |
+| `components/portfolio/Portfolio.tsx` | Zone défilable de la modale : `role="region"` + `aria-labelledby` (requis pour un `tabIndex={0}` accessible). |
+| `eslint.config.mjs` | `next.config.js` ignoré (CommonJS volontaire). |
+| `components/NotFoundContent.tsx`, `components/forms/DevisForm.tsx` | Imports / variables inutilisés retirés. `delais` conservé (champ « délai » commenté), avec annotation. |
+| `lib/mail.ts` | Délais d'attente SMTP (connexion 10 s, accueil 10 s, socket 20 s) : une requête ne reste plus suspendue si le serveur ne répond pas. |
+| `README.md` | Cases « métadonnées » et « error.tsx / loading.tsx » cochées. |
+
+## À faire (hors code, constaté dans la Search Console)
+
+- Enrichir les pages `/services/<slug>` : ~280 à 320 mots par page en FR, moins en EN / AR ; `processSteps` identique sur les 9 services (source des « doublons »).
+- Vérifier qu'aucune règle de domaine Vercel ne redirige `www` → apex (boucle avec `canonicalHostFor` dans `proxy.ts`).
+- Mettre à jour `CONTENT_LAST_MODIFIED` (`lib/data/servicesIndex.ts`) quand le contenu change réellement.

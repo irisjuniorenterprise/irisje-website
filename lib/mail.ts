@@ -112,6 +112,10 @@ export async function sendFormMail(payload: FormMailPayload): Promise<void> {
     port: config.port,
     secure: config.secure,
     auth: config.auth,
+    // Sans ces délais, un serveur SMTP muet laisserait la requête pendante.
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   });
 
   await transporter.sendMail({

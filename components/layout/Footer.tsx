@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -43,16 +42,12 @@ const socialIcons = {
 };
 
 export default function Footer() {
-  const [year, setYear] = useState(2026);
+  const year = new Date().getFullYear();
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
   const segments = pathname.split('/').filter(Boolean);
   const locale = segments[0] || 'fr';
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
 
   const isRtl = locale === 'ar';
 

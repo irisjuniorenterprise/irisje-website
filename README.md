@@ -238,12 +238,12 @@ irisje/
 
 ### 🚧 Phase 4 — Optimisations (en cours)
 
-- [ ] Correction des métadonnées (namespace incorrect)
+- [x] Correction des métadonnées (namespace incorrect)
 - [ ] Correction du statut recrutement défini en dur
 - [ ] Optimisation des formulaires (composant `FormField` mutualisé)
 - [ ] Refactor `ClientSideEffects` (suppression des variables globales)
 - [ ] Migration vers `next/image` dans le Portfolio
-- [ ] Ajout des fichiers `error.tsx` et `loading.tsx`
+- [x] Ajout des fichiers `error.tsx` et `loading.tsx`
 
 ### 📅 Phase 5 — Déploiement (planifié)
 

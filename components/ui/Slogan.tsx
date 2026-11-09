@@ -24,6 +24,9 @@ export default function Slogan() {
     if (!el) return;
 
     if (typeof IntersectionObserver === 'undefined') {
+      // Navigateur sans IntersectionObserver : on affiche directement. Cas
+      // exceptionnel et propre au client, impossible à dériver au rendu serveur.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
       return;
     }

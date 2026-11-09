@@ -38,6 +38,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Config Next en CommonJS (require imposé par next-intl/plugin).
+    "next.config.js",
   ]),
 ]);
 

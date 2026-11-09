@@ -32,7 +32,6 @@ type DevisFormProps = {
 
 export default function DevisForm({ locale, defaultPrestation }: DevisFormProps) {
   const t = useTranslations('DevisPage');
-  const tCommon = useTranslations('Common');
   const isRtl = locale === 'ar';
 
   // Schéma de validation avec messages traduits
@@ -136,6 +135,9 @@ export default function DevisForm({ locale, defaultPrestation }: DevisFormProps)
     { value: 'plus-10000', label: t('budgets.plus_10000') },
   ];
 
+  // Utilisé uniquement par le champ « délai », actuellement commenté plus bas :
+  // conservé pour le réactiver sans réécrire la liste.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const delais = [
     { value: '1-semaine', label: t('delais.1_semaine') },
     { value: '2-semaines', label: t('delais.2_semaines') },
