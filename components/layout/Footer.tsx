@@ -73,7 +73,7 @@ export default function Footer({ joinOpen = false, contact }: FooterProps) {
   // dans le header. « page » = la page elle-même ; « true » = une page
   // enfant (ex. un guide dans /guides). Les liens externes ne sont jamais actifs.
   const currentProps = (path: string) => {
-    const current =
+    const current: 'page' | 'true' | undefined =
       pathWithoutLocale === path
         ? 'page'
         : pathWithoutLocale.startsWith(`${path}/`)
