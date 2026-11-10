@@ -84,7 +84,7 @@ export default async function DevisPage({ params, searchParams }: Props) {
       >
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <div className="contact-card">
+            <div data-rv="zoom" className="contact-card">
               {/* Le formulaire gère déjà son propre RTL via la prop locale */}
               <LazyDevisForm
                 key={defaultPrestation ?? 'aucune'}

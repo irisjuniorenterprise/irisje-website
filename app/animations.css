@@ -1,0 +1,104 @@
+/* app/animations.css
+ *
+ * Animations d'apparition du CONTENU (jamais le header, le footer ni le fil
+ * d'Ariane : ils n'ont pas d'attribut `data-rv`).
+ * Importée APRÈS globals.css et alignment.css dans app/[locale]/layout.tsx.
+ *
+ * FONCTIONNEMENT
+ *  - Un bloc à animer porte `data-rv` dans le JSX (rendu serveur, donc masqué
+ *    dès le premier affichage, sans clignotement).
+ *  - ClientSideEffects observe ces blocs. Quand l'un entre dans l'écran, il
+ *    reçoit `data-rv-in="N"` (N = rang dans le lot qui apparaît ensemble,
+ *    0 à 6) : c'est ce rang qui décale les animations (effet « cascade »).
+ *  - L'animation est jouée UNE fois, au premier passage à l'écran.
+ *
+ * VARIANTES : data-rv (montée), "zoom", "start" / "end" (glissement depuis le
+ * début / la fin de la ligne : inversé automatiquement en arabe), "fade".
+ *
+ * ACCESSIBILITÉ / ROBUSTESSE
+ *  - prefers-reduced-motion : aucun masquage, aucune animation.
+ *  - Sans JavaScript (scripting: none) : le contenu reste visible.
+ *  - Impression : tout est visible.
+ */
+
+:root {
+  --rv-dur: 0.8s;
+  --rv-ease: var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  --rv-step: 90ms; /* décalage entre deux blocs du même lot */
+  --rv-dist: 28px;
+  --rv-dir: 1; /* -1 en RTL */
+}
+[dir='rtl'] {
+  --rv-dir: -1;
+}
+
+/* ---------- État initial : masqué tant que le bloc n'est pas entré ---------- */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-rv]:not([data-rv-in]) {
+    opacity: 0;
+  }
+}
+
+/* ---------- Animation ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-rv][data-rv-in] {
+    /* `backwards` : l'état de départ s'applique pendant le délai, et rien ne
+       reste appliqué ensuite (pas de contexte d'empilement résiduel, donc pas
+       d'interférence avec les survols ni avec les cartes 3D). */
+    animation: rv-up var(--rv-dur) var(--rv-ease) backwards;
+    animation-delay: calc(var(--rv-n, 0) * var(--rv-step));
+  }
+  [data-rv='zoom'][data-rv-in] {
+    animation-name: rv-zoom;
+  }
+  [data-rv='start'][data-rv-in] {
+    animation-name: rv-start;
+  }
+  [data-rv='end'][data-rv-in] {
+    animation-name: rv-end;
+  }
+  [data-rv='fade'][data-rv-in] {
+    animation-name: rv-fade;
+  }
+
+  [data-rv-in='1'] { --rv-n: 1; }
+  [data-rv-in='2'] { --rv-n: 2; }
+  [data-rv-in='3'] { --rv-n: 3; }
+  [data-rv-in='4'] { --rv-n: 4; }
+  [data-rv-in='5'] { --rv-n: 5; }
+  [data-rv-in='6'] { --rv-n: 6; }
+}
+
+@keyframes rv-up {
+  from { opacity: 0; transform: translate3d(0, var(--rv-dist), 0); }
+}
+@keyframes rv-zoom {
+  from { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.94); }
+}
+@keyframes rv-start {
+  from { opacity: 0; transform: translate3d(calc(var(--rv-dir) * -44px), 0, 0); }
+}
+@keyframes rv-end {
+  from { opacity: 0; transform: translate3d(calc(var(--rv-dir) * 44px), 0, 0); }
+}
+@keyframes rv-fade {
+  from { opacity: 0; }
+}
+
+/* ---------- Sections « .placeholder » dont le contenu s'anime ----------
+   Leur fondu global (globals.css) est remplacé par celui des blocs : la
+   section (fond, bordure) est visible tout de suite, et chaque bloc apparaît
+   quand il entre dans l'écran, même dans une section haute. Les sections
+   sans `data-rv` gardent l'ancien comportement. */
+.placeholder:has([data-rv]) {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media print {
+  [data-rv] {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}

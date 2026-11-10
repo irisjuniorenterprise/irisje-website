@@ -90,9 +90,9 @@ export default function IntroSection({
       style={bordered ? { borderBottom: '1px solid var(--border-light)' } : undefined}
     >
       <div className={styles.inner}>
-        <h2 className={`section-title ${styles.title}`}>{title}</h2>
+        <h2 data-rv className={`section-title ${styles.title}`}>{title}</h2>
 
-        <div className={styles.card}>
+        <div data-rv="zoom" className={styles.card}>
           <Text value={lead} html={allowHtml} className={styles.lead} />
           {body && <Text value={body} html={allowHtml} className={styles.body} />}
 
@@ -104,7 +104,7 @@ export default function IntroSection({
         </div>
 
         {cta && (
-          <div className={styles.cta}>
+          <div data-rv className={styles.cta}>
             <Link href={cta.href} className={`btn btn-cta ${styles.button}`}>
               {cta.label}
               {cta.srSuffix && <span style={visuallyHidden}>{` — ${cta.srSuffix}`}</span>}

@@ -92,10 +92,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className={styles.section} id="livrables">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.whatYouGet}</h2>
+            <h2 data-rv className={styles.h2}>{ui.whatYouGet}</h2>
             <ul className={styles.cards}>
               {content.deliverables.map((item) => (
-                <li key={item} className={styles.card}>
+                <li key={item} data-rv="zoom" className={styles.card}>
                   {item}
                 </li>
               ))}
@@ -107,10 +107,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className={styles.section} id="public">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.forWhomTitle}</h2>
+            <h2 data-rv className={styles.h2}>{ui.forWhomTitle}</h2>
             <ul className={styles.list}>
               {content.forWhom.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item} data-rv>{item}</li>
               ))}
             </ul>
           </div>
@@ -120,10 +120,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className={styles.section} id="deroule">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.processTitle}</h2>
+            <h2 data-rv className={styles.h2}>{ui.processTitle}</h2>
             <ol className={styles.steps}>
               {ui.processSteps.map((step) => (
-                <li key={step.title} className={styles.step}>
+                <li key={step.title} data-rv className={styles.step}>
                   <h3 className={styles.stepTitle}>{step.title}</h3>
                   <p className={styles.stepText}>{step.text}</p>
                 </li>
@@ -136,7 +136,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className={styles.section} id="faq">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.faqTitle}</h2>
+            <h2 data-rv className={styles.h2}>{ui.faqTitle}</h2>
             <FaqDetails items={content.faq} />
           </div>
         </div>
@@ -151,27 +151,27 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className={styles.section} id="autres-services">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.otherServices}</h2>
+            <h2 data-rv className={styles.h2}>{ui.otherServices}</h2>
             <ul className={styles.links}>
               {others.map((other) => (
-                <li key={other}>
+                <li key={other} data-rv>
                   <Link href={`/${locale}/services/${other}`} className={styles.link}>
                     {names[other]}
                   </Link>
                 </li>
               ))}
-              <li>
+              <li data-rv>
                 <Link href={`/${locale}/services`} className={styles.link}>
                   {ui.allServices}
                 </Link>
               </li>
             </ul>
-            <h2 className={styles.h2} style={{ marginTop: '2rem' }}>
+            <h2 data-rv className={styles.h2} style={{ marginTop: '2rem' }}>
               {ui.guidesTitle}
             </h2>
             <ul className={styles.links}>
               {GUIDE_SLUGS.map((guide) => (
-                <li key={guide}>
+                <li key={guide} data-rv>
                   <Link href={`/${locale}/guides/${guide}`} className={styles.link}>
                     {GUIDE_TITLES[locale][guide]}
                   </Link>

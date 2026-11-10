@@ -11,6 +11,7 @@ import logoData from '@/public/horiz-logo.png';
 import LanguageSwitcher from './LanguageSwitcher';
 import { Icons } from '@/components/icons/Icons';
 import JoinLink from './JoinLink';
+import { useLoaderReveal } from './useLoaderReveal';
 
 type HeaderProps = {
   /** Période de recrutement ouverte : affiche IRIS JOIN dans le header. */
@@ -26,6 +27,11 @@ export default function Header({ joinOpen = false, joinUntil }: HeaderProps) {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const t = useTranslations('Navigation');
+
+  // Apparition animée du header (voir « ANIMATION D'APPARITION » dans
+  // Header.module.css) : jouée une fois, quand l'écran de chargement se retire.
+  // Le header est persistant : on ne la rejoue pas à chaque changement de page.
+  useLoaderReveal(headerRef);
 
   // Extraire la locale du pathname
   const segments = pathname.split('/').filter(Boolean);

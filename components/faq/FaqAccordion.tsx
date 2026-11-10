@@ -28,7 +28,7 @@ export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
 
   return (
     <div className={`${styles.accordion} ${isRtl ? styles.rtl : ''}`} dir={isRtl ? 'rtl' : 'ltr'}>
-      <div className={styles.header}>
+      <div data-rv className={styles.header}>
         <h2 className={styles.title}>
           <Icons.HelpCircle size={32} stroke="var(--primary)" strokeWidth={1.8} />
           {t('title')}
@@ -40,7 +40,7 @@ export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
         {items.map((item) => {
           const isOpen = openId === item.id;
           return (
-            <div key={item.id} className={styles.item}>
+            <div key={item.id} data-rv className={styles.item}>
               <button
                 type="button"
                 className={styles.question}

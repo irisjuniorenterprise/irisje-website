@@ -1,5 +1,6 @@
 'use client';
 
+import { useLayoutEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -51,6 +52,43 @@ export default function Footer() {
 
   const isRtl = locale === 'ar';
 
+  // Apparition animée des éléments du footer (voir « ANIMATION D'APPARITION »
+  // dans Footer.module.css). Le footer est rendu VISIBLE côté serveur : sans
+  // JavaScript, ou avec « réduire les animations », rien n'est jamais masqué
+  // (contenu et liens toujours lisibles / indexables). L'état « pending »
+  // (éléments masqués) n'est posé ici qu'une fois l'animation possible, avant
+  // la première peinture (useLayoutEffect : pas de clignotement), puis passe à
+  // « in » quand le footer entre à l'écran. L'attribut est écrit directement
+  // dans le DOM (pas de state) : aucun rendu React supplémentaire.
+  // Relancé à chaque changement de page : le footer est persistant dans le
+  // layout, on rejoue donc l'animation pour qu'elle reste vivante.
+  const footerRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const el = footerRef.current;
+    if (!el) return;
+    if (
+      typeof IntersectionObserver === 'undefined' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    el.dataset.reveal = 'pending';
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.dataset.reveal = 'in';
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
   const localHref = (path: string) => {
     if (path.startsWith('/#')) return path;
     if (path === '/') return `/${locale}`;
@@ -58,7 +96,11 @@ export default function Footer() {
   };
 
   return (
-    <footer className={`${styles.siteFooter} ${isRtl ? styles.rtl : ''}`} dir={isRtl ? 'rtl' : 'ltr'}>
+    <footer
+      ref={footerRef}
+      className={`${styles.siteFooter} ${isRtl ? styles.rtl : ''}`}
+      dir={isRtl ? 'rtl' : 'ltr'}
+    >
       <div className="container">
         <div className={styles.footerTop}>
           <div className={styles.footerCol}>

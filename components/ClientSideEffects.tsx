@@ -20,6 +20,17 @@ import { usePathname } from 'next/navigation';
 // Note : `.site-footer` ne correspond actuellement à rien (le footer utilise
 // une classe de module) — sélecteur conservé par sécurité.
 const REVEAL_SELECTOR = '.placeholder, .site-footer';
+// Blocs de contenu animés (attribut `data-rv`, voir app/animations.css).
+// Contrairement aux sections ci-dessus, chaque bloc est observé séparément :
+// il s'anime au moment où il entre dans l'écran, même au milieu d'une section
+// haute. On lui ajoute `data-rv-in="N"` (N = rang dans le lot qui apparaît
+// ensemble, pour l'effet de cascade). Un attribut `data-*` n'est jamais
+// retiré par React lors d'un re-rendu (contrairement à `class`).
+// ⚠️ L'attribut est ajouté par script, et UNIQUEMENT sur un élément déjà
+// hydraté (voir « Apparition des blocs de contenu » plus bas), sinon React
+// signale un « hydration mismatch ».
+const RV_SELECTOR = '[data-rv]:not([data-rv-in])';
+const RV_MAX_STEP = 6;
 // Sections suivies par le scrollspy
 const SECTION_SELECTOR = 'main section[id]';
 
@@ -41,6 +52,74 @@ export default function ClientSideEffects() {
             });
           },
           { threshold: 0.15 }
+        )
+      : null;
+
+    // --- Apparition des blocs de contenu ---
+    // ⚠️ `data-rv-in` n'est posé QUE sur un élément déjà hydraté par React.
+    // Sur un élément rendu par le serveur et pas encore hydraté, React
+    // comparerait ses attributs au rendu client et signalerait « hydration
+    // mismatch » (attribut serveur en trop, « won't be patched up »). React
+    // marque chaque nœud hydraté d'une clé interne `__reactFiber$…` : on
+    // attend donc qu'elle soit présente (sondage léger, plafonné à ~10 s).
+    const rtl = document.documentElement.dir === 'rtl';
+    const isHydrated = (el: Element) =>
+      Object.keys(el).some((key) => key.startsWith('__reactFiber$'));
+
+    const pending = new Set<Element>();
+    let pendingTimer: number | undefined;
+    let pendingTicks = 0;
+
+    // Fait apparaître un lot de blocs : rang = ordre de lecture dans le lot
+    const showBatch = (els: Element[]) => {
+      els
+        .map((el) => ({ el, rect: el.getBoundingClientRect() }))
+        .sort((a, b) => {
+          const rowA = Math.round(a.rect.top / 40);
+          const rowB = Math.round(b.rect.top / 40);
+          if (rowA !== rowB) return rowA - rowB;
+          return rtl ? b.rect.left - a.rect.left : a.rect.left - b.rect.left;
+        })
+        .forEach(({ el }, index) => {
+          el.setAttribute('data-rv-in', String(Math.min(index, RV_MAX_STEP)));
+        });
+    };
+
+    const flushPending = () => {
+      pendingTicks += 1;
+      const giveUp = pendingTicks > 80;
+      const ready: Element[] = [];
+      pending.forEach((el) => {
+        if (!el.isConnected) pending.delete(el);
+        else if (giveUp || isHydrated(el)) {
+          pending.delete(el);
+          ready.push(el);
+        }
+      });
+      if (ready.length) showBatch(ready);
+      if (pending.size === 0 && pendingTimer !== undefined) {
+        window.clearInterval(pendingTimer);
+        pendingTimer = undefined;
+        pendingTicks = 0;
+      }
+    };
+
+    const blocks = hasObserver
+      ? new IntersectionObserver(
+          (entries, obs) => {
+            const ready: Element[] = [];
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              obs.unobserve(entry.target);
+              if (isHydrated(entry.target)) ready.push(entry.target);
+              else pending.add(entry.target);
+            });
+            if (ready.length) showBatch(ready);
+            if (pending.size > 0 && pendingTimer === undefined) {
+              pendingTimer = window.setInterval(flushPending, 125);
+            }
+          },
+          { threshold: 0, rootMargin: '0px 0px -8% 0px' }
         )
       : null;
 
@@ -77,13 +156,17 @@ export default function ClientSideEffects() {
         if (reveal) reveal.observe(el);
         else el.classList.add('in-view'); // navigateur sans IntersectionObserver
       }
+      if (el.matches(RV_SELECTOR)) {
+        if (blocks) blocks.observe(el);
+        else el.setAttribute('data-rv-in', '0'); // navigateur sans IntersectionObserver
+      }
       if (spy && el.matches(SECTION_SELECTOR)) spy.observe(el);
     };
 
     const trackWithin = (root: ParentNode, resetRevealed: boolean) => {
       if (root instanceof Element) track(root, resetRevealed);
       root
-        .querySelectorAll(`${REVEAL_SELECTOR}, ${SECTION_SELECTOR}`)
+        .querySelectorAll(`${REVEAL_SELECTOR}, ${SECTION_SELECTOR}, ${RV_SELECTOR}`)
         .forEach((el) => track(el, resetRevealed));
     };
 
@@ -108,6 +191,8 @@ export default function ClientSideEffects() {
     return () => {
       mutations.disconnect();
       reveal?.disconnect();
+      blocks?.disconnect();
+      if (pendingTimer !== undefined) window.clearInterval(pendingTimer);
       spy?.disconnect();
     };
   }, [pathname]); // Relancé à chaque changement de route

@@ -96,7 +96,7 @@ export default async function HomePage({ params }: Props) {
           ============================================================ */}
       {/* Section snap à part entière : sans elle, le snap scroll saute par-dessus le slider */}
       <section className="placeholder" suppressHydrationWarning id="slider" style={{ textAlign: 'start' }}>
-        <div className="container">
+        <div className="container" data-rv="zoom">
           {/* Avance automatique : la durée de chaque diapositive est
               adaptative (calculée d'après la longueur de son texte, entre
               4,5 s et 8 s) pour rester lisible sans devenir ennuyeuse. Le
@@ -147,6 +147,7 @@ export default async function HomePage({ params }: Props) {
       >
         <div className="container">
           <div
+            data-rv="zoom"
             className="devis-card"
             style={{
               maxWidth: '800px',

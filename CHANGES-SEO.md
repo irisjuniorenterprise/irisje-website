@@ -99,3 +99,22 @@ Détail et mode d'emploi : **docs/SEO-GEO-AEO.md**.
 - Enrichir les pages `/services/<slug>` : ~280 à 320 mots par page en FR, moins en EN / AR ; `processSteps` identique sur les 9 services (source des « doublons »).
 - Vérifier qu'aucune règle de domaine Vercel ne redirige `www` → apex (boucle avec `canonicalHostFor` dans `proxy.ts`).
 - Mettre à jour `CONTENT_LAST_MODIFIED` (`lib/data/servicesIndex.ts`) quand le contenu change réellement.
+## Animation d'apparition du footer
+
+| Fichier | Changement |
+|---|---|
+| `components/layout/Footer.tsx` | `IntersectionObserver` + attribut `data-reveal` (`pending` → `in`) posé directement dans le DOM (pas de state). Rejoué à chaque changement de page. Inactif sans JS ou avec « réduire les animations ». |
+| `components/layout/Footer.module.css` | Titres et liens qui montent en fondu, logo et icônes sociales qui « poppent », séparateur qui se déploie, copyright en fondu ; échelonné colonne par colonne (~1,5 s au total). `transition: all` des icônes sociales remplacée par des propriétés explicites (une transition sur `opacity` primerait sur l'animation). |
+
+Le footer reste **visible par défaut** dans le HTML serveur : contenu et liens toujours lisibles et indexables.
+
+## Animation d'apparition du header et du fil d'Ariane
+
+| Fichier | Changement |
+|---|---|
+| `components/layout/useLoaderReveal.ts` (nouveau) | Hook partagé : pose `data-reveal` (`pending` → `in`) directement dans le DOM, **quand l'écran de chargement se retire** (sinon l'animation se jouerait derrière l'overlay). Rien n'est masqué sans JS, avec « réduire les animations », ni si l'overlay est déjà retiré (pas de clignotement). Filet de sécurité à 2,8 s. |
+| `components/layout/PageLoader.tsx` | Attribut `data-page-loader` sur l'overlay (repère du hook). |
+| `components/layout/Header.tsx` / `Header.module.css` | Le header descend, puis logo (pop), liens (via leur `<li>` : le soulignement des `<a>` utilise déjà `transform`) et actions (langue, IRIS JOIN, Contact, burger) apparaissent en cascade. Jouée **une fois** par chargement (le header est persistant). Origine du logo inversée en RTL. |
+| `components/ui/Breadcrumb.tsx` / `Breadcrumb.module.css` | Les maillons glissent un par un depuis le début de ligne (sens inversé en RTL via `--crumb-dx`). **Rejouée à chaque changement de page** (`replayKey` = pathname). Hook appelé avant le `return null` de l'accueil (règle des hooks). |
+
+Animations en `backwards` uniquement (pas de `forwards`) : survols, soulignements et pulsation de la pastille IRIS JOIN restent intacts. `tsc --noEmit` et `eslint` : 0 erreur. Non testé dans un navigateur (pas de Playwright/Chromium dans mon environnement) : à vérifier visuellement avec `npm run dev`.

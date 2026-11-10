@@ -80,6 +80,7 @@ export default function PageLoader({ children }: PageLoaderProps) {
       key={cycle}
       className={styles.overlay}
       data-state={visible ? 'visible' : 'hidden'}
+      data-page-loader=""
       data-nav={cycle > 0}
       aria-hidden="true"
     >

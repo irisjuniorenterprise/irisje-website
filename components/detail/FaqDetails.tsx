@@ -10,7 +10,7 @@ export default function FaqDetails({ items }: { items: FaqItem[] }) {
   return (
     <div className={styles.faq}>
       {items.map((item) => (
-        <details key={item.q} className={styles.faqItem}>
+        <details key={item.q} data-rv className={styles.faqItem}>
           <summary className={styles.faqQuestion}>{item.q}</summary>
           <p className={styles.faqAnswer}>{item.a}</p>
         </details>

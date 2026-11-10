@@ -219,7 +219,7 @@ export default function ValueCards({
   return (
     <>
       {/* Indication d'usage : pastille avec flèche animée + texte selon l'appareil */}
-      <div className={styles.hint}>
+      <div data-rv className={styles.hint}>
         <div className={styles.hintIcon} aria-hidden="true">
           <FlipIcon size={18} />
         </div>
@@ -229,7 +229,7 @@ export default function ValueCards({
         </div>
       </div>
 
-      <div className={styles.grid} ref={gridRef}>
+      <div data-rv="zoom" className={styles.grid} ref={gridRef}>
         {items.map((item, index) => {
           const isFlipped = flipped === item.key;
           const descId = `${baseId}-${item.key}-desc`;

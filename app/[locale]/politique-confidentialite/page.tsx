@@ -76,7 +76,7 @@ export default async function PolitiqueConfidentialitePage({ params }: Props) {
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="legal-card">
               {sections.map((section, index) => (
-                <div key={section.id}>
+                <div key={section.id} data-rv>
                   <div className="legal-section">
                     <div className="legal-icon">
                       <section.icon size={28} stroke="var(--primary)" />

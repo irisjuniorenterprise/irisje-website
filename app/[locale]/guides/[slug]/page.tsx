@@ -81,13 +81,13 @@ export default async function GuidePage({ params }: Props) {
       <article className={styles.section} id="contenu">
         <div className="container">
           <div className={styles.narrow}>
-            <p className={styles.byline}>
+            <p data-rv className={styles.byline}>
               {ui.updated} {updated}
             </p>
             {guide.sections.map((section) => {
               const List = section.ordered ? 'ol' : 'ul';
               return (
-                <section key={section.h2} style={{ marginBottom: '1.8rem' }}>
+                <section key={section.h2} data-rv style={{ marginBottom: '1.8rem' }}>
                   <h2 className={styles.h2}>{section.h2}</h2>
                   {section.paragraphs?.map((p) => (
                     <p key={p} className={styles.text}>
@@ -111,7 +111,7 @@ export default async function GuidePage({ params }: Props) {
       <section className={styles.section} id="faq">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.faqTitle}</h2>
+            <h2 data-rv className={styles.h2}>{ui.faqTitle}</h2>
             <FaqDetails items={guide.faq} />
           </div>
         </div>
@@ -120,10 +120,10 @@ export default async function GuidePage({ params }: Props) {
       <section className={styles.section} id="prestations-liees">
         <div className="container">
           <div className={styles.narrow}>
-            <h2 className={styles.h2}>{ui.relatedServices}</h2>
+            <h2 data-rv className={styles.h2}>{ui.relatedServices}</h2>
             <ul className={styles.links}>
               {related.map((service) => (
-                <li key={service}>
+                <li key={service} data-rv>
                   <Link href={`/${locale}/services/${service}`} className={styles.link}>
                     {SERVICE_NAMES[locale][service]}
                   </Link>
@@ -134,7 +134,7 @@ export default async function GuidePage({ params }: Props) {
         </div>
       </section>
 
-      <CtaBand id="cta" title={ui.ctaTitle} description={ui.ctaText}>
+      <CtaBand id="cta" fullHeight title={ui.ctaTitle} description={ui.ctaText}>
         <Link href={`/${locale}/devis#formulaire-devis`} className="btn btn-cta">
           {ui.ctaButton}
         </Link>

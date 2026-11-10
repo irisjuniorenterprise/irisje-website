@@ -201,8 +201,8 @@ export default async function AProposPage({ params }: Props) {
         }}
       >
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className="section-title">{t('mission.title')}</h2>
-          <div className="mission-block">
+          <h2 data-rv className="section-title">{t('mission.title')}</h2>
+          <div data-rv="zoom" className="mission-block">
             <p
               style={{
                 fontSize: '1.1rem',
@@ -243,8 +243,9 @@ export default async function AProposPage({ params }: Props) {
         }}
       >
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className="section-title">{t('vision.title')}</h2>
+          <h2 data-rv className="section-title">{t('vision.title')}</h2>
           <div
+            data-rv="start"
             className={styles.visionBlock}
             style={{
               borderLeft: isRtl ? 'none' : '4px solid var(--primary)',
@@ -290,7 +291,7 @@ export default async function AProposPage({ params }: Props) {
         }}
       >
         <div className="container">
-          <h2 className="section-title">{t('values.title')}</h2>
+          <h2 data-rv className="section-title">{t('values.title')}</h2>
           {/* Cartes à retournement : nom de la valeur devant, description derrière */}
           <ValueCards
             items={values}
@@ -338,10 +339,10 @@ export default async function AProposPage({ params }: Props) {
         }}
       >
         <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <h2 className="section-title">{t('map.title')}</h2>
+          <h2 data-rv className="section-title">{t('map.title')}</h2>
           <div className={styles.mapWrapper}>
             {/* Carte d'information */}
-            <div className={styles.mapInfo}>
+            <div data-rv="start" className={styles.mapInfo}>
               <div className={styles.mapInfoLabel}>{t('map.label')}</div>
               <p className={styles.mapInfoDescription}>{t('map.description')}</p>
 
@@ -387,7 +388,7 @@ export default async function AProposPage({ params }: Props) {
             </div>
 
             {/* Carte Leaflet (chargée côté client, marqueur orange IRIS JE) */}
-            <div className={styles.mapColumn}>
+            <div data-rv="end" className={styles.mapColumn}>
               <TunisiaMapLoader
                 markerLabel="IRIS Junior Entreprise"
                 countryLabel={t('map.country_label')}

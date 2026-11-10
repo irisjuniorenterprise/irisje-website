@@ -11,6 +11,7 @@ import SnapScroll from '@/components/layout/SnapScroll';
 import ScrollToHash from '@/components/layout/ScrollToHash';
 import '../globals.css';
 import '../alignment.css';
+import '../animations.css';
 import Slogan from '@/components/ui/Slogan';
 import BackToTop from '@/components/ui/BackToTop';
 import SectionNav from '@/components/layout/SectionNav';

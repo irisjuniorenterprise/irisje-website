@@ -80,8 +80,9 @@ export default async function ServicesPage({ params }: Props) {
         style={{ minHeight: 'auto', padding: '4rem 0' }}
       >
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className="section-title">{t('introduction.title')}</h2>
+          <h2 data-rv className="section-title">{t('introduction.title')}</h2>
           <p
+            data-rv
             style={{
               fontSize: '1.05rem',
               lineHeight: '1.7',
@@ -111,6 +112,7 @@ export default async function ServicesPage({ params }: Props) {
             ].map((item) => (
               // Un clic mène directement à la section associée (#it, #marketing, #etudes)
               <a
+                data-rv="zoom"
                 key={item.id}
                 href={`#${item.id}`}
                 className={`${isRtl ? styles.valueCardRtl : styles.valueCard} ${styles.valueLink}`}
@@ -162,6 +164,7 @@ export default async function ServicesPage({ params }: Props) {
         <div className="container">
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <h2
+              data-rv
               className="section-title"
               style={{
                 display: 'flex',
@@ -174,6 +177,7 @@ export default async function ServicesPage({ params }: Props) {
               {t('it.title')}
             </h2>
             <p
+              data-rv
               style={{
                 textAlign: 'center',
                 color: 'var(--text-secondary)',
@@ -184,7 +188,7 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Développement Web */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.WebDevBrowser size={28} stroke="var(--primary)" />
@@ -208,7 +212,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Développement Mobile */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.MobileDev size={28} stroke="var(--primary)" />
@@ -232,7 +236,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 3 : Création de chatbots */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.Chatbot size={28} stroke="var(--primary)" />
@@ -273,6 +277,7 @@ export default async function ServicesPage({ params }: Props) {
         <div className="container">
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <h2
+              data-rv
               className="section-title"
               style={{
                 display: 'flex',
@@ -285,6 +290,7 @@ export default async function ServicesPage({ params }: Props) {
               {t('marketing.title')}
             </h2>
             <p
+              data-rv
               style={{
                 textAlign: 'center',
                 color: 'var(--text-secondary)',
@@ -295,7 +301,7 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Branding */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.Palette size={28} stroke="var(--primary)" />
@@ -318,7 +324,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Community Management */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.Share size={28} stroke="var(--primary)" />
@@ -359,6 +365,7 @@ export default async function ServicesPage({ params }: Props) {
         <div className="container">
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <h2
+              data-rv
               className="section-title"
               style={{
                 display: 'flex',
@@ -371,6 +378,7 @@ export default async function ServicesPage({ params }: Props) {
               {t('etudes.title')}
             </h2>
             <p
+              data-rv
               style={{
                 textAlign: 'center',
                 color: 'var(--text-secondary)',
@@ -381,7 +389,7 @@ export default async function ServicesPage({ params }: Props) {
             </p>
 
             {/* Prestation 1 : Étude de marché */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.Search size={28} stroke="var(--primary)" />
@@ -405,7 +413,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 2 : Étude de notoriété */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.VisibilitySurvey size={28} stroke="var(--primary)" />
@@ -427,7 +435,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 3 : Étude de satisfaction */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.Heart size={28} stroke="var(--primary)" />
@@ -449,7 +457,7 @@ export default async function ServicesPage({ params }: Props) {
             </div>
 
             {/* Prestation 4 : Plan d'affaires */}
-            <div className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
+            <div data-rv="zoom" className={isRtl ? styles.serviceCardRtl : styles.serviceCard}>
               <div className={isRtl ? styles.serviceHeaderRtl : styles.serviceHeader}>
                 <div className={isRtl ? styles.serviceIconRtl : styles.serviceIcon}>
                   <Icons.BusinessPlanDoc size={28} stroke="var(--primary)" />

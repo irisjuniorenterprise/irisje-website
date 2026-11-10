@@ -1,9 +1,11 @@
 'use client';
 
+import { useRef, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons/Icons';
+import { useLoaderReveal } from '@/components/layout/useLoaderReveal';
 import styles from './Breadcrumb.module.css';
 
 type BreadcrumbProps = {
@@ -18,6 +20,13 @@ type BreadcrumbProps = {
 export default function Breadcrumb({ inline = false }: BreadcrumbProps) {
   const pathname = usePathname();
   const t = useTranslations('Breadcrumb');
+
+  // Apparition animée des maillons (voir « ANIMATION D'APPARITION » dans
+  // Breadcrumb.module.css), rejouée à chaque changement de page : le fil
+  // d'Ariane change avec elle. Doit être appelé AVANT le `return null` de
+  // l'accueil (règle des hooks) ; sans <nav> rendu, le hook ne fait rien.
+  const navRef = useRef<HTMLElement>(null);
+  useLoaderReveal(navRef, pathname);
 
   // Extraire la locale du pathname
   const segments = pathname.split('/').filter(Boolean);
@@ -58,7 +67,7 @@ export default function Breadcrumb({ inline = false }: BreadcrumbProps) {
 
   const list = (
     <ol className={styles.list}>
-      <li className={styles.item}>
+      <li className={styles.item} style={{ '--i': 0 } as CSSProperties}>
         <Link href={`/${locale}`} className={styles.link}>
           <Icons.Home size={16} className={styles.homeIcon} />
           <span className={styles.homeLabel}>{t('home')}</span>
@@ -66,7 +75,11 @@ export default function Breadcrumb({ inline = false }: BreadcrumbProps) {
         <Icons.ChevronRight size={14} className={styles.separator} />
       </li>
       {breadcrumbs.map((crumb, index) => (
-        <li key={crumb.path} className={styles.item}>
+        <li
+          key={crumb.path}
+          className={styles.item}
+          style={{ '--i': index + 1 } as CSSProperties}
+        >
           {crumb.isLast ? (
             // Élément courant du fil d'Ariane : annoncé tel quel, et le
             // style `.active` n'est plus le seul indicateur d'état.
@@ -90,6 +103,7 @@ export default function Breadcrumb({ inline = false }: BreadcrumbProps) {
 
   return (
     <nav
+      ref={navRef}
       className={`${styles.breadcrumb} ${inline ? styles.inline : ''} ${isRtl ? styles.rtl : ''}`}
       dir={isRtl ? 'rtl' : 'ltr'}
       aria-label={t('label')}

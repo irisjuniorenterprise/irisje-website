@@ -182,3 +182,36 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ============================================================
+   ANIMATION D'APPARITION
+   ------------------------------------------------------------
+   Pilotée par useLoaderReveal (data-reveal sur <nav>), rejouée à chaque
+   changement de page :
+     (absent)  → tout est visible (SSR, sans JS, mouvement réduit)
+     pending   → maillons masqués, en attente de la fin du chargement
+     in        → maillons qui glissent depuis le début de ligne, un par un
+   `backwards` seulement : à la fin, le maillon retrouve son style normal.
+   Le sens du glissement suit la direction (--crumb-dx inversé en RTL).
+   ============================================================ */
+@keyframes crumbIn {
+  from {
+    opacity: 0;
+    transform: translateX(var(--crumb-dx, -12px));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .breadcrumb.rtl {
+    --crumb-dx: 12px;
+  }
+
+  .breadcrumb[data-reveal='pending'] .item {
+    opacity: 0;
+  }
+
+  .breadcrumb[data-reveal='in'] .item {
+    animation: crumbIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: calc(0.1s + var(--i, 0) * 90ms);
+  }
+}

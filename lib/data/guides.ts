@@ -9,7 +9,13 @@
 // ⚠️ Contenu à relire et valider par l'équipe IRIS avant publication.
 import type { Locale } from '../../i18n/config';
 import type { GuideContent, GuideSlug, GuideUi } from './servicesIndex';
+import { UI_AR } from './servicesContent.ar';
+import { UI_EN } from './servicesContent.en';
+import { UI_FR } from './servicesContent.fr';
 
+// Le bandeau CTA des guides reprend EXACTEMENT les textes de celui des pages
+// de service (UI_*) : même texte = même retour à la ligne = même hauteur de
+// bandeau, à toutes les largeurs d'écran. Ne pas les dissocier.
 export const GUIDE_UI: Record<Locale, GuideUi> = {
   fr: {
     indexTitle: 'Guides pratiques | IRIS Junior Entreprise',
@@ -19,9 +25,9 @@ export const GUIDE_UI: Record<Locale, GuideUi> = {
     updated: 'Mis à jour le',
     quickAnswer: 'En bref',
     faqTitle: 'Questions fréquentes',
-    ctaTitle: 'Un projet en tête ?',
-    ctaText: 'Décrivez votre besoin : nous vous répondons avec un devis personnalisé.',
-    ctaButton: 'Demander un devis',
+    ctaTitle: UI_FR.ctaTitle,
+    ctaText: UI_FR.ctaText,
+    ctaButton: UI_FR.ctaButton,
     relatedServices: 'Prestations liées',
     titleSuffix: 'IRIS Junior Entreprise',
   },
@@ -33,9 +39,9 @@ export const GUIDE_UI: Record<Locale, GuideUi> = {
     updated: 'Updated on',
     quickAnswer: 'In short',
     faqTitle: 'Frequently asked questions',
-    ctaTitle: 'Have a project in mind?',
-    ctaText: 'Describe your need: we reply with a tailored quote.',
-    ctaButton: 'Request a quote',
+    ctaTitle: UI_EN.ctaTitle,
+    ctaText: UI_EN.ctaText,
+    ctaButton: UI_EN.ctaButton,
     relatedServices: 'Related services',
     titleSuffix: 'IRIS Junior Entreprise',
   },
@@ -47,9 +53,9 @@ export const GUIDE_UI: Record<Locale, GuideUi> = {
     updated: 'آخر تحديث',
     quickAnswer: 'باختصار',
     faqTitle: 'الأسئلة الشائعة',
-    ctaTitle: 'لديك مشروع في ذهنك؟',
-    ctaText: 'صِف حاجتك وسنرد عليك بعرض سعر مخصص.',
-    ctaButton: 'اطلب عرض سعر',
+    ctaTitle: UI_AR.ctaTitle,
+    ctaText: UI_AR.ctaText,
+    ctaButton: UI_AR.ctaButton,
     relatedServices: 'خدمات ذات صلة',
     titleSuffix: 'IRIS Junior Entreprise',
   },

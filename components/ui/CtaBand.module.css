@@ -31,6 +31,15 @@ section.band {
   background-repeat: no-repeat;
 }
 
+/* Pleine hauteur d'écran sous le header (+ barre fil d'Ariane s'il y en a une) :
+   MÊME formule que `main section.placeholder` dans snap-scroll.css, donc même
+   hauteur que le CTA des pages en snap scroll (services, accueil, à propos).
+   `section.band.full` (0,2,1) l'emporte sur `section.band { min-height: auto }`. */
+section.band.full {
+  min-height: calc(100vh - var(--snap-header-h, 81px));
+  min-height: calc(100svh - var(--snap-header-h, 81px));
+}
+
 .inner {
   max-width: 700px;
   margin: 0 auto;

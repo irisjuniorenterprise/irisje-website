@@ -18,6 +18,9 @@ type CtaBandProps = {
   note?: string;
   /** Boutons d'action (ex. <Link className="btn btn-cta">…</Link>) */
   children?: ReactNode;
+  /** Pleine hauteur d'écran (comme le CTA des pages en snap scroll : services,
+   *  accueil, à propos). Pour les pages sans snap, ex. les guides. */
+  fullHeight?: boolean;
 };
 
 export default function CtaBand({
@@ -26,14 +29,15 @@ export default function CtaBand({
   description,
   note,
   children,
+  fullHeight = false,
 }: CtaBandProps) {
   return (
-    <section className={`placeholder ${styles.band}`} id={id} suppressHydrationWarning>
+    <section className={`placeholder ${styles.band}${fullHeight ? ` ${styles.full}` : ''}`} id={id} suppressHydrationWarning>
       <div className={`container ${styles.inner}`}>
-        <h2 className={styles.title}>{title}</h2>
-        {description && <p className={styles.description}>{description}</p>}
-        {note && <p className={styles.note}>{note}</p>}
-        {children && <div className={styles.actions}>{children}</div>}
+        <h2 data-rv className={styles.title}>{title}</h2>
+        {description && <p data-rv className={styles.description}>{description}</p>}
+        {note && <p data-rv className={styles.note}>{note}</p>}
+        {children && <div data-rv className={styles.actions}>{children}</div>}
       </div>
     </section>
   );

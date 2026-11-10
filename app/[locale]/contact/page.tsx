@@ -70,7 +70,7 @@ export default async function ContactPage({ params }: Props) {
       <section style={{ padding: '3rem 0 5rem', background: 'transparent' }}>
         <div className="container">
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <div className="contact-card">
+            <div data-rv="zoom" className="contact-card">
               <LazyContactForm locale={locale} />
             </div>
           </div>

@@ -502,3 +502,91 @@
     height: 28px;
   }
 }
+
+/* ============================================================
+   ANIMATION D'APPARITION
+   ------------------------------------------------------------
+   Pilotée par useLoaderReveal (data-reveal sur <header>) :
+     (absent)  → tout est visible (SSR, sans JS, mouvement réduit)
+     pending   → header remonté hors écran, éléments masqués
+     in        → le header descend, puis logo, liens et actions
+                 apparaissent en cascade
+   Les animations n'utilisent que `backwards` : à la fin, chaque élément
+   retrouve son style normal (survol, soulignement, pulsation de la pastille
+   IRIS JOIN…) sans qu'un `forwards` ne vienne l'écraser.
+   Les liens de navigation sont animés via leur <li> : le soulignement des
+   <a> (::after) utilise déjà `transform`.
+   ============================================================ */
+@keyframes headerDrop {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes headerRise {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes headerPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .header {
+    --header-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Rang de chaque lien / action (alimente les délais) */
+  .navList li:nth-child(2) { --i: 1; }
+  .navList li:nth-child(3) { --i: 2; }
+  .navList li:nth-child(4) { --i: 3; }
+
+  .actions > :nth-child(2) { --a: 1; }
+  .actions > :nth-child(3) { --a: 2; }
+  .actions > :nth-child(4) { --a: 3; }
+
+  .logo {
+    transform-origin: left center;
+  }
+
+  .header.rtl .logo {
+    transform-origin: right center;
+  }
+
+  /* --- État initial : masqué --- */
+  .header[data-reveal='pending'] {
+    transform: translateY(-100%);
+  }
+
+  .header[data-reveal='pending'] .logo,
+  .header[data-reveal='pending'] .navList li,
+  .header[data-reveal='pending'] .actions > * {
+    opacity: 0;
+  }
+
+  /* --- Lecture --- */
+  .header[data-reveal='in'] {
+    animation: headerDrop 0.55s var(--header-ease) backwards;
+  }
+
+  .header[data-reveal='in'] .logo {
+    animation: headerPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation-delay: 0.2s;
+  }
+
+  .header[data-reveal='in'] .navList li {
+    animation: headerRise 0.5s var(--header-ease) backwards;
+    animation-delay: calc(0.3s + var(--i, 0) * 70ms);
+  }
+
+  .header[data-reveal='in'] .actions > * {
+    animation: headerRise 0.5s var(--header-ease) backwards;
+    animation-delay: calc(0.45s + var(--a, 0) * 70ms);
+  }
+}

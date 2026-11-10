@@ -49,7 +49,7 @@ export default async function GuidesIndexPage({ params }: Props) {
             {GUIDE_SLUGS.map((slug) => {
               const guide = GUIDES[locale][slug];
               return (
-                <article key={slug} className={styles.guideCard}>
+                <article key={slug} data-rv="zoom" className={styles.guideCard}>
                   <h2>{guide.h1}</h2>
                   <p>{guide.summary}</p>
                   <Link href={`/${locale}/guides/${slug}`} className="btn btn-cta btn-sm">

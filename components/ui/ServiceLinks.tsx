@@ -25,22 +25,22 @@ export default function ServiceLinks({ locale }: { locale: Locale }) {
     <section className={styles.section} id="detail-services">
       <div className="container">
         <div className={styles.narrow}>
-          <h2 className={styles.h2}>{titles.services}</h2>
+          <h2 data-rv className={styles.h2}>{titles.services}</h2>
           <ul className={styles.links}>
             {SERVICE_SLUGS.map((slug) => (
-              <li key={slug}>
+              <li key={slug} data-rv>
                 <Link href={`/${locale}/services/${slug}`} className={styles.link}>
                   {SERVICE_NAMES[locale][slug]}
                 </Link>
               </li>
             ))}
           </ul>
-          <h2 className={styles.h2} style={{ marginTop: '2rem' }}>
+          <h2 data-rv className={styles.h2} style={{ marginTop: '2rem' }}>
             {titles.guides}
           </h2>
           <ul className={styles.links}>
             {GUIDE_SLUGS.map((slug) => (
-              <li key={slug}>
+              <li key={slug} data-rv>
                 <Link href={`/${locale}/guides/${slug}`} className={styles.link}>
                   {GUIDE_TITLES[locale][slug]}
                 </Link>
