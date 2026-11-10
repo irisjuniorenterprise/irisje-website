@@ -3,7 +3,8 @@
  * Écran de chargement plein écran, léger : logo IRIS Junior Entreprise
  * recomposé comme le logo officiel (emblème à gauche, légèrement plus haut
  * que le bloc « IRIS / Junior Entreprise »), qui fait une pulsation
- * (zoom avant puis arrière, 1,2 s) + barre de progression indéterminée.
+ * (zoom avant puis arrière, 1,2 s) + slogan #ToTheNEXTLevel sous le logo
+ * + barre de progression indéterminée.
  * Overlay fixe : recouvre header, contenu et footer quel que soit le
  * défilement. 100 % CSS, aucune image, aucune police, aucun JS.
  *
@@ -24,7 +25,7 @@
   padding: 2rem 1.5rem;
   background:
     radial-gradient(640px 400px at 50% -8%, rgba(90, 184, 222, 0.14), transparent 60%),
-    radial-gradient(560px 360px at 100% 108%, rgba(255, 102, 51, 0.08), transparent 55%),
+    radial-gradient(560px 360px at 100% 108%, rgba(90, 184, 222, 0.09), transparent 55%),
     var(--background, #f8fafc);
   /* Pas de défilement de la page cachée derrière (notamment au toucher). */
   overscroll-behavior: contain;
@@ -114,6 +115,99 @@
   animation-delay: 0.2s;
 }
 
+/* ---------------------------- Slogan ---------------------------- */
+
+/* Même vocabulaire que components/ui/Slogan.module.css : cadre à crochets
+   accent, texte Montserrat 800 en bleu primaire, point orange pulsant.
+   Les crochets « respirent » au même rythme (1,2 s) que le logo.
+   L'état de base est l'état FINAL (visible) : l'entrée utilise
+   `backwards`, donc mouvement réduit / sans animation = slogan lisible. */
+.slogan {
+  position: relative;
+  display: inline-flex;
+  padding: 0.55em 0.9em;
+  direction: ltr;
+  font-size: clamp(1.05rem, 3.6vw, 1.5rem);
+  animation: ldg-slogan-in 0.45s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)) 0.05s backwards;
+}
+
+.sloganText {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--primary, #1a3969);
+  white-space: nowrap;
+}
+
+.dot {
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: 0.34em;
+  height: 0.34em;
+  margin-inline-start: 0.35em;
+  border-radius: 50%;
+  background: var(--secondary, #ff6633);
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--secondary, #ff6633);
+  animation: ldg-dot 1.2s ease-out infinite;
+}
+
+.corner {
+  position: absolute;
+  width: 0.7em;
+  height: 0.7em;
+  border: 2px solid var(--accent, #5ab8de);
+  animation: ldg-bracket 1.2s ease-in-out infinite;
+}
+
+.tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  --bx: -3px;
+  --by: -3px;
+}
+.tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 6px;
+  --bx: 3px;
+  --by: -3px;
+}
+.bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 6px;
+  --bx: -3px;
+  --by: 3px;
+}
+.br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+  --bx: 3px;
+  --by: 3px;
+}
+
 /* ---------------------------- Barre de progression ---------------------------- */
 
 .bar {
@@ -134,12 +228,8 @@
   left: 0;
   width: 42%;
   border-radius: var(--radius-pill, 999px);
-  background: linear-gradient(
-    90deg,
-    var(--primary, #1a3969),
-    var(--accent, #5ab8de),
-    var(--secondary, #ff6633)
-  );
+  /* Dégradé entre teintes voisines uniquement (bleu → cyan), jamais bleu → orange. */
+  background: linear-gradient(90deg, var(--primary, #1a3969), var(--accent, #5ab8de));
   animation: ldg-sweep 1.4s var(--ease, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
 }
 
@@ -212,6 +302,42 @@
   }
 }
 
+/* Les crochets s'écartent légèrement quand le logo grossit, puis se resserrent. */
+@keyframes ldg-bracket {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(var(--bx), var(--by));
+    opacity: 1;
+  }
+}
+
+/* Anneau du point orange (même effet que le slogan du site). */
+@keyframes ldg-dot {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes ldg-slogan-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------------------------- Responsive ---------------------------- */
 
 /* Écrans bas (mobile en paysage) : tout reste visible sans scroll. */
@@ -223,6 +349,10 @@
   .lockup {
     --w: clamp(130px, 26vw, 190px);
   }
+  .slogan {
+    font-size: 1rem;
+    padding: 0.4em 0.8em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -231,8 +361,14 @@
   .emblemWrap::before,
   .partIris,
   .partJunior,
-  .barFill {
+  .barFill,
+  .slogan,
+  .corner,
+  .dot::after {
     animation: none;
+  }
+  .dot::after {
+    opacity: 0;
   }
   .barFill {
     width: 70%;

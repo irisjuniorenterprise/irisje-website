@@ -65,6 +65,23 @@ export default function Footer({ joinOpen = false, contact }: FooterProps) {
 
   const isRtl = locale === 'ar';
 
+  // Page courante, sans la locale (« /fr/faq » → « /faq »).
+  const pathWithoutLocale = `/${segments.slice(1).join('/')}`;
+
+  // Lien de la page active : repéré visuellement (classe `active`, voir
+  // Footer.module.css) ET pour les lecteurs d'écran (`aria-current`), comme
+  // dans le header. « page » = la page elle-même ; « true » = une page
+  // enfant (ex. un guide dans /guides). Les liens externes ne sont jamais actifs.
+  const currentProps = (path: string) => {
+    const current =
+      pathWithoutLocale === path
+        ? 'page'
+        : pathWithoutLocale.startsWith(`${path}/`)
+          ? 'true'
+          : undefined;
+    return current ? { className: styles.active, 'aria-current': current } : {};
+  };
+
   // Apparition animée des éléments du footer (voir « ANIMATION D'APPARITION »
   // dans Footer.module.css). Le footer est rendu VISIBLE côté serveur : sans
   // JavaScript, ou avec « réduire les animations », rien n'est jamais masqué
@@ -130,7 +147,7 @@ export default function Footer({ joinOpen = false, contact }: FooterProps) {
             <ul>
               {SERVICE_SLUGS.map((slug) => (
                 <li key={slug}>
-                  <Link href={localHref(`/services/${slug}`)}>
+                  <Link href={localHref(`/services/${slug}`)} {...currentProps(`/services/${slug}`)}>
                     {SERVICE_NAMES[(locale === 'en' || locale === 'ar' ? locale : 'fr') as Locale][slug]}
                   </Link>
                 </li>
@@ -140,9 +157,9 @@ export default function Footer({ joinOpen = false, contact }: FooterProps) {
           <div className={`${styles.footerCol} ${styles.footerResources}`}>
             <h3>{t('footer_resources')}</h3>
             <ul>
-              <li><Link href={localHref('/a-propos')}>{t('about')}</Link></li>
-              <li><Link href={localHref('/guides')}>{t('guides')}</Link></li>
-              <li><Link href={localHref('/faq')}>{t('faq')}</Link></li>
+              <li><Link href={localHref('/a-propos')} {...currentProps('/a-propos')}>{t('about')}</Link></li>
+              <li><Link href={localHref('/guides')} {...currentProps('/guides')}>{t('guides')}</Link></li>
+              <li><Link href={localHref('/faq')} {...currentProps('/faq')}>{t('faq')}</Link></li>
               {/* IRIS JOIN : uniquement pendant la période de recrutement */}
               {joinOpen && (
                 <li><JoinLink locale={locale} variant="text" /></li>
@@ -152,9 +169,9 @@ export default function Footer({ joinOpen = false, contact }: FooterProps) {
           <div className={`${styles.footerCol} ${styles.footerLegal}`}>
             <h3>{t('legal')}</h3>
             <ul>
-              <li><Link href={localHref('/mentions-legales')}>{t('legal_mentions')}</Link></li>
-              <li><Link href={localHref('/politique-confidentialite')}>{t('legal_confidentialite')}</Link></li>
-              <li><Link href={localHref('/cgu')}>{t('legal_cgu')}</Link></li>
+              <li><Link href={localHref('/mentions-legales')} {...currentProps('/mentions-legales')}>{t('legal_mentions')}</Link></li>
+              <li><Link href={localHref('/politique-confidentialite')} {...currentProps('/politique-confidentialite')}>{t('legal_confidentialite')}</Link></li>
+              <li><Link href={localHref('/cgu')} {...currentProps('/cgu')}>{t('legal_cgu')}</Link></li>
             </ul>
           </div>
           {/* Coordonnées : même forme que les autres blocs (titre + 3 lignes) */}

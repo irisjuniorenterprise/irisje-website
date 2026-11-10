@@ -83,6 +83,17 @@
   color: var(--footer-text-hover);
 }
 
+/* ------------------------------------------------------------
+   LIEN DE LA PAGE ACTIVE (aria-current)
+   Simple mise en valeur, sans ligne : texte plus clair (blanc) et en gras
+   par rapport aux autres liens gris. Placé après :hover pour rester
+   identique au survol.
+   ------------------------------------------------------------ */
+.footerCol a.active {
+  color: var(--footer-text-primary);
+  font-weight: 700;
+}
+
 /* Bande des services : pastilles centrées qui passent à la ligne */
 .footerServices {
   padding-bottom: 28px;
@@ -107,6 +118,17 @@
 .footerServices a:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Service de la page courante : pastille plus claire (fond et bordure). */
+.footerServices a.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.footerServices a.active:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Marque : logo + réseaux */
@@ -338,4 +360,3 @@
     animation-delay: 700ms;
   }
 }
-
