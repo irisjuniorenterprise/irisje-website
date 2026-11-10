@@ -16,7 +16,7 @@ import { useLoaderReveal } from './useLoaderReveal';
 type HeaderProps = {
   /** Période de recrutement ouverte : affiche IRIS JOIN dans le header. */
   joinOpen?: boolean;
-  /** Dernier jour de candidature, déjà formaté (ex. « 7 octobre »). */
+  /** Dernier jour de candidature, déjà formaté (ex. « 31 octobre »). */
   joinUntil?: string;
 };
 

@@ -232,3 +232,12 @@
     transition: none;
   }
 }
+
+/* Variante « text » (pied de page) : petite flèche ↗ à côté du libellé */
+.textIcon {
+  width: 0.85em;
+  height: 0.85em;
+  margin-inline-start: 0.35em;
+  vertical-align: -0.05em;
+  opacity: 0.8;
+}

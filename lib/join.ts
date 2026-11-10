@@ -27,7 +27,7 @@ type JoinText = {
   hint: string;
   /** Titre de la carte du menu mobile. */
   title: string;
-  /** Sous-titre de la carte : rappelle la date limite (ex. « 7 octobre »). */
+  /** Sous-titre de la carte : rappelle la date limite (ex. « 31 octobre »). */
   until: (date: string) => string;
 };
 

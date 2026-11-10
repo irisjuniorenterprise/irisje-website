@@ -54,7 +54,7 @@ Ce dépôt contient le **site web officiel** de l'association — conçu pour ce
 | ⚙️ Catalogue de services | Prestations détaillées en IT, Marketing et Études |
 | 📬 Formulaire de contact | Canal de communication direct avec l'équipe |
 | 💼 Demande de devis | Formulaire personnalisé pour les prospects |
-| 🎓 Candidatures (IRIS JOIN) | Onglet vers la plateforme JOIN (ouvert en octobre) ; `/recrutement` redirige en 308 |
+| 🎓 Candidatures (IRIS JOIN) | Onglet vers la plateforme JOIN (ouvert du 1er septembre au 31 octobre) ; `/recrutement` redirige en 308 |
 | ❓ FAQ | Réponses aux questions les plus fréquentes |
 | 📄 Pages légales | Mentions légales, CGU, politique de confidentialité |
 | 🌍 Multilingue | Français, Anglais, Arabe — avec support RTL natif |
@@ -120,7 +120,7 @@ L'application est accessible sur **[http://localhost:3000](http://localhost:3000
 | **À propos** | Mission, vision, valeurs et équipe |
 | **Services** | Catalogue des prestations en IT, Marketing et Études |
 | **Devis** | Formulaire de demande de devis personnalisé |
-| **Recrutement** | Formulaire de candidature (ouvert en octobre) |
+| **Recrutement** | Redirection vers IRIS JOIN (candidatures du 1er septembre au 31 octobre) |
 | **FAQ** | Foire aux questions |
 | **Contact** | Formulaire de contact direct |
 

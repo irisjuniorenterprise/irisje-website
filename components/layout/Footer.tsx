@@ -7,6 +7,9 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import styles from './Footer.module.css';
 import logoData from '@/public/logo-s-no-bg.png';
+import JoinLink from './JoinLink';
+import { SERVICE_NAMES, SERVICE_SLUGS } from '@/lib/data/servicesIndex';
+import type { Locale } from '@/i18n/config';
 
 const socialIcons = {
   linkedin: (
@@ -42,7 +45,17 @@ const socialIcons = {
   ),
 };
 
-export default function Footer() {
+type FooterProps = {
+  /** Période de recrutement ouverte (1er sept. → 31 oct.) : affiche le lien IRIS JOIN. */
+  joinOpen?: boolean;
+  /** Coordonnées publiques, fournies par le layout (serveur) pour ne pas alourdir le client. */
+  contact: { email: string; telephone: string };
+};
+
+/** « +21696822343 » → « +216 96 822 343 » (affichage) */
+const formatPhone = (tel: string) => tel.replace(/^(\+\d{3})(\d{2})(\d{3})(\d{3})$/, '$1 $2 $3 $4');
+
+export default function Footer({ joinOpen = false, contact }: FooterProps) {
   const year = new Date().getFullYear();
   const pathname = usePathname();
   const t = useTranslations('Navigation');
@@ -103,34 +116,57 @@ export default function Footer() {
     >
       <div className="container">
         <div className={styles.footerTop}>
-          <div className={styles.footerCol}>
-            <h3>{t('home')}</h3>
+          {/* Le header porte déjà la navigation principale (Accueil, À propos,
+              Services, Devis, Contact) : le pied de page ne la répète pas. Il
+              sert à ce que le header n'affiche pas : les pages de chaque
+              service, les ressources et les mentions légales.
+              Disposition (centrée à toutes les tailles, un seul axe) : la bande
+              des 9 services sur toute la largeur ; dessous, 3 blocs de même
+              forme (ressources, légal, coordonnées : titre + liens) ; puis la
+              marque (logo + réseaux).
+              L'ordre du DOM = l'ordre visuel (focus clavier cohérent). */}
+          <div className={`${styles.footerCol} ${styles.footerServices}`}>
+            <h3>{t('footer_services')}</h3>
             <ul>
-              <li><Link href={localHref('/')}>{t('home')}</Link></li>
-              <li><Link href={localHref('#a-propos')}>{t('about')}</Link></li>
-              <li><Link href={localHref('#services')}>{t('services')}</Link></li>
-              <li><Link href={localHref('#devis')}>{t('devis')}</Link></li>
-              <li><Link href={localHref('#contact')}>{t('contact')}</Link></li>
+              {SERVICE_SLUGS.map((slug) => (
+                <li key={slug}>
+                  <Link href={localHref(`/services/${slug}`)}>
+                    {SERVICE_NAMES[(locale === 'en' || locale === 'ar' ? locale : 'fr') as Locale][slug]}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className={styles.footerCol}>
-            <h3>{t('services')}</h3>
+          <div className={`${styles.footerCol} ${styles.footerResources}`}>
+            <h3>{t('footer_resources')}</h3>
             <ul>
-              <li><Link href={localHref('/services')}>{t('services')}</Link></li>
               <li><Link href={localHref('/a-propos')}>{t('about')}</Link></li>
-              <li><Link href={localHref('/devis')}>{t('devis')}</Link></li>
               <li><Link href={localHref('/guides')}>{t('guides')}</Link></li>
-              <li><Link href={localHref('/contact')}>{t('contact')}</Link></li>
+              <li><Link href={localHref('/faq')}>{t('faq')}</Link></li>
+              {/* IRIS JOIN : uniquement pendant la période de recrutement */}
+              {joinOpen && (
+                <li><JoinLink locale={locale} variant="text" /></li>
+              )}
             </ul>
           </div>
-          <div className={styles.footerCol}>
+          <div className={`${styles.footerCol} ${styles.footerLegal}`}>
             <h3>{t('legal')}</h3>
             <ul>
               <li><Link href={localHref('/mentions-legales')}>{t('legal_mentions')}</Link></li>
               <li><Link href={localHref('/politique-confidentialite')}>{t('legal_confidentialite')}</Link></li>
               <li><Link href={localHref('/cgu')}>{t('legal_cgu')}</Link></li>
-              <li><Link href={localHref('/faq')}>{t('faq')}</Link></li>
             </ul>
+          </div>
+          {/* Coordonnées : même forme que les autres blocs (titre + 3 lignes) */}
+          <div className={`${styles.footerCol} ${styles.footerContactCol}`}>
+            <h3>{t('footer_contact')}</h3>
+            <address>
+              <ul>
+                <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+                <li><a href={`tel:${contact.telephone}`} dir="ltr">{formatPhone(contact.telephone)}</a></li>
+                <li><span className={styles.footerAddress}>{t('footer_address')}</span></li>
+              </ul>
+            </address>
           </div>
           <div className={styles.footerBrand}>
             <Image className={styles.footerLogo} src={logoData} alt="IRIS Junior Entreprise" width={80} height={80} />

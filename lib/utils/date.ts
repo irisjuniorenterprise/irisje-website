@@ -1,13 +1,18 @@
 // lib/utils/date.ts
 
 /**
- * Fenêtre de recrutement (fuseau horaire de la Tunisie, UTC+1, sans heure d'été).
- * Pour la modifier, il suffit de changer ces 4 constantes.
+ * Fenêtre de recrutement (fuseau horaire de la Tunisie, UTC+1, sans heure d'été),
+ * reconduite chaque année : du 1er septembre au 31 octobre, les DEUX inclus.
+ * Pour la modifier, il suffit de changer ces 2 constantes.
  */
 const TIMEZONE = 'Africa/Tunis';
-export const RECRUITMENT_MONTH = 10; // Octobre
-export const RECRUITMENT_OPEN_DAY = 1; // Ouvert à partir du 01/10 (inclus)
-export const RECRUITMENT_CLOSE_DAY = 8; // Jour de fermeture EXCLU : 07/10 inclus reste ouvert
+export const RECRUITMENT_OPEN = { month: 9, day: 1 } as const; // 01/09 (inclus)
+export const RECRUITMENT_CLOSE = { month: 10, day: 31 } as const; // 31/10 (inclus)
+
+/** « mois × 100 + jour » : 1er septembre → 901, 31 octobre → 1031 (comparable directement). */
+const dayKey = (month: number, day: number): number => month * 100 + day;
+const OPEN_KEY = dayKey(RECRUITMENT_OPEN.month, RECRUITMENT_OPEN.day);
+const CLOSE_KEY = dayKey(RECRUITMENT_CLOSE.month, RECRUITMENT_CLOSE.day);
 
 type DateParts = { year: number; month: number; day: number };
 
@@ -28,30 +33,25 @@ const getTunisDateParts = (date: Date = new Date()): DateParts => {
 
 /**
  * Vérifie si la période de recrutement est ouverte.
- * @returns true du 01/10 au 07/10 inclus (heure de Tunis), false le reste de l'année.
+ * @returns true du 01/09 au 31/10 inclus (heure de Tunis), false le reste de l'année.
  */
 export const isRecruitmentOpen = (date: Date = new Date()): boolean => {
   const { month, day } = getTunisDateParts(date);
-  return (
-    month === RECRUITMENT_MONTH &&
-    day >= RECRUITMENT_OPEN_DAY &&
-    day < RECRUITMENT_CLOSE_DAY
-  );
+  const key = dayKey(month, day);
+  return key >= OPEN_KEY && key <= CLOSE_KEY;
 };
 
 /**
- * Retourne la date de la prochaine ouverture des candidatures (1er octobre).
+ * Retourne la date de la prochaine ouverture des candidatures (1er septembre).
  * À midi UTC pour éviter tout décalage de jour lors du formatage.
  */
 export const getNextRecruitmentDate = (date: Date = new Date()): Date => {
   const { year, month, day } = getTunisDateParts(date);
 
-  const openingPassed =
-    month > RECRUITMENT_MONTH ||
-    (month === RECRUITMENT_MONTH && day >= RECRUITMENT_OPEN_DAY);
+  const openingPassed = dayKey(month, day) >= OPEN_KEY;
 
   const targetYear = openingPassed ? year + 1 : year;
-  return new Date(Date.UTC(targetYear, RECRUITMENT_MONTH - 1, RECRUITMENT_OPEN_DAY, 12));
+  return new Date(Date.UTC(targetYear, RECRUITMENT_OPEN.month - 1, RECRUITMENT_OPEN.day, 12));
 };
 
 /** Formate une date de recrutement selon la locale (ex. « 1 octobre 2027 »). */
@@ -64,11 +64,11 @@ export const formatRecruitmentDate = (date: Date, locale: string): string =>
   });
 
 /**
- * Dernier jour d'ouverture, sans l'année (ex. « 7 octobre »). Dérivé des
+ * Dernier jour d'ouverture, sans l'année (ex. « 31 octobre »). Dérivé des
  * constantes de la fenêtre : aucune date n'est écrite en dur dans l'interface.
  */
 export const formatRecruitmentEnd = (locale: string): string =>
-  new Date(Date.UTC(2000, RECRUITMENT_MONTH - 1, RECRUITMENT_CLOSE_DAY - 1, 12)).toLocaleDateString(
+  new Date(Date.UTC(2000, RECRUITMENT_CLOSE.month - 1, RECRUITMENT_CLOSE.day, 12)).toLocaleDateString(
     locale,
     { day: 'numeric', month: 'long', timeZone: 'UTC' },
   );

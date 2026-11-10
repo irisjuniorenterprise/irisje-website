@@ -20,8 +20,9 @@ type JoinLinkProps = {
   /**
    * - `pill` : pastille du header desktop (logo + « Nouveau »)
    * - `card` : carte en tête du menu mobile (titre + date limite)
+   * - `text` : simple lien texte (pied de page)
    */
-  variant: 'pill' | 'card';
+  variant: 'pill' | 'card' | 'text';
   /** Dernier jour de candidature, déjà formaté (variante `card`). */
   until?: string;
   /** Appelé au clic (ex. refermer le menu mobile). */
@@ -53,6 +54,16 @@ function ExternalIcon({ className }: { className?: string }) {
 export default function JoinLink({ locale, variant, until, onNavigate }: JoinLinkProps) {
   const href = useSyncExternalStore(subscribe, getClientUrl, getServerUrl);
   const { badge, hint, title, until: untilText } = getJoinText(locale);
+
+  if (variant === 'text') {
+    return (
+      <a href={href} target="_blank" rel="noopener">
+        {title}
+        <ExternalIcon className={styles.textIcon} />
+        <span className="sr-only"> — {hint}</span>
+      </a>
+    );
+  }
 
   if (variant === 'card') {
     return (

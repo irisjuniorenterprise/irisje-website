@@ -1,5 +1,11 @@
 /* ============================================================
-   STYLES GÉNÉRAUX & STRUCTURE (MOBILE PAR DÉFAUT)
+   STRUCTURE (MOBILE PAR DÉFAUT)
+   ------------------------------------------------------------
+   Principe : TOUT est centré sur un seul axe, à toutes les tailles.
+   Chaque groupe (services, ressources, légal, coordonnées) a la même
+   forme : un titre centré puis ses éléments. Placement par zones nommées.
+     < 1024px  : une colonne
+     ≥ 1024px  : services en bandeau, puis 3 colonnes égales, puis la marque
    ============================================================ */
 .siteFooter {
   background: var(--footer-bg);
@@ -7,17 +13,32 @@
   padding: 56px 0 0;
 }
 
-/* Sur mobile, on force 3 colonnes pour le texte avec un texte très petit selon la maquette */
 .footerTop {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px 10px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'services'
+    'resources'
+    'legal'
+    'contact'
+    'brand';
+  gap: 28px;
   padding-bottom: 40px;
+}
+
+.footerServices { grid-area: services; }
+.footerResources { grid-area: resources; }
+.footerLegal { grid-area: legal; }
+.footerContactCol { grid-area: contact; }
+.footerBrand { grid-area: brand; }
+
+.footerCol {
+  text-align: center;
 }
 
 .footerCol h3 {
   color: var(--footer-text-primary);
-  font-size: 0.85rem; /* Réduit pour Mobile */
+  font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 12px;
 }
@@ -25,31 +46,75 @@
 .footerCol ul {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.footerCol a {
+/* Ressources et légal : liens en rangée centrée qui passe à la ligne
+   (repassent en colonne à partir de 1024px) */
+.footerResources ul,
+.footerLegal ul {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 24px;
+}
+
+.footerCol address {
+  font-style: normal;
+}
+
+/* Liens, et ligne d'adresse (même apparence) */
+.footerCol a,
+.footerAddress {
+  padding-block: 4px; /* zone de toucher plus confortable */
   color: var(--footer-text-secondary);
-  font-size: 0.75rem; /* Très petit pour tout faire tenir sur Mobile */
+  font-size: 0.8rem;
+  line-height: 1.5;
   display: inline-block;
-  transition: color 0.2s ease, padding 0.2s ease;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
 }
 
 .footerCol a:hover {
   color: var(--footer-text-hover);
-  padding-left: 4px;
 }
 
+/* Bande des services : pastilles centrées qui passent à la ligne */
+.footerServices {
+  padding-bottom: 28px;
+  border-bottom: 1px solid #333333;
+}
+
+.footerServices ul {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.footerServices a {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  line-height: 1.3;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.footerServices a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Marque : logo + réseaux */
 .footerBrand {
-  grid-column: 1 / -1; /* Prend toute la largeur sur mobile, s'affiche en dessous */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin-top: 16px;
 }
 
 .footerLogo {
@@ -106,50 +171,52 @@
 }
 
 /* ============================================================
-   DESKTOP ET TABLETTE (Grand Écrans)
+   TABLETTE (≥ 768px) : même structure, textes un peu plus grands
    ============================================================ */
 @media (min-width: 768px) {
   .footerTop {
-    grid-template-columns: repeat(3, 1fr) auto;
-    gap: 32px 48px;
+    gap: 32px;
   }
-  
+
   .footerCol h3 {
     font-size: 1rem;
   }
-  
-  .footerCol a {
+
+  .footerCol a,
+  .footerAddress {
     font-size: 0.88rem;
   }
 
-  .footerBrand {
-    grid-column: auto;
-    align-items: center;
-    margin-top: 0;
+  .footerServices a {
+    font-size: 0.85rem;
+    padding: 7px 14px;
   }
 }
 
 /* ============================================================
-   SUPPORT RTL (POUR LA LANGUE ARABE)
+   GRAND ÉCRAN (≥ 1024px) : services en bandeau, puis 3 colonnes
+   ÉGALES (ressources | légal | coordonnées), chacune centrée, puis la
+   marque. Même axe central que sur mobile : symétrie parfaite, et en
+   arabe (dir="rtl") l'ordre des colonnes s'inverse tout seul.
    ============================================================ */
-
-/* Aligne TOUS les blocs de texte à droite dès le mobile */
-.siteFooter.rtl .footerCol {
-  text-align: right;
-}
-
-/* En mode Arabe, l'effet de décalage au survol s'inverse vers la droite */
-.siteFooter.rtl .footerCol a:hover {
-  padding-left: 0;
-  padding-right: 4px;
-}
-
-
-@media (min-width: 768px) {
-  /* Aligne automatiquement l'ordre des grilles de droite à gauche en Desktop */
-  .siteFooter.rtl .footerTop {
-    grid-template-columns: repeat(3, 1fr) auto;
+@media (min-width: 1024px) {
+  .footerTop {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      'services services services'
+      'resources legal contact'
+      'brand brand brand';
+    gap: 36px 48px;
   }
+
+  .footerResources ul,
+  .footerLegal ul {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  /* Logo et réseaux : le logo reste au-dessus des réseaux */
 }
 
 /* ============================================================
@@ -196,15 +263,21 @@
   }
 
   /* Rang de chaque colonne / ligne / icône (alimente les délais) */
-  .footerCol:nth-child(2) { --col: 1; }
-  .footerCol:nth-child(3) { --col: 2; }
-  .footerBrand { --col: 3; }
+  .footerServices { --col: 0; }
+  .footerResources { --col: 1; }
+  .footerLegal { --col: 2; }
+  .footerContactCol { --col: 3; }
+  .footerBrand { --col: 4; }
 
   .footerCol li:nth-child(1) { --row: 1; }
   .footerCol li:nth-child(2) { --row: 2; }
   .footerCol li:nth-child(3) { --row: 3; }
   .footerCol li:nth-child(4) { --row: 4; }
   .footerCol li:nth-child(5) { --row: 5; }
+  .footerCol li:nth-child(6) { --row: 6; }
+  .footerCol li:nth-child(7) { --row: 7; }
+  .footerCol li:nth-child(8) { --row: 8; }
+  .footerCol li:nth-child(9) { --row: 9; }
 
   .socialLinks a:nth-child(1) { --dot: 0; }
   .socialLinks a:nth-child(2) { --dot: 1; }

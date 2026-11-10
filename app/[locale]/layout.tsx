@@ -20,6 +20,7 @@ import PageLoader from '@/components/layout/PageLoader';
 import { Suspense } from 'react';
 import PageJsonLd from '@/components/seo/PageJsonLd';
 import { getRequestSite } from '@/lib/request-site';
+import { ORGANIZATION } from '@/lib/seo';
 import { formatRecruitmentEnd, isRecruitmentOpen } from '@/lib/utils/date';
 
 type Props = {
@@ -30,7 +31,7 @@ type Props = {
 // ⚡ Rendu STATIQUE (SEO / Core Web Vitals) : une page HTML par langue, générée
 // au build et servie par le CDN (TTFB minimal), puis régénérée toutes les
 // heures en arrière-plan. La régénération est nécessaire car la fenêtre de
-// recrutement (1er–7 octobre, lib/utils/date.ts) dépend de la date du jour.
+// recrutement (1er septembre–31 octobre, lib/utils/date.ts) dépend de la date du jour.
 export const revalidate = 3600;
 
 export function generateStaticParams() {
@@ -145,7 +146,10 @@ async function LocaleChrome({
         {children}
       </main>
       <Slogan />
-      <Footer />
+      <Footer
+        joinOpen={recruitmentOpen}
+        contact={{ email: ORGANIZATION.email, telephone: ORGANIZATION.telephone }}
+      />
       <BackToTop />
       <ClientSideEffects />
       <SnapScroll />

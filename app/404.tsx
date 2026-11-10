@@ -9,6 +9,7 @@ import Header from '@/components/layout/Header';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Slogan from '@/components/ui/Slogan';
 import Footer from '@/components/layout/Footer';
+import { ORGANIZATION } from '@/lib/seo';
 import './not-found.css';
 
 async function getLocale(): Promise<string> {
@@ -64,7 +65,7 @@ export default async function RootNotFound() {
             <NotFoundContent locale={locale} />
           </main>
           <Slogan />
-          <Footer />
+          <Footer contact={{ email: ORGANIZATION.email, telephone: ORGANIZATION.telephone }} />
         </NextIntlClientProvider>
       </body>
     </html>
